@@ -1,0 +1,74 @@
+.newarrivals {
+  .heading img {
+    width: 40px;
+    height: 40px;
+    margin-top: 5px;
+  }
+  .heading-right {
+    a {
+      float: right;
+      cursor: pointer;
+      button {
+        background: transparent;
+        cursor: pointer;
+        padding: 0px;
+        span {
+          color: var(--color-gray);
+        }
+      }
+    }
+  }
+  h4 {
+    font-weight: 400;
+  }
+  span {
+    color: var(--color-primary);
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .box img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    .a_flex {
+      flex-wrap: wrap;
+    }
+  }
+  /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+  @media screen and (max-width: 555px) {
+    .box {
+      .product {
+        height: 100%;
+        width: 100%;
+        overflow: hidden;
+      }
+      img {
+        width: 100%;
+        height: 400px;
+        border-radius: 10px;
+      }
+    }
+  }
+
+  /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+  @media screen and (max-width: 420px) {
+    .box {
+      img {
+        width: 100%;
+        height: 300px;
+      }
+    }
+  }
+
+  /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+  @media screen and (max-width: 320px) {
+    .box {
+      img {
+        width: 100%;
+        height: 200px;
+      }
+    }
+  }
+}

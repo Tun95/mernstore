@@ -1,0 +1,136 @@
+.main_settings {
+  .others h1,
+  h3 {
+    color: var(--color-gray);
+  }
+
+  .content_settings {
+    .upper_form .upper_inner_form {
+      display: flex;
+      gap: 6px;
+    }
+    .upper_group input {
+      padding: 6px;
+      border-radius: 5px;
+      border: 1px solid var(--color-light-gray);
+    }
+    .upper_group input:nth-child(1) {
+      margin-bottom: 5px;
+    }
+    .inner_form {
+      padding: 10px;
+    }
+    .form_box {
+      margin-bottom: 20px;
+    }
+
+    .lower_form {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+
+      .lower_group {
+        display: grid;
+        margin-bottom: 10px;
+        .d_flex {
+          gap: 10px;
+        }
+        .logo_image {
+          .logo {
+            width: 32px;
+            height: 32px;
+            margin-right: 5px;
+            object-fit: contain;
+          }
+        }
+        .flex_row {
+          display: flex;
+          flex-direction: column;
+          width: 100%;
+
+          input {
+            width: 100%;
+            gap: 10px;
+          }
+        }
+        .about_store {
+          height: 100px;
+          border: 1px solid var(--color-light-gray);
+          border-radius: 10px;
+        }
+      }
+      input {
+        padding: 7px;
+        font-size: 16px;
+        outline: none;
+        border-radius: 5px;
+        border: 1px solid var(--color-light-gray);
+      }
+      .sub_input {
+        width: 40%;
+      }
+      .sub_input:nth-child(1) {
+        margin-right: 20px;
+      }
+    }
+    .logo_image {
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      .logo {
+        width: 50%;
+        height: 100px;
+        margin-right: 5px;
+        object-fit: contain;
+      }
+      .logo_url {
+        width: 50%;
+      }
+    }
+    .submit_btn button {
+      width: 45%;
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      font-size: 20px;
+      font-weight: 600;
+      padding: 8px;
+      border: none;
+      outline: none;
+      cursor: pointer;
+      margin-top: 20px;
+      border-radius: 10px;
+    }
+  }
+  @media screen and (max-width: 960px) {
+    .content_settings .upper_form .upper_inner_form {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 5px;
+    }
+    .content_settings .upper_group input {
+      width: 92%;
+    }
+  }
+  @media screen and (max-width: 545px) {
+    .content_settings .upper_form .upper_inner_form {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media screen and (max-width: 510px) {
+    .content_settings .lower_form {
+      grid-template-columns: 1fr;
+    }
+    .content_settings .submit_btn button {
+      padding: 5px;
+      font-size: 18px;
+    }
+  }
+  @media screen and (max-width: 370px) {
+    .content_settings .upper_form h3 {
+      font-size: 15px;
+    }
+    .content_settings .upper_form .upper_inner_form {
+      grid-template-columns: 1fr;
+    }
+  }
+}

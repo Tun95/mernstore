@@ -1,0 +1,258 @@
+/*------head-----------*/
+.head {
+  background-color: var(--color-black);
+  height: 40px;
+  color: var(--color-white);
+}
+
+.head a {
+  color: var(--color-white);
+}
+
+.head i {
+  margin-right: 10px;
+}
+.head label {
+  margin-right: 30px;
+  font-size: 13px;
+}
+.head .to {
+  margin-right: 0px;
+}
+.head .currency_state {
+  margin-right: 30px;
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  margin-right: -28px;
+}
+
+.head .float_left {
+  display: flex;
+  float: left;
+}
+.currency_symbol_option {
+  display: flex;
+  justify-content: space-between;
+}
+.head .float_right {
+  display: flex;
+  float: right;
+}
+
+/*------head-----------*/
+
+/*------search-----------*/
+.search {
+  padding: 20px 0;
+  /* position: sticky;
+  top: 0px;
+  z-index: 10000;
+  width: 100%; */
+}
+.search_bar {
+  /* top: 0;
+  z-index: 1; */
+}
+
+.userModal {
+  width: 100%;
+  height: 100%;
+  background-color: var(--color-text);
+}
+
+.search .logo img {
+  min-width: 60%;
+  height: 46px;
+  object-fit: contain;
+}
+
+.search-box {
+  min-width: 40%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  height: 40px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  /* padding: 10px; */
+  border-radius: 50px;
+}
+.search-box i {
+  width: 5%;
+  text-align: center;
+  font-size: 20px;
+  opacity: 0.5;
+  padding: 15px 20px;
+  font-size: 17px;
+}
+.search-box input {
+  width: 100%;
+  outline: none;
+  padding: 5px;
+}
+::placeholder {
+  font-size: 15px;
+}
+.search-box span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  opacity: 0.5;
+  border-left: 2px solid rgba(0, 0, 0, 0.1);
+  padding: 10px;
+}
+.cart {
+  position: relative;
+}
+.search .cart span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  top: -10px;
+  right: 0px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: #e94560;
+  font-size: 12px;
+  color: var(--color-white);
+}
+.search .icon {
+  margin-left: 5px;
+}
+.search .f_flex {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.search .fa-user {
+  margin-right: 10px;
+}
+.search .menu_bar {
+  display: none;
+  position: relative;
+  bottom: 4px;
+}
+.search .dark_color {
+  color: var(--color-white);
+}
+/*------search-----------*/
+
+/*------Nav Link-----------*/
+.header {
+  padding: 10px 0px;
+  box-shadow: -1px 15px 17px -8px rgba(0, 0, 0, 0.1);
+}
+.ctg_btn {
+  background-color: var(--color-background);
+  height: 50px;
+  padding: 0px 10px;
+  border-radius: 5px;
+  margin-top: 5px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.categories .demo_customized_menu {
+  height: 100px !important;
+}
+.categories .align_left {
+  margin-right: 20px !important;
+}
+.categories h4 {
+  font-weight: 500;
+}
+.categories h4 i {
+  margin-left: 10px;
+}
+
+.header .ctg_btn {
+  cursor: pointer;
+}
+.header ul {
+  position: relative;
+  top: 20px;
+}
+.header ul li {
+  margin-left: 30px;
+}
+.header ul li a {
+  transition: 0.5s;
+  font-size: 15px;
+  font-weight: 400;
+}
+.header ul li .pointer {
+  transition: 0.5s;
+  font-size: 15px;
+  font-weight: 400;
+}
+.header ul li a:hover,
+.pointer:hover {
+  color: var(--color-hover);
+}
+
+.open {
+  display: none;
+}
+
+@media (max-width: 1144px) {
+  .head .none_screen {
+    display: none;
+  }
+}
+@media (max-width: 1050px) {
+  .header .navlink {
+    display: none;
+  }
+  .search .menu_bar {
+    display: block;
+  }
+}
+@media (max-width: 1031px) {
+  #display-none {
+    display: none;
+  }
+}
+
+@media (max-width: 860px) {
+  .search .search-box {
+    display: none;
+  }
+
+  .topbar {
+    display: none;
+  }
+  .head .left {
+    position: relative;
+    top: 5px;
+  }
+}
+@media (max-width: 600px) {
+  .search .logo img {
+    width: 60%;
+    height: 40px;
+    object-fit: contain;
+  }
+  .search .cart,
+  .user_modal {
+    display: none;
+  }
+}
+@media (max-width: 404px) {
+  .head {
+    display: none;
+  }
+}
+@media (max-width: 550px) {
+  .header {
+    display: none;
+  }
+  .search {
+    box-shadow: -1px 15px 17px -8px rgba(0, 0, 0, 0.1);
+  }
+}

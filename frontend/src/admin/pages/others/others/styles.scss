@@ -1,0 +1,13 @@
+.settings {
+  .chevron {
+    position: relative;
+    top: 12px;
+    cursor: pointer;
+  }
+  /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+  @media screen and (max-width: 320px) {
+    .box_shadow {
+      padding: 0px;
+    }
+  }
+}

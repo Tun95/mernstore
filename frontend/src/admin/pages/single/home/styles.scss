@@ -1,0 +1,13 @@
+.home_settings {
+  width: 100%;
+  .f_flex {
+    gap: 20px;
+    width: 100%;
+  }
+  /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+  @media screen and (max-width: 1000px) {
+    .f_flex {
+      flex-direction: column;
+    }
+  }
+}

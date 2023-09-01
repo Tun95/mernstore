@@ -1,0 +1,75 @@
+.menu_btn_icon {
+  .menu_icon {
+    font-size: 40px !important;
+    color: var(--color-primary);
+  }
+}
+.cart_badge_icon {
+  position: relative;
+  top: 8px;
+}
+.cart_badge_side {
+  width: 15px;
+  background-color: var(--color-primary);
+  height: 15px;
+  position: relative;
+  left: 14px;
+  bottom: 28px;
+  border-radius: 50%;
+  .cart_badge {
+    color: var(--color-white);
+    font-size: 12px;
+    // border-radius: 50%;
+  }
+}
+.side_bar_drawer {
+  ::-webkit-scrollbar {
+    display: none;
+  }
+  .dark_mode {
+    color: var(--color-white);
+    background-color: rgb(0, 0, 0, 0.8);
+  }
+  .currency_state {
+    .currencyExchangeIcon {
+      position: relative;
+      right: 19px;
+      font-size: 23px;
+    }
+    select {
+      width: 60%;
+      height: 30px;
+    }
+  }
+  .toggle_width {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 20px 0px;
+    .logo_span {
+      width: 100%;
+      height: 60px;
+      background-color: var(--color-background);
+      margin: -20px 0px;
+    }
+    img {
+      width: auto;
+      height: 40px;
+    }
+    .toggle_btn {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      font-weight: 600;
+      width: 180px;
+    }
+  }
+}
+.side_bar_search {
+  width: 100%;
+  margin-bottom: 40px;
+  .side_bar_search_box {
+    border: 2px solid #b4b4b4;
+    padding: 6px;
+    width: 95%;
+  }
+}
