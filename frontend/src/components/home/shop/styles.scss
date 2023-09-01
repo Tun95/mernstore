@@ -63,6 +63,7 @@
   }
   @media screen and (max-width: 585px) {
     .product-content {
+      width: auto;
       grid-template-columns: 1fr;
     }
   }
