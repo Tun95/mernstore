@@ -6,9 +6,9 @@ import User from "../models/userModels.js";
 
 const applicationRoutes = express.Router();
 
-//======
+//=====
 //APPLY
-//======
+//=====
 applicationRoutes.post(
   "/",
   isAuth,
