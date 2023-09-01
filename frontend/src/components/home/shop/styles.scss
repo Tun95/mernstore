@@ -1,4 +1,8 @@
 .shop {
+  // .container {
+  //   width: 100%;
+  //   padding: 0;
+  // }
   .heading-right {
     a {
       float: right;
@@ -30,10 +34,6 @@
     }
   }
 
-  .contentWidth {
-    margin-left: 30px;
-  }
-
   .grid1 {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -63,7 +63,6 @@
   }
   @media screen and (max-width: 585px) {
     .product-content {
-      width: auto;
       grid-template-columns: 1fr;
     }
   }
