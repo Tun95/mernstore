@@ -1,29 +1,30 @@
-.form_container {
-  .check_box {
-    display: flex;
-    align-items: center;
-    height: 10px;
-    width: 100%;
-    margin-top: 20px;
-    .flashdeal {
-      width: 20px;
-    }
-    input {
-      width: auto;
-      height: auto;
-      margin-right: 5px;
-    }
-    input,
-    label {
-      cursor: pointer;
-      font-size: 12px;
-      a {
-        color: var(--color-blue);
+.form-box {
+  .check_box_message {
+    margin-bottom: 5px;
+    .check_box {
+      display: flex;
+      align-items: center;
+      width: 100%;
+
+      .flashdeal {
+        width: 20px;
+      }
+      input {
+        width: auto;
+        height: auto;
+        margin-right: 5px;
+      }
+      input,
+      label {
+        cursor: pointer;
+        a {
+          color: var(--color-blue);
+        }
       }
     }
-    .loading_submit {
-      font-size: 16px;
-      font-weight: 500;
+    .error {
+      color: var(--color-primary);
+      font-size: 14px;
     }
   }
 }

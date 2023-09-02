@@ -9,6 +9,7 @@ import { toast } from "react-toastify";
 import { getError } from "../../../components/utilities/util/Utils";
 import { request } from "../../../base url/BaseUrl";
 import { Context } from "../../../context/Context";
+import { Link } from "react-router-dom";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -26,13 +27,14 @@ const reducer = (state, action) => {
 function ContactScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Context);
   const { settings } = state;
-  const { webname, messenger, whatsapp } =
+  const { email, shortDesc, storeAddress, whatsapp } =
     (settings &&
       settings
         .map((s) => ({
-          webname: s.webname,
-          messenger: s.messenger,
+          shortDesc: s.shortDesc,
+          storeAddress: s.storeAddress,
           whatsapp: s.whatsapp,
+          email: s.email,
         }))
         .find(() => true)) ||
     {};
@@ -70,178 +72,168 @@ function ContactScreen() {
   };
 
   return (
-    <div className="form_container">
+    <div className="form-box">
       <Helmet>
         <title>Contact us</title>
       </Helmet>
-      <div className="form_box_content">
-        <Formik
-          initialValues={initialValues}
-          validationSchema={contactSchema}
-          onSubmit={handleSubmit}
-        >
-          {({
-            errors,
-            touched,
-            handleSubmit,
-            handleChange,
-            handleBlur,
-            isSubmitting,
-            values,
-          }) => (
-            <Form action="" onSubmit={handleSubmit}>
-              <div className="inner-form">
-                <h2 className="form_header">Contact Us</h2>
+      <div className="container">
+        <div className="quick_link ">
+          <div className="page a_flex">
+            <Link to="/">Home /</Link>
+            <p> Registration</p>
+          </div>
+        </div>
+        <div className="form-box-content">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={contactSchema}
+            onSubmit={handleSubmit}
+          >
+            {({
+              errors,
+              touched,
+              handleSubmit,
+              handleChange,
+              handleBlur,
+              isSubmitting,
+              values,
+            }) => (
+              <Form action="" onSubmit={handleSubmit}>
+                <div className="inner-form">
+                  <h1>Contact Us</h1>
 
-                <div className="featured_box">
-                  <div className="featured">
-                    <div className="icon">
-                      <i className="fa-brands fa-facebook-messenger messenger"></i>
+                  <div className="contact_form_group">
+                    <div className="form-group">
+                      <label
+                        htmlFor="name"
+                        className={errors.name && touched.name ? "error" : ""}
+                      >
+                        Full name:<span className="red">*</span>
+                      </label>
+                      <Field
+                        name="name"
+                        type="name"
+                        value={values.name}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={
+                          errors.name && touched.name ? "input-error" : ""
+                        }
+                        id="name"
+                        placeholder="Enter your full name"
+                      />
+                      <ErrorMessage
+                        name="name"
+                        component="div"
+                        className="error"
+                      />
                     </div>
-                    <div className="content">
-                      <span className="name">
-                        <label htmlFor="name">Store:</label>
-                        <div className="">{webname} store</div>
-                      </span>
-                      <div className="via_contact">
-                        <label htmlFor="via">Via Messenger:</label>
-                        <div className="contact_btn_social">
-                          <a
-                            className="messenger"
-                            href={`https://m.me/${messenger}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <i className="fa-brands fa-facebook-messenger"></i>{" "}
-                            Messenger
-                          </a>
-                        </div>
-                      </div>
+                    <div className="form-group">
+                      <label
+                        htmlFor="email"
+                        className={errors.email && touched.email ? "error" : ""}
+                      >
+                        Eamil:<span className="red">*</span>
+                      </label>
+                      <Field
+                        name="email"
+                        type="email"
+                        value={values.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={
+                          errors.email && touched.email ? "input-error" : ""
+                        }
+                        id="email"
+                        placeholder="Enter your email"
+                      />
+                      <ErrorMessage
+                        name="email"
+                        component="div"
+                        className="error"
+                      />
                     </div>
                   </div>
-                  <div className="featured">
-                    <div className="icon">
-                      <i className="fa-brands fa-whatsapp whatsapp"></i>
-                    </div>
-                    <div className="content">
-                      <span className="name">
-                        <label htmlFor="name">Store:</label>
-                        <div className="">{webname} Store</div>
-                      </span>
-                      <div className="via_contact">
-                        <label htmlFor="via">Via Whatsapp:</label>
-                        <div className="contact_btn_social">
-                          <a
-                            className="whatsapp"
-                            href={`https://wa.me/${whatsapp}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            <i className="fa-brands fa-whatsapp"></i> Whatsapp
-                          </a>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="contact_form_group">
                   <div className="form-group">
-                    <label htmlFor="name">Name:</label>
+                    <label
+                      htmlFor="subject"
+                      className={
+                        errors.subject && touched.subject ? "error" : ""
+                      }
+                    >
+                      Title:<span className="red">*</span>
+                    </label>
                     <Field
-                      name="name"
-                      type="name"
-                      value={values.name}
+                      name="subject"
+                      type="subject"
+                      value={values.subject}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={
-                        errors.name && touched.name ? "input-error" : ""
+                        errors.subject && touched.subject ? "input-error" : ""
                       }
-                      id="name"
-                      placeholder="Enter your name"
+                      id="subject"
+                      placeholder="Enter your message title"
                     />
                     <ErrorMessage
-                      name="name"
+                      name="subject"
                       component="div"
                       className="error"
                     />
                   </div>
                   <div className="form-group">
-                    <label htmlFor="email">Eamil:</label>
+                    <label
+                      htmlFor="message"
+                      className={
+                        errors.message && touched.message ? "error" : ""
+                      }
+                    >
+                      Message:<span className="red">*</span>
+                    </label>
                     <Field
-                      name="email"
-                      type="email"
-                      value={values.email}
+                      as="textarea"
+                      id="message"
+                      name="message"
+                      type="message"
+                      value={values.message}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={
-                        errors.email && touched.email ? "input-error" : ""
+                        errors.message && touched.message
+                          ? "textarea input-error"
+                          : "textarea"
                       }
-                      id="email"
-                      placeholder="Enter your email"
+                      placeholder="Enter your message..."
                     />
                     <ErrorMessage
-                      name="email"
+                      name="message"
                       component="div"
                       className="error"
                     />
                   </div>
+                  <div className="form-btn">
+                    <button disabled={isSubmitting} className="form-submit-btn">
+                      {isSubmitting ? "Sending..." : "Send"}
+                    </button>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label htmlFor="subject">Title:</label>
-                  <Field
-                    name="subject"
-                    type="subject"
-                    value={values.subject}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      errors.subject && touched.subject ? "input-error" : ""
-                    }
-                    id="subject"
-                    placeholder="Enter your subject"
-                  />
-                  <ErrorMessage
-                    name="subject"
-                    component="div"
-                    className="error"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="message">Message:</label>
-                  <Field
-                    as="textarea"
-                    id="message"
-                    name="message"
-                    type="message"
-                    value={values.message}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      errors.message && touched.message
-                        ? "textarea input-error"
-                        : "textarea"
-                    }
-                    placeholder="Enter your message..."
-                  />
-                  <ErrorMessage
-                    name="message"
-                    component="div"
-                    className="error"
-                  />
-                </div>
-                <div className="form-btn">
-                  <button
-                    disabled={isSubmitting}
-                    className="form_submit_btn contact_btn"
-                  >
-                    {isSubmitting ? "Sending..." : "Send"}
-                  </button>
-                </div>
+              </Form>
+            )}
+          </Formik>
+          <div className="form-lower-text">
+            <div className="register_now">
+              <div className="contact_info">
+                <h2>Contact Information</h2>
+                <address>
+                  <p>{shortDesc}</p>
+                  <p className="lower">Address: {storeAddress}</p>
+                  <p className="lower">Email: {email}</p>
+                  <p className="lower">Phone: {whatsapp}</p>
+                </address>
               </div>
-            </Form>
-          )}
-        </Formik>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

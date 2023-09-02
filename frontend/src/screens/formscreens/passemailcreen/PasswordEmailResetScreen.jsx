@@ -8,6 +8,7 @@ import { request } from "../../../base url/BaseUrl";
 import { toast } from "react-toastify";
 import { getError } from "../../../components/utilities/util/Utils";
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -53,56 +54,82 @@ function PasswordEmailResetScreen() {
   return (
     <div className="form-box">
       <Helmet>
-        <title>Password Reset</title>
+        <title>Reset Password</title>
       </Helmet>
-      <div className="form-box-content">
-        <Formik
-          initialValues={initialValues}
-          validationSchema={resetSchema}
-          onSubmit={handleSubmit}
-        >
-          {({
-            errors,
-            touched,
-            handleSubmit,
-            handleChange,
-            handleBlur,
-            isSubmitting,
-            values,
-          }) => (
-            <Form action="" onSubmit={handleSubmit}>
-              <div className="inner-form inner-form-small">
-                <h2>Password Reset Form</h2>
-                <p>Enter email down below to reset password</p>
-                <div className="form-group">
-                  <label htmlFor="email">Eamil</label>
-                  <Field
-                    name="email"
-                    type="email"
-                    value={values.email}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      errors.email && touched.email ? "input-error" : ""
-                    }
-                    id="email"
-                    placeholder="Enter your email"
-                  />
-                  <ErrorMessage
-                    name="email"
-                    component="div"
-                    className="error"
-                  />
+      <div className="container">
+        <div className="quick_link ">
+          <div className="page a_flex">
+            <Link to="/">Home /</Link>
+            <p> Reset Password</p>
+          </div>
+        </div>
+        <div className="form-box-content">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={resetSchema}
+            onSubmit={handleSubmit}
+          >
+            {({
+              errors,
+              touched,
+              handleSubmit,
+              handleChange,
+              handleBlur,
+              isSubmitting,
+              values,
+            }) => (
+              <Form action="" onSubmit={handleSubmit}>
+                <div className="inner-form inner-form-small">
+                  <h1>Reset Password</h1>
+                  <div className="form-group">
+                    <label
+                      htmlFor="email"
+                      className={errors.email && touched.email ? "error" : ""}
+                    >
+                      E-mail<span className="red">*</span>
+                    </label>
+                    <Field
+                      name="email"
+                      type="email"
+                      value={values.email}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={
+                        errors.email && touched.email ? "input-error" : ""
+                      }
+                      id="email"
+                      placeholder="Enter your email"
+                    />
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className="error"
+                    />
+                  </div>
+                  <div className="form-btn">
+                    <button className="form-submit-btn" disabled={isSubmitting}>
+                      {isSubmitting ? "Sending..." : "Reset Password"}
+                    </button>
+                  </div>
                 </div>
-                <div className="form-btn">
-                  <button className="form-submit-btn" disabled={isSubmitting}>
-                    {isSubmitting ? "Sending..." : "Reset Password"}
-                  </button>
-                </div>
-              </div>
-            </Form>
-          )}
-        </Formik>
+              </Form>
+            )}
+          </Formik>
+          <div className="form-lower-text">
+            <div className="register_now">
+              <h2>Reset password</h2>
+              <p>
+                If you have forgotten your password, enter your email address in
+                the field and click{" "}
+                <span className="italics">Reset password</span>.{" "}
+              </p>
+              <p>
+                You will receive a new password and a link to sign in. You will
+                be able to change the password later.
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

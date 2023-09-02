@@ -126,7 +126,7 @@ function SideBar() {
       to: userProfileLink, // <-- add link targets
     },
     {
-      text: "Wish List",
+      text: "Wishlist",
       icon: <FavoriteIcon />,
       to: userWishLink,
     },

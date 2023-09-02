@@ -6,7 +6,7 @@ import { Icon } from "react-icons-kit";
 import { eyeOff } from "react-icons-kit/feather/eyeOff";
 import { eye } from "react-icons-kit/feather/eye";
 import { newPassSchema } from "../../../components/schemas/Index";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Context } from "../../../context/Context";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -61,10 +61,13 @@ function PasswordResetFormScreen() {
   const handleSubmit = async (values, actions) => {
     try {
       dispatch({ type: "SUBMIT_REQUEST" });
-      const { data } = await axios.put(`${request}/api/users/${userId}/reset-password`, {
-        password: values.password,
-        token,
-      });
+      const { data } = await axios.put(
+        `${request}/api/users/${userId}/reset-password`,
+        {
+          password: values.password,
+          token,
+        }
+      );
       dispatch({ type: "SUBMIT_SUCCESS", payload: data });
       toast.success(
         "Password reset  successfully, you will be redirected to login screen in 3 seconds",
@@ -86,59 +89,83 @@ function PasswordResetFormScreen() {
   return (
     <div className="form-box">
       <Helmet>
-        <title>Password Reset Form</title>
+        <title>Create new password</title>
       </Helmet>
-      <div className="form-box-content">
-        <Formik
-          initialValues={initialValues}
-          validationSchema={newPassSchema}
-          onSubmit={handleSubmit}
-        >
-          {({
-            errors,
-            touched,
-            handleSubmit,
-            handleChange,
-            handleBlur,
-            isSubmitting,
-            values,
-          }) => (
-            <Form action="" onSubmit={handleSubmit}>
-              <div className="inner-form inner-form-small">
-                <h2>New Password</h2>
-                <p>Enter new password down below</p>
-                <div className="form-group">
-                  <label htmlFor="password">New Password</label>
-                  <Field
-                    name="password"
-                    type={type}
-                    value={values.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      errors.password && touched.password ? "input-error" : ""
-                    }
-                    id="password"
-                    placeholder="Enter your password"
-                  />
-                  <span onClick={handleToggle}>
-                    <Icon icon={icon} size={20} className="eye-icon" />
-                  </span>
-                  <ErrorMessage
-                    name="password"
-                    component="div"
-                    className="error"
-                  />
+      <div className="container">
+        <div className="quick_link ">
+          <div className="page a_flex">
+            <Link to="/">Home /</Link>
+            <p> New password</p>
+          </div>
+        </div>
+        <div className="form-box-content">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={newPassSchema}
+            onSubmit={handleSubmit}
+          >
+            {({
+              errors,
+              touched,
+              handleSubmit,
+              handleChange,
+              handleBlur,
+              isSubmitting,
+              values,
+            }) => (
+              <Form action="" onSubmit={handleSubmit}>
+                <div className="inner-form inner-form-small">
+                  <h1>Create new password</h1>
+                  <div className="form-group">
+                    <label
+                      htmlFor="password"
+                      className={
+                        errors.password && touched.password ? "error" : ""
+                      }
+                    >
+                      New Password<span className="red">*</span>
+                    </label>
+                    <Field
+                      name="password"
+                      type={type}
+                      value={values.password}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={
+                        errors.password && touched.password ? "input-error" : ""
+                      }
+                      id="password"
+                      placeholder="Enter your password"
+                    />
+                    <span onClick={handleToggle}>
+                      <Icon icon={icon} size={20} className="eye-icon" />
+                    </span>
+                    <ErrorMessage
+                      name="password"
+                      component="div"
+                      className="error"
+                    />
+                  </div>
+                  <div className="form-btn">
+                    <button className="form-submit-btn" disabled={isSubmitting}>
+                      Reset Password
+                    </button>
+                  </div>
                 </div>
-                <div className="form-btn">
-                  <button className="form-submit-btn" disabled={isSubmitting}>
-                    Reset Password
-                  </button>
-                </div>
-              </div>
-            </Form>
-          )}
-        </Formik>
+              </Form>
+            )}
+          </Formik>
+          <div className="form-lower-text">
+            <div className="register_now">
+              <h2>New Password</h2>
+              <p>
+                Enter new password field and click{" "}
+                <span className="italics">Reset Password</span> to create new
+                password
+              </p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

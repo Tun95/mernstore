@@ -8,6 +8,7 @@
 
 :root {
   --color-bg: #f3f5f9;
+  --color-border: #e7e8eb;
   --color-background: #f6f9fc;
   --color-light-light-gray: #f7f7f7;
   --color-rating: #ffcd4e;
@@ -172,6 +173,9 @@ li {
 .capitalize {
   text-transform: capitalize;
 }
+.italics {
+  font-style: italic;
+}
 .RText {
   text-align-last: right;
 }
@@ -190,6 +194,9 @@ button {
   border: none;
   outline: none;
   background-color: none;
+}
+.red {
+  color: var(--color-primary);
 }
 
 button:disabled {
@@ -593,7 +600,7 @@ textarea::placeholder {
 .checkout_form .form-group {
   margin-top: -15px;
 }
-.form_container input.input-error,
+input.input-error,
 select.input-error {
   border-color: var(--color-primary);
 }

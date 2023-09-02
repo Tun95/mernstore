@@ -107,112 +107,123 @@ function LoginScreen() {
     }
   }, [navigate, redirect, userInfo]);
   return (
-    <div className="form-box">
+    <div className="form-box  mb">
       <Helmet>
         <title>Login</title>
       </Helmet>
-      <div className="form-box-content">
-        <Formik
-          initialValues={initialValues}
-          validationSchema={loginSchema}
-          onSubmit={handleSubmit}
-        >
-          {({
-            errors,
-            touched,
-            handleSubmit,
-            handleChange,
-            handleBlur,
-            isSubmitting,
-            values,
-          }) => (
-            <Form action="" onSubmit={handleSubmit}>
-              <div className="inner-form">
-                <h2>Member Login</h2>
-                <div className="form-group">
-                  <label htmlFor="email">Eamil</label>
-                  <Field
-                    name="email"
-                    type="email"
-                    value={values.email}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      errors.email && touched.email ? "input-error" : ""
-                    }
-                    id="email"
-                    placeholder="Enter your email"
-                  />
-                  <ErrorMessage
-                    name="email"
-                    component="div"
-                    className="error"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="password">Password</label>
-                  <Field
-                    name="password"
-                    type={type}
-                    value={values.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      errors.password && touched.password ? "input-error" : ""
-                    }
-                    id="password"
-                    placeholder="Enter your password"
-                  />
-                  <span onClick={handleToggle}>
-                    <Icon icon={icon} size={20} className="eye-icon" />
-                  </span>
-                  <ErrorMessage
-                    name="password"
-                    component="div"
-                    className="error"
-                  />
-                </div>
-                <div className="form-btn">
-                  <button className="form-submit-btn" disabled={isSubmitting}>
-                    {isSubmitting ? "Logging in..." : "Login"}
-                  </button>
-                </div>
+      <div className="container">
+        <div className="quick_link ">
+          <div className="page a_flex">
+            <Link to="/">Home /</Link>
+            <p> Sign In</p>
+          </div>
+        </div>
+        <div className="form-box-content">
+          <div>
+            <Formik
+              initialValues={initialValues}
+              validationSchema={loginSchema}
+              onSubmit={handleSubmit}
+            >
+              {({
+                errors,
+                touched,
+                handleSubmit,
+                handleChange,
+                handleBlur,
+                isSubmitting,
+                values,
+              }) => (
+                <Form action="" onSubmit={handleSubmit}>
+                  <div className="inner-form">
+                    <h1>Login</h1>
+                    <div className="form-group">
+                      <label
+                        htmlFor="email"
+                        className={errors.email && touched.email ? "error" : ""}
+                      >
+                        E-mail<span className="red">*</span>
+                      </label>
+                      <Field
+                        name="email"
+                        type="email"
+                        value={values.email}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={
+                          errors.email && touched.email ? "input-error" : ""
+                        }
+                        id="email"
+                        placeholder="Enter your email"
+                      />
+                      <ErrorMessage
+                        name="email"
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <div className="d_flex">
+                        <label
+                          htmlFor="password"
+                          className={
+                            errors.password && touched.password ? "error" : ""
+                          }
+                        >
+                          Password<span className="red">*</span>
+                        </label>
+                        <Link to="/forgot-password">Forgot Your Password?</Link>
+                      </div>
+                      <Field
+                        name="password"
+                        type={type}
+                        value={values.password}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={
+                          errors.password && touched.password
+                            ? "input-error"
+                            : ""
+                        }
+                        id="password"
+                        placeholder="Enter your password"
+                      />
+                      <span onClick={handleToggle}>
+                        <Icon icon={icon} size={20} className="eye-icon" />
+                      </span>
+                      <ErrorMessage
+                        name="password"
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                    <div className="form-btn c_flex">
+                      <button
+                        className="form-submit-btn"
+                        disabled={isSubmitting}
+                      >
+                        {isSubmitting ? "Logging in..." : "Login"}
+                      </button>
+                      <label htmlFor="remember" className="remember a_flex">
+                        <input type="checkbox" id="remember" />
+                        <small>Remember me</small>
+                      </label>
+                    </div>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
+          <div>
+            <div className="form-lower-text">
+              <div className="register_now">
+                <h2>Not a registered member?</h2>
+                <p>
+                  Creating a new account is easy and takes less than a minute.
+                </p>
+                <Link to="/register">Register for a new account</Link>
               </div>
-            </Form>
-          )}
-        </Formik>
-        {/* <span className="l_flex or">OR</span> */}
-        <div>
-          {/* Google sign-up button */}
-          {/* <GoogleLogin
-            // clientId=""
-            buttonText="Login with Google"
-            onSuccess={handleGoogleLoginSuccess}
-            onFailure={handleGoogleLoginFailure}
-            cookiePolicy={"single_host_origin"}
-          /> */}
-
-          {/* Facebook sign-up button */}
-          {/* <FacebookLogin
-            appId="6222862251176447"
-            callback={handleFacebookSignUp}
-            onFailure={(error) => console.log("Facebook sign-up failed", error)}
-            render={(renderProps) => (
-              <button
-                onClick={renderProps.onClick}
-                className="facebook-login-button mt"
-              >
-                Sign up with Facebook
-              </button>
-            )}
-          /> */}
-          <div className="form-lower-text">
-            <p className="forgot-password">
-              <Link to="/forgot-password"> Forgot Password?</Link>
-            </p>
-            <span>
-              <Link to="/register">Have an account</Link>
-            </span>
+            </div>
           </div>
         </div>
       </div>

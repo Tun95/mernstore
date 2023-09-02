@@ -90,135 +90,186 @@ function VendorScreen() {
   };
 
   return (
-    <div className="form_container">
+    <div className="form-box">
       <Helmet>
         <title>Vendor Application</title>
       </Helmet>
-      <div className="form_box_content">
-        <Formik
-          initialValues={initialValues}
-          validationSchema={sellerSchema}
-          onSubmit={handleSubmit}
-        >
-          {({
-            errors,
-            touched,
-            handleSubmit,
-            handleChange,
-            handleBlur,
-            isSubmitting,
-            values,
-          }) => (
-            <Form action="" onSubmit={handleSubmit}>
-              <div className="inner-form">
-                <h2 className="form_header">Vendor Application Form</h2>
-                <div className="form-group">
-                  <label htmlFor="sellerName">Merchant or store name:</label>
-                  <Field
-                    name="sellerName"
-                    type="sellerName"
-                    value={values.sellerName}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      errors.sellerName && touched.sellerName
-                        ? "input-error"
-                        : ""
-                    }
-                    id="sellerName"
-                    placeholder="Enter your seller name"
-                  />
-                  <ErrorMessage
-                    name="sellerName"
-                    component="div"
-                    className="error"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="storeAddress">Store Address:</label>
-                  <Field
-                    name="storeAddress"
-                    type="storeAddress"
-                    value={values.storeAddress}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      errors.storeAddress && touched.storeAddress
-                        ? "input-error"
-                        : ""
-                    }
-                    id="storeAddress"
-                    placeholder="Enter your address"
-                  />
-                  <ErrorMessage
-                    name="storeAddress"
-                    component="div"
-                    className="error"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="sellerDescription">About:</label>
-                  <Field
-                    as="textarea"
-                    id="sellerDescription"
-                    name="sellerDescription"
-                    type="sellerDescription"
-                    value={values.sellerDescription}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      errors.sellerDescription && touched.sellerDescription
-                        ? "textarea input-error"
-                        : "textarea"
-                    }
-                    placeholder="About your products and store..."
-                  />
-                  <ErrorMessage
-                    name="sellerDescription"
-                    component="div"
-                    className="error"
-                  />
-                </div>
-                <div className="">
-                  <span className="check_box">
-                    <input
-                      type="checkbox"
-                      checked={values.status}
-                      id="status"
-                      className="flashdeal"
+      <div className="container">
+        <div className="quick_link ">
+          <div className="page a_flex">
+            <Link to="/">Home /</Link>
+            <p> Application</p>
+          </div>
+        </div>
+        <div className="form-box-content">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={sellerSchema}
+            onSubmit={handleSubmit}
+          >
+            {({
+              errors,
+              touched,
+              handleSubmit,
+              handleChange,
+              handleBlur,
+              isSubmitting,
+              values,
+            }) => (
+              <Form action="" onSubmit={handleSubmit}>
+                <div className="inner-form">
+                  <h1 className="form_header">Vendor Application</h1>
+                  <div className="form-group">
+                    <label
+                      htmlFor="sellerName"
+                      className={
+                        errors.sellerName && touched.sellerName ? "error" : ""
+                      }
+                    >
+                      Merchant or store name:<span className="red">*</span>
+                    </label>
+                    <Field
+                      name="sellerName"
+                      type="sellerName"
+                      value={values.sellerName}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      className={
+                        errors.sellerName && touched.sellerName
+                          ? "input-error"
+                          : ""
+                      }
+                      id="sellerName"
+                      placeholder="Enter your seller name"
                     />
-                    <label htmlFor="status">
-                      I agree to the{" "}
-                      <Link to="/terms-and-conditons">
-                        terms and conditions
-                      </Link>
+                    <ErrorMessage
+                      name="sellerName"
+                      component="div"
+                      className="error"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="storeAddress"
+                      className={
+                        errors.storeAddress && touched.storeAddress
+                          ? "error"
+                          : ""
+                      }
+                    >
+                      Store Address:<span className="red">*</span>
                     </label>
-                  </span>
-                  <ErrorMessage
-                    name="status"
-                    component="div"
-                    className="error"
-                  />
+                    <Field
+                      name="storeAddress"
+                      type="storeAddress"
+                      value={values.storeAddress}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={
+                        errors.storeAddress && touched.storeAddress
+                          ? "input-error"
+                          : ""
+                      }
+                      id="storeAddress"
+                      placeholder="Enter your address"
+                    />
+                    <ErrorMessage
+                      name="storeAddress"
+                      component="div"
+                      className="error"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="sellerDescription"
+                      className={
+                        errors.sellerDescription && touched.sellerDescription
+                          ? "error"
+                          : ""
+                      }
+                    >
+                      About:<span className="red">*</span>
+                    </label>
+                    <Field
+                      as="textarea"
+                      id="sellerDescription"
+                      name="sellerDescription"
+                      type="sellerDescription"
+                      value={values.sellerDescription}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={
+                        errors.sellerDescription && touched.sellerDescription
+                          ? "textarea input-error"
+                          : "textarea"
+                      }
+                      placeholder="About your products and store..."
+                    />
+                    <ErrorMessage
+                      name="sellerDescription"
+                      component="div"
+                      className="error"
+                    />
+                  </div>
+                  <div className="">
+                    <span className="check_box_message">
+                      <span className="check_box">
+                        {" "}
+                        <input
+                          type="checkbox"
+                          checked={values.status}
+                          id="status"
+                          className="flashdeal"
+                          onChange={handleChange}
+                          onBlur={handleBlur}
+                        />
+                        <label htmlFor="status">
+                          I agree to the{" "}
+                          <Link to="/terms-and-conditons">
+                            terms and conditions
+                          </Link>
+                          <span className="red">*</span>
+                        </label>
+                      </span>
+                      <ErrorMessage
+                        name="status"
+                        component="div"
+                        className="error"
+                      />
+                    </span>
+                  </div>
+                  <div className="form-btn">
+                    <button
+                      type="submit"
+                      disabled={isSubmitting}
+                      className="form-submit-btn"
+                    >
+                      {isSubmitting ? (
+                        <LoadingBox className="loading_submit" />
+                      ) : (
+                        <React.Fragment>Submit</React.Fragment>
+                      )}
+                    </button>
+                  </div>
                 </div>
-                <div className="form-btn">
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="form_submit_btn"
-                  >
-                    {isSubmitting ? (
-                      <LoadingBox className="loading_submit" />
-                    ) : (
-                      <React.Fragment>Submit</React.Fragment>
-                    )}
-                  </button>
-                </div>
+              </Form>
+            )}
+          </Formik>
+          <div className="form-lower-text">
+            <div className="register_now">
+              <div className="vendor_application_description">
+                <h2>Vendor Application</h2>
+                <p>Please provide a brief description of your store:</p>
+                <p>As a vendor on our platform, you can:</p>
+                <ul>
+                  <li>Reach a wide audience of potential customers.</li>
+                  <li>Manage your store and products with ease.</li>
+                  <li>Track your sales and earnings.</li>
+                </ul>
               </div>
-            </Form>
-          )}
-        </Formik>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

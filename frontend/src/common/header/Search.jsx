@@ -166,7 +166,7 @@ function Search() {
                         onClick={handleClose}
                         disableRipple
                       >
-                        Wish List
+                        Wishlist
                       </MenuItem>,
                       <StyledDivider darkMode={darkMode} />,
                     ]

@@ -151,172 +151,213 @@ function RegisterScreen() {
       <Helmet>
         <title>Register</title>
       </Helmet>
-      <div className="form-box-content">
-        <Formik
-          initialValues={initialValues}
-          validationSchema={basicSchema}
-          onSubmit={handleSubmit}
-        >
-          {({
-            errors,
-            touched,
-            handleSubmit,
-            handleChange,
-            handleBlur,
-            isSubmitting,
-            values,
-          }) => (
-            <Form action="" onSubmit={handleSubmit}>
-              <div className="inner-form">
-                <h2>Register Now</h2>
-                <div className="form-group">
-                  <label htmlFor="firstName">First Name</label>
-                  <Field
-                    name="firstName"
-                    type="text"
-                    value={values.firstName}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      errors.firstName && touched.firstName ? "input-error" : ""
-                    }
-                    id="firstName"
-                    placeholder="Enter your first name"
-                  />
-                  <ErrorMessage
-                    name="firstName"
-                    component="div"
-                    className="error"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="lastName">Last Name</label>
-                  <Field
-                    name="lastName"
-                    type="text"
-                    value={values.lastName}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      errors.lastName && touched.lastName ? "input-error" : ""
-                    }
-                    id="lastName"
-                    placeholder="Enter your last name"
-                  />
-                  <ErrorMessage
-                    name="lastName"
-                    component="div"
-                    className="error"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="email">Eamil</label>
+      <div className="container">
+        <div className="quick_link ">
+          <div className="page a_flex">
+            <Link to="/">Home /</Link>
+            <p> Registration</p>
+          </div>
+        </div>
+        <div className="form-box-content">
+          <Formik
+            initialValues={initialValues}
+            validationSchema={basicSchema}
+            onSubmit={handleSubmit}
+          >
+            {({
+              errors,
+              touched,
+              handleSubmit,
+              handleChange,
+              handleBlur,
+              isSubmitting,
+              values,
+            }) => (
+              <Form action="" onSubmit={handleSubmit}>
+                <div className="inner-form">
+                  <h1>Register for a new account</h1>
+                  <div className="inline_input c_flex">
+                    <div className="form-group">
+                      <label
+                        htmlFor="firstName"
+                        className={
+                          errors.firstName && touched.firstName ? "error" : ""
+                        }
+                      >
+                        First Name<span className="red">*</span>
+                      </label>
+                      <Field
+                        name="firstName"
+                        type="text"
+                        value={values.firstName}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={
+                          errors.firstName && touched.firstName
+                            ? "input-error"
+                            : ""
+                        }
+                        id="firstName"
+                        placeholder="Enter your first name"
+                      />
+                      <ErrorMessage
+                        name="firstName"
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label
+                        htmlFor="lastName"
+                        className={
+                          errors.lastName && touched.lastName ? "error" : ""
+                        }
+                      >
+                        Last Name<span className="red">*</span>
+                      </label>
+                      <Field
+                        name="lastName"
+                        type="text"
+                        value={values.lastName}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={
+                          errors.lastName && touched.lastName
+                            ? "input-error"
+                            : ""
+                        }
+                        id="lastName"
+                        placeholder="Enter your last name"
+                      />
+                      <ErrorMessage
+                        name="lastName"
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="email"
+                      className={errors.email && touched.email ? "error" : ""}
+                    >
+                      E-mail<span className="red">*</span>
+                    </label>
 
-                  <Field
-                    name="email"
-                    type="email"
-                    value={values.email}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      errors.email && touched.email ? "input-error" : ""
-                    }
-                    id="email"
-                    placeholder="Enter your email"
-                  />
-                  <ErrorMessage
-                    name="email"
-                    component="div"
-                    className="error"
-                  />
+                    <Field
+                      name="email"
+                      type="email"
+                      value={values.email}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={
+                        errors.email && touched.email ? "input-error" : ""
+                      }
+                      id="email"
+                      placeholder="Enter your email"
+                    />
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className="error"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="password"
+                      className={
+                        errors.password && touched.password ? "error" : ""
+                      }
+                    >
+                      Password<span className="red">*</span>
+                    </label>
+                    <Field
+                      name="password"
+                      type={type}
+                      value={values.password}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={
+                        errors.password && touched.password ? "input-error" : ""
+                      }
+                      id="password"
+                      placeholder="Enter your password"
+                    />
+                    <span onClick={handleToggle}>
+                      <Icon icon={icon} size={20} className="eye-icon" />
+                    </span>
+                    <ErrorMessage
+                      name="password"
+                      component="div"
+                      className="error"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="cpassword"
+                      className={
+                        errors.passwordConfirmation &&
+                        touched.passwordConfirmation
+                          ? "error"
+                          : ""
+                      }
+                    >
+                      Comfirm Password<span className="red">*</span>
+                    </label>
+                    <Field
+                      name="passwordConfirmation"
+                      type={typeCom}
+                      value={values.passwordConfirmation}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={
+                        errors.passwordConfirmation &&
+                        touched.passwordConfirmation
+                          ? "input-error"
+                          : ""
+                      }
+                      id="cpassword"
+                      placeholder="Comfirm password"
+                    />
+                    <span onClick={handleComToggle}>
+                      <Icon icon={iconCom} size={20} className="eye-icon" />
+                    </span>
+                    <ErrorMessage
+                      name="passwordConfirmation"
+                      component="div"
+                      className="error"
+                    />
+                  </div>
+                  <div className="mailing">
+                    <h1>Mailing lists</h1>
+                    <p>Sign up for our newsletters!</p>
+                    <label htmlFor="remember" className="remember a_flex">
+                      <input type="checkbox" id="remember" />
+                      <small>
+                        Company news and unique discounts for subscribers
+                      </small>
+                    </label>
+                  </div>
+                  <div className="form-btn">
+                    <button disabled={isSubmitting} className="form-submit-btn">
+                      {isSubmitting ? "Registering..." : "Register"}
+                    </button>
+                  </div>
                 </div>
-                <div className="form-group">
-                  <label htmlFor="password">Password</label>
-                  <Field
-                    name="password"
-                    type={type}
-                    value={values.password}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      errors.password && touched.password ? "input-error" : ""
-                    }
-                    id="password"
-                    placeholder="Enter your password"
-                  />
-                  <span onClick={handleToggle}>
-                    <Icon icon={icon} size={20} className="eye-icon" />
-                  </span>
-                  <ErrorMessage
-                    name="password"
-                    component="div"
-                    className="error"
-                  />
-                </div>
-                <div className="form-group">
-                  <label htmlFor="cpassword">Comfirm Password</label>
-                  <Field
-                    name="passwordConfirmation"
-                    type={typeCom}
-                    value={values.passwordConfirmation}
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                    className={
-                      errors.passwordConfirmation &&
-                      touched.passwordConfirmation
-                        ? "input-error"
-                        : ""
-                    }
-                    id="cpassword"
-                    placeholder="Comfirm password"
-                  />
-                  <span onClick={handleComToggle}>
-                    <Icon icon={iconCom} size={20} className="eye-icon" />
-                  </span>
-                  <ErrorMessage
-                    name="passwordConfirmation"
-                    component="div"
-                    className="error"
-                  />
-                </div>
-                <div className="form-btn">
-                  <button disabled={isSubmitting} className="form-submit-btn">
-                    {isSubmitting ? "Registering..." : "Register"}
-                  </button>
-                </div>
-              </div>
-            </Form>
-          )}
-        </Formik>
-        {/* <span className="l_flex or">OR</span> */}
-        <div>
-          {/* Google sign-up button */}
-          {/* <GoogleLogin
-            //clientId="408401850346-97mfn7e1q7f698pn7in837hha576nleb.apps.googleusercontent.com"
-            onSuccess={handleGoogleSignUp}
-            onFailure={(error) => console.log("Google sign-up failed", error)}
-            buttonText="Sign up with Google"
-          /> */}
-
-          {/* Facebook sign-up button */}
-          {/* <FacebookLogin
-            appId="6222862251176447"
-            callback={handleFacebookSignUp}
-            onFailure={(error) => console.log("Facebook sign-up failed", error)}
-            render={(renderProps) => (
-              <button
-                onClick={renderProps.onClick}
-                className="facebook-login-button mt"
-              >
-                Sign up with Facebook
-              </button>
+              </Form>
             )}
-          /> */}
+          </Formik>
           <div className="form-lower-text">
-            <p>Already a member?</p>
-            <span>
-              <Link to="/login">Login</Link>
-            </span>
+            <div className="register_now">
+              <h2>Benefits of becoming a registered member</h2>
+              <small>
+                <ul>
+                  <li>Log in at any time to check order statuses</li>
+                  <li>Personalize your shopping</li>
+                  <li>Speed up future purchases</li>
+                </ul>
+              </small>
+            </div>
           </div>
         </div>
       </div>
