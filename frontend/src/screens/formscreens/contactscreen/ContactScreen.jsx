@@ -224,8 +224,8 @@ function ContactScreen() {
             <div className="register_now">
               <div className="contact_info">
                 <h2>Contact Information</h2>
+                <p>{shortDesc}</p>
                 <address>
-                  <p>{shortDesc}</p>
                   <p className="lower">Address: {storeAddress}</p>
                   <p className="lower">Email: {email}</p>
                   <p className="lower">Phone: {whatsapp}</p>
