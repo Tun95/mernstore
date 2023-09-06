@@ -4,16 +4,31 @@ import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import { Context } from "../../context/Context";
 import { Link } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+import "./styles.scss";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
+import { LocationModal } from "../../components/modals/Modals";
 
 function Head() {
   const { darkMode, state, toggle, currencies, toCurrencies, setToCurrencies } =
     useContext(Context);
   const { settings } = state;
 
+  //THEME SWITCH
   const MaterialUISwitch = styled(Switch)(({ theme }) => ({
     width: 50,
     height: 30,
     padding: 7,
+    position: "relative",
+    left: 15,
     "& .MuiSwitch-switchBase": {
       margin: 1,
       padding: 0,
@@ -62,6 +77,16 @@ function Head() {
     },
   }));
 
+  //INFO
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openInfo = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleCloseInfo = () => {
+    setAnchorEl(null);
+  };
+
   const { email, whatsapp } =
     (settings &&
       settings
@@ -75,60 +100,149 @@ function Head() {
   return (
     <div>
       <section className="head">
-        <div className="container c_flex head-position">
-          <div className="left">
-            <span>
-              <i className="fa fa-phone"></i>
-              <label htmlFor="">
-                <a href={`tel:${whatsapp}`}>{whatsapp}</a>
-              </label>
-              <i className="fa fa-envelope"></i>
-              <label htmlFor="">
-                <a href={`mailto:${email}`}>{email}</a>
-              </label>
-            </span>
-          </div>
-          <div className="right topbar">
-            <label htmlFor="" className="none_screen">
-              <Link to="/theme-faq">Theme FAQ's</Link>
-            </label>
-            <label htmlFor="" className="none_screen">
-              <Link to="/contact">Need Helps</Link>
-            </label>
-            <span id="display-none">🏳️‍⚧️</span>
-            <label htmlFor="" id="display-none">
-              EN
-            </label>
-            <span id="display-none">🏳️‍⚧️</span>
-            <div className="currency_state">
-              <label className="to">To:</label>
-              <select
-                className={
-                  darkMode ? "dark_mode currency_symbol" : "currency_symbol"
-                }
-                value={toCurrencies}
-                onChange={(e) => {
-                  const selectedCurrency = e.target.value;
-                  localStorage.setItem("toCurrencies", selectedCurrency);
-                  setToCurrencies(selectedCurrency);
-                }}
-              >
-                {currencies.map((currency) => (
-                  <option
-                    className="currency_symbol_option"
-                    key={currency.code}
-                    value={currency.code}
-                  >
-                    {currency.symbol} &#160;&#160; {currency.code}
-                  </option>
-                ))}
-              </select>
+        <div className="container  head-position">
+          <div className="c_flex">
+            <div className="left">
+              <LocationModal />
             </div>
-            <div>
-              <FormControlLabel
-                onClick={toggle}
-                control={<MaterialUISwitch checked={darkMode} />}
-              />
+            <div className="right a_flex">
+              <React.Fragment>
+                <Box
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    textAlign: "center",
+                  }}
+                >
+                  <Typography sx={{ minWidth: 100 }}>
+                    <Link to="">Delivery and payment</Link>
+                  </Typography>
+                  <Typography sx={{ minWidth: 100 }}>
+                    <Link to="">Returns</Link>
+                  </Typography>
+                  <Typography sx={{ minWidth: 100 }}>
+                    <Link to="">Store locators</Link>
+                  </Typography>{" "}
+                  <Typography sx={{ minWidth: 100 }}>
+                    <Link to="/contact">Contact</Link>
+                  </Typography>
+                  <Tooltip title="Information">
+                    <IconButton
+                      onClick={handleClick}
+                      disableRipple
+                      size="small"
+                      sx={{ ml: 2 }}
+                      className="icon-button"
+                      aria-controls={openInfo ? "account-menu" : undefined}
+                      aria-haspopup="true"
+                      aria-expanded={openInfo ? "true" : undefined}
+                    >
+                      <span className="a_flex">
+                        <ArticleOutlinedIcon className="icon" />
+                        <KeyboardArrowDownIcon className="icon" />
+                      </span>
+                    </IconButton>
+                  </Tooltip>
+                </Box>
+                <Menu
+                  anchorEl={anchorEl}
+                  id="account-menu"
+                  open={openInfo}
+                  onClose={handleCloseInfo}
+                  onClick={handleCloseInfo}
+                  PaperProps={{
+                    elevation: 0,
+                    sx: {
+                      borderRadius: "10px",
+                      overflow: "visible",
+                      filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                      mt: 1.5,
+                      ml: 0.8,
+                      "& .MuiAvatar-root": {
+                        width: 32,
+                        height: 32,
+                        ml: -0.5,
+                        mr: 1,
+                      },
+                      "&:before": {
+                        content: '""',
+                        display: "block",
+                        position: "absolute",
+                        top: 0,
+                        right: 14,
+                        width: 10,
+                        height: 10,
+                        bgcolor: "background.paper",
+                        transform: "translateY(-50%) rotate(45deg)",
+                        zIndex: 0,
+                      },
+                    },
+                  }}
+                  transformOrigin={{ horizontal: "right", vertical: "top" }}
+                  anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                >
+                  <MenuItem
+                    component={Link}
+                    to="/track-order"
+                    onClick={handleCloseInfo}
+                  >
+                    Delivery and payment
+                  </MenuItem>
+                  <MenuItem
+                    component={Link}
+                    to="/track-order"
+                    onClick={handleCloseInfo}
+                  >
+                    Returns
+                  </MenuItem>
+                  <MenuItem
+                    component={Link}
+                    to="/track-order"
+                    onClick={handleCloseInfo}
+                  >
+                    Store locators
+                  </MenuItem>
+                  <MenuItem
+                    component={Link}
+                    to="/contact"
+                    onClick={handleCloseInfo}
+                  >
+                    Contact
+                  </MenuItem>
+                </Menu>
+              </React.Fragment>
+              <label htmlFor="" id="display-none" className="language">
+                EN
+              </label>
+              <div className="currency_state">
+                <select
+                  className={
+                    darkMode ? "dark_mode currency_symbol" : "currency_symbol"
+                  }
+                  value={toCurrencies}
+                  onChange={(e) => {
+                    const selectedCurrency = e.target.value;
+                    localStorage.setItem("toCurrencies", selectedCurrency);
+                    setToCurrencies(selectedCurrency);
+                  }}
+                >
+                  {currencies.map((currency) => (
+                    <option
+                      className="currency_symbol_option"
+                      key={currency.code}
+                      value={currency.code}
+                    >
+                      {currency.symbol} &#160;&#160; {currency.code}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <FormControlLabel
+                  onClick={toggle}
+                  control={<MaterialUISwitch checked={darkMode} />}
+                />
+              </div>
             </div>
           </div>
         </div>

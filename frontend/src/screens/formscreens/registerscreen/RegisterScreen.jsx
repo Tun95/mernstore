@@ -176,7 +176,7 @@ function RegisterScreen() {
               <Form action="" onSubmit={handleSubmit}>
                 <div className="inner-form">
                   <h1>Register for a new account</h1>
-                  <div className="inline_input c_flex">
+                  <div className="inline_input d_flex">
                     <div className="form-group">
                       <label
                         htmlFor="firstName"

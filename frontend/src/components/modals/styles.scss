@@ -1,39 +1,173 @@
-.user_modal_bg {
-  width: 100%;
-  height: 100%;
-  .user_modal_list {
-    position: fixed;
-    top: 120px;
-    right: 4%;
-    // margin-right: 65px;
-    z-index: 5000;
-    background-color: #f7f7f7;
-    border-radius: 5px;
-    width: 200px;
-    padding: 20px;
-    .user_modal_box {
-      line-height: 30px;
-      a {
-        width: 100%;
+.customer_location {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  min-height: 500px;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  border-radius: 10px;
+  outline: none;
+  .map_header {
+    padding: 10px 20px !important;
+    color: var(--color-white);
+    background-color: var(--color-primary) !important;
+    h1 {
+      font-weight: 800;
+      font-size: 18px;
+    }
+    .map_icon {
+      color: var(--color-background);
+      font-size: 28px;
+      cursor: pointer;
+    }
+  }
+  .map_btn {
+    position: absolute;
+    bottom: 0;
+    padding: 15px 20px !important;
+    background-color: var(--color-bg);
+    width: 100%;
+    button {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      padding: 10px 30px;
+      font-size: 17px;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+  }
+}
+.customer_call {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  background-color: #ffffff;
+  box-shadow: 0px 0px 24px rgba(0, 0, 0, 0.2);
+  overflow: hidden;
+  border-radius: 10px;
+  outline: none;
+  .call_header {
+    padding: 10px 20px !important;
+    color: var(--color-white);
+    background-color: var(--color-primary) !important;
+    h1 {
+      font-weight: 800;
+      font-size: 18px;
+    }
+    .call_icon {
+      color: var(--color-background);
+      font-size: 28px;
+      cursor: pointer;
+    }
+  }
 
-        li {
-          padding-left: 5px;
+  .call {
+    .error {
+      font-size: 14px;
+      color: var(--color-primary);
+    }
+
+    label {
+      font-size: 15px;
+      font-weight: 600;
+    }
+    .call_request {
+      padding: 10px 20px;
+      .form_group {
+        margin-bottom: 20px;
+        .input_box {
+          border: 1px solid var(--color-light-gray);
+          padding: 8px;
+          width: 100%;
+          border-radius: 5px;
         }
-        li:hover {
-          background-color: #dfdfdf;
+        input.error-border {
+          border: 1px solid var(--color-primary);
         }
+      }
+      .time {
+        margin-bottom: 15px;
+        .request_time {
+          .time_input {
+            border: 1px solid var(--color-light-gray);
+            margin-left: 6px;
+            padding: 4px;
+            border-radius: 6px;
+          }
+
+          input.error-border {
+            border: 1px solid var(--color-primary);
+          }
+        }
+        .mb {
+          margin-bottom: 9px;
+        }
+      }
+    }
+
+    .call_btn {
+      padding: 15px 20px !important;
+      background-color: var(--color-bg);
+      width: 100%;
+
+      button {
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        padding: 12px 15px;
+        font-size: 15px;
+        border-radius: 7px;
+        cursor: pointer;
+        box-shadow: var(--light-shadow);
       }
     }
   }
 }
-.user_modal_list::before {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: -2px;
-  height: 50px;
-  width: 50px;
-  z-index: -1;
-  background-color: #f7f7f7;
-  transform: translateX(-50%) rotate(45deg);
+.modal_login_btn {
+  background: transparent;
+  color: var(--color-white);
+  cursor: pointer;
+  &:hover {
+    border-bottom: 1px solid var(--color-white);
+    padding-bottom: -8px;
+  }
+}
+.login_modal {
+  width: 600px;
+  .login_form {
+    margin-top: 20px;
+    .call_request {
+      .form_group {
+        margin-bottom: 15px;
+        label {
+          font-weight: 300;
+          font-size: 14px;
+          color: var(--color-black);
+        }
+        a {
+          font-size: 13px;
+          color: var(--color-tab);
+        }
+        .eye-icon {
+          float: right;
+          position: relative;
+          bottom: 34px;
+          right: 10px;
+        }
+      }
+    }
+    .remember {
+      input {
+        margin-right: 8px;
+        width: 18px;
+        height: 18px;
+        border-radius: 10px;
+        cursor: pointer;
+      }
+    }
+  }
 }

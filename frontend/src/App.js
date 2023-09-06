@@ -190,7 +190,6 @@ function App() {
           ></Route>
           <Route path="/vendor-products/:id" element={<SellerScreen />}></Route>
 
-          {/* ABOUT US */}
           <Route path="/store-locations" element={<OurStoreScreen />}></Route>
           <Route path="/privacy-policy" element={<PrivacyScreen />}></Route>
           <Route path="/terms-and-conditons" element={<TermScreen />}></Route>
@@ -198,12 +197,10 @@ function App() {
           <Route path="/our-cares" element={<OurCareScreen />}></Route>
           <Route path="/theme-faq" element={<ThemeFaqScreen />}></Route>
 
-          {/* CUSTOMER CARES */}
           <Route path="/bulk-purchases" element={<BulkScreen />}></Route>
           <Route path="/how-to-buy" element={<BuyInfoScreen />}></Route>
           <Route path="/returns" element={<ReturnScreen />}></Route>
 
-          {/* USER */}
           <Route
             path="/user-profile/:id"
             element={
@@ -280,9 +277,6 @@ function App() {
           ></Route>
           <Route path="/unsubscribe" element={<UnSubscribeScreen />}></Route>
 
-          {/* VALIDATION */}
-
-          {/* CHECKOUT */}
           <Route
             path="/billing"
             element={
@@ -301,9 +295,7 @@ function App() {
             }
           ></Route>
           <Route path="/finish" element={<FinishScreen />}></Route>
-          {/* CHECKOUT */}
 
-          {/* ADMIN ROUTES */}
           <Route
             path="/admin/dashboard"
             element={
@@ -474,7 +466,7 @@ function App() {
               </AdminRoute>
             }
           ></Route>
-          {/* BANNER */}
+
           <Route
             path="/admin/new-banner"
             element={
@@ -515,9 +507,7 @@ function App() {
               </AdminRoute>
             }
           ></Route>
-          {/* ADMIN ROUTES */}
 
-          {/* SELLER ROUTES */}
           <Route
             path="/vendor/dashboard"
             element={
@@ -566,8 +556,6 @@ function App() {
               </SellerRoute>
             }
           ></Route>
-
-          {/* SELLER ROUTES */}
         </Routes>
 
         {/* <MessengerCustomerChat

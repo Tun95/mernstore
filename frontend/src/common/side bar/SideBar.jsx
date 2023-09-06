@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import "./style.scss";
 import Box from "@mui/material/Box";
@@ -33,6 +33,12 @@ import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import WorkIcon from "@mui/icons-material/Work";
 import { styled } from "@mui/material/styles";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import AddIcon from "@mui/icons-material/Add";
+import RemoveIcon from "@mui/icons-material/Remove";
+import CloseIcon from "@mui/icons-material/Close";
+import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+import GridViewIcon from "@mui/icons-material/GridView";
+import { LocationModal, LoginModals } from "../../components/modals/Modals";
 
 const StyledDivider = styled(Divider)(({ theme, darkMode }) => ({
   backgroundColor: darkMode ? "#ffffff" : "", // Change colors accordingly
@@ -103,9 +109,6 @@ function SideBar() {
       icon: (
         <span>
           <ShoppingCartIcon className="cart_badge_icon" />
-          <span className="cart_badge_side l_flex">
-            <span className="cart_badge">{cart.cartItems?.length}</span>
-          </span>
         </span>
       ),
       to: "/cart",
@@ -117,294 +120,32 @@ function SideBar() {
     },
   ];
 
-  const userProfileLink = userInfo ? `/user-profile/${userInfo._id}` : "";
-  const userWishLink = userInfo ? `/wish-list/${userInfo._id}` : "";
-  const userItemList = [
-    {
-      text: "My Profile",
-      icon: <AccountCircleIcon />,
-      to: userProfileLink, // <-- add link targets
-    },
-    {
-      text: "Wishlist",
-      icon: <FavoriteIcon />,
-      to: userWishLink,
-    },
-    {
-      text: "Orders",
-      icon: <WorkIcon />,
-      to: "/track-order",
-    },
-    {
-      text: "Track Orders",
-      icon: <PlaceIcon />,
-      to: "/track-shipment",
-    },
-  ];
-  const adminItemList = [
-    {
-      text: "Dashboard",
-      icon: <LineStyleIcon />,
-      to: "/admin/dashboard", // <-- add link targets
-    },
-    {
-      text: "Products",
-      icon: <Inventory2Icon />,
-      to: "/admin/products",
-    },
-    {
-      text: "Users",
-      icon: <PeopleIcon />,
-      to: "/admin/users",
-    },
-    {
-      text: "Vendors",
-      icon: <BadgeIcon />,
-      to: "/admin/vendors",
-    },
-    {
-      text: "Orders",
-      icon: <WarehouseIcon />,
-      to: "/admin/orders",
-    },
-    {
-      text: "Withdrawals",
-      icon: <AccountBalanceWalletIcon />,
-      to: "/admin/withdrawal-request",
-    },
-    {
-      text: "Settings",
-      icon: <SettingsIcon />,
-      to: "/admin/settings",
-    },
-  ];
+  //TOGGLE
+  const [shopSectionExpanded, setShopSectionExpanded] = useState(false);
+  const [adminSectionExpanded, setAdminSectionExpanded] = useState(false);
+  const [vendorSectionExpanded, setVendorSectionExpanded] = useState(false);
 
-  const vendorProfileLink = userInfo ? `/vendor-profile/${userInfo._id}` : "";
-  const vendorItemlist = [
-    {
-      text: "Dashboard",
-      icon: <LineStyleIcon />,
-      to: "/vendor/dashboard", // <-- add link targets
-    },
-    {
-      text: "Vendor Profile",
-      icon: <AccountCircleIcon />,
-      to: vendorProfileLink, // <-- add link targets
-    },
-    {
-      text: "Products",
-      icon: <Inventory2Icon />,
-      to: `/vendor/products`,
-    },
-    {
-      text: "Orders",
-      icon: <WarehouseIcon />,
-      to: "/vendor/orders",
-    },
-    {
-      text: "Withdraw",
-      icon: <AccountBalanceWalletIcon />,
-      to: "/vendor/withdraw",
-    },
-  ];
-  const list = (anchor) => (
-    <Box
-      sx={{
-        width: anchor === "top" || anchor === "bottom" ? "auto" : 250,
-      }}
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <List>
-        {webItemList?.map((item, index) => {
-          const { text, icon } = item;
-          return (
-            <ListItem disablePadding component={Link} to={item.to} key={index}>
-              <ListItemButton>
-                {icon && (
-                  <ListItemIcon
-                    sx={{
-                      color: darkMode ? "#ffffff" : "#2e2e2e", // Set text color based on darkMode
-                    }}
-                  >
-                    {icon}
-                  </ListItemIcon>
-                )}
-                <ListItemText
-                  primary={text}
-                  sx={{
-                    color: darkMode ? "#ffffff" : "#2e2e2e", // Set text color based on darkMode
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          );
-        })}
-      </List>
-      <StyledDivider darkMode={darkMode} />
-      <StyledDivider darkMode={darkMode} />
-      {userInfo ? (
-        <List>
-          {userItemList?.map((item, index) => {
-            const { text, icon } = item;
-            return (
-              <ListItem
-                disablePadding
-                component={Link}
-                to={item.to}
-                key={index}
-              >
-                <ListItemButton>
-                  {icon && (
-                    <ListItemIcon
-                      sx={{
-                        color: darkMode ? "#ffffff" : "#2e2e2e", // Set text color based on darkMode
-                      }}
-                    >
-                      {icon}
-                    </ListItemIcon>
-                  )}
-                  <ListItemText
-                    primary={text}
-                    sx={{
-                      color: darkMode ? "#ffffff" : "#2e2e2e", // Set text color based on darkMode
-                    }}
-                  />
-                </ListItemButton>
-              </ListItem>
-            );
-          })}
-        </List>
-      ) : (
-        <List>
-          <ListItem disablePadding component={Link} to={`/login`}>
-            <ListItemButton>
-              <ListItemIcon
-                sx={{
-                  color: darkMode ? "#ffffff" : "#2e2e2e", // Set text color based on darkMode
-                }}
-              >
-                <LoginIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary="Log in"
-                sx={{
-                  color: darkMode ? "#ffffff" : "#2e2e2e", // Set text color based on darkMode
-                }}
-              />
-            </ListItemButton>
-          </ListItem>
-        </List>
-      )}
-      {userInfo && userInfo.isAdmin ? (
-        <>
-          <StyledDivider darkMode={darkMode} />
-          <StyledDivider darkMode={darkMode} />
-          <List>
-            {adminItemList?.map((item, index) => {
-              const { text, icon } = item;
-              return (
-                <ListItem
-                  disablePadding
-                  component={Link}
-                  to={item.to}
-                  key={index}
-                >
-                  <ListItemButton>
-                    {icon && (
-                      <ListItemIcon
-                        sx={{
-                          color: darkMode ? "#ffffff" : "#2e2e2e", // Set text color based on darkMode
-                        }}
-                      >
-                        {icon}
-                      </ListItemIcon>
-                    )}
-                    <ListItemText
-                      primary={text}
-                      sx={{
-                        color: darkMode ? "#ffffff" : "#2e2e2e", // Set text color based on darkMode
-                      }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
-          </List>
-        </>
-      ) : null}
-      {userInfo && userInfo.isSeller ? (
-        <>
-          <StyledDivider darkMode={darkMode} />
-          <StyledDivider darkMode={darkMode} />
-          <List>
-            {vendorItemlist?.map((item, index) => {
-              const { text, icon } = item;
-              return (
-                <ListItem
-                  disablePadding
-                  component={Link}
-                  to={item.to}
-                  key={index}
-                >
-                  <ListItemButton>
-                    {icon && (
-                      <ListItemIcon
-                        sx={{
-                          color: darkMode ? "#ffffff" : "#2e2e2e", // Set text color based on darkMode
-                        }}
-                      >
-                        {icon}
-                      </ListItemIcon>
-                    )}
-                    <ListItemText
-                      primary={text}
-                      sx={{
-                        color: darkMode ? "#ffffff" : "#2e2e2e", // Set text color based on darkMode
-                      }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              );
-            })}
-          </List>
-        </>
-      ) : null}
-      {userInfo && (
-        <>
-          <StyledDivider darkMode={darkMode} />
-          <StyledDivider darkMode={darkMode} />
-          <List>
-            <ListItem disablePadding onClick={signoutHandler}>
-              <ListItemButton>
-                <ListItemIcon
-                  sx={{
-                    color: darkMode ? "#ffffff" : "#2e2e2e", // Set text color based on darkMode
-                  }}
-                >
-                  <LogoutIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary="Log out"
-                  sx={{
-                    color: darkMode ? "#ffffff" : "#2e2e2e", // Set text color based on darkMode
-                  }}
-                />
-              </ListItemButton>
-            </ListItem>
-          </List>
-        </>
-      )}
-    </Box>
-  );
+  const toggleShopSection = () => {
+    setShopSectionExpanded(!shopSectionExpanded);
+  };
+
+  const toggleAdminSection = () => {
+    setAdminSectionExpanded(!adminSectionExpanded);
+  };
+
+  const toggleVendorSection = () => {
+    setVendorSectionExpanded(!vendorSectionExpanded);
+  };
 
   return (
     <div>
-      {["right"]?.map((anchor, index) => (
+      {["left"]?.map((anchor, index) => (
         <React.Fragment key={index}>
           <Button
             className="menu_btn_icon"
+            id="demo-customized-button"
+            disableRipple
+            style={{ backgroundColor: "transparent" }}
             onClick={toggleDrawer(anchor, true)}
           >
             <MenuIcon className="menu_icon" />
@@ -420,15 +161,306 @@ function SideBar() {
               },
             }}
           >
-            <span className="toggle_width">
-              <span className="logo_span l_flex">
-                <img src={logo} alt="logo" className="logo" />
+            <div className="main">
+              <span className="toggle_width">
+                <span className="logo_span d_flex">
+                  <img src={logo} alt="logo" className="logo" />
+                  <CloseIcon
+                    className="icon"
+                    onClick={toggleDrawer(anchor, false)}
+                  />
+                </span>
               </span>
-            </span>
-            <StyledDivider darkMode={darkMode} />
-            <StyledDivider darkMode={darkMode} />
-            {list(anchor)}
-            <StyledDivider darkMode={darkMode} />
+              <div className="login_reg">
+                <div className="content a_flex">
+                  <div className="user l_flex">
+                    <AccountCircleOutlinedIcon className="icon" />
+                  </div>
+                  <div className="link_small">
+                    <div className="link a_flex">
+                      <LoginModals
+                        toggleDrawer={toggleDrawer}
+                        anchor={anchor}
+                      />
+                      <span>|</span>
+                      <Link
+                        to="/register"
+                        onClick={toggleDrawer(anchor, false)}
+                      >
+                        Register
+                      </Link>
+                    </div>
+                    <small>Log in to get more opportunities</small>
+                  </div>
+                </div>
+              </div>
+              <div className="category_btn">
+                <button className="l_flex">
+                  <span className="a_flex">
+                    <GridViewIcon className="icon" />
+                    <span>Categories</span>
+                  </span>
+                </button>
+              </div>
+              <div className="lang_currency_locate">
+                <div className="language  a_flex">
+                  <span className="label">Language: </span>
+                  <div className="btn">
+                    <button className="disabled" disabled>
+                      RU
+                    </button>
+                    <button className="active">EN</button>
+                    <button className="disabled" disabled>
+                      AR
+                    </button>
+                  </div>
+                </div>
+                <div className="currency a_flex">
+                  <span className="label">Currencies: </span>
+                  <div className="currency_state">
+                    <select
+                      className={darkMode ? "dark_mode" : ""}
+                      value={toCurrencies}
+                      onChange={(e) => {
+                        const selectedCurrency = e.target.value;
+                        localStorage.setItem("toCurrencies", selectedCurrency);
+                        setToCurrencies(selectedCurrency);
+                      }}
+                    >
+                      {currencies.map((currency) => (
+                        <option key={currency.code} value={currency.code}>
+                          {currency.symbol} &#160;&#160; {currency.code}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+                <div className="location a_flex">
+                  <span className="label">City: </span>
+                  <LocationModal />
+                </div>
+              </div>
+              <StyledDivider darkMode={darkMode} />
+              <div className="store_info">
+                <ul>
+                  <li>
+                    <Link onClick={toggleDrawer(anchor, false)} to="/">
+                      Delivery and payment
+                    </Link>
+                  </li>
+                  <li>
+                    <Link onClick={toggleDrawer(anchor, false)} to="/">
+                      Returns
+                    </Link>
+                  </li>
+                  <li>
+                    <Link onClick={toggleDrawer(anchor, false)} to="/">
+                      Store locator
+                    </Link>
+                  </li>
+                  <li>
+                    <Link onClick={toggleDrawer(anchor, false)} to="/contact">
+                      Contacts
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+              <StyledDivider darkMode={darkMode} />
+              <div className="shop">
+                <label
+                  htmlFor=""
+                  className="c_flex"
+                  onClick={toggleShopSection}
+                >
+                  <span>Shop</span>
+                  {shopSectionExpanded ? (
+                    <RemoveIcon className="icon" />
+                  ) : (
+                    <AddIcon className="icon" />
+                  )}
+                </label>
+                {shopSectionExpanded && (
+                  <ul>
+                    <li>
+                      <Link onClick={toggleDrawer(anchor, false)} to="/">
+                        Home
+                      </Link>
+                    </li>
+                    <li>
+                      <Link onClick={toggleDrawer(anchor, false)} to="/store">
+                        Store
+                      </Link>
+                    </li>
+                    <li className="c_flex">
+                      <Link onClick={toggleDrawer(anchor, false)} to="/cart">
+                        Cart
+                      </Link>
+                      <span>
+                        <ShoppingCartIcon className="icon" />
+                        <span className="cart_badge_side l_flex">
+                          <span className="cart_badge">
+                            {cart.cartItems?.length}
+                          </span>
+                        </span>
+                      </span>
+                    </li>
+                    <li>
+                      <Link onClick={toggleDrawer(anchor, false)} to="/">
+                        Delivery and payment
+                      </Link>
+                    </li>
+                    <li>
+                      <Link onClick={toggleDrawer(anchor, false)} to="/">
+                        Returns
+                      </Link>
+                    </li>
+                    <li>
+                      <Link onClick={toggleDrawer(anchor, false)} to="/">
+                        Store locator
+                      </Link>
+                    </li>
+                    <li>
+                      <Link onClick={toggleDrawer(anchor, false)} to="/contact">
+                        Contacts
+                      </Link>
+                    </li>
+                  </ul>
+                )}
+              </div>{" "}
+              {userInfo && userInfo.isAdmin ? (
+                <>
+                  <StyledDivider darkMode={darkMode} />
+                  <div className="shop admin">
+                    <label
+                      htmlFor=""
+                      className="c_flex"
+                      onClick={toggleAdminSection}
+                    >
+                      <span>Admin</span>
+                      {adminSectionExpanded ? (
+                        <RemoveIcon className="icon" />
+                      ) : (
+                        <AddIcon className="icon" />
+                      )}
+                    </label>
+                    {adminSectionExpanded && (
+                      <ul onClick={toggleDrawer(anchor, false)}>
+                        <li className="c_flex">
+                          <Link className="c_flex" to="/admin/dashboard">
+                            <span>Dashboard</span>
+                            <LineStyleIcon className="icon" />
+                          </Link>
+                        </li>
+                        <li className="c_flex">
+                          <Link className="c_flex" to="/admin/products">
+                            <span>Products</span>
+                            <Inventory2Icon className="icon" />
+                          </Link>
+                        </li>
+                        <li className="c_flex">
+                          <Link className="c_flex" to="/admin/users">
+                            <span>Users</span>
+                            <PeopleIcon className="icon" />{" "}
+                          </Link>
+                        </li>
+                        <li className="c_flex">
+                          <Link className="c_flex" to="/admin/vendors">
+                            <span> Vendors</span>
+                            <BadgeIcon className="icon" />
+                          </Link>
+                        </li>{" "}
+                        <li className="c_flex">
+                          <Link className="c_flex" to="/admin/orders">
+                            <span>Orders</span>
+                            <WarehouseIcon className="icon" />
+                          </Link>
+                        </li>{" "}
+                        <li className="c_flex">
+                          <Link
+                            className="c_flex"
+                            to="/admin/withdrawal-request"
+                          >
+                            <span> Withdrawals</span>
+                            <AccountBalanceWalletIcon className="icon" />
+                          </Link>
+                        </li>{" "}
+                        <li>
+                          <Link to="/admin/settings" className="c_flex">
+                            <span> Settings</span>
+                            <SettingsIcon className="icon" />
+                          </Link>
+                        </li>
+                      </ul>
+                    )}
+                  </div>
+                </>
+              ) : (
+                ""
+              )}
+              {userInfo && userInfo.isSeller ? (
+                <>
+                  {" "}
+                  <StyledDivider darkMode={darkMode} />
+                  <div className="shop seller">
+                    <label
+                      htmlFor=""
+                      className="c_flex"
+                      onClick={toggleVendorSection}
+                    >
+                      <span>Vendor</span>
+                      {vendorSectionExpanded ? (
+                        <RemoveIcon className="icon" />
+                      ) : (
+                        <AddIcon className="icon" />
+                      )}
+                    </label>
+                    {vendorSectionExpanded && (
+                      <ul onClick={toggleDrawer(anchor, false)}>
+                        <li className="c_flex">
+                          <Link className="c_flex" to="/vendor/dashboard">
+                            <span>Dashboard</span>
+                            <LineStyleIcon className="icon" />
+                          </Link>
+                        </li>
+                        <li className="c_flex">
+                          <Link className="c_flex" to="/vendor/products">
+                            <span>Products</span>
+                            <Inventory2Icon className="icon" />
+                          </Link>
+                        </li>
+                        <li className="c_flex">
+                          <Link
+                            className="c_flex"
+                            to={
+                              userInfo ? `/vendor-profile/${userInfo._id}` : ""
+                            }
+                          >
+                            <span>My Profile</span>
+                            <AccountCircleOutlinedIcon className="icon" />{" "}
+                          </Link>
+                        </li>
+                        <li className="c_flex">
+                          <Link className="c_flex" to="/vendor/orders">
+                            <span>Orders</span>
+                            <WarehouseIcon className="icon" />
+                          </Link>
+                        </li>{" "}
+                        <li className="c_flex">
+                          <Link className="c_flex" to="/vendor/withdraw">
+                            <span> Withdraw</span>
+                            <AccountBalanceWalletIcon className="icon" />
+                          </Link>
+                        </li>
+                      </ul>
+                    )}
+                  </div>
+                </>
+              ) : (
+                ""
+              )}
+              <StyledDivider darkMode={darkMode} />
+            </div>
+
             <StyledDivider darkMode={darkMode} />
             <span
               className={darkMode ? "dark_mode lower_drawer" : "lower_drawer"}
@@ -447,24 +479,6 @@ function SideBar() {
               </span>
               <StyledDivider darkMode={darkMode} />
               <StyledDivider darkMode={darkMode} />
-              <div className="currency_state toggle_width a_flex">
-                <CurrencyExchangeIcon className="currencyExchangeIcon" />
-                <select
-                  className={darkMode ? "dark_mode" : ""}
-                  value={toCurrencies}
-                  onChange={(e) => {
-                    const selectedCurrency = e.target.value;
-                    localStorage.setItem("toCurrencies", selectedCurrency);
-                    setToCurrencies(selectedCurrency);
-                  }}
-                >
-                  {currencies.map((currency) => (
-                    <option key={currency.code} value={currency.code}>
-                      {currency.symbol} &#160;&#160; {currency.code}
-                    </option>
-                  ))}
-                </select>
-              </div>
             </span>
           </Drawer>
         </React.Fragment>

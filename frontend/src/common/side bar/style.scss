@@ -1,4 +1,8 @@
 .menu_btn_icon {
+  background: transparent;
+  &:hover {
+    background: transparent !important;
+  }
   .menu_icon {
     font-size: 40px !important;
     color: var(--color-primary);
@@ -8,20 +12,7 @@
   position: relative;
   top: 8px;
 }
-.cart_badge_side {
-  width: 15px;
-  background-color: var(--color-primary);
-  height: 15px;
-  position: relative;
-  left: 14px;
-  bottom: 28px;
-  border-radius: 50%;
-  .cart_badge {
-    color: var(--color-white);
-    font-size: 12px;
-    // border-radius: 50%;
-  }
-}
+
 .side_bar_drawer {
   ::-webkit-scrollbar {
     display: none;
@@ -30,37 +21,198 @@
     color: var(--color-white);
     background-color: rgb(0, 0, 0, 0.8);
   }
-  .currency_state {
-    .currencyExchangeIcon {
-      position: relative;
-      right: 19px;
-      font-size: 23px;
-    }
-    select {
-      width: 60%;
-      height: 30px;
-    }
-  }
+
   .toggle_width {
     width: 100%;
     display: flex;
     justify-content: center;
-    margin: 20px 0px;
+    padding: 20px;
+    background-color: var(--color-background);
     .logo_span {
       width: 100%;
-      height: 60px;
-      background-color: var(--color-background);
-      margin: -20px 0px;
-    }
-    img {
-      width: auto;
       height: 40px;
+      position: relative;
+      img {
+        width: auto;
+        height: 37px;
+        cursor: pointer;
+      }
+      .icon {
+        font-size: 28px;
+        position: relative;
+        bottom: 9px;
+        left: 3px;
+        cursor: pointer;
+      }
     }
+
     .toggle_btn {
       background-color: var(--color-primary);
       color: var(--color-white);
       font-weight: 600;
       width: 180px;
+    }
+  }
+  .main {
+    width: 320px;
+    .login_reg {
+      background-color: var(--color-black);
+      color: var(--color-gray);
+      padding: 15px 20px;
+      a {
+        color: var(--color-white);
+        font-size: 14px;
+        font-weight: 300;
+      }
+      a:hover {
+        text-decoration: underline;
+      }
+      .content {
+        .user {
+          background-color: var(--color-gray);
+          color: var(--color-white);
+          width: 30px;
+          height: 30px;
+          border-radius: 50%;
+          padding: 20px;
+          margin-right: 10px;
+          .icon {
+            font-size: 28px;
+          }
+        }
+        .link_small {
+          font-size: 15px;
+          line-height: 18px;
+          .link {
+            span {
+              margin: 0px 10px;
+            }
+          }
+          small {
+            color: var(--color-light-gray);
+            font-size: 12px;
+            font-weight: 300;
+          }
+        }
+      }
+    }
+    .category_btn {
+      padding: 15px 20px;
+      button {
+        background-color: var(--color-black);
+        color: var(--color-white);
+        padding: 7.5px;
+        width: 100%;
+        border-radius: 20px;
+        cursor: pointer;
+        .a_flex {
+          .icon {
+            margin-right: 5px;
+          }
+          span {
+            font-size: 15px;
+            font-weight: 300;
+          }
+        }
+      }
+    }
+    .lang_currency_locate {
+      padding: 4px 20px;
+      line-height: 75px;
+      margin-bottom: -10px;
+      .label {
+        font-size: 13px;
+        margin-right: 10px;
+      }
+      .language {
+        .btn {
+          button {
+            border: 1px solid var(--color-light-gray);
+            padding: 9px;
+            border-radius: 6px;
+            background: transparent;
+            &.disabled {
+              border-color: var(--color-border);
+            }
+            &.active {
+              border-color: var(--color-tab);
+              background-color: #dbedfd;
+              color: var(--color-tab);
+              margin: 0px 10px;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+      .currency {
+        width: 100%;
+        .currency_state {
+          width: 100%;
+          select {
+            width: 100%;
+            height: 30px;
+          }
+        }
+      }
+      .location {
+        .button-text {
+          font-size: 12px;
+          text-transform: none;
+          .icon {
+            font-size: 13px;
+            color: var(--color-primary);
+          }
+          span {
+            font-size: 12px;
+          }
+        }
+      }
+    }
+    .store_info {
+      padding: 15px 20px;
+      color: var(--color-black);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 30px;
+    }
+    .shop {
+      padding: 13px 20px;
+      color: var(--color-black);
+      font-size: 14px;
+      font-weight: 600;
+      line-height: 30px;
+      ul {
+        width: 100%;
+        a {
+          width: 100%;
+        }
+        .icon {
+          font-size: 18px;
+        }
+      }
+      label {
+        color: var(--color-light-gray);
+        // margin-bottom: 8px;
+        font-weight: 300;
+        cursor: pointer;
+        .icon {
+          color: var(--color-black);
+        }
+      }
+      .cart_badge_side {
+        width: 15px;
+        background-color: var(--color-primary);
+        height: 15px;
+        position: absolute;
+        right: 14px;
+        bottom: 48px;
+        border-radius: 50%;
+        .cart_badge {
+          color: var(--color-white);
+          font-size: 12px;
+          // border-radius: 50%;
+        }
+      }
     }
   }
 }

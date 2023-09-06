@@ -55,6 +55,9 @@ function LoginScreen() {
       console.log(data);
       ctxDispatch({ type: "USER_SIGNIN", payload: data });
       localStorage.setItem("userInfo", JSON.stringify(data));
+      setTimeout(() => {
+        actions.resetForm();
+      }, 1000);
       navigate(redirect || "/");
       toast.success("Sign in successfully", { position: "bottom-center" });
     } catch (err) {
@@ -63,9 +66,6 @@ function LoginScreen() {
         limit: 1,
       });
     }
-    setTimeout(() => {
-      actions.resetForm();
-    }, 1000);
   };
 
   //============

@@ -107,11 +107,6 @@ function Search() {
     <div>
       <section className="search">
         <div className="container c_flex search_bar">
-          <div className="logo width">
-            <Link to="/">
-              <img src={logo} alt="" className="logo_img" />
-            </Link>
-          </div>
           <form
             action=""
             onSubmit={submitHandler}
@@ -124,7 +119,6 @@ function Search() {
               type="search"
               placeholder="Search and hit enter..."
             />
-            <span>All Category</span>
           </form>
           <div className="icon f_flex width">
             <div className="user_modal">
@@ -296,12 +290,6 @@ function Search() {
                 <i className="fa fa-shopping-bag icon-circle"></i>
                 <span>{cart.cartItems.length}</span>
               </Link>
-            </div>
-            <div className="menu_bar">
-              <i className="fa-solid fa-menu">
-                {" "}
-                <SideBar />
-              </i>
             </div>
           </div>
         </div>

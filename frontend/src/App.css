@@ -23,8 +23,8 @@
   --color-dark: #111;
   --color-black: #2e2e2e;
   --color-white: #fff;
-  --color-gray: #6c6c6c;
-  --color-light-gray: #b4b4b4;
+  --color-gray: #777777;
+  --color-light-gray: #999999;
   --transition: all 400ms ease;
   --box-shadow: 0 33px 40px 0 hsla(0, 0%, 73.3%, 0.1);
   --light-shadow: rgb(3 0 71 / 5%) 0px 1px 3px;
@@ -40,6 +40,7 @@
 html {
   scroll-behavior: smooth;
 }
+
 body {
   font-family: "Poppins", sans-serif;
   background-color: var(--color-white);

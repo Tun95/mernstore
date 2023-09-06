@@ -2,13 +2,13 @@ import React from "react";
 import Head from "./Head";
 import Search from "./Search";
 import Navbar from "./Navbar";
-import "./header.css";
+import "./styles.scss";
 
 function Header() {
   return (
     <div>
       <Head />
-      <Search />
+      {/* <Search /> */}
       <Navbar />
     </div>
   );
