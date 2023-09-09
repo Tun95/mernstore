@@ -114,19 +114,21 @@ function Head() {
                     textAlign: "center",
                   }}
                 >
-                  <Typography sx={{ minWidth: 100 }}>
-                    <Link to="">Delivery and payment</Link>
-                  </Typography>
-                  <Typography sx={{ minWidth: 100 }}>
-                    <Link to="">Returns</Link>
-                  </Typography>
-                  <Typography sx={{ minWidth: 100 }}>
-                    <Link to="">Store locators</Link>
-                  </Typography>{" "}
-                  <Typography sx={{ minWidth: 100 }}>
-                    <Link to="/contact">Contact</Link>
-                  </Typography>
-                  <Tooltip title="Information">
+                  <span className="list l_flex">
+                    <Typography sx={{ minWidth: 100 }}>
+                      <Link to="">Delivery and payment</Link>
+                    </Typography>
+                    <Typography sx={{ minWidth: 100 }}>
+                      <Link to="">Returns</Link>
+                    </Typography>
+                    <Typography sx={{ minWidth: 100 }}>
+                      <Link to="">Store locators</Link>
+                    </Typography>{" "}
+                    <Typography sx={{ minWidth: 100 }}>
+                      <Link to="/contact">Contact</Link>
+                    </Typography>
+                  </span>
+                  <Tooltip title="Information" className="drop_list_box">
                     <IconButton
                       onClick={handleClick}
                       disableRipple
@@ -237,7 +239,7 @@ function Head() {
                   ))}
                 </select>
               </div>
-              <div>
+              <div className="toggle_switch">
                 <FormControlLabel
                   onClick={toggle}
                   control={<MaterialUISwitch checked={darkMode} />}

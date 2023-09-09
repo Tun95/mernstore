@@ -176,337 +176,342 @@ function Navbar() {
   return (
     <nav className="navBar">
       <div className="nav_bar">
-        <div className="container c_flex">
-          <div className="categories ">
-            <div className="a_flex">
-              <div className="menu_bar">
-                <SideBar />
-              </div>
-              <div className="logo width">
-                <Link to="/">
-                  <img src={logo} alt="" className="logo_img" />
-                </Link>
-              </div>
-              <div>
-                <div className="c_flex ctg_btn" onClick={handleClick}>
-                  <GridViewIcon className="align_left" />
-                  <h5>Categories</h5>
-                  <KeyboardArrowDownIcon className="icon" />
+        <div className="container ">
+          <div className="c_flex">
+            <div className="categories ">
+              <div className="a_flex">
+                <div className="menu_bar">
+                  <SideBar />
                 </div>
-                {categories?.length > 0 ? (
-                  <StyledMenu
-                    darkMode={darkMode}
-                    id="demo-customized-menu"
-                    className="demo_customized_menu"
-                    MenuListProps={{
-                      "aria-labelledby": "demo-customized-button",
-                    }}
-                    anchorEl={anchorEl}
-                    open={open}
-                    onClose={handleClose}
-                  >
-                    {categories?.map((c, index) => (
-                      <MenuItem
-                        key={index}
-                        component={Link}
-                        to={`/store?category=${c.category}`}
-                        onClick={(e) => handleCategoryClick(e, c.category)}
-                        disableRipple
-                      >
-                        {c.category}
-                      </MenuItem>
-                    ))}
-                  </StyledMenu>
-                ) : null}
+                <div className="logo width">
+                  <Link to="/">
+                    <img src={logo} alt="" className="logo_img" />
+                  </Link>
+                </div>
+                <div className="category_modal">
+                  <div className="c_flex ctg_btn" onClick={handleClick}>
+                    <GridViewIcon className="align_left" />
+                    <h5>Categories</h5>
+                    <KeyboardArrowDownIcon className="icon" />
+                  </div>
+                  {categories?.length > 0 ? (
+                    <StyledMenu
+                      darkMode={darkMode}
+                      id="demo-customized-menu"
+                      className="demo_customized_menu"
+                      MenuListProps={{
+                        "aria-labelledby": "demo-customized-button",
+                      }}
+                      anchorEl={anchorEl}
+                      open={open}
+                      onClose={handleClose}
+                    >
+                      {categories?.map((c, index) => (
+                        <MenuItem
+                          key={index}
+                          component={Link}
+                          to={`/store?category=${c.category}`}
+                          onClick={(e) => handleCategoryClick(e, c.category)}
+                          disableRipple
+                        >
+                          {c.category}
+                        </MenuItem>
+                      ))}
+                    </StyledMenu>
+                  ) : null}
+                </div>
               </div>
             </div>
-          </div>
-          <div>
-            <form action="" onSubmit={submitHandler} className="search-box ">
-              <i className="fa fa-search" onClick={submitHandler}></i>
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                type="search"
-                placeholder="Search and hit enter..."
-              />
-            </form>
-          </div>
-          <div className=" c_flex">
-            <div className="menu_item">
-              <React.Fragment>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    textAlign: "center",
-                  }}
-                >
-                  <Tooltip>
-                    <IconButton
-                      onClick={handleClickNav}
-                      disableRipple
-                      size="small"
-                      sx={{ ml: 2 }}
-                      className="icon-button"
-                      disableElevation
-                      aria-controls={openInfo ? "account-menu" : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={openInfo ? "true" : undefined}
-                    >
-                      <span className="a_flex">
-                        <PhoneInTalkOutlinedIcon />
-                        <span>+0 123-456-7890</span>
-                        <KeyboardArrowDownIcon className="icon" />
-                      </span>
-                    </IconButton>
-                  </Tooltip>
-                </Box>
-
-                <Menu
-                  anchorEl={anchorEle}
-                  id="account-menu"
-                  open={openInfo}
-                  onClose={handleCloseNav}
-                  PaperProps={{
-                    elevation: 0,
-                    sx: {
-                      borderRadius: "20px",
-                      overflow: "visible",
-                      zIndex: 1,
-                      filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                      mt: 1.5,
-                      ml: 2,
-                      "& .MuiAvatar-root": {
-                        width: 32,
-                        height: 32,
-                        ml: -0.5,
-                        mr: 1,
-                      },
-                      "&:before": {
-                        content: '""',
-                        display: "block",
-                        position: "absolute",
-                        top: 0,
-                        right: 24,
-                        width: 15,
-                        height: 15,
-                        bgcolor: "background.paper",
-                        transform: "translateY(-50%) rotate(45deg)",
-                        zIndex: 0,
-                      },
-                    },
-                  }}
-                  transformOrigin={{ horizontal: "right", vertical: "top" }}
-                  anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-                >
-                  <div className="menu-content">
-                    <div className="numbers">
-                      <div className="phone_num">
-                        <h3>
-                          <a href="tel:+01334567890">+0 133-456-7890</a>
-                        </h3>
-                        <small>Mon-Fr 9a.m.-6p.m.</small>
-                      </div>
-                      <div className="phone_num">
-                        <h3>
-                          <a href="tel:+01334567890">+0 133-456-7890</a>
-                        </h3>
-                        <small>Mon-Fr 9a.m.-6p.m.</small>
-                      </div>
-                    </div>
-                    <div className="btn">
-                      <CallRequestModals />
-                    </div>
-                    <Divider />
-                    <div className="social_icons f_flex">
-                      <div className="icon l_flex">
-                        <a href="/#">
-                          <i class="fa-brands fa-facebook-f"></i>
-                        </a>
-                      </div>
-                      <div className="icon l_flex">
-                        <a href="/#">
-                          <i class="fa-brands fa-instagram"></i>
-                        </a>
-                      </div>
-                      <div className="icon l_flex">
-                        <a href="/#">
-                          <i class="fa-brands fa-youtube"></i>
-                        </a>
-                      </div>
-                      <div className="icon l_flex">
-                        <a href="/#">
-                          <i class="fa-brands fa-skype"></i>
-                        </a>
-                      </div>
-                    </div>
-                    <div className="address_email">
-                      <small>Email</small>
-                      <h5>
-                        <a href="mailto:info@example.com">info@example.com</a>
-                      </h5>
-                    </div>
-                    <div className="address_email">
-                      <small>Address</small>
-                      <h5 className="address">
-                        United States, Boston, 44 Main street
-                      </h5>
-                    </div>
-                  </div>
-                </Menu>
-              </React.Fragment>
+            <div className="search_box_width">
+              <form action="" onSubmit={submitHandler} className="search-box ">
+                <i className="fa fa-search" onClick={submitHandler}></i>
+                <input
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  type="search"
+                  placeholder="Search and hit enter..."
+                />
+              </form>
             </div>
-            <div className="icons c_flex">
-              <Tooltip title="View comparison list">
-                <span className="l_flex">
-                  <EqualizerIcon className="icon" />
-                </span>
-              </Tooltip>
-              <Tooltip title="View wish list">
-                <span className="l_flex">
-                  <FavoriteBorderIcon className="icon" />
-                </span>
-              </Tooltip>
-              <React.Fragment>
-                <Box
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    textAlign: "center",
-                  }}
-                >
-                  <Tooltip>
-                    <IconButton
-                      onClick={handleClickUser}
-                      disableRipple
-                      size="small"
-                      className="icon-button"
-                      disableElevation
-                      aria-controls={openUserInfo ? "account-menu" : undefined}
-                      aria-haspopup="true"
-                      aria-expanded={openUserInfo ? "true" : undefined}
-                    >
-                      <span className="l_flex">
-                        <AccountCircleOutlinedIcon className="icon" />
-                      </span>
-                    </IconButton>
-                  </Tooltip>
-                </Box>
+            <div className=" left_icons c_flex">
+              <div className="menu_item item_number_box">
+                <React.Fragment>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                  >
+                    <Tooltip>
+                      <IconButton
+                        onClick={handleClickNav}
+                        disableRipple
+                        size="small"
+                        sx={{ ml: 2 }}
+                        className="icon-button"
+                        disableElevation
+                        aria-controls={openInfo ? "account-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={openInfo ? "true" : undefined}
+                      >
+                        <span className="a_flex">
+                          <PhoneInTalkOutlinedIcon />
+                          <span>+0 123-456-7890</span>
+                          <KeyboardArrowDownIcon className="icon" />
+                        </span>
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
 
-                <Menu
-                  anchorEl={anchorUser}
-                  id="account-menu"
-                  open={openUserInfo}
-                  onClose={handleCloseUser}
-                  PaperProps={{
-                    elevation: 0,
-                    sx: {
-                      zIndex: 1,
-                      borderRadius: "20px",
-                      overflow: "visible",
-                      padding: 0,
-                      margin: 0,
-                      filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                      ml: 1,
-                      "& .MuiAvatar-root": {
-                        width: 32,
-                        height: 32,
-                        ml: 1.5,
-                        mr: 1,
+                  <Menu
+                    anchorEl={anchorEle}
+                    id="account-menu"
+                    open={openInfo}
+                    onClose={handleCloseNav}
+                    PaperProps={{
+                      elevation: 0,
+                      sx: {
+                        borderRadius: "20px",
+                        overflow: "visible",
+                        zIndex: 1,
+                        filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                        mt: 1.5,
+                        ml: 2,
+                        "& .MuiAvatar-root": {
+                          width: 32,
+                          height: 32,
+                          ml: -0.5,
+                          mr: 1,
+                        },
+                        "&:before": {
+                          content: '""',
+                          display: "block",
+                          position: "absolute",
+                          top: 0,
+                          right: 24,
+                          width: 15,
+                          height: 15,
+                          bgcolor: "background.paper",
+                          transform: "translateY(-50%) rotate(45deg)",
+                          zIndex: 0,
+                        },
                       },
-                      "&:before": {
-                        content: '""',
-                        display: "block",
-                        position: "absolute",
-                        top: 0,
-                        right: 24,
-                        width: 15,
-                        height: 15,
-                        bgcolor: "background.paper",
-                        transform: "translateY(-50%) rotate(45deg)",
-                        zIndex: 0,
-                      },
-                    },
-                  }}
-                  transformOrigin={{ horizontal: "right", vertical: "top" }}
-                  anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-                >
-                  <div className="user_menu_content">
-                    <div className="upper">
-                      <div className="user_head c_flex">
-                        <h4>My Account</h4>
-                        <CloseOutlinedIcon
-                          onClick={handleCloseUser}
-                          className="icon"
-                        />
+                    }}
+                    transformOrigin={{ horizontal: "right", vertical: "top" }}
+                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                  >
+                    <div className="menu-content">
+                      <div className="numbers">
+                        <div className="phone_num">
+                          <h3>
+                            <a href="tel:+01334567890">+0 133-456-7890</a>
+                          </h3>
+                          <small>Mon-Fr 9a.m.-6p.m.</small>
+                        </div>
+                        <div className="phone_num">
+                          <h3>
+                            <a href="tel:+01334567890">+0 133-456-7890</a>
+                          </h3>
+                          <small>Mon-Fr 9a.m.-6p.m.</small>
+                        </div>
+                      </div>
+                      <div className="btn">
+                        <CallRequestModals />
                       </div>
                       <Divider />
-                      <div className="menu_item">
-                        <MenuItem
-                          key="orders"
-                          component={Link}
-                          to="/track-order"
-                          className="list"
-                          onClick={handleCloseUser}
-                          disableRipple
-                        >
-                          Orders
-                        </MenuItem>
-                        <MenuItem
-                          key="orders"
-                          component={Link}
-                          to="/track-order"
-                          className="list"
-                          onClick={handleCloseUser}
-                          disableRipple
-                        >
-                          Comparison list
-                        </MenuItem>
-                        <MenuItem
-                          key="orders"
-                          component={Link}
-                          to="/track-order"
-                          className="list"
-                          onClick={handleCloseUser}
-                          disableRipple
-                        >
-                          Wish list
-                        </MenuItem>
-                      </div>
-                    </div>
-                    <div className="lower">
-                      <div className="content">
-                        <div className="track">
-                          <small>Track my order(s)</small>
-                          <form action="" className="a_flex">
-                            <input
-                              type="text"
-                              placeholder="Order Tracking ID"
-                            />
-                            <button>
-                              <ArrowRightOutlinedIcon />
-                            </button>
-                          </form>
+                      <div className="social_icons f_flex">
+                        <div className="icon l_flex">
+                          <a href="/#">
+                            <i className="fa-brands fa-facebook-f"></i>
+                          </a>
                         </div>
-                        <div className="reg_login c_flex">
-                          <button className="login">Login</button>
-                          <button>Register</button>
+                        <div className="icon l_flex">
+                          <a href="/#">
+                            <i className="fa-brands fa-instagram"></i>
+                          </a>
+                        </div>
+                        <div className="icon l_flex">
+                          <a href="/#">
+                            <i className="fa-brands fa-youtube"></i>
+                          </a>
+                        </div>
+                        <div className="icon l_flex">
+                          <a href="/#">
+                            <i className="fa-brands fa-skype"></i>
+                          </a>
                         </div>
                       </div>
+                      <div className="address_email">
+                        <small>Email</small>
+                        <h5>
+                          <a href="mailto:info@example.com">info@example.com</a>
+                        </h5>
+                      </div>
+                      <div className="address_email">
+                        <small>Address</small>
+                        <h5 className="address">
+                          United States, Boston, 44 Main street
+                        </h5>
+                      </div>
                     </div>
-                  </div>
-                </Menu>
-              </React.Fragment>
+                  </Menu>
+                </React.Fragment>
+              </div>
+              <div className="icons c_flex">
+                <Tooltip title="View comparison list" className="view">
+                  <span className="l_flex">
+                    <EqualizerIcon className="icon" />
+                  </span>
+                </Tooltip>
+                <Tooltip title="View wish list" className="view">
+                  <span className="l_flex">
+                    <FavoriteBorderIcon className="icon" />
+                  </span>
+                </Tooltip>
+                <React.Fragment>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                    className="user_menu_box"
+                  >
+                    <Tooltip>
+                      <IconButton
+                        onClick={handleClickUser}
+                        disableRipple
+                        size="small"
+                        className="icon-button"
+                        disableElevation
+                        aria-controls={
+                          openUserInfo ? "account-menu" : undefined
+                        }
+                        aria-haspopup="true"
+                        aria-expanded={openUserInfo ? "true" : undefined}
+                      >
+                        <span className="l_flex">
+                          <AccountCircleOutlinedIcon className="icon" />
+                        </span>
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
 
-              <span>
-                <span className="l_flex">
-                  <ShoppingCartIcon className="icon" />
+                  <Menu
+                    anchorEl={anchorUser}
+                    id="account-menu"
+                    open={openUserInfo}
+                    onClose={handleCloseUser}
+                    PaperProps={{
+                      elevation: 0,
+                      sx: {
+                        zIndex: 1,
+                        borderRadius: "20px",
+                        overflow: "visible",
+                        padding: 0,
+                        margin: 0,
+                        filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                        ml: 1,
+                        "& .MuiAvatar-root": {
+                          width: 32,
+                          height: 32,
+                          ml: 1.5,
+                          mr: 1,
+                        },
+                        "&:before": {
+                          content: '""',
+                          display: "block",
+                          position: "absolute",
+                          top: 0,
+                          right: 24,
+                          width: 15,
+                          height: 15,
+                          bgcolor: "background.paper",
+                          transform: "translateY(-50%) rotate(45deg)",
+                          zIndex: 0,
+                        },
+                      },
+                    }}
+                    transformOrigin={{ horizontal: "right", vertical: "top" }}
+                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                  >
+                    <div className="user_menu_content">
+                      <div className="upper">
+                        <div className="user_head c_flex">
+                          <h4>My Account</h4>
+                          <CloseOutlinedIcon
+                            onClick={handleCloseUser}
+                            className="icon"
+                          />
+                        </div>
+                        <Divider />
+                        <div className="menu_item">
+                          <MenuItem
+                            key="orders"
+                            component={Link}
+                            to="/track-order"
+                            className="list"
+                            onClick={handleCloseUser}
+                            disableRipple
+                          >
+                            Orders
+                          </MenuItem>
+                          <MenuItem
+                            key="orders"
+                            component={Link}
+                            to="/track-order"
+                            className="list"
+                            onClick={handleCloseUser}
+                            disableRipple
+                          >
+                            Comparison list
+                          </MenuItem>
+                          <MenuItem
+                            key="orders"
+                            component={Link}
+                            to="/track-order"
+                            className="list"
+                            onClick={handleCloseUser}
+                            disableRipple
+                          >
+                            Wish list
+                          </MenuItem>
+                        </div>
+                      </div>
+                      <div className="lower">
+                        <div className="content">
+                          <div className="track">
+                            <small>Track my order(s)</small>
+                            <form action="" className="a_flex">
+                              <input
+                                type="text"
+                                placeholder="Order Tracking ID"
+                              />
+                              <button>
+                                <ArrowRightOutlinedIcon />
+                              </button>
+                            </form>
+                          </div>
+                          <div className="reg_login c_flex">
+                            <button className="login">Login</button>
+                            <button>Register</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Menu>
+                </React.Fragment>
+
+                <span>
+                  <span className="l_flex">
+                    <ShoppingCartIcon className="icon" />
+                  </span>
+                  <span className="badge ">
+                    <span className="badge_count_num l_flex">0</span>
+                  </span>
                 </span>
-                <span className="badge ">
-                  <span className="badge_count_num l_flex">0</span>
-                </span>
-              </span>
+              </div>
             </div>
           </div>
         </div>

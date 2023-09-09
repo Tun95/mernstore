@@ -1,22 +1,14 @@
 import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import "./style.scss";
-import Box from "@mui/material/Box";
 import Drawer from "@mui/material/Drawer";
 import Button from "@mui/material/Button";
-import List from "@mui/material/List";
 import Divider from "@mui/material/Divider";
-import ListItem from "@mui/material/ListItem";
-import ListItemButton from "@mui/material/ListItemButton";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import MenuIcon from "@mui/icons-material/Menu";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import PlaceIcon from "@mui/icons-material/Place";
-import HomeIcon from "@mui/icons-material/Home";
-import StoreIcon from "@mui/icons-material/Store";
-import CallIcon from "@mui/icons-material/Call";
 import LineStyleIcon from "@mui/icons-material/LineStyle";
 import Inventory2Icon from "@mui/icons-material/Inventory2";
 import PeopleIcon from "@mui/icons-material/People";
@@ -25,11 +17,7 @@ import WarehouseIcon from "@mui/icons-material/Warehouse";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { Context } from "../../context/Context";
 import LogoutIcon from "@mui/icons-material/Logout";
-import LoginIcon from "@mui/icons-material/Login";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import LightModeIcon from "@mui/icons-material/LightMode";
-import DarkModeIcon from "@mui/icons-material/DarkMode";
-import CurrencyExchangeIcon from "@mui/icons-material/CurrencyExchange";
 import WorkIcon from "@mui/icons-material/Work";
 import { styled } from "@mui/material/styles";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
@@ -93,37 +81,14 @@ function SideBar() {
     window.location.href = "/login";
   };
 
-  const webItemList = [
-    {
-      text: "Home",
-      icon: <HomeIcon />,
-      to: "/", // <-- add link targets
-    },
-    {
-      text: "Store",
-      icon: <StoreIcon />,
-      to: "/store",
-    },
-    {
-      text: "Cart",
-      icon: (
-        <span>
-          <ShoppingCartIcon className="cart_badge_icon" />
-        </span>
-      ),
-      to: "/cart",
-    },
-    {
-      text: "Contact",
-      icon: <CallIcon />,
-      to: "/contact",
-    },
-  ];
-
   //TOGGLE
+  const [accountSectionExpanded, setAccountSectionExpanded] = useState(false);
   const [shopSectionExpanded, setShopSectionExpanded] = useState(false);
   const [adminSectionExpanded, setAdminSectionExpanded] = useState(false);
   const [vendorSectionExpanded, setVendorSectionExpanded] = useState(false);
+  const toggleAccountSection = () => {
+    setAccountSectionExpanded(!accountSectionExpanded);
+  };
 
   const toggleShopSection = () => {
     setShopSectionExpanded(!shopSectionExpanded);
@@ -153,7 +118,7 @@ function SideBar() {
           <Drawer
             anchor={anchor}
             open={state[anchor]}
-            onClose={toggleDrawer(anchor, false)}
+            // onClose={toggleDrawer(anchor, false)}
             className="side_bar_drawer"
             PaperProps={{
               sx: {
@@ -172,26 +137,116 @@ function SideBar() {
                 </span>
               </span>
               <div className="login_reg">
-                <div className="content a_flex">
-                  <div className="user l_flex">
+                <div
+                  className={
+                    accountSectionExpanded ? "content f_flex" : "content a_flex"
+                  }
+                >
+                  <div
+                    className={
+                      userInfo && accountSectionExpanded
+                        ? "user l_flex user_account_open"
+                        : "user l_flex"
+                    }
+                  >
                     <AccountCircleOutlinedIcon className="icon" />
                   </div>
-                  <div className="link_small">
-                    <div className="link a_flex">
-                      <LoginModals
-                        toggleDrawer={toggleDrawer}
-                        anchor={anchor}
-                      />
-                      <span>|</span>
-                      <Link
-                        to="/register"
-                        onClick={toggleDrawer(anchor, false)}
+                  {userInfo ? (
+                    <div className="shop user_account">
+                      <label
+                        htmlFor=""
+                        className="c_flex"
+                        onClick={toggleAccountSection}
                       >
-                        Register
-                      </Link>
+                        <span className="my_account">My account</span>
+                        {accountSectionExpanded ? (
+                          <RemoveIcon className="icon" />
+                        ) : (
+                          <AddIcon className="icon" />
+                        )}
+                      </label>
+                      {accountSectionExpanded && (
+                        <ul>
+                          <li>
+                            <Link
+                              className="c_flex"
+                              onClick={toggleDrawer(anchor, false)}
+                              to={`/user-profile/${userInfo._id}`}
+                            >
+                              <span>Profile</span>
+                              <span>
+                                <AccountCircleIcon className="icon" />
+                              </span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              onClick={toggleDrawer(anchor, false)}
+                              to="/track-shipment"
+                              className="c_flex"
+                            >
+                              <span>Track orders</span>
+                              <span>
+                                <PlaceIcon className="icon" />
+                              </span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              onClick={toggleDrawer(anchor, false)}
+                              to="/orders"
+                              className="c_flex"
+                            >
+                              <span>Orders</span>
+                              <span>
+                                <WorkIcon className="icon" />
+                              </span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              onClick={toggleDrawer(anchor, false)}
+                              to={`/wish-list/${userInfo._id}`}
+                              className="c_flex"
+                            >
+                              <span>Wishlish</span>
+                              <span>
+                                <FavoriteIcon className="icon" />
+                              </span>
+                            </Link>
+                          </li>
+                          <li>
+                            <button
+                              onClick={signoutHandler}
+                              className="logout_btn c_flex"
+                            >
+                              <span className="btn_text">Log out</span>
+                              <span>
+                                <LogoutIcon className="icon" />
+                              </span>
+                            </button>
+                          </li>
+                        </ul>
+                      )}
                     </div>
-                    <small>Log in to get more opportunities</small>
-                  </div>
+                  ) : (
+                    <div className="link_small">
+                      <div className="link a_flex">
+                        <LoginModals
+                          toggleDrawer={toggleDrawer}
+                          anchor={anchor}
+                        />
+                        <span>|</span>
+                        <Link
+                          to="/register"
+                          onClick={toggleDrawer(anchor, false)}
+                        >
+                          Register
+                        </Link>
+                      </div>
+                      <small>Log in to get more opportunities</small>
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="category_btn">
@@ -459,27 +514,78 @@ function SideBar() {
                 ""
               )}
               <StyledDivider darkMode={darkMode} />
+              <div className="lower_social_contact">
+                <div className="content">
+                  <div className="upper">
+                    <h3>Get social</h3>
+                    <p>
+                      Join us in the group <br /> and be the first to know all
+                      promotions and offers!
+                    </p>
+                  </div>
+                  <div className="middle">
+                    <div className="social_icons f_flex">
+                      <div className="icon l_flex">
+                        <a href="/#">
+                          <i className="fa-brands fa-facebook-f"></i>
+                        </a>
+                      </div>
+                      <div className="icon l_flex">
+                        <a href="/#">
+                          <i className="fa-brands fa-instagram"></i>
+                        </a>
+                      </div>
+                      <div className="icon l_flex">
+                        <a href="/#">
+                          <i className="fa-brands fa-twitter"></i>
+                        </a>
+                      </div>
+                      <div className="icon l_flex">
+                        <a href="/#">
+                          <i className="fa-brands fa-youtube"></i>
+                        </a>
+                      </div>
+                      <div className="icon l_flex">
+                        <a href="/#">
+                          <i className="fa-brands fa-skype"></i>
+                        </a>
+                      </div>
+                      <div className="icon l_flex">
+                        <a href="/#">
+                          <i className="fa-brands fa-pinterest-p"></i>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="lower_address a_flex">
+                    <span>
+                      <small>Boston, 44 Main street</small>
+                    </span>
+                    <span>
+                      <a href="tel:+0 133-456-7890">
+                        +0 133-456-7890 (the call is free)
+                      </a>
+                    </span>
+                    <span>
+                      <a href="tel:+0 133-456-7890">+0 133-456-7890</a>
+                    </span>
+                    <span>
+                      <small>Mon-Sun 9.00 - 18.00</small>
+                    </span>
+                    <span>
+                      <a className="link" href="mailto:demo@example.com">
+                        demo@example.com
+                      </a>
+                    </span>
+                    <span>
+                      <Link className="link" to="">
+                        View on map
+                      </Link>
+                    </span>
+                  </div>
+                </div>
+              </div>
             </div>
-
-            <StyledDivider darkMode={darkMode} />
-            <span
-              className={darkMode ? "dark_mode lower_drawer" : "lower_drawer"}
-            >
-              <span className="toggle_width">
-                {darkMode === false && (
-                  <Button className="toggle_btn" onClick={toggle}>
-                    <LightModeIcon /> Light
-                  </Button>
-                )}
-                {darkMode === true && (
-                  <Button className="toggle_btn" onClick={toggle}>
-                    <DarkModeIcon /> Dark
-                  </Button>
-                )}
-              </span>
-              <StyledDivider darkMode={darkMode} />
-              <StyledDivider darkMode={darkMode} />
-            </span>
           </Drawer>
         </React.Fragment>
       ))}

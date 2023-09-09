@@ -118,8 +118,6 @@
   }
 }
 
-
-
 .user_menu_content {
   width: 270px;
   outline: none;
@@ -210,9 +208,8 @@
     gap: 10px;
   }
   .ctg_btn {
-    padding: 8px;
-    border-radius: 5px;
-    border-radius: 30px;
+    padding: 10px;
+    border-radius: 8px;
     background-color: var(--color-primary);
     display: flex;
     justify-content: center;
@@ -237,35 +234,37 @@
       height: 100px !important;
     }
   }
-  .search-box {
-    width: 200%;
-    position: relative;
-    display: flex;
-    align-items: center;
-    height: 40px;
-    padding: 0px 10px;
-    /* padding: 10px; */
-    border-radius: 8px;
-    background-color: var(--color-bg);
+  .search_box_width {
+    .search-box {
+      width: 200%;
+      position: relative;
+      display: flex;
+      align-items: center;
+      height: 40px;
+      padding: 0px 10px;
+      /* padding: 10px; */
+      border-radius: 8px;
+      background-color: var(--color-bg);
 
-    .fa-search {
-      position: absolute;
-      right: -5px;
-      text-align: center;
-      font-size: 20px;
-      opacity: 0.5;
-      padding: 15px 20px;
-      font-size: 23px;
-    }
-    input {
-      width: 100%;
-      outline: none;
-      padding: 5px;
-      border-radius: 50px;
-      background: transparent;
-    }
-    ::placeholder {
-      font-size: 15px;
+      .fa-search {
+        position: absolute;
+        right: -5px;
+        text-align: center;
+        font-size: 20px;
+        opacity: 0.5;
+        padding: 15px 20px;
+        font-size: 23px;
+      }
+      input {
+        width: 100%;
+        outline: none;
+        padding: 5px;
+        border-radius: 50px;
+        background: transparent;
+      }
+      ::placeholder {
+        font-size: 15px;
+      }
     }
   }
   .icons {
@@ -299,57 +298,122 @@
     }
   }
 }
-
-@media (max-width: 1144px) {
-  .head .none_screen {
-    display: none;
+@media (max-width: 1450px) {
+  .nav_bar {
+    width: 100%;
+    .categories {
+      margin-right: 0px;
+      width: 20%;
+    }
+    .search-box {
+      width: 150%;
+    }
   }
 }
-@media (max-width: 1050px) {
-  .nav_bar .navlink {
-    display: none;
-  }
-  .search .menu_bar {
-    display: block;
-  }
-}
-@media (max-width: 1031px) {
-  #display-none {
-    display: none;
-  }
-}
-
-@media (max-width: 860px) {
-  .search .search-box {
-    display: none;
-  }
-
-  .topbar {
-    display: none;
-  }
-  .head .left {
-    position: relative;
-    top: 5px;
+@media (max-width: 1350px) {
+  .nav_bar {
+    .search-box {
+      width: 180%;
+    }
+    .left_icons {
+      .item_number_box {
+        display: none;
+      }
+    }
   }
 }
-@media (max-width: 600px) {
-  .search .logo img {
-    width: 60%;
-    height: 40px;
-    object-fit: contain;
-  }
-  .search .cart,
-  .user_modal {
-    display: none;
+@media (max-width: 1136px) {
+  .nav_bar {
+    width: 100%;
+    .categories {
+      width: 0%;
+      .category_modal {
+        display: none;
+      }
+    }
   }
 }
-@media (max-width: 404px) {
+@media (max-width: 1024px) {
   .head {
-    display: none;
+    .right {
+      .list {
+        display: none;
+      }
+    }
   }
 }
-@media (max-width: 550px) {
-  .search {
-    box-shadow: -1px 15px 17px -8px rgba(0, 0, 0, 0.1);
+@media (max-width: 1000px) {
+  .nav_bar {
+    .categories {
+      width: 3%;
+    }
+    .search_box_width {
+      .search-box {
+        width: 175%;
+      }
+    }
   }
 }
+@media (max-width: 900px) {
+  .nav_bar {
+    .categories {
+      width: auto;
+    }
+    .search_box_width {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 770px) {
+  .head {
+    .right {
+      .drop_list_box,
+      .toggle_switch {
+        display: none;
+      }
+    }
+  }
+  .nav_bar {
+    .left_icons {
+      .icons {
+        .view {
+          display: none;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 420px) {
+  .nav_bar {
+    .categories {
+      .menu_bar {
+        .menu_btn_icon {
+          .menu_icon {
+            font-size: 30px !important;
+          }
+        }
+      }
+      .logo {
+        img {
+          width: 65%;
+          height: auto;
+        }
+      }
+    }
+  }
+}
+@media (max-width: 345px) {
+  .nav_bar {
+    .left_icons {
+      .user_menu_box {
+        display: none;
+      }
+    }
+  }
+}
+// @media (max-width: 550px) {
+//   .search {
+//     box-shadow: -1px 15px 17px -8px rgba(0, 0, 0, 0.1);
+//   }
+// }

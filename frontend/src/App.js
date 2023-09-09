@@ -226,7 +226,7 @@ function App() {
             }
           ></Route>
           <Route
-            path="/track-order"
+            path="/orders"
             element={
               <ProtectedRoute>
                 <OrderHistoryScreen />

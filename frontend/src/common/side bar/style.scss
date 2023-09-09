@@ -59,6 +59,7 @@
       background-color: var(--color-black);
       color: var(--color-gray);
       padding: 15px 20px;
+      width: 100%;
       a {
         color: var(--color-white);
         font-size: 14px;
@@ -68,6 +69,37 @@
         text-decoration: underline;
       }
       .content {
+        width: 100%;
+        .user_account {
+          width: 100%;
+          margin-right: -20px;
+          .my_account {
+            font-size: 16px;
+            .icon {
+              font-size: 20px;
+            }
+          }
+          .icon {
+            color: var(--color-light-gray);
+            font-size: 18px;
+          }
+          .logout_btn {
+            width: 100%;
+            background: transparent;
+            color: var(--color-white);
+            cursor: pointer;
+            &:hover {
+              .btn_text {
+                border-bottom: 1px solid var(--color-white);
+                padding-bottom: -15px;
+              }
+            }
+          }
+        }
+        .user_account_open {
+          position: relative;
+          top: 8px;
+        }
         .user {
           background-color: var(--color-gray);
           color: var(--color-white);
@@ -203,9 +235,10 @@
         width: 15px;
         background-color: var(--color-primary);
         height: 15px;
-        position: absolute;
-        right: 14px;
-        bottom: 48px;
+        position: relative;
+        left: 10px;
+        margin-top: -25px;
+        bottom: 10px;
         border-radius: 50%;
         .cart_badge {
           color: var(--color-white);
@@ -214,14 +247,66 @@
         }
       }
     }
-  }
-}
-.side_bar_search {
-  width: 100%;
-  margin-bottom: 40px;
-  .side_bar_search_box {
-    border: 2px solid #b4b4b4;
-    padding: 6px;
-    width: 95%;
+    .lower_social_contact {
+      padding: 13px 20px;
+      background-color: var(--color-light-light-gray);
+      .content {
+        .upper {
+          h3 {
+            font-size: 20px;
+            font-weight: 800;
+          }
+          p {
+            font-size: 14px;
+            color: var(--color-gray);
+            line-height: 20px;
+          }
+        }
+        .social_icons {
+          margin: 15px 0px;
+          flex-wrap: wrap;
+          gap: 5px;
+          .icon {
+            margin-right: 6px;
+            background-color: var(--color-gray);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+
+            cursor: pointer;
+            transition: var(--transition);
+            a {
+              color: var(--color-white);
+              .fa-brands {
+                font-size: 18px;
+              }
+            }
+            &:hover {
+              background-color: var(--color-primary);
+            }
+          }
+        }
+        .lower_address {
+          flex-direction: column;
+          align-items: flex-start;
+
+          a {
+            color: var(--color-blue);
+            font-size: 13px;
+            font-weight: 300;
+            transition: var(--transition);
+            &:hover {
+              color: var(--color-text);
+            }
+          }
+          .link {
+            text-decoration: underline;
+          }
+        }
+      }
+    }
+    @media (max-width: 320px) {
+      width: 100%;
+    }
   }
 }
