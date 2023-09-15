@@ -10,7 +10,7 @@
   --color-bg: #f3f5f9;
   --color-border: #e7e8eb;
   --color-background: #f6f9fc;
-  --color-light-light-gray: #f7f7f7;
+  --color-light-light-gray: #f6f6f6;
   --color-rating: #ffcd4e;
   --color-primary: #f62f5e;
   --color-hover: #ff014f;
@@ -29,7 +29,7 @@
   --box-shadow: 0 33px 40px 0 hsla(0, 0%, 73.3%, 0.1);
   --light-shadow: rgb(3 0 71 / 5%) 0px 1px 3px;
   --border-sty: 1px solid #ebebeb;
-  --container-width-lg: 90%;
+  --container-width-lg: 85%;
   --container-width-md: 97%;
   --container-width-sm: 99%;
 }
@@ -688,8 +688,13 @@ select.input-error {
 /*----- whatsapp btn -------*/
 
 /*----- Resolutions -------*/
+/*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+@media screen and (max-width: 1300px) {
+  .container {
+    width: var(--container-width-md);
+  }
+}
 
-/*-----display_grid storepages -------*/
 /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
 @media screen and (max-width: 900px) {
   .form_container {

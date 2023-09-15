@@ -13,6 +13,7 @@ import Subscribe from "../../components/home/subscribe/Subscribe";
 import { Context } from "../../context/Context";
 import LoadingBox from "../../components/utilities/message loading/LoadingBox";
 import MessageBox from "../../components/utilities/message loading/MessageBox";
+import Category from "../../components/home/category/Category";
 
 function HomeScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Context);
@@ -32,6 +33,7 @@ function HomeScreen() {
         ) : (
           <>
             <Home />
+            <Category />
             <FlashDeals />
             <TopCate />
             <NewArrival />

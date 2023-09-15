@@ -4,7 +4,7 @@ import SliderCard from "./SliderCard";
 function Slider() {
   return (
     <>
-      <section className="homeSlide contentWidth">
+      <section className="homeSlide">
         <div className="container">
           <SliderCard />
         </div>
