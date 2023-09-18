@@ -1,5 +1,5 @@
 import React from "react";
-import Finish from "../../../components/stepper checkout/Finnish";
+import Finish from "../../../components/checkout/Finnish";
 
 function FinishScreen() {
   return (

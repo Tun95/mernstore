@@ -3,12 +3,12 @@ import bcrypt from "bcryptjs";
 const data = {
   users: [
     {
-      firstName: "Abaris",
-      lastName: "Softech",
-      email: "abarissolution@gmail.com",
+      firstName: "Tunji",
+      lastName: "Akande",
+      email: "Shopmate400@gmail.com",
       image:
         "https://res.cloudinary.com/dstj5eqcd/image/upload/v1687182438/dvez9uaxz53b0vfakide.jpg",
-      password: bcrypt.hashSync("Abaris95"),
+      password: bcrypt.hashSync("Shopmate400"),
       isAdmin: true,
       isBlocked: false,
       isSeller: true,
@@ -634,11 +634,11 @@ const data = {
       playstore: "",
       appstore: "",
       whatsapp: "+0 123-456-7890",
-      webname: "mernStore",
+      webname: "shopFinity",
       storeAddress: "unknown, unknown India",
-      logo: "https://res.cloudinary.com/dstj5eqcd/image/upload/v1693569313/c34u7tt9v49lrqraalwb.png",
+      logo: "https://res.cloudinary.com/dstj5eqcd/image/upload/v1692095770/d26wuxkgcqvsh8mue9m7.png",
       faviconUrl:
-        "https://res.cloudinary.com/dstj5eqcd/image/upload/v1693569319/js8nedrd4emu5f3u7cax.png",
+        "https://res.cloudinary.com/dstj5eqcd/image/upload/v1690410281/mhhrdg6d7yxzqvqd8vwm.png",
       buyInfo: "How to buy",
       bulk: "Corporate & Bulk Purchasing",
       themeFaq: "<p>theme faq guidelines</p>",
@@ -662,9 +662,6 @@ const data = {
       googleAnalytics: "G-MNF3WLVGEC",
       messengerAppId: "6222862251176447",
       messengerPageId: "107454247668619",
-      __v: 0,
-      createdAt: "2023-09-01T11:06:15.870Z",
-      updatedAt: "2023-09-01T11:55:18.275Z",
     },
   ],
 };

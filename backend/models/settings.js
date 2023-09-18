@@ -35,6 +35,10 @@ const settingsSchema = new mongoose.Schema(
       type: String,
       default: 14,
     },
+    minimumWithdrawalAmount: {
+      type: String,
+      default: 200,
+    },
     shipping: {
       type: String,
       default: 24,
@@ -58,6 +62,14 @@ const settingsSchema = new mongoose.Schema(
     messenger: {
       type: String,
       default: "john.stone",
+    },
+    facebook: {
+      type: String,
+      default: "https://web.facebook.com/",
+    },
+    twitter: {
+      type: String,
+      default: "https://twitter.com/",
     },
     email: {
       type: String,

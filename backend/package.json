@@ -14,6 +14,7 @@
     "axios": "^1.4.0",
     "bad-words": "^3.0.4",
     "bcryptjs": "^2.4.3",
+    "bluesnap": "^0.3.4",
     "cloudinary": "^1.32.0",
     "cookie-session": "^2.0.0",
     "cors": "^2.8.5",
@@ -22,7 +23,9 @@
     "ejs": "^3.1.9",
     "express": "^4.18.1",
     "express-async-handler": "^1.2.0",
+    "express-fileupload": "^1.4.0",
     "express-session": "^1.17.3",
+    "fs-extra": "^11.1.1",
     "google-auth-library": "^8.9.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.4",
@@ -39,7 +42,9 @@
     "shippo": "^1.7.1",
     "socket.io": "^4.5.2",
     "streamifier": "^0.1.1",
-    "stripe": "^10.17.0"
+    "stripe": "^10.17.0",
+    "taxjar": "^4.0.1",
+    "unzipper": "^0.10.14"
   },
   "devDependencies": {
     "morgan": "^1.10.0",

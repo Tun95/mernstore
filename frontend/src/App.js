@@ -130,15 +130,6 @@ function App() {
     };
 
     updateFavicon(); // Call the function to update favicon
-    // Update the title dynamically
-    // document.title = webname || "ShopFinity";
-
-    // // Set the webname in the script
-    // const webnameValue = webname || "";
-    // const dynamicTitleElement = document.getElementById("dynamicTitle");
-    // if (dynamicTitleElement) {
-    //   dynamicTitleElement.innerText = webnameValue;
-    // }
 
     // Set the description dynamically using window.appShortDesc
     const metaDescriptionTag = document.querySelector(

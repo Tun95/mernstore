@@ -13,6 +13,8 @@ import fetch from "node-fetch";
 import crypto from "crypto";
 import shippo from "shippo";
 import mongoose from "mongoose";
+import bluesnap from "bluesnap";
+import Taxjar from "taxjar";
 
 const orderRouter = express.Router();
 
@@ -411,111 +413,6 @@ orderRouter.get(
 //===================
 //ADMIN ORDER SUMMARY
 //===================
-// orderRouter.get(
-//   "/order_summary",
-//   // isAuth,
-//   // isSellerOrAdmin,
-//   expressAsyncHandler(async (req, res) => {
-//     const productId = req?.query.id;
-//     const date = new Date();
-//     const lastMonth = new Date(date.setMonth(date.getMonth() - 1));
-//     const previousMonth = new Date(
-//       new Date().setMonth(lastMonth.getMonth() - 1)
-//     );
-//     console.log(productId);
-
-//     // GET MONTHLY ORDERS
-//     const orders = await Order.aggregate([
-//       {
-//         $match: {
-//           createdAt: { $gte: previousMonth, $lt: lastMonth },
-//         },
-//       },
-//       {
-//         $group: {
-//           _id: null,
-//           numOrders: { $sum: 1 },
-//         },
-//       },
-//     ]);
-
-//     // GET MONTHLY USERS STATS
-//     const users = await User.aggregate([
-//       {
-//         $match: {
-//           createdAt: { $gte: previousMonth, $lt: lastMonth },
-//         },
-//       },
-//       {
-//         $group: {
-//           _id: null,
-//           numUsers: { $sum: 1 },
-//         },
-//       },
-//     ]);
-
-//     // GET MONTHLY INCOME
-//     const income = await Order.aggregate([
-//       {
-//         $match: {
-//           createdAt: { $gte: previousMonth, $lt: lastMonth },
-//         },
-//       },
-//       {
-//         $group: {
-//           _id: null,
-//           orders: { $sum: 1 },
-//           numOrders: { $sum: 1 },
-//           sales: { $sum: "$grandTotal" },
-//         },
-//       },
-//     ]);
-
-//     // GET DAILY ORDERS
-//     const dailyOrders = await Order.aggregate([
-//       {
-//         $group: {
-//           _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-//           orders: { $sum: 1 },
-//           numOrders: { $sum: 1 },
-//           sales: { $sum: "$grandTotal" },
-//         },
-//       },
-//       {
-//         $match: {
-//           _id: {
-//             $gte: previousMonth.toISOString(),
-//             $lt: lastMonth.toISOString(),
-//           },
-//         },
-//       },
-//       { $sort: { _id: -1 } },
-//       { $limit: 10 },
-//     ]);
-
-//     // GET SALE PERFORMANCE
-//     const salePerformance = await Order.aggregate([
-//       {
-//         $group: {
-//           _id: { $dateToString: { format: "%Y-%m-%d", date: "$createdAt" } },
-//           sales: { $sum: "$grandTotal" },
-//         },
-//       },
-//       {
-//         $match: {
-//           _id: {
-//             $gte: previousMonth.toISOString(),
-//             $lt: lastMonth.toISOString(),
-//           },
-//         },
-//       },
-//       { $sort: { _id: -1 } },
-//       { $limit: 2 },
-//     ]);
-
-//     res.send({ users, orders, income, dailyOrders, salePerformance });
-//   })
-// );
 orderRouter.get(
   "/summary",
   // isAuth,
@@ -675,6 +572,51 @@ orderRouter.get(
       res.send(order);
     } else {
       res.send(404).send({ message: "Order Not Found" });
+    }
+  })
+);
+
+//===================
+//CALCULATE TAX
+//===================
+const sandboxUrl = "https://api.sandbox.taxjar.com";
+const client = new Taxjar({
+  apiKey: "76eb2ab542d2996eb4755ca6f8560dd7", // Replace with your TaxJar sandbox API key
+  apiUrl: "https://api.sandbox.taxjar.com", // Use the sandbox API endpoint
+});
+
+// Define your calculateTax function using async/await
+const calculateTax = async (orderData) => {
+  try {
+    // Use the TaxJar client to make the tax calculation request
+    const taxResponse = await client.taxForOrder(orderData);
+
+    // Extract the tax amount from the response
+    const taxAmount = taxResponse.tax.amount_to_collect;
+
+    return taxAmount;
+  } catch (error) {
+    console.error("Error calculating tax:", error);
+    throw error; // You can choose to handle errors as needed
+  }
+};
+
+orderRouter.post(
+  "/calculate-tax",
+  expressAsyncHandler(async (req, res) => {
+    // Extract data from the request body
+    const orderData = req.body;
+
+    try {
+      // Calculate tax using the TaxJar SDK
+      const taxAmount = await calculateTax(orderData);
+
+      // Send the tax amount as a response to the frontend
+      res.json({ taxAmount });
+    } catch (error) {
+      console.error("Error calculating tax:", error);
+      // Handle errors appropriately (e.g., send an error response)
+      res.status(500).json({ error: "Internal server error" });
     }
   })
 );
@@ -1471,31 +1413,45 @@ orderRouter.post(
 //=========
 // BLUESNAP
 //=========
-orderRouter.post("/bluesnap", async (req, res) => {
-  try {
-    const { amount, currency, paymentMethodToken } = req.body;
+// BlueSnap config
+const gateway = new bluesnap.BlueSnapGateway({
+  environment: "Sandbox", // 'Production' or 'Sandbox'
+  username: "API_16934390598971666311015", // BlueSnap username
+  password: "Christ92++++++", // BlueSnap password
+  apiVersion: "3.0", // Optional
+});
 
-    const response = await axios.post(
-      "https://sandbox.bluesnap.com/services/2/payment-fields-tokens",
-      {
+orderRouter.post(
+  "/bluesnap",
+  // isAuth,
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const { amount, currency, paymentMethodToken } = req.body;
+
+      // Construct the card transaction request object
+      const cardTransactionRequest = {
         amount,
         currency,
-        paymentMethodToken,
-      },
-      {
-        auth: {
-          username: "API_16934390598971666311015",
-          password: "Christ92++++++",
+        paymentSource: {
+          paymentMethod: {
+            paymentMethodToken,
+          },
         },
-      }
-    );
+      };
 
-    res.json(response.data);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
+      // Create the card transaction using the provided method
+      const cardTransaction = await gateway.transaction.card.create(
+        cardTransactionRequest
+      );
+
+      // Return the BlueSnap API response to the client
+      res.json(cardTransaction);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  })
+);
 
 const generateChecksum = (params, key) => {
   const data = Object.values(params).join("|");
@@ -2284,6 +2240,54 @@ orderRouter.put(
           console.log("Email sent:", info.response);
         }
       });
+
+      await order.save();
+
+      res.json({ success: true, message: "Payment successful" });
+    } else {
+      res.json({ success: false, message: "Payment canceled or failed" });
+    }
+  })
+);
+
+// Order Payment Route
+orderRouter.put(
+  "/:id/pay",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const order = await Order.findById(req.params.id).populate("user");
+    if (order) {
+      // Update product quantities
+      await updateProductQuantities(order.orderItems);
+
+      // Convert and format currency
+      const convertedItemsPrice = await convertAndFormatCurrency(
+        order.itemsPrice,
+        order.currencySign
+      );
+      const convertedTaxPrice = await convertAndFormatCurrency(
+        order.taxPrice,
+        order.currencySign
+      );
+      const convertedShippingPrice = await convertAndFormatCurrency(
+        order.shippingPrice,
+        order.currencySign
+      );
+      const convertedGrandTotal = await convertAndFormatCurrency(
+        order.grandTotal,
+        order.currencySign
+      );
+
+      // Create and send email
+      const payOrderEmailTemplate = `<!DOCTYPE html>
+      <html>
+      <!-- Email template content -->
+      </html>`;
+      await sendEmail(
+        order.user.email,
+        `New Order ${order.trackingId}`,
+        payOrderEmailTemplate
+      );
 
       await order.save();
 

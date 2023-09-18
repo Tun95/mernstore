@@ -36,8 +36,8 @@ const userSchema = new mongoose.Schema(
     accountVerificationTokenExpires: { type: Date },
 
     //Affiliate
-    isAffiliate: { type: Boolean, default: false },
-    affiliateCode: { type: String },
+    isAffiliate: { type: Boolean, default: false }, // Indicates if the user is an affiliate
+    affiliateCode: { type: String, unique: true }, // Unique code for the affiliate user
     referredBy: { type: mongoose.Schema.Types.ObjectId, ref: "User" }, // Stores the ID of the user who referred this user (optional)
 
     affiliateCommissionRate: { type: Number, default: 0.1 }, // Example: Commission rate for the affiliate
@@ -56,7 +56,7 @@ const userSchema = new mongoose.Schema(
     // Withdrawal requests made by the seller
     withdrawalRequests: [
       {
-        amount: { type: Number },
+        amount: { type: Number, required: true },
         gateway: { type: String },
         email: { type: String },
         transactionId: { type: String },

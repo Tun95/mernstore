@@ -8,11 +8,9 @@ import crypto from "crypto";
 import mongoose from "mongoose";
 import Order from "../models/orderModels.js";
 import moment from "moment";
-
-// import passport from "./passport.js";
+import Settings from "../models/settings.js";
 
 const userRouter = express.Router();
-// userRouter.use(passport.initialize());
 
 //============
 //USER SIGN IN
@@ -81,36 +79,6 @@ userRouter.post(
     });
   })
 );
-
-//============
-//GOOGLE LOGIN
-//============
-// userRouter.get(
-//   "/auth/google",
-//   passport.authenticate("google", { scope: ["profile", "email"] })
-// );
-// userRouter.get(
-//   "/auth/google/callback",
-//   passport.authenticate("google", { failureRedirect: "/login" }),
-//   (req, res) => {
-//     // Generate the JWT token using the user object obtained from the authentication process
-//     const token = generateToken(req.user);
-
-//     // Redirect or send the token to the client (you may choose a different approach based on your application's design)
-//     res.redirect(`/dashboard?token=${token}`);
-//   }
-// );
-
-// userRouter.get("/auth/facebook", passport.authenticate("facebook"));
-
-// userRouter.get(
-//   "/auth/facebook/callback",
-//   passport.authenticate("facebook", { failureRedirect: "/login" }),
-//   (req, res) => {
-//     // Redirect or handle successful authentication
-//     res.redirect("/"); // Example: Redirect to the homepage
-//   }
-// );
 
 //TOP SELLERS
 userRouter.get(
@@ -191,6 +159,9 @@ userRouter.post(
     const userId = req.user._id;
     const { amount, email, gateway } = req.body;
 
+    const settings = await Settings.findOne({});
+    const minimumWithdrawalAmount = settings?.minimumWithdrawalAmount || 0;
+
     try {
       // Find the seller user by userId
       const seller = await User.findById(userId);
@@ -207,7 +178,7 @@ userRouter.post(
         return res.status(400).json({ message: "Invalid withdrawal amount" });
       }
 
-      if (amount < seller.minimumWithdrawalAmount) {
+      if (amount < minimumWithdrawalAmount) {
         return res
           .status(400)
           .json({ message: "Withdrawal amount is below the minimum" });
@@ -219,8 +190,17 @@ userRouter.post(
       // Deduct the withdrawal amount from the grandTotalEarnings
       seller.grandTotalEarnings -= amount;
 
-      // Deduct the withdrawal amount from the availableBalance
-      seller.availableBalance -= amount;
+      // Fetch the totalWithdrawn directly from the seller instance
+      const totalWithdrawn = seller.withdrawalRequests.reduce(
+        (total, request) =>
+          request.status === "approved" ? total + request.amount : total,
+        0
+      );
+
+      // Calculate and update the availableBalance for the seller
+      const grandTotalEarningsValue = seller.grandTotalEarnings;
+      const availableBalance = grandTotalEarningsValue - totalWithdrawn;
+      seller.availableBalance = availableBalance;
 
       // Add the withdrawal request to the seller's withdrawalRequests
       seller.withdrawalRequests.push({
@@ -330,18 +310,19 @@ userRouter.delete(
   })
 );
 
-//======================================
+//===================================
 //ADMIN APPROVAL/DECLINE A WITHDRAWAL
-//======================================
+//====================================
 // Function to send withdrawal approval/decline email
 async function sendWithdrawalEmail(
   toEmail,
   withdrawalAmount,
   gateway,
   transactionId,
-  status
+  status,
+  settings
 ) {
-  const transporter = nodemailer.createTransport({
+  const smtpTransport = nodemailer.createTransport({
     service: process.env.MAIL_SERVICE,
     auth: {
       user: process.env.EMAIL_ADDRESS,
@@ -352,136 +333,209 @@ async function sendWithdrawalEmail(
   let subject = "";
   let message = "";
 
+  const { facebook, twitter, whatsapp } = settings || {};
+
   if (status === "approved") {
-    subject = "Withdrawal Request Approved";
+    subject = `Withdrawal Request Approved (Transaction ID: ${transactionId})`;
     message = `
     <html>
       <head>
-       <style>
-          body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            padding: 20px;
-          }
-          .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          }
-          h2 {
-            color: #333;
-          }
-          p {
-            color: #666;
-            margin: 10px 0;
-          }
-          .footer {
-            margin-top: 20px;
-            text-align: center;
-          }
-          .social-icons {
-            margin-top: 10px;
-          }
-          .social-icon {
-            margin: 0 5px;
-            font-size: 24px;
-            color: #333;
-          }
-          .icons{
-            width:25px;
-            height: 25px;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <h2>Withdrawal Request Approved</h2>
-          <p>Your withdrawal request for $${withdrawalAmount} via ${gateway} has been approved.</p>
-          <p>Transaction ID: ${transactionId}</p>
+     <style>
+      .main {
+        font-family: Arial, sans-serif;
+        background-color: #f7f7f7;
+        border-radius: 8px;
+        padding: 20px;
+       
+      }
+      .container {
+        max-width: 600px;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        margin: 1% auto;
+        text-align: center;
+        overflow: hidden;
+      }
+      .header {
+        background-color: #007bff;
+        padding: 20px;
+        text-align: center;
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+      }
+      .content{
+        text-align: center;
+      }
+      h2 {
+        color: #333;
+      }
+      p {
+        color: #666;
+        margin: 10px 0;
+      }
+      .footer {
+        margin-top: 20px;
+        text-align: center;
+      }
+      .social-icons {
+        margin-top: 10px;
+      }
+      .social-icon {
+        margin: 0 5px;
+        font-size: 24px;
+        color: #333;
+      }
+      .icons {
+        width: 25px;
+        height: 25px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+      <div class="container">
+        <div class="header">
+          <h1>${process.env.SHOP_NAME}</h1>
         </div>
+        <h2>Withdrawal Request Approved</h2>
+        <p class="content">
+          Your withdrawal request for $${withdrawalAmount} via ${gateway} has
+          been approved.
+        </p>
         <div class="footer">
           <p>For more information, visit our website:</p>
           <p><strong>${process.env.SHOP_NAME}</strong></p>
           <div class="social-icons">
-            <a href="#" class="social-icon">
-              <img class="icons" src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399098/facebook_e2bdv6.png" alt="Facebook">
+            <a href=${facebook} class="social-icon">
+              <img
+                class="icons"
+                src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399098/facebook_e2bdv6.png"
+                alt="Facebook"
+              />
             </a>
-            <a href="#" class="social-icon">
-              <img class="icons" src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399098/twitter_djgizx.png" alt="Twitter">
+            <a href=${twitter} class="social-icon">
+              <img
+                class="icons"
+                src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399098/twitter_djgizx.png"
+                alt="Twitter"
+              />
             </a>
-            <a href="#" class="social-icon">
-              <img class="icons" src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399099/whatsapp_m0dmdp.png" alt="WhatsApp">
+            <a href=https://wa.me/${whatsapp} class="social-icon">
+              <img
+                class="icons"
+                src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399099/whatsapp_m0dmdp.png"
+                alt="WhatsApp"
+              />
             </a>
           </div>
         </div>
-      </body>
+      </div>
+    </div>
+  </body>
     </html>
   `;
   } else if (status === "declined") {
-    subject = "Withdrawal Request Declined";
+    subject = `Withdrawal Request Declined (Transaction ID: ${transactionId})`;
     message = `
     <html>
       <head>
        <style>
-          body {
-            font-family: Arial, sans-serif;
-            background-color: #f5f5f5;
-            padding: 20px;
-          }
-          .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 5px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-          }
-          h2 {
-            color: #333;
-          }
-          p {
-            color: #666;
-            margin: 10px 0;
-          }
-          .footer {
-            margin-top: 20px;
+        .main {
+          font-family: Arial, sans-serif;
+          background-color: #f7f7f7;
+          border-radius: 8px;
+          padding: 20px;
+          width: 100%;
+        }
+
+        .container {
+          max-width: 600px;
+          padding: 20px;
+          background-color: #fff;
+          box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+          border-radius: 8px;
+          margin: 1% auto;
+          text-align: center;
+        }
+        .header {
+          background-color: #007bff;
+          padding: 20px;
+          text-align: center;
+          border-top-left-radius: 8px;
+          border-top-right-radius: 8px;
+        }
+        h2 {
+          color: #333;
+        }
+        .content{
             text-align: center;
           }
-          .social-icons {
-            margin-top: 10px;
-          }
-          .social-icon {
-            margin: 0 5px;
-            font-size: 24px;
-            color: #333;
-          }
-          .icons{
-            width:25px;
-            height: 25px;
-          }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <h2>Withdrawal Request Declined</h2>
-          <p>Your withdrawal request for $${withdrawalAmount} via ${gateway} has been declined.</p>
+        p {
+          color: #666;
+          margin: 10px 0;
+        }
+        .footer {
+          margin-top: 20px;
+          text-align: center;
+        }
+        .social-icons {
+          margin-top: 10px;
+        }
+        .social-icon {
+          margin: 0 5px;
+          font-size: 24px;
+          color: #333;
+        }
+        .icons {
+          width: 25px;
+          height: 25px;
+        }
+    </style>
+  </head>
+  <body>
+  <div class="main">
+      <div class="container">
+        <div class="header">
+          <h1>${process.env.SHOP_NAME}</h1>
         </div>
+        <h2>Withdrawal Request Declined</h2>
+        <p class="content">
+          Your withdrawal request for $${withdrawalAmount} via ${gateway} has
+          been declined.
+        </p>
         <div class="footer">
           <p>For more information, visit our website:</p>
           <p><strong>${process.env.SHOP_NAME}</strong></p>
           <div class="social-icons">
-            <a href="#" class="social-icon">
-              <img class="icons" src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399098/facebook_e2bdv6.png" alt="Facebook">
+            <a href=${facebook} class="social-icon">
+              <img
+                class="icons"
+                src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399098/facebook_e2bdv6.png"
+                alt="Facebook"
+              />
             </a>
-            <a href="#" class="social-icon">
-              <img class="icons" src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399098/twitter_djgizx.png" alt="Twitter">
+            <a href=${twitter} class="social-icon">
+              <img
+                class="icons"
+                src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399098/twitter_djgizx.png"
+                alt="Twitter"
+              />
             </a>
-            <a href="#" class="social-icon">
-              <img class="icons" src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399099/whatsapp_m0dmdp.png" alt="WhatsApp">
+            <a href=https://wa.me/${whatsapp} class="social-icon">
+              <img
+                class="icons"
+                src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399099/whatsapp_m0dmdp.png"
+                alt="WhatsApp"
+              />
             </a>
           </div>
         </div>
-      </body>
-    </html>
+      </div>
+    </div>
+   </body>
+  </html>
   `;
   }
 
@@ -492,7 +546,12 @@ async function sendWithdrawalEmail(
     html: message,
   };
 
-  await transporter.sendMail(mailOptions);
+  try {
+    await smtpTransport.sendMail(mailOptions);
+    console.log("Email sent successfully");
+  } catch (error) {
+    console.error("Error sending email:", error);
+  }
 }
 userRouter.patch(
   "/withdraw/:id",
@@ -513,9 +572,9 @@ userRouter.patch(
       const withdrawalRequest = seller.withdrawalRequests.id(id);
       const withdrawalAmount = withdrawalRequest.amount;
       const gateway = withdrawalRequest.gateway;
-      const email = withdrawalRequest.email;
       const transactionId = withdrawalRequest.transactionId; // Retrieve the transactionId from the withdrawal request
 
+      const settings = await Settings.findOne({});
       if (action === "approve") {
         // Find the withdrawal request and update its status to approved
         withdrawalRequest.status = "approved";
@@ -524,17 +583,18 @@ userRouter.patch(
         // Update the withdrawnAmount by adding the approved withdrawal amount
         seller.withdrawnAmount += withdrawalAmount;
 
+        // Save the updated user document
+        await seller.save();
+
         // Send email notification to the seller about withdrawal approval
-        sendWithdrawalEmail(
-          email,
+        await sendWithdrawalEmail(
+          seller.email,
           withdrawalAmount,
           gateway,
           transactionId,
-          "approved"
+          "approved",
+          settings
         );
-
-        // Save the updated user document
-        await seller.save();
 
         res.status(200).json({ message: "Withdrawal request approved" });
       } else if (action === "decline") {
@@ -544,17 +604,18 @@ userRouter.patch(
         // Return the declined amount back to grandTotalEarnings
         seller.grandTotalEarnings += withdrawalAmount;
 
+        // Save the updated user document
+        await seller.save();
+
         // Send email notification to the seller about withdrawal decline
-        sendWithdrawalEmail(
-          email,
+        await sendWithdrawalEmail(
+          seller.email,
           withdrawalAmount,
           gateway,
           transactionId,
-          "declined"
+          "declined",
+          settings
         );
-
-        // Save the updated user document
-        await seller.save();
 
         res.status(200).json({ message: "Withdrawal request declined" });
       } else {
@@ -666,7 +727,11 @@ userRouter.get(
 userRouter.get(
   "/seller/:id",
   expressAsyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id).populate("products");
+    const user = await User.findById(req.params.id).populate({
+      path: "products",
+      options: { sort: { createdAt: -1 } },
+    });
+
     let numReviewsSum = 0;
     let ratingSum = 0;
     let numSales = 0;
@@ -902,13 +967,16 @@ userRouter.put(
   })
 );
 
-//===============
+//=================================
 //Generate Email Verification Token
-//===============
+//=================================
 userRouter.post(
   "/verification-token",
   isAuth,
   expressAsyncHandler(async (req, res) => {
+    const settings = await Settings.findOne({});
+    const { facebook, twitter, whatsapp } = settings || {};
+
     const loginUserId = req?.user?._id;
     const user = await User.findById(loginUserId);
     try {
@@ -933,7 +1001,7 @@ userRouter.post(
             p {
               margin-bottom: 16px;
             }
-            a {
+            .anchor {
               display: inline-block;
               padding: 10px 20px;
               background-color: #007BFF;
@@ -941,6 +1009,26 @@ userRouter.post(
               text-decoration: none;
               border-radius: 4px;
             }
+              .footer_info {
+                  color: #666;
+                  margin: 10px 0;
+                }
+               .footer {
+                  margin-top: 20px;
+                  
+                }
+                .social-icons {
+                  margin-top: 10px;
+                }
+                .social-icon {
+                  margin: 0 5px;
+                  font-size: 24px;
+                  color: #333;
+                }
+                .icons{
+                  width:25px;
+                  height: 25px;
+                }
             
           </style>
         </head>
@@ -949,12 +1037,39 @@ userRouter.post(
           <p>Hello ${user.firstName},</p>
           <p>You have received this email because you have been requested to verify your account.</p>
           <p>Please click the button below to verify your account:</p>
-          <a href="${verificationLink}">Verify Account</a>
+          <a class="anchor" href="${verificationLink}">Verify Account</a>
           <p>If you did not request this verification, you can safely ignore this email.</p>
           <p>This verification link is valid for the next 10 minutes.</p>
           <p>Thank you,</p>
           <p>${process.env.SHOP_NAME} Team</p>
           <hr/>
+          <div class="footer">
+            <p class="footer_info">For more information, visit our website:</p>
+            <p class="footer_info"><strong>${process.env.SHOP_NAME}</strong></p>
+            <div class="social-icons">
+            <a href=${facebook} class="social-icon">
+              <img
+                class="icons"
+                src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399098/facebook_e2bdv6.png"
+                alt="Facebook"
+              />
+            </a>
+            <a href=${twitter} class="social-icon">
+              <img
+                class="icons"
+                src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399098/twitter_djgizx.png"
+                alt="Twitter"
+              />
+            </a>
+            <a href=https://wa.me/${whatsapp} class="social-icon">
+              <img
+                class="icons"
+                src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399099/whatsapp_m0dmdp.png"
+                alt="WhatsApp"
+              />
+            </a>
+          </div>
+          </div>
         </body>
         </html>
       `;
@@ -1026,6 +1141,9 @@ userRouter.put(
 userRouter.post(
   "/password-token",
   expressAsyncHandler(async (req, res) => {
+    const settings = await Settings.findOne({});
+    const { facebook, twitter, whatsapp } = settings || {};
+
     const { email } = req.body;
     const user = await User.findOne({ email });
     if (!user) throw new Error("User not Found");
@@ -1034,20 +1152,77 @@ userRouter.post(
       await user.save();
 
       // HTML message
-      const resetURL = `<p>Hello ${user.firstName},</p>
-        <p>We received a request to reset your password for your account at ${
-          process.env.SHOP_NAME
-        }. If you did not request this, please ignore this email.</p>
-        <p>To reset your password, click the button below:</p>
-        <a href=${`${process.env.SUB_DOMAIN}/${user.id}/new-password/${token}`} style="display: inline-block; margin: 10px 0; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 4px;">Reset Password</a>
-        <p style="color: #777; font-size: 14px;">Please note that this link will expire in 10 minutes for security reasons.</p>
-        <p>If the button above doesn't work, you can also copy and paste the following URL into your web browser:</p>
-        <p>${`${process.env.SUB_DOMAIN}/${user.id}/new-password/${token}`}</p>
-        <p>If you have any questions or need further assistance, please contact our support team at ${
-          process.env.EMAIL_ADDRESS
-        }.</p>
-        <p>Best regards,<br/>${process.env.SHOP_NAME} Team</p>     
-        `;
+      const resetURL = `
+      <html>
+          <head>
+            <style>
+                .footer_info {
+                  color: #666;
+                  margin: 10px 0;
+                }
+               .footer {
+                  margin-top: 20px;
+                  
+                }
+                .social-icons {
+                  margin-top: 10px;
+                }
+                .social-icon {
+                  margin: 0 5px;
+                  font-size: 24px;
+                  color: #333;
+                }
+                .icons{
+                  width:25px;
+                  height: 25px;
+                }
+            </style>
+          </head>
+        <body>
+        <p>Hello ${user.firstName},</p>
+          <p>We received a request to reset your password for your account at ${
+            process.env.SHOP_NAME
+          }. If you did not request this, please ignore this email.</p>
+          <p>To reset your password, click the button below:</p>
+          <a href=${`${process.env.SUB_DOMAIN}/${user.id}/new-password/${token}`} style="display: inline-block; margin: 10px 0; padding: 10px 20px; background-color: #007bff; color: #fff; text-decoration: none; border-radius: 4px;">Reset Password</a>
+          <p style="color: #777; font-size: 14px;">Please note that this link will expire in 10 minutes for security reasons.</p>
+          <p>If the button above doesn't work, you can also copy and paste the following URL into your web browser:</p>
+          <p>${`${process.env.SUB_DOMAIN}/${user.id}/new-password/${token}`}</p>
+          <p>If you have any questions or need further assistance, please contact our support team at ${
+            process.env.EMAIL_ADDRESS
+          }.</p>
+          <p>Best regards,<br/>${process.env.SHOP_NAME} Team</p>
+          <hr/>
+          <div class="footer">
+            <p class="footer_info">For more information, visit our website:</p>
+            <p class="footer_info"><strong>${process.env.SHOP_NAME}</strong></p>
+            <div class="social-icons">
+            <a href=${facebook} class="social-icon">
+              <img
+                class="icons"
+                src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399098/facebook_e2bdv6.png"
+                alt="Facebook"
+              />
+            </a>
+            <a href=${twitter} class="social-icon">
+              <img
+                class="icons"
+                src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399098/twitter_djgizx.png"
+                alt="Twitter"
+              />
+            </a>
+            <a href=https://wa.me/${whatsapp} class="social-icon">
+              <img
+                class="icons"
+                src="https://res.cloudinary.com/dstj5eqcd/image/upload/v1693399099/whatsapp_m0dmdp.png"
+                alt="WhatsApp"
+              />
+            </a>
+          </div>
+          </div>
+        </body>
+     </html>     
+      `;
 
       const smtpTransport = nodemailer.createTransport({
         service: process.env.MAIL_SERVICE,

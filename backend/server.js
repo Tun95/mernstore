@@ -24,6 +24,8 @@ import applicationRoutes from "./routes/applicationRoutes.js";
 import passport from "passport";
 import showRoutes from "./routes/showroomRoutes.js";
 import wrapperRouter from "./routes/wrapperRoutes.js";
+import updateRouter from "./routes/updateRoutes.js";
+import http from "http";
 
 dotenv.config();
 
@@ -100,6 +102,7 @@ app.use("/api/checkout", stripeRouter);
 app.use("/api/apply", applicationRoutes);
 app.use("/api/showroom", showRoutes);
 app.use("/api/wrappers", wrapperRouter);
+app.use("/api/updates", updateRouter);
 
 const _dirname = path.resolve();
 app.use(express.static(path.join(_dirname, "/frontend/build")));
@@ -113,6 +116,8 @@ app.use((err, req, res, next) => {
 
 const port = process.env.PORT || 5000;
 
-app.listen(port, () => {
-  console.log(`serve at http://localhost:${port}`);
+const server = app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
 });
+
+server.timeout = 600000; // Set the timeout to 10 minutes (600,000 milliseconds)

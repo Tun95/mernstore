@@ -1,5 +1,5 @@
 import React from "react";
-import Confirmation from "../../../components/stepper checkout/Confirmation";
+import Confirmation from "../../../components/checkout/Confirmation";
 
 function ConfirmationScreen() {
   return (
