@@ -33,6 +33,7 @@
           position: relative;
           .info_top {
             position: absolute;
+            z-index: 2;
             .left {
               flex-direction: column;
               font-size: 12px;
@@ -86,20 +87,121 @@
               }
             }
           }
-          .img {
-            img {
-              width: 100%;
-            }
-          }
+          // .product-image {
+          //   position: relative;
+          //   display: inline-block;
+          //   height: auto; /* Adjust the height as needed */
 
-          .MuiTooltip-tooltip {
-            background-color: var(
-              --color-black
-            ); /* Change the background color */
-            color: #fff; /* Change the text color */
-            font-size: 14px; /* Change the font size */
-            /* Add any other styles you want */
-          }
+          //   .img {
+          //     position: relative;
+          //     display: block;
+          //     width: 100%;
+          //     height: auto;
+          //     display: flex;
+          //     justify-content: center;
+
+          //     &:hover {
+          //       .image-list {
+          //         opacity: 1;
+          //       }
+          //     }
+          //     .image_img {
+          //       width: 100%;
+          //     }
+          //     .image-list {
+          //       position: absolute;
+          //       bottom: 0;
+          //       left: 0;
+          //       opacity: 0;
+          //       width: 90%;
+          //       display: flex;
+          //       justify-content: center;
+
+          //       padding: 8px 0;
+          //       z-index: 1; /* Ensure the image list is above the main image */
+
+          //       .image-bar {
+          //         width: 35px; /* Adjust the width of the image bars */
+          //         height: 340px; /* Adjust the height of the image bars */
+          //         margin: 0 3px; /* Adjust the spacing between image bars */
+          //         border-bottom: 2px solid var(--color-light-gray); /* Color of the image bars */
+          //         transition: background-color 0.3s ease; /* Add a transition effect */
+          //         &:hover {
+          //           border-bottom: 2px solid var(--color-tab);
+          //         }
+          //       }
+
+          //       .image-bar.active {
+          //         border-bottom: 1px solid var(--color-tab);
+          //       }
+          //     }
+
+          //     .main-image {
+          //       display: block;
+          //       width: 100%;
+          //       height: auto;
+          //       transition: opacity 0.3s ease; /* Add a transition effect for fading between images */
+          //     }
+          //   }
+          // }
+					.product-image {
+  position: relative;
+  display: inline-block;
+  height: auto; /* Adjust the height as needed */
+
+  .img {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: auto;
+    display: flex;
+    justify-content: center;
+    &:hover {
+      .image-list {
+        opacity: 1;
+      }
+    }
+
+    .image_img {
+      width: 100%;
+    }
+
+    .image-list {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      opacity: 0;
+      width: 100%;
+      display: flex;
+      justify-content: center; /* Center horizontally */
+      padding: 8px 0;
+      z-index: 1; /* Ensure the image list is above the main image */
+
+      .image-bar {
+        width: 35px; /* Adjust the width of the image bars */
+        height: 340px; /* Adjust the height of the image bars */
+        margin: 0 3px; /* Adjust the spacing between image bars */
+        border-bottom: 2px solid var(--color-light-gray); /* Color of the image bars */
+        transition: background-color 0.3s ease; /* Add a transition effect */
+        &:hover {
+          border-bottom: 2px solid var(--color-tab);
+        }
+      }
+
+      .image-bar.active {
+        border-bottom: 1px solid var(--color-tab);
+      }
+    }
+
+    .main-image {
+      display: block;
+      width: 100%;
+      height: auto;
+      transition: opacity 0.3s ease; /* Add a transition effect for fading between images */
+    }
+  }
+}
+
 
           .name {
             h5 {

@@ -1,18 +1,69 @@
 import React from "react";
 import "./styles.scss";
-import img1 from "../../../assets/bestsellers/airpod.webp";
-import img2 from "../../../assets/bestsellers/controller.webp";
-import img3 from "../../../assets/bestsellers/headset.webp";
-import img4 from "../../../assets/bestsellers/watch.webp";
-import img5 from "../../../assets/bestsellers/xbox.webp";
+import airpod1 from "../../../assets/bestsellers/airpod1.webp";
+import airpod2 from "../../../assets/bestsellers/airpod2.webp";
+import airpod3 from "../../../assets/bestsellers/airpod3.webp";
+import airpod4 from "../../../assets/bestsellers/airpod4.webp";
+import airpod5 from "../../../assets/bestsellers/airpod5.webp";
+import airpod6 from "../../../assets/bestsellers/airpod.webp";
+
+import controller from "../../../assets/bestsellers/controller.webp";
+import controller1 from "../../../assets/bestsellers/controller1.webp";
+import controller2 from "../../../assets/bestsellers/controller2.webp";
+import controller3 from "../../../assets/bestsellers/controller3.webp";
+
+import headset from "../../../assets/bestsellers/headset.webp";
+import headset1 from "../../../assets/bestsellers/headset1.webp";
+import headset2 from "../../../assets/bestsellers/headset2.webp";
+import headset3 from "../../../assets/bestsellers/headset3.webp";
+import headset4 from "../../../assets/bestsellers/headset4.webp";
+import headset5 from "../../../assets/bestsellers/headset5.webp";
+
+import watch from "../../../assets/bestsellers/watch.webp";
+import watch1 from "../../../assets/bestsellers/watch1.webp";
+import watch2 from "../../../assets/bestsellers/watch2.webp";
+import watch3 from "../../../assets/bestsellers/watch3.webp";
+
+import xbox from "../../../assets/bestsellers/xbox.webp";
+import xbox1 from "../../../assets/bestsellers/xbox1.webp";
+import xbox2 from "../../../assets/bestsellers/xbox2.webp";
+import xbox3 from "../../../assets/bestsellers/xbox3.webp";
+import xbox4 from "../../../assets/bestsellers/xbox4.webp";
+
 import BestSellerCard from "./BestSellerCard";
 
 function Bestseller() {
-  const data = [
+  const products = [
     {
       id: 1,
       name: "Apple AirPods Pro with Wireless Charging Case",
-      img: img1,
+      images: [
+        {
+          id: 1,
+          img: airpod6, // Add one more image
+        },
+        {
+          id: 2,
+          img: airpod1,
+        },
+        {
+          id: 3,
+          img: airpod2,
+        },
+        {
+          id: 4,
+          img: airpod3,
+        },
+        {
+          id: 5,
+          img: airpod4,
+        },
+        {
+          id: 6,
+          img: airpod5,
+        },
+      ],
+
       price: 18245,
       discount: 10,
       rating: 3.5,
@@ -23,7 +74,24 @@ function Bestseller() {
     {
       id: 2,
       name: "Apple AirPods Pro with Wireless Charging Case",
-      img: img2,
+      images: [
+        {
+          id: 1,
+          img: controller,
+        },
+        {
+          id: 2,
+          img: controller1,
+        },
+        {
+          id: 3,
+          img: controller2,
+        },
+        {
+          id: 4,
+          img: controller3,
+        },
+      ],
       price: 2245,
       discount: 10,
       rating: 3,
@@ -35,7 +103,33 @@ function Bestseller() {
     {
       id: 3,
       name: "Sony - Platinum Wireless 7.1 Virtual Surround Sound Gaming Headset for PlayStation 4 - Black",
-      img: img3,
+      images: [
+        {
+          id: 1,
+          img: headset,
+        },
+        {
+          id: 2,
+          img: headset1,
+        },
+        {
+          id: 3,
+          img: headset2,
+        },
+        {
+          id: 4,
+          img: headset3,
+        },
+        {
+          id: 5,
+          img: headset4,
+        },
+        {
+          id: 6,
+          img: headset5,
+        },
+      ],
+
       price: 10245,
       discount: 10,
       rating: 4.5,
@@ -46,7 +140,24 @@ function Bestseller() {
     {
       id: 4,
       name: "Apple AirPods Pro with Wireless Charging Case",
-      img: img4,
+      images: [
+        {
+          id: 1,
+          img: watch,
+        },
+        {
+          id: 2,
+          img: watch1,
+        },
+        {
+          id: 3,
+          img: watch2,
+        },
+        {
+          id: 4,
+          img: watch3,
+        },
+      ],
       price: 18245,
       discount: 6,
       rating: 2.5,
@@ -57,7 +168,28 @@ function Bestseller() {
     {
       id: 5,
       name: "Apple AirPods Pro with Wireless Charging Case",
-      img: img5,
+      images: [
+        {
+          id: 1,
+          img: xbox,
+        },
+        {
+          id: 2,
+          img: xbox1,
+        },
+        {
+          id: 3,
+          img: xbox2,
+        },
+        {
+          id: 4,
+          img: xbox3,
+        },
+        {
+          id: 5,
+          img: xbox4,
+        },
+      ],
       price: 10005,
       discount: 0,
       rating: 0,
@@ -83,7 +215,11 @@ function Bestseller() {
             </div>
           </div>
           <div className="product_list">
-            <BestSellerCard products={data} />
+            <div className="product_card">
+              {products.map((product, index) => (
+                <BestSellerCard key={index} product={product} index={index} />
+              ))}
+            </div>
           </div>
         </div>
       </div>
