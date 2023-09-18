@@ -49,12 +49,11 @@ function BestSellerCard({ product, index }) {
 
     const containerWidth = imageList.clientWidth;
     const totalImages = product.images.length;
-    const imagesToShow = 6; // Number of images to show at a time
-    const imageWidth = containerWidth / imagesToShow;
 
     // Calculate the index based on the mouse position
     const offsetIndex = Math.floor(
-      (e.clientX - imageList.getBoundingClientRect().left) / imageWidth
+      (e.clientX - imageList.getBoundingClientRect().left) /
+        (containerWidth / totalImages)
     );
 
     // Ensure the offset index is within the valid range
@@ -107,13 +106,13 @@ function BestSellerCard({ product, index }) {
       <div className="product-image">
         <Link
           to=""
-          className="img "
+          className="img"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
         >
           {product.images ? (
             <>
-              <div className="image_img p_flex">
+              <div className="image_img ">
                 <span className={`image-list image-list-${index}`}>
                   {product.images.map((item, imageIndex) => (
                     <span key={imageIndex} className="image-bar"></span>
