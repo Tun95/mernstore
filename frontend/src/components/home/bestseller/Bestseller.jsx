@@ -67,7 +67,7 @@ function Bestseller() {
     },
   ];
   return (
-    <div className="best_seller margin_top">
+    <div className="best_seller product_main margin_top">
       <div className="container">
         <div className="content">
           <div className="header">

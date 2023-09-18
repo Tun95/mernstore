@@ -351,6 +351,7 @@ textarea::placeholder {
 }
 
 /*---------product-----------*/
+
 .product {
   background: var(--color-white);
   padding: 20px;
