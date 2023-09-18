@@ -4,7 +4,7 @@ import { Context } from "../../../context/Context";
 import { Link } from "react-router-dom";
 
 function DCard({ products }) {
-  const { state, dispatch: ctxDispatch, convertCurrency } = useContext(Context);
+  const { convertCurrency } = useContext(Context);
 
   //===========
   //REACT SLICK

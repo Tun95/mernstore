@@ -59,19 +59,23 @@ function copyOrUpdateFiles(sourceFolder, targetFolder) {
   }
 }
 
-// Function to remove a directory and its contents recursively
-async function removeDirectoryRecursive(directoryPath) {
+// Function to empty a directory and its contents recursively
+async function emptyDirectory(directoryPath) {
   try {
-    await fsExtra.remove(directoryPath);
+    await fsExtra.emptyDir(directoryPath);
     return true;
   } catch (error) {
-    console.error(`Error removing directory '${directoryPath}':`, error);
+    if (error.code === "ENOTEMPTY") {
+      // Ignore the error if the directory is not empty
+      return true;
+    }
+    console.error(`Error emptying directory '${directoryPath}':`, error);
     return false;
   }
 }
 
 // ====================
-// UPDATE FILE HANDLER
+// INSTALL UPDATE ROUTE
 // ====================
 updateRouter.post("/apply-update", async (req, res) => {
   if (!req.files || !req.files.updateZip) {
@@ -121,25 +125,14 @@ updateRouter.post("/apply-update", async (req, res) => {
         );
 
         if (success) {
-          // Remove temporary folders and their contents recursively
-          const removeUploads = await removeDirectoryRecursive(uploadPath);
-          const removeExtractedUpdates = await removeDirectoryRecursive(
-            extractPath
-          );
+          // Empty the temporary folders and their contents recursively
+          const emptyUploads = await emptyDirectory(uploadPath);
+          const emptyExtractedUpdates = await emptyDirectory(extractPath);
 
-          if (removeUploads && removeExtractedUpdates) {
-            // Optionally, remove the parent directory as well
-            const removeParentDirectory = await removeDirectoryRecursive(
-              path.dirname(extractPath)
-            );
-
-            if (removeParentDirectory) {
-              res.send("Update applied successfully.");
-            } else {
-              res.status(500).send("Error cleaning up parent directory.");
-            }
+          if (emptyUploads && emptyExtractedUpdates) {
+            res.send("Update applied successfully.");
           } else {
-            res.status(500).send("Error cleaning up temporary folders.");
+            res.status(500).send("Error emptying temporary folders.");
           }
         } else {
           res.status(500).send("Error applying the update.");
@@ -148,6 +141,46 @@ updateRouter.post("/apply-update", async (req, res) => {
   } catch (err) {
     console.error("Error processing the update:", err);
     res.status(500).send("Error applying the update.");
+  }
+});
+
+// =======================
+// UNINSTALL UPDATE ROUTE
+// =======================
+updateRouter.post("/uninstall-update", async (req, res) => {
+  const { installPath } = req.body; // Assuming you send the installPath of the update to uninstall
+
+  if (!installPath) {
+    return res.status(400).send("Missing installation path.");
+  }
+
+  const isFrontendUpdate = req.body.type === "frontend"; // You may need to send the type of update too
+  const baseDirectory = isFrontendUpdate ? "frontend" : "backend";
+
+  const targetFolder = path.join(
+    __dirname,
+    "..", // Move up one directory (to "backend" or "frontend")
+    "..", // Move up one more directory (to "MernStore")
+    baseDirectory,
+    installPath
+  );
+
+  if (!fs.existsSync(targetFolder)) {
+    return res.status(400).send("Target folder does not exist.");
+  }
+
+  try {
+    // Empty the target folder and its contents recursively
+    const emptyTargetFolder = await emptyDirectory(targetFolder);
+
+    if (emptyTargetFolder) {
+      res.send("Update uninstalled successfully.");
+    } else {
+      res.status(500).send("Error emptying target folder.");
+    }
+  } catch (err) {
+    console.error("Error uninstalling the update:", err);
+    res.status(500).send("Error uninstalling the update.");
   }
 });
 

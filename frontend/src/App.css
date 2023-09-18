@@ -12,12 +12,13 @@
   --color-background: #f6f9fc;
   --color-light-light-gray: #f6f6f6;
   --color-rating: #ffcd4e;
-  --color-primary: #f62f5e;
-  --color-hover: #ff014f;
+  --color-primary: #be0318;
+  --color-hover: #c72b3d;
   --color-green: #075e54;
   --color-light-green: #128c7e;
   --color-blue: #3462fa;
   --color-tab: #389efd;
+
   --color-text: #0f3460;
   --color-text-dull: #8a95ad;
   --color-dark: #111;
@@ -65,6 +66,9 @@ body {
 
 .mtb {
   margin: 20px 0px;
+}
+.margin_top {
+  margin-top: 40px;
 }
 .mt {
   margin-top: 20px;
@@ -312,32 +316,6 @@ textarea::placeholder {
 
 /*---------category----------*/
 
-.category {
-  box-shadow: rgb(43 52 69 / 10%) 0px 4px 16px;
-  background-color: var(--color-white);
-  width: 23%;
-  height: 510px;
-  padding: 15px 0;
-  border-radius: 5px;
-  margin-top: 5px;
-}
-.category img {
-  width: 30px;
-  height: 30px;
-  object-fit: contain;
-}
-.category span {
-  margin: 10px 20px;
-  text-transform: capitalize;
-}
-.category .box {
-  transition: 0.5s;
-  padding: 0 20px;
-}
-.category .box:hover {
-  background-color: #ffe1e6;
-  cursor: pointer;
-}
 /*---------category----------*/
 
 .btn-primary {

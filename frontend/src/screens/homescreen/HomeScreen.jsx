@@ -14,6 +14,7 @@ import { Context } from "../../context/Context";
 import LoadingBox from "../../components/utilities/message loading/LoadingBox";
 import MessageBox from "../../components/utilities/message loading/MessageBox";
 import Category from "../../components/home/category/Category";
+import Bestseller from "../../components/home/bestseller/Bestseller";
 
 function HomeScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Context);
@@ -34,6 +35,7 @@ function HomeScreen() {
           <>
             <Home />
             <Category />
+            <Bestseller />
             <FlashDeals />
             <TopCate />
             <NewArrival />
