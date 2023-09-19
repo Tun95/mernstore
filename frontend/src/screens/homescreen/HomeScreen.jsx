@@ -15,6 +15,7 @@ import LoadingBox from "../../components/utilities/message loading/LoadingBox";
 import MessageBox from "../../components/utilities/message loading/MessageBox";
 import Category from "../../components/home/category/Category";
 import Bestseller from "../../components/home/bestseller/Bestseller";
+import Demand from "../../components/home/ondemand/Demand";
 
 function HomeScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Context);
@@ -27,26 +28,28 @@ function HomeScreen() {
         <title>Home</title>
       </Helmet>
       <div className="home_outline">
-        {loading ? (
+        {/* {loading ? (
           <LoadingBox></LoadingBox>
         ) : error ? (
           <MessageBox variant="danger">{error}</MessageBox>
-        ) : (
-          <>
-            <Home />
-            <Category />
-            <Bestseller />
-            <FlashDeals />
-            <TopCate />
-            <NewArrival />
-            <Discount />
-            <Shop />
+        ) : ( */}
+        <>
+          <Home />
+          <Category />
+          <Bestseller />
+          <Demand />
 
-            <Annct />
-            <Wrapper />
-            <Subscribe />
-          </>
-        )}
+          <FlashDeals />
+          <TopCate />
+          <NewArrival />
+          <Discount />
+          <Shop />
+
+          <Annct />
+          <Wrapper />
+          <Subscribe />
+        </>
+        {/* )} */}
       </div>
     </>
   );

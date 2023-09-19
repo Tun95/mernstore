@@ -26,265 +26,232 @@
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         overflow: hidden;
-        .card_content {
-          border: 1px solid var(--color-border);
-          padding: 10px;
-          width: 100%;
-          position: relative;
-          .info_top {
+        /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+        @media screen and (max-width: 1200px) {
+          grid-template-columns: repeat(4, 1fr);
+        }
+
+        /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+        @media screen and (max-width: 900px) {
+          grid-template-columns: repeat(3, 1fr);
+        }
+
+        /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+        @media screen and (max-width: 630px) {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+        @media screen and (max-width: 340px) {
+          grid-template-columns: 1fr;
+        }
+      }
+      .card_content {
+        border: 1px solid var(--color-border);
+        padding: 15px;
+        overflow: hidden;
+        width: 100%;
+        position: relative;
+        .info_top {
+          .left {
             position: absolute;
             z-index: 2;
-            .left {
-              flex-direction: column;
-              font-size: 12px;
-              color: var(--color-white);
-              gap: 5px;
-              .num_discount {
-                background-color: #f3ba1e;
-                padding: 3px;
-                width: 40px;
-                border-radius: 15px;
-              }
-              .new {
-                background-color: #2fa318;
-                padding: 3px;
-                width: 40px;
-                border-radius: 15px;
-              }
-              .most_popular {
-                background-color: #b05cf5;
-                padding: 3px 8px;
-                border-radius: 15px;
-              }
+            flex-direction: column;
+            font-size: 12px;
+            color: var(--color-white);
+            gap: 5px;
+            .num_discount {
+              background-color: #f3ba1e;
+              padding: 3px;
+              width: 40px;
+              border-radius: 15px;
             }
-            .right {
-              display: none;
-              position: absolute;
-              top: -100%; /* Start above the .info_top */
-              right: -120%; /* Center horizontally */
-              transform: translateX(120%); /* Center horizontally */
-              transition: top 0.5s ease-in-out; /* Add a smooth transition for the top property */
-              .icon {
-                cursor: pointer;
-              }
+            .new {
+              background-color: #2fa318;
+              padding: 3px;
+              width: 40px;
+              border-radius: 15px;
+            }
+            .most_popular {
+              background-color: #b05cf5;
+              padding: 3px 8px;
+              border-radius: 15px;
             }
           }
-
-          &:hover {
-            .right {
-              display: flex;
-              animation: dropDown 0.5s ease-in-out forwards; /* Apply the dropDown animation */
-              flex-direction: column;
-              align-items: center;
-              gap: 5px;
-              .right_background {
-                width: 35px;
-                height: 35px;
-                color: var(--color-gray);
-                background-color: rgba(255, 255, 255, 0.5);
-                border-radius: 5px;
-                backdrop-filter: blur(5px);
-              }
+          .right {
+            display: none;
+            position: absolute;
+            z-index: 2;
+            right: 15px;
+            top: -100%; /* Start above the .info_top */
+            transition: top 0.5s ease-in-out; /* Add a smooth transition for the top property */
+            .icon {
+              cursor: pointer;
             }
           }
-          // .product-image {
-          //   position: relative;
-          //   display: inline-block;
-          //   height: auto; /* Adjust the height as needed */
+        }
 
-          //   .img {
-          //     position: relative;
-          //     display: block;
-          //     width: 100%;
-          //     height: auto;
-          //     display: flex;
-          //     justify-content: center;
+        &:hover {
+          .right {
+            display: flex;
+            animation: dropDown 0.5s ease-in-out forwards; /* Apply the dropDown animation */
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            margin-top: 13px;
+            .right_background {
+              width: 35px;
+              height: 35px;
+              color: var(--color-gray);
+              background-color: rgba(255, 255, 255, 0.5);
+              border-radius: 5px;
+              backdrop-filter: blur(5px);
+            }
+          }
+        }
 
-          //     &:hover {
-          //       .image-list {
-          //         opacity: 1;
-          //       }
-          //     }
-          //     .image_img {
-          //       width: 100%;
-          //     }
-          //     .image-list {
-          //       position: absolute;
-          //       bottom: 0;
-          //       left: 0;
-          //       opacity: 0;
-          //       width: 90%;
-          //       display: flex;
-          //       justify-content: center;
+        .product-image {
+          position: relative;
+          height: auto; /* Adjust the height as needed */
 
-          //       padding: 8px 0;
-          //       z-index: 1; /* Ensure the image list is above the main image */
-
-          //       .image-bar {
-          //         width: 35px; /* Adjust the width of the image bars */
-          //         height: 340px; /* Adjust the height of the image bars */
-          //         margin: 0 3px; /* Adjust the spacing between image bars */
-          //         border-bottom: 2px solid var(--color-light-gray); /* Color of the image bars */
-          //         transition: background-color 0.3s ease; /* Add a transition effect */
-          //         &:hover {
-          //           border-bottom: 2px solid var(--color-tab);
-          //         }
-          //       }
-
-          //       .image-bar.active {
-          //         border-bottom: 1px solid var(--color-tab);
-          //       }
-          //     }
-
-          //     .main-image {
-          //       display: block;
-          //       width: 100%;
-          //       height: auto;
-          //       transition: opacity 0.3s ease; /* Add a transition effect for fading between images */
-          //     }
-          //   }
-          // }
-          .product-image {
+          .img {
             position: relative;
-            display: inline-block;
-            height: auto; /* Adjust the height as needed */
+            display: block;
+            width: 100%;
+            height: auto;
+            // display: flex;
+            // justify-content: center;
+            &:hover {
+              .demand-image-list,
+              .image-list {
+                opacity: 1;
+              }
+            }
 
-            .img {
-              position: relative;
+            .image_img {
+              width: 100%;
+            }
+
+            .demand-image-list,
+            .image-list {
+              position: absolute;
+              bottom: 0;
+              right: 0;
+              opacity: 0;
+              width: 100%;
+              display: flex;
+              justify-content: center; /* Center horizontally */
+              padding: 8px 0;
+              z-index: 1; /* Ensure the image list is above the main image */
+
+              .image-bar {
+                width: 100%; /* Adjust the width of the image bars */
+                height: 340px; /* Adjust the height of the image bars */
+                margin: 0 3px; /* Adjust the spacing between image bars */
+                border-bottom: 2px solid var(--color-light-gray); /* Color of the image bars */
+                transition: background-color 0.3s ease; /* Add a transition effect */
+                &:hover {
+                  border-bottom: 2px solid var(--color-tab);
+                }
+              }
+
+              .image-bar.active {
+                border-bottom: 1px solid var(--color-tab);
+              }
+            }
+
+            .main-image {
               display: block;
               width: 100%;
               height: auto;
-              display: flex;
-              justify-content: center;
-              &:hover {
-                .image-list {
-                  opacity: 1;
-                }
-              }
-
-              .image_img {
-                width: 100%;
-              }
-
-              .image-list {
-                position: absolute;
-                bottom: 0;
-                left: 10px;
-                right: 0;
-                opacity: 0;
-                width: 100%;
-                display: flex;
-                justify-content: center; /* Center horizontally */
-                padding: 8px 0;
-                z-index: 1; /* Ensure the image list is above the main image */
-
-                .image-bar {
-                  width: 100%; /* Adjust the width of the image bars */
-                  height: 340px; /* Adjust the height of the image bars */
-                  margin: 0 3px; /* Adjust the spacing between image bars */
-                  border-bottom: 2px solid var(--color-light-gray); /* Color of the image bars */
-                  transition: background-color 0.3s ease; /* Add a transition effect */
-                  &:hover {
-                    border-bottom: 2px solid var(--color-tab);
-                  }
-                }
-
-                .image-bar.active {
-                  border-bottom: 1px solid var(--color-tab);
-                }
-              }
-
-              .main-image {
-                display: block;
-                width: 100%;
-                height: auto;
-                transition: opacity 0.3s ease; /* Add a transition effect for fading between images */
-              }
+              transition: opacity 0.3s ease; /* Add a transition effect for fading between images */
             }
           }
+        }
 
-          .name {
-            h5 {
-              font-weight: 400;
-              color: var(--color-gray);
-              font-size: 14px;
-              //max-height: 60px; /* Set the maximum height you want */
-              // overflow: hidden;
-              // text-overflow: ellipsis;
-              // white-space: nowrap;
-            }
-          }
-          .ratings {
-            margin: 5px 0px;
+        .name {
+          h5 {
+            font-weight: 400;
             color: var(--color-gray);
-            gap: 5px;
-            .not_rated {
-              color: var(--color-light-gray);
-            }
-            .rated {
-              color: var(--color-primary);
+            font-size: 14px;
+
+            /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+            @media screen and (max-width: 950px) {
+              white-space: nowrap;
+              overflow: hidden;
+              text-overflow: ellipsis;
             }
           }
-          .countInStock {
-            font-size: 15px;
+        }
+        .ratings {
+          margin: 5px 0px;
+          color: var(--color-gray);
+          gap: 5px;
+          .not_rated {
+            color: var(--color-light-gray);
+          }
+          .rated {
+            color: var(--color-primary);
+          }
+        }
+        .countInStock {
+          font-size: 15px;
 
-            .available {
-              color: var(--color-tab);
+          .available {
+            color: var(--color-tab);
+          }
+        }
+        .lower_bottom {
+          margin-bottom: 10px;
+          .price_discount {
+            .price {
+              color: var(--color-black);
+              font-weight: 800;
+            }
+            .discounted {
+              font-size: 12px;
             }
           }
-          .lower_bottom {
-            margin-bottom: 10px;
-            .price_discount {
-              .price {
-                color: var(--color-black);
-                font-weight: 800;
-              }
-              .discounted {
-                font-size: 12px;
-              }
-            }
-            .add_to_cart_btn {
-              gap: 10px;
-              position: absolute;
-              right: 8px;
-              padding: 4px;
-              border-radius: 50px;
-              border: 1px solid var(--color-white);
-              transition: var(--transition);
-              .quantity {
-                gap: 5px;
-                display: none;
-                margin-left: 5px;
+          .add_to_cart_btn {
+            gap: 10px;
+            position: absolute;
+            right: 8px;
+            padding: 4px;
+            border-radius: 50px;
+            border: 1px solid var(--color-white);
+            transition: var(--transition);
+            .quantity {
+              gap: 5px;
+              display: none;
+              margin-left: 5px;
 
-                .qty {
-                  width: 20px;
-                  font-size: 15px;
-                }
-                button {
-                  background: transparent;
-                  font-size: 13px;
-                  cursor: pointer;
-                  i {
-                    color: var(--color-gray);
-                  }
-                }
+              .qty {
+                width: 20px;
+                font-size: 15px;
               }
-              &:hover {
-                border: 1px solid var(--color-border);
-                background-color: var(--color-white);
-
-                .quantity {
-                  display: flex;
-                }
-              }
-              .btn {
-                background-color: var(--color-primary);
-                color: var(--color-white);
-                width: 35px;
-                height: 35px;
-                border-radius: 50%;
+              button {
+                background: transparent;
+                font-size: 13px;
                 cursor: pointer;
+                i {
+                  color: var(--color-gray);
+                }
               }
+            }
+            &:hover {
+              border: 1px solid var(--color-border);
+              background-color: var(--color-white);
+
+              .quantity {
+                display: flex;
+              }
+            }
+            .btn {
+              background-color: var(--color-primary);
+              color: var(--color-white);
+              width: 35px;
+              height: 35px;
+              border-radius: 50%;
+              cursor: pointer;
             }
           }
         }

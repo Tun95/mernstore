@@ -5,9 +5,9 @@ import Favorite from "@mui/icons-material/Favorite";
 import black from "../../..//assets/bestsellers/black.webp";
 import AddchartIcon from "@mui/icons-material/Addchart";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Context } from "../../../context/Context";
 import { Link } from "react-router-dom";
 import Tooltip from "@mui/material/Tooltip";
+import { Context } from "../../../context/Context";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -19,7 +19,7 @@ function truncateText(text, maxWords) {
   }
   return words.slice(0, maxWords).join(" ") + " ...";
 }
-function BestSellerCard({ product, index }) {
+function DemandCard({ product, index }) {
   const { convertCurrency } = useContext(Context);
 
   //===========
@@ -128,13 +128,14 @@ function BestSellerCard({ product, index }) {
           {product.images ? (
             <>
               <div className="image_img ">
-                <span className={`image-list image-list-${index}`}>
+                <span
+                  className={`demand-image-list demand-image-list-${index}`}
+                >
                   {product.images.map((item, imageIndex) => (
                     <span key={imageIndex} className="image-bar"></span>
                   ))}
                 </span>
               </div>
-
               <img
                 src={product.images[selectedImage]?.img || product.img}
                 alt=""
@@ -207,4 +208,4 @@ function BestSellerCard({ product, index }) {
   );
 }
 
-export default BestSellerCard;
+export default DemandCard;
