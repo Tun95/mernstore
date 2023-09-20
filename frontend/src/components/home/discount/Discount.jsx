@@ -1,85 +1,146 @@
-import React, { useEffect, useReducer, useRef } from "react";
-import DCard from "./DCard";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import axios from "axios";
-import { request } from "../../../base url/BaseUrl";
-import { getError } from "../../utilities/util/Utils";
+import React, { useEffect, useState } from "react";
+import DiscountCard from "./DiscountCard";
+import { Link } from "react-router-dom";
+import data from "../bestseller/data";
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import Slider from "react-slick";
+import "./styles.scss";
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "FETCH_REQUEST":
-      return { ...state, loading: true };
-    case "FETCH_SUCCESS":
-      return {
-        ...state,
-        products: action.payload,
-        loading: false,
-      };
-    case "FETCH_FAIL":
-      return { ...state, error: action.payload, loading: false };
+const NextArrow = (props) => {
+  const { onClick } = props;
+  return (
+    <div className="control-btn l_flex" onClick={onClick}>
+      <button className="next l_flex">
+        <KeyboardArrowRightIcon className="icon" />
+      </button>
+    </div>
+  );
+};
 
-    default:
-      return state;
-  }
+const PrevArrow = (props) => {
+  const { onClick } = props;
+  return (
+    <div className="control-btn l_flex" onClick={onClick}>
+      <button className="prev l_flex">
+        <KeyboardArrowLeftIcon className="icon" />
+      </button>
+    </div>
+  );
 };
 function Discount() {
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [{ loading, error, products }, dispatch] = useReducer(reducer, {
-    products: [],
-    loading: true,
-    error: "",
-  });
-  //============
-  //PRODUCT FETCHING
-  //============
+  const { products } = data;
+
+  //===========
+  //REACT SLICK
+  //===========
+  const [slidesToShow, setSlidesToShow] = useState(1);
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await axios.get(`${request}/api/products/discount`);
-        dispatch({ type: "FETCH_SUCCESS", payload: result.data });
-      } catch (err) {
-        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+      if (screenWidth >= 1250) {
+        setSlidesToShow(Math.min(4, products.length));
+      } else if (screenWidth >= 1120) {
+        setSlidesToShow(Math.min(3, products.length));
+      } else if (screenWidth >= 800) {
+        setSlidesToShow(Math.min(2, products.length));
+      } else if (screenWidth >= 660) {
+        setSlidesToShow(Math.min(3, products.length));
+      } else if (screenWidth >= 330) {
+        setSlidesToShow(Math.min(2, products.length));
+      } else {
+        setSlidesToShow(Math.min(1, products.length));
       }
     };
-    fetchData();
-  }, []);
 
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [products.length]);
+
+  const SliderSettings = {
+    dots: false,
+    infinite: true,
+    speed: 500,
+    slidesToShow: slidesToShow,
+    slidesToScroll: 1,
+    nextArrow: <NextArrow />,
+    prevArrow: <PrevArrow />,
+    responsive: [
+      {
+        breakpoint: 600,
+        settings: {
+          arrows: false,
+        },
+      },
+    ],
+  };
   return (
-    <>
-      <section className=" background newarrivals">
-        {products.length > 0 ? (
-          <div className="container">
-            <div className="heading d_flex">
-              <div className="heading-left row f_flex">
-                <img
-                  src="https://img.icons8.com/windows/32/fa314a/gift.png"
-                  alt=""
-                />
-
-                <h2>Big Discount</h2>
+    <div className="discount_section product_main">
+      <div className="container">
+        <div className="content box_shadow d_flex">
+          <div className="left">
+            <div className="main_content">
+              <div className="header">
+                <h2>AB: Only today you can buy a camera with - 20% discount</h2>
               </div>
-              <div className="heading-right row">
-                <a href="#store">
-                  <button
-                    onClick={() =>
-                      navigate(`/store?order=discount&discount=50`)
-                    }
-                    className="a_flex view_all"
-                  >
-                    <span>View all</span>
-                    <i className="fa fa-caret-right"></i>
-                  </button>
-                </a>
+              <div className="description">
+                <p>
+                  Buy a camera of a well-known brand with 20% discount during
+                  this period. Buying promotional models of cameras or Canon
+                  lenses, you get a free one-year subscription to a plan for
+                  photographers from Adobe Creative Cloud and one of the online
+                  courses.
+                </p>
+              </div>
+              <div className="time_period">
+                <div className="">
+                  <h4>Promotions expires within:</h4>
+                </div>
+                <div className="time">
+                  <span>
+                    <ul>
+                      <li>
+                        <span>111</span>
+                        <small>days</small>
+                      </li>
+                      <li>
+                        <span>4</span>
+                        <small>hours</small>
+                      </li>
+                      <li>
+                        <span>57</span>
+                        <small>minutes</small>
+                      </li>
+                      <li>
+                        <span className="seconds">36</span>
+                        <small>seconds</small>
+                      </li>
+                    </ul>
+                  </span>
+                </div>
+              </div>
+              <div className="btn a_flex">
+                <div className="btn_btn">
+                  <button>More</button>
+                </div>
+                <div className="link">
+                  <Link to="">All promotion</Link>
+                </div>
               </div>
             </div>
-            <DCard products={products} />
           </div>
-        ) : (
-          ""
-        )}
-      </section>
-    </>
+          <div className="product_list contentWidth">
+            <Slider {...SliderSettings}>
+              {products.map((product, index) => (
+                <DiscountCard key={index} product={product} index={index} />
+              ))}
+            </Slider>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
