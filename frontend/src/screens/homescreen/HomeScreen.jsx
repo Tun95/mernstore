@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Helmet } from "react-helmet-async";
-import Annct from "../../components/home/announcement/Annct";
+import Annct from "../../components/home/announcement/Announcement";
 import Discount from "../../components/home/discount/Discount";
 import FlashDeals from "../../components/home/flashdeals/FlashDeals";
 import Home from "../../components/home/mainpage/Home";
@@ -16,6 +16,7 @@ import MessageBox from "../../components/utilities/message loading/MessageBox";
 import Category from "../../components/home/category/Category";
 import Bestseller from "../../components/home/bestseller/Bestseller";
 import Demand from "../../components/home/ondemand/Demand";
+import Announcement from "../../components/home/announcement/Announcement";
 
 function HomeScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Context);
@@ -38,6 +39,7 @@ function HomeScreen() {
           <Category />
           <Bestseller />
           <Demand />
+          <Announcement />
 
           <FlashDeals />
           <TopCate />
@@ -45,7 +47,6 @@ function HomeScreen() {
           <Discount />
           <Shop />
 
-          <Annct />
           <Wrapper />
           <Subscribe />
         </>
