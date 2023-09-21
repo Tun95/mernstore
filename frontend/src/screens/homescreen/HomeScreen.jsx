@@ -16,6 +16,7 @@ import Bestseller from "../../components/home/bestseller/Bestseller";
 import Demand from "../../components/home/ondemand/Demand";
 import Announcement from "../../components/home/announcement/Announcement";
 import Discount from "../../components/home/discount/Discount";
+import Blog from "../../components/home/blog/Blog";
 
 function HomeScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Context);
@@ -40,6 +41,7 @@ function HomeScreen() {
           <Demand />
           <Announcement />
           <Discount />
+          <Blog />
 
           <FlashDeals />
           <TopCate />

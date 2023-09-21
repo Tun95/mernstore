@@ -31,6 +31,55 @@ const PrevArrow = (props) => {
 function Discount() {
   const { products } = data;
 
+  //TIMER
+  const [targetDate, setTargetDate] = useState("");
+  const [days, setDays] = useState("00");
+  const [hours, setHours] = useState("00");
+  const [minutes, setMinutes] = useState("00");
+  const [seconds, setSeconds] = useState("00");
+  const [countdownInterval, setCountdownInterval] = useState(null);
+
+  const startCountdown = () => {
+    clearInterval(countdownInterval);
+
+    const targetTime = new Date(targetDate).getTime();
+
+    const updateCountdown = () => {
+      const currentTime = new Date().getTime();
+      const timeRemaining = targetTime - currentTime;
+
+      if (timeRemaining <= 0) {
+        clearInterval(countdownInterval);
+        return;
+      }
+
+      const remainingDays = Math.floor(timeRemaining / (1000 * 60 * 60 * 24));
+      const remainingHours = Math.floor(
+        (timeRemaining % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+      );
+      const remainingMinutes = Math.floor(
+        (timeRemaining % (1000 * 60 * 60)) / (1000 * 60)
+      );
+      const remainingSeconds = Math.floor((timeRemaining % (1000 * 60)) / 1000);
+
+      setDays(String(remainingDays).padStart(2, "0"));
+      setHours(String(remainingHours).padStart(2, "0"));
+      setMinutes(String(remainingMinutes).padStart(2, "0"));
+      setSeconds(String(remainingSeconds).padStart(2, "0"));
+    };
+
+    updateCountdown();
+
+    const intervalId = setInterval(updateCountdown, 1000);
+    setCountdownInterval(intervalId);
+  };
+
+  useEffect(() => {
+    return () => {
+      clearInterval(countdownInterval);
+    };
+  }, [countdownInterval]);
+
   //===========
   //REACT SLICK
   //===========
@@ -102,23 +151,35 @@ function Discount() {
                   <span>
                     <ul>
                       <li>
-                        <span>111</span>
+                        <span>{days}</span>
                         <small>days</small>
                       </li>
                       <li>
-                        <span>4</span>
+                        <span>{hours}</span>
                         <small>hours</small>
                       </li>
                       <li>
-                        <span>57</span>
+                        <span>{minutes}</span>
                         <small>minutes</small>
                       </li>
                       <li>
-                        <span className="seconds">36</span>
+                        <span className="seconds">{seconds}</span>
                         <small>seconds</small>
                       </li>
                     </ul>
                   </span>
+                </div>
+                <div className="set">
+                  <label htmlFor="targetDate">
+                    Enter Target Date and Time:
+                  </label>
+                  <input
+                    type="datetime-local"
+                    id="targetDate"
+                    value={targetDate}
+                    onChange={(e) => setTargetDate(e.target.value)}
+                  />
+                  <button onClick={startCountdown}>Start Countdown</button>
                 </div>
               </div>
               <div className="btn a_flex">
