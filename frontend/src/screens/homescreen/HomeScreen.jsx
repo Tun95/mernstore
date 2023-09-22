@@ -43,13 +43,13 @@ function HomeScreen() {
           <Discount />
           <Blog />
 
-          <FlashDeals />
+          {/* <FlashDeals />
           <TopCate />
           <NewArrival />
 
           <Shop />
 
-          <Wrapper />
+          <Wrapper /> */}
           <Subscribe />
         </>
         {/* )} */}

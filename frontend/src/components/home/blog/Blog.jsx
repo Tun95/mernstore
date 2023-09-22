@@ -19,6 +19,9 @@ function Blog() {
               <BlogCards index={index} post={post} key={index} />
             ))}
           </div>
+          <div className="btn">
+            <button>All blog articles</button>
+          </div>
         </div>
       </div>
     </div>

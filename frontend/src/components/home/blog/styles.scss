@@ -1,4 +1,115 @@
 .blog_section {
   background-color: var(--color-light-light-gray);
   padding: 30px 0px;
+  height: 100%;
+  position: relative;
+  .blog_list {
+    padding: 10px 0px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr); /* 5 columns in total */
+    grid-gap: 10px;
+    /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+    @media screen and (max-width: 995px) {
+      grid-template-columns: repeat(3, 1fr);
+    }
+    @media screen and (max-width: 575px) {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    @media screen and (max-width: 320px) {
+      grid-template-columns: 1fr;
+    }
+    .blog_card {
+      &:hover {
+        transition: background-color 0.3s;
+        // background-color: #000;
+        a {
+          text-decoration: underline;
+        }
+        .cards {
+          .img_date {
+            filter: brightness(0.9);
+            transition: filter 0.3s;
+          }
+        }
+      }
+      .cards {
+        height: 100%;
+        a {
+          font-size: 14px;
+        }
+        .date {
+          position: relative;
+          bottom: 40px;
+          left: 10px;
+          z-index: 2;
+
+          span {
+            font-size: 9px;
+            color: var(--color-border);
+            padding: 2px 5px;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+          }
+        }
+        .name {
+          margin-top: -25px;
+          /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+          @media screen and (max-width: 950px) {
+          }
+        }
+        .img_date {
+          transition: filter 0.3s; /* Add a smooth transition effect to the filter property */
+
+          filter: brightness(1);
+          img {
+            border-radius: 20px;
+            width: 100%;
+
+            /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+            @media screen and (max-width: 995px) {
+              height: 120px;
+              object-fit: cover;
+            }
+          }
+        }
+      }
+    }
+    .blog_card.first {
+      grid-column: span 2;
+      grid-row: span 2;
+      // height: 100%;
+      .cards {
+        .img_date {
+          img {
+            width: 97%;
+            height: 60vh;
+            object-fit: cover;
+          }
+        }
+      }
+      /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+      @media screen and (max-width: 995px) {
+        grid-row: span 1;
+        grid-column: span 1;
+        .cards {
+          .img_date {
+            img {
+              height: 120px;
+              object-fit: cover;
+            }
+          }
+        }
+      }
+    }
+  }
+  .btn {
+    button {
+      background-color: var(--color-primary);
+      color: var(--color-white);
+      padding: 12px 15px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+  }
 }

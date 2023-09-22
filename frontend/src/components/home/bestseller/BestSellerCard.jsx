@@ -19,6 +19,7 @@ function truncateText(text, maxWords) {
   }
   return words.slice(0, maxWords).join(" ") + " ...";
 }
+
 function BestSellerCard({ product, index }) {
   const { convertCurrency } = useContext(Context);
 
