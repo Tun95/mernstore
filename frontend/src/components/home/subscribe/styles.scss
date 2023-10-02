@@ -1,76 +1,124 @@
-.subscribe_box {
-  background-color: var(--color-white);
-  span {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    .text_small {
-      text-align: center;
-      display: flex;
-      justify-self: center;
-    }
-  }
-  .container {
-    width: 50%;
-    .content {
-      width: 100%;
-      margin-right: 20px;
-    }
-    .error {
-      color: var(--color-primary);
-      font-size: 12px;
-    }
-
-    .search-box {
-      width: 100%;
-      margin-right: 0px;
-      position: relative;
-      right: 0px;
-      .email_box {
-        margin-left: 8px;
-      }
-      input {
-        background: transparent;
-        width: 90%;
+.subscribe {
+  padding: 40px 0px;
+  .content {
+    .header {
+      margin-bottom: 40px;
+      .main_header {
+        margin-bottom: 10px;
       }
     }
-    .search-box.input-error {
-      border-color: var(--color-primary);
-      width: 100%;
-    }
-    .email_box.input-error {
-      color: var(--color-primary);
-    }
-    .btn {
-      button {
-        color: var(--color-white);
-        background-color: var(--color-primary);
-        font-weight: 600;
-        padding: 8px 20px;
+    .group {
+      gap: 20px;
+      .form_group {
+        background-color: var(--color-light-light-gray);
+        width: 100%;
+        padding: 20px;
+        text-align: center;
         border-radius: 20px;
-        font-size: 17px;
-        cursor: pointer;
-      }
-    }
-  }
-  @media screen and (max-width: 745px) {
-    .container {
-      width: 100%;
-    }
-  }
-  @media screen and (max-width: 320px) {
-    .container {
-      .subscribe_box_content {
-        flex-direction: column;
-        .btn {
-          margin-top: 8px;
-          width: 100%;
-          button {
-            width: 100%;
-            padding: 6px 20px;
-            font-size: 16px;
+        .head {
+          flex-direction: column;
+          border-bottom: none;
+          margin-bottom: 10px;
+          h2 {
+            color: var(--color-black);
+            margin-bottom: 10px;
+          }
+          p {
+            width: 60%;
+            color: var(--color-gray);
+            font-size: 15px;
+            /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+            @media screen and (max-width: 420px) {
+              width: 90%;
+            }
           }
         }
+        .subscribe_box_content {
+          width: 90%;
+          .content {
+            width: 100%;
+            display: flex;
+            margin-right: 5px;
+            flex-direction: column;
+          }
+          .error {
+            color: var(--color-primary);
+            font-size: 12px;
+          }
+
+          .input-box {
+            width: 100%;
+            margin-right: 0px;
+            background-color: var(--color-white);
+            border-radius: 20px;
+            padding: 9px 0px;
+            padding-left: 16px;
+
+            .email_box {
+              margin-left: 8px;
+            }
+            input {
+              background: transparent;
+              width: 90%;
+            }
+          }
+          .input-box.input-error {
+            border-color: var(--color-primary);
+            width: 100%;
+          }
+          .email_box.input-error {
+            color: var(--color-primary);
+          }
+          .btn {
+            button {
+              color: var(--color-white);
+              background-color: var(--color-primary);
+              padding: 9px 25px;
+              border-radius: 20px;
+              font-size: 17px;
+              cursor: pointer;
+            }
+          }
+          /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+          @media screen and (max-width: 380px) {
+            flex-direction: column;
+            .btn {
+              margin-top: 10px;
+              button {
+                width: 100%;
+              }
+            }
+          }
+        }
+        .icons {
+          .social_icons {
+            flex-wrap: wrap;
+            gap: 5px;
+            .icon {
+              margin-right: 6px;
+              background-color: var(--color-gray);
+              width: 40px;
+              height: 40px;
+              border-radius: 50%;
+
+              cursor: pointer;
+              transition: var(--transition);
+              a {
+                color: var(--color-white);
+                .fa-brands {
+                  font-size: 18px;
+                }
+              }
+              &:hover {
+                background-color: var(--color-primary);
+              }
+            }
+          }
+        }
+      }
+      /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+      @media screen and (max-width: 900px) {
+        flex-direction: column;
       }
     }
   }
