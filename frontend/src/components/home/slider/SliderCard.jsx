@@ -7,10 +7,10 @@ import data from "./data.js";
 function SliderCard() {
   const settings = {
     dots: true,
-    infinite: false,
+    infinite: true,
     speed: 500,
     arrows: false,
-    autoplay: false,
+    autoplay: true,
     appendDots: (dots) => {
       return <ul style={{ margin: "0px" }}>{dots}</ul>;
     },

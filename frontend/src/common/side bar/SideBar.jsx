@@ -118,7 +118,7 @@ function SideBar() {
           <Drawer
             anchor={anchor}
             open={state[anchor]}
-            // onClose={toggleDrawer(anchor, false)}
+            onClose={toggleDrawer(anchor, false)}
             className="side_bar_drawer"
             PaperProps={{
               sx: {
