@@ -6,7 +6,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import Box from "@mui/material/Box";
 import "./styles.scss";
 import { Formik, ErrorMessage, Form, Field } from "formik";
-import * as Yup from "yup";
 import { Context } from "../../context/Context";
 import { toast } from "react-toastify";
 import { Icon } from "react-icons-kit";
@@ -16,7 +15,8 @@ import axios from "axios";
 import { request } from "../../base url/BaseUrl";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getError } from "../utilities/util/Utils";
-import { loginSchema } from "../schemas/Index";
+import { loginSchema, reviewSchema, validationSchema } from "../schemas/Index";
+import { Rating } from "@mui/material";
 
 export function LocationModal() {
   //GOOGLE MAP
@@ -58,19 +58,7 @@ const initialValues = {
   convenientTimeFrom: "09:00", // Default start time
   convenientTimeTo: "17:00", // Default end time
 };
-const validationSchema = Yup.object({
-  name: Yup.string().required("Name is required"),
-  phone: Yup.string().required("Phone is required"),
-  convenientTimeFrom: Yup.string().required("Start time is required"),
-  convenientTimeTo: Yup.string()
-    .required("End time is required")
-    .when("convenientTimeFrom", (convenientTimeFrom, schema) => {
-      return schema.test({
-        test: (convenientTimeTo) => convenientTimeTo > convenientTimeFrom,
-        message: "End time must be later than start time",
-      });
-    }),
-});
+
 export function CallRequestModals() {
   //CALL MODAL
   const [openCall, setOpenCall] = React.useState(false);
@@ -362,6 +350,150 @@ export function LoginModals({ toggleDrawer, anchor }) {
                       <input type="checkbox" id="rememberModal" />
                       <small>Remember me</small>
                     </label>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        </Box>
+      </Modal>
+    </>
+  );
+}
+
+const initialReviewValues = {
+  name: "",
+  rating: "",
+  description: "",
+};
+
+export function RatingInput({ field, form }) {
+  const { name, value } = field;
+
+  return (
+    <div className="review_rating">
+      <Rating
+        name="rating"
+        className="rating"
+        value={value}
+        onChange={(event, newValue) => {
+          form.setFieldValue(name, newValue);
+        }}
+      />
+    </div>
+  );
+}
+export function ReviewModal() {
+  //REVIEW MODAL
+  const [openReview, setOpenReview] = React.useState(false);
+  const handleOpenReview = () => setOpenReview(true);
+  const handleCloseReview = () => setOpenReview(false);
+
+  //=========
+  // REVIEW
+  //=========
+  const handleSubmit = () => {};
+  return (
+    <>
+      <button onClick={handleOpenReview}>Write a review</button>
+      <Modal
+        open={openReview}
+        onClose={handleCloseReview}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="customer_call login_modal review_modal">
+          <div className="call_header c_flex">
+            <h1>Write a review</h1>
+            <CloseIcon onClick={handleCloseReview} className="call_icon" />
+          </div>
+          <div className="call login_form">
+            <Formik
+              initialValues={initialReviewValues}
+              validationSchema={reviewSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ touched, errors, isSubmitting }) => (
+                <Form>
+                  <div className="call_request">
+                    <div
+                      className={`form_group ${
+                        touched.name && errors.name ? "error" : ""
+                      }`}
+                    >
+                      <label
+                        htmlFor="name"
+                        className={errors.name && touched.name ? "error" : ""}
+                      >
+                        Your name:<span className="red">*</span>
+                      </label>
+                      <Field
+                        type="text"
+                        id="name"
+                        name="name"
+                        className={`input_box ${
+                          touched.name && errors.name ? "error-border" : ""
+                        }`}
+                      />
+                      <ErrorMessage
+                        name="name"
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                    <div className="form_group">
+                      <label
+                        htmlFor="rating"
+                        className={
+                          errors.rating && touched.rating ? "error" : ""
+                        }
+                      >
+                        Your rating:<span className="red">*</span>
+                      </label>
+                      <Field
+                        name="rating"
+                        component={RatingInput} // Use the custom RatingInput component
+                      />
+                      <ErrorMessage
+                        name="rating"
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                    <div className="form_group">
+                      <label
+                        htmlFor="description"
+                        className={
+                          errors.description && touched.description
+                            ? "error"
+                            : ""
+                        }
+                      >
+                        Description:<span className="red">*</span>
+                      </label>
+                      <Field
+                        as="textarea"
+                        id="description"
+                        name="description"
+                        type="description"
+                        className={
+                          errors.description && touched.description
+                            ? "textarea input-error"
+                            : "textarea"
+                        }
+                        placeholder="Tell us about your products and store..."
+                      />
+                      <ErrorMessage
+                        name="description"
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                  </div>
+                  <div className="call_btn c_flex">
+                    <button type="submit" disabled={isSubmitting}>
+                      {isSubmitting ? "Submitting..." : "Submit"}
+                    </button>
                   </div>
                 </Form>
               )}

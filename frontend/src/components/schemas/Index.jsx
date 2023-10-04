@@ -62,12 +62,15 @@ export const contactSchema = yup.object().shape({
 });
 
 export const sellerSchema = yup.object().shape({
-  sellerName: yup.string().required("Store name is required*"),
-  storeAddress: yup
+  company: yup.string().required("The Company field is mandatory*"),
+  taxNumber: yup.string().required("Store name is required*"),
+  firstName: yup.string().required("The First name field is mandatory.*"),
+  lastName: yup.string().required("The Last name field is mandatory.*"),
+  email: yup
     .string()
-    .matches(/^[a-zA-Z0-9\s,'-.#]*$/, "Invalid store address")
-    .required("Store address is required*"),
-  sellerDescription: yup
+    .email("Please enter a valid email address")
+    .required("The E-mail field is mandatory.*"),
+  description: yup
     .string()
     .test("word-count", "About should have at least 50 words", (value) => {
       if (value) {
@@ -77,7 +80,38 @@ export const sellerSchema = yup.object().shape({
       return false;
     })
     .required("About cannot be left empty*"),
+  address: yup
+    .string()
+    .matches(/^[a-zA-Z0-9\s,'-.#]*$/, "Invalid store address")
+    .required("Store address is required*"),
+  city: yup.string().required("City field is mandatory.*"),
+  zipCode: yup.string().required("Zip code field is mandatory.*"),
   status: yup.boolean().oneOf([true], "This box needs to be checked*"),
+});
+
+export const validationSchema = yup.object({
+  name: yup.string().required("Name is required"),
+  phone: yup.string().required("Phone is required"),
+  convenientTimeFrom: yup.string().required("Start time is required"),
+  convenientTimeTo: yup
+    .string()
+    .required("End time is required")
+    .when("convenientTimeFrom", (convenientTimeFrom, schema) => {
+      return schema.test({
+        test: (convenientTimeTo) => convenientTimeTo > convenientTimeFrom,
+        message: "End time must be later than start time",
+      });
+    }),
+});
+
+export const reviewSchema = yup.object().shape({
+  name: yup.string().required("Your name is required"),
+  rating: yup
+    .number()
+    .min(1, "Rating must be at least 1")
+    .max(5, "Rating cannot be more than 5")
+    .required("Your rating is required"),
+  description: yup.string().required("Description is required"),
 });
 
 export const billingSchema = yup.object().shape({

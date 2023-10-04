@@ -9,15 +9,15 @@ import Paper from "@mui/material/Paper";
 import Pagination from "@mui/material/Pagination";
 import PaginationItem from "@mui/material/PaginationItem";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-
+import { Helmet } from "react-helmet-async";
 import axios from "axios";
 import { toast } from "react-toastify";
 import ReactTimeAgo from "react-time-ago";
-import { Context } from "../../../../../context/Context";
-import { request } from "../../../../../base url/BaseUrl";
-import { getError } from "../../../../../components/utilities/util/Utils";
-import LoadingBox from "../../../../../components/utilities/message loading/LoadingBox";
-import MessageBox from "../../../../../components/utilities/message loading/MessageBox";
+import { Context } from "../../../../context/Context";
+import { request } from "../../../../base url/BaseUrl";
+import { getError } from "../../../../components/utilities/util/Utils";
+import LoadingBox from "../../../../components/utilities/message loading/LoadingBox";
+import MessageBox from "../../../../components/utilities/message loading/MessageBox";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -53,7 +53,7 @@ function formatDate(date) {
   return new Date(date).toLocaleDateString(undefined, options);
 }
 
-function SellerOrderList() {
+function SellerOrderListScreen() {
   const { state, convertCurrency } = useContext(Context);
   const { userInfo } = state;
   const navigate = useNavigate();
@@ -116,6 +116,9 @@ function SellerOrderList() {
 
   return (
     <div className="container">
+      <Helmet>
+        <title>Vendor Orders</title>
+      </Helmet>
       <div className="order-table order_table">
         <h2>Vendor Orders</h2>{" "}
         {loading ? (
@@ -239,4 +242,4 @@ function SellerOrderList() {
   );
 }
 
-export default SellerOrderList;
+export default SellerOrderListScreen;

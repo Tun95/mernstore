@@ -115,17 +115,17 @@ function Head() {
                   }}
                 >
                   <span className="list l_flex">
-                    <Typography sx={{ minWidth: 100 }}>
-                      <Link to="">Delivery and payment</Link>
+                    <Typography sx={{ minWidth: 130 }}>
+                      <Link to="/apply-for-vendor">Become a seller</Link>
                     </Typography>
                     <Typography sx={{ minWidth: 100 }}>
-                      <Link to="">Returns</Link>
+                      <Link to="">Vendors plans</Link>
                     </Typography>
-                    <Typography sx={{ minWidth: 100 }}>
-                      <Link to="">Store locators</Link>
+                    <Typography sx={{ minWidth: 80 }}>
+                      <Link to="/vendors">Vendors</Link>
                     </Typography>{" "}
-                    <Typography sx={{ minWidth: 100 }}>
-                      <Link to="/contact">Contact</Link>
+                    <Typography sx={{ minWidth: 50 }}>
+                      <Link to="/blog">Our Blog</Link>
                     </Typography>
                   </span>
                   <Tooltip title="Information" className="drop_list_box">

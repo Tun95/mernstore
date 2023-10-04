@@ -16,6 +16,7 @@ import MessageBox from "../../../../components/utilities/message loading/Message
 import Rating from "../../../../components/utilities/rating/Ratings";
 import { RWebShare } from "react-web-share";
 import ShareIcon from "@mui/icons-material/Share";
+import { Helmet } from "react-helmet-async";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -35,7 +36,7 @@ function formatDate(date) {
   const options = { day: "numeric", month: "short", year: "numeric" };
   return new Date(date).toLocaleDateString(undefined, options);
 }
-function Seller() {
+function SellerScreen() {
   const { state, dispatch: ctxDispatch, convertCurrency } = useContext(Context);
   const { cart: cartItems } = state;
   const params = useParams();
@@ -128,6 +129,9 @@ function Seller() {
   const pageURL = process.env.REACT_APP_FRONTEND_URL;
   return (
     <div className="mtb seller_product">
+      <Helmet>
+        <title>Vendors's products</title>
+      </Helmet>
       <div className="container ">
         <div className="box_shadow ">
           {loading ? (
@@ -320,4 +324,4 @@ function Seller() {
   );
 }
 
-export default Seller;
+export default SellerScreen;

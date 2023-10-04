@@ -272,7 +272,7 @@ function Navbar() {
                     PaperProps={{
                       elevation: 0,
                       sx: {
-                        borderRadius: "20px",
+                        borderRadius: "10px",
                         overflow: "visible",
                         zIndex: 1,
                         filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
@@ -407,7 +407,7 @@ function Navbar() {
                       elevation: 0,
                       sx: {
                         zIndex: 1,
-                        borderRadius: "20px",
+                        borderRadius: "10px",
                         overflow: "visible",
                         padding: 0,
                         margin: 0,

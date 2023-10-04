@@ -1,4 +1,4 @@
-import React, { useContext, useReducer } from "react";
+import React, { useContext, useReducer, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import { Formik, ErrorMessage, Field, Form } from "formik";
 import { sellerSchema } from "../../../components/schemas/Index";
@@ -10,6 +10,8 @@ import { getError } from "../../../components/utilities/util/Utils";
 import axios from "axios";
 import { request } from "../../../base url/BaseUrl";
 import LoadingBox from "../../../components/utilities/message loading/LoadingBox";
+import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
+import PhoneInput from "react-phone-number-input";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -35,11 +37,21 @@ function VendorScreen() {
   });
 
   const initialValues = {
-    sellerName: "",
-    storeAddress: "",
-    sellerDescription: "",
+    company: "",
+    taxNumber: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    description: "",
+    address: "",
+    city: "",
+    zipCode: "",
     status: false,
   };
+
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+  const [selectedPhone, setSelectedPhone] = useState("");
 
   //==============
   // APPLY
@@ -60,9 +72,18 @@ function VendorScreen() {
         const { data } = await axios.post(
           `${request}/api/apply`,
           {
-            sellerName: values.sellerName,
-            storeAddress: values.storeAddress,
-            sellerDescription: values.sellerDescription,
+            company: values.company,
+            taxNumber: values.taxNumber,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            email: values.email,
+            description: values.description,
+            address: values.address,
+            city: values.city,
+            country: selectedCountry,
+            state: selectedState,
+            zipCode: values.zipCode,
+            phone: selectedPhone,
             status: true,
           },
           {
@@ -92,13 +113,13 @@ function VendorScreen() {
   return (
     <div className="form-box">
       <Helmet>
-        <title>Vendor Application</title>
+        <title>Apply for a vendor account</title>
       </Helmet>
       <div className="container">
         <div className="quick_link ">
           <div className="page a_flex">
             <Link to="/">Home /</Link>
-            <p> Application</p>
+            <p>Apply for a vendor account</p>
           </div>
         </div>
         <div className="form-box-content">
@@ -118,99 +139,295 @@ function VendorScreen() {
             }) => (
               <Form action="" onSubmit={handleSubmit}>
                 <div className="inner-form">
-                  <h1 className="form_header">Vendor Application</h1>
+                  <h1 className="form_header">Apply for a vendor account</h1>
                   <div className="form-group">
                     <label
-                      htmlFor="sellerName"
+                      htmlFor="company"
                       className={
-                        errors.sellerName && touched.sellerName ? "error" : ""
+                        errors.company && touched.company ? "error" : ""
                       }
                     >
-                      Merchant or store name:<span className="red">*</span>
+                      Company:<span className="red">*</span>
                     </label>
                     <Field
-                      name="sellerName"
-                      type="sellerName"
-                      value={values.sellerName}
+                      name="company"
+                      type="company"
+                      value={values.company}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={
-                        errors.sellerName && touched.sellerName
-                          ? "input-error"
-                          : ""
+                        errors.company && touched.company ? "input-error" : ""
                       }
-                      id="sellerName"
-                      placeholder="Enter your seller name"
+                      id="company"
+                      placeholder="Enter your company name"
                     />
                     <ErrorMessage
-                      name="sellerName"
+                      name="company"
                       component="div"
                       className="error"
                     />
                   </div>
                   <div className="form-group">
                     <label
-                      htmlFor="storeAddress"
+                      htmlFor="taxNumber"
                       className={
-                        errors.storeAddress && touched.storeAddress
-                          ? "error"
-                          : ""
+                        errors.taxNumber && touched.taxNumber ? "error" : ""
                       }
                     >
-                      Store Address:<span className="red">*</span>
+                      Tax number:<span className="red">*</span>
                     </label>
                     <Field
-                      name="storeAddress"
-                      type="storeAddress"
-                      value={values.storeAddress}
+                      name="taxNumber"
+                      type="taxNumber"
+                      value={values.taxNumber}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={
-                        errors.storeAddress && touched.storeAddress
+                        errors.taxNumber && touched.taxNumber
                           ? "input-error"
                           : ""
                       }
-                      id="storeAddress"
-                      placeholder="Enter your address"
+                      id="taxNumber"
+                      placeholder="Enter tax number"
                     />
                     <ErrorMessage
-                      name="storeAddress"
+                      name="taxNumber"
+                      component="div"
+                      className="error"
+                    />
+                  </div>
+                  <div className="inline_input d_flex">
+                    <div className="form-group">
+                      <label
+                        htmlFor="firstName"
+                        className={
+                          errors.firstName && touched.firstName ? "error" : ""
+                        }
+                      >
+                        First name:<span className="red">*</span>
+                      </label>
+                      <Field
+                        name="firstName"
+                        type="firstName"
+                        value={values.firstName}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={
+                          errors.firstName && touched.firstName
+                            ? "input-error"
+                            : ""
+                        }
+                        id="firstName"
+                        placeholder="Enter your first name"
+                      />
+                      <ErrorMessage
+                        name="firstName"
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label
+                        htmlFor="lastName"
+                        className={
+                          errors.lastName && touched.lastName ? "error" : ""
+                        }
+                      >
+                        Last name:<span className="red">*</span>
+                      </label>
+                      <Field
+                        name="lastName"
+                        type="lastName"
+                        value={values.lastName}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        className={
+                          errors.lastName && touched.lastName
+                            ? "input-error"
+                            : ""
+                        }
+                        id="lastName"
+                        placeholder="Enter your last name"
+                      />
+                      <ErrorMessage
+                        name="lastName"
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="email"
+                      className={errors.email && touched.email ? "error" : ""}
+                    >
+                      E-mail:<span className="red">*</span>
+                    </label>
+                    <Field
+                      name="email"
+                      type="email"
+                      value={values.email}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={
+                        errors.email && touched.email ? "input-error" : ""
+                      }
+                      id="email"
+                      placeholder="Enter your last name"
+                    />
+                    <ErrorMessage
+                      name="email"
                       component="div"
                       className="error"
                     />
                   </div>
                   <div className="form-group">
                     <label
-                      htmlFor="sellerDescription"
+                      htmlFor="description"
                       className={
-                        errors.sellerDescription && touched.sellerDescription
-                          ? "error"
-                          : ""
+                        errors.description && touched.description ? "error" : ""
                       }
                     >
-                      About:<span className="red">*</span>
+                      Description:<span className="red">*</span>
                     </label>
                     <Field
                       as="textarea"
-                      id="sellerDescription"
-                      name="sellerDescription"
-                      type="sellerDescription"
-                      value={values.sellerDescription}
+                      id="description"
+                      name="description"
+                      type="description"
+                      value={values.description}
                       onChange={handleChange}
                       onBlur={handleBlur}
                       className={
-                        errors.sellerDescription && touched.sellerDescription
+                        errors.description && touched.description
                           ? "textarea input-error"
                           : "textarea"
                       }
-                      placeholder="About your products and store..."
+                      placeholder="Tell us about your products and store..."
                     />
                     <ErrorMessage
-                      name="sellerDescription"
+                      name="description"
                       component="div"
                       className="error"
                     />
                   </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="address"
+                      className={
+                        errors.address && touched.address ? "error" : ""
+                      }
+                    >
+                      Address:<span className="red">*</span>
+                    </label>
+                    <Field
+                      name="address"
+                      type="address"
+                      value={values.address}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={
+                        errors.address && touched.address ? "input-error" : ""
+                      }
+                      id="address"
+                      placeholder="Enter your store address"
+                    />
+                    <ErrorMessage
+                      name="address"
+                      component="div"
+                      className="error"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="city"
+                      className={errors.city && touched.city ? "error" : ""}
+                    >
+                      City:<span className="red">*</span>
+                    </label>
+                    <Field
+                      name="city"
+                      type="city"
+                      value={values.city}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={
+                        errors.city && touched.city ? "input-error" : ""
+                      }
+                      id="city"
+                      placeholder="Enter your city"
+                    />
+                    <ErrorMessage
+                      name="city"
+                      component="div"
+                      className="error"
+                    />
+                  </div>
+                  <div className="inline_input d_flex">
+                    <div className="form-group">
+                      <label htmlFor="country">Country:</label>{" "}
+                      <CountryDropdown
+                        name="country"
+                        value={selectedCountry} // Use selectedCountry state
+                        onChange={(val) => setSelectedCountry(val)} // Update selectedCountry state
+                        onBlur={handleBlur}
+                        className="select_styles"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label htmlFor="state">State/Province:</label>
+                      <RegionDropdown
+                        country={selectedCountry} // Use selectedCountry state
+                        name="state"
+                        value={selectedState} // Use selectedState state
+                        onChange={(val) => setSelectedState(val)} // Update selectedState state
+                        onBlur={handleBlur}
+                        className="select_styles"
+                      />
+                    </div>
+                  </div>
+                  <div className="form-group">
+                    <label
+                      htmlFor="zipCode"
+                      className={
+                        errors.zipCode && touched.zipCode ? "error" : ""
+                      }
+                    >
+                      Zip/postal code:<span className="red">*</span>
+                    </label>
+                    <Field
+                      name="zipCode"
+                      type="zipCode"
+                      value={values.zipCode}
+                      onChange={handleChange}
+                      onBlur={handleBlur}
+                      className={
+                        errors.zipCode && touched.zipCode ? "input-error" : ""
+                      }
+                      id="zipCode"
+                    />
+                    <ErrorMessage
+                      name="zipCode"
+                      component="div"
+                      className="error"
+                    />
+                  </div>
+                  <div className="form-group">
+                    <label htmlFor="phone">Phone:</label>{" "}
+                    <PhoneInput
+                      international
+                      countryCallingCodeEditable={true}
+                      inputProps={{
+                        name: "phone",
+                        id: "phone",
+                      }}
+                      country={selectedCountry}
+                      value={selectedPhone}
+                      onChange={(value, country) => setSelectedPhone(value)} // Update selectedPhone state
+                      onBlur={handleBlur}
+                    />
+                  </div>
+
                   <div className="">
                     <span className="check_box_message">
                       <span className="check_box">
@@ -258,7 +475,7 @@ function VendorScreen() {
           <div className="form-lower-text">
             <div className="register_now">
               <div className="vendor_application_description">
-                <h2>Vendor Application</h2>
+                <h2>Apply for a vendor account</h2>
                 <p>Please provide a brief description of your store:</p>
                 <p>As a vendor on our platform, you can:</p>
                 <ul>

@@ -282,7 +282,7 @@ function ShippingAddress() {
                   placeholder="Enter Your City"
                 />
               </div>
-              <span className="form-group">
+              <div className="form-group">
                 <label htmlFor="cstate">State:</label>
                 <RegionDropdown
                   country={country}
@@ -291,7 +291,7 @@ function ShippingAddress() {
                   className="select_styles"
                   // onChange={(val) => setcstate(val)}
                 />
-              </span>
+              </div>
               <div className="form-group">
                 <label htmlFor="zip">Zip Code:</label>
                 <input
@@ -304,11 +304,7 @@ function ShippingAddress() {
               </div>
               <div className="form-group">
                 <label htmlFor="country">Country:</label>
-                {/* <CountryDropdown
-                  value={country}
-                  onChange={(val) => setCountry(val)}
-                  className="select_styles"
-                /> */}
+               
                 <CountryDropdown
                   value={country}
                   onChange={handleCountryChange}

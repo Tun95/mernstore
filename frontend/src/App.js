@@ -84,13 +84,15 @@ import NotFoundScreen from "./components/utilities/404 error/PageNotFound";
 import ThemeFaqScreen from "./screens/aboutscreen/faqscreen/ThemeFaqScreen";
 import SellerProductEdit from "./seller/pages/edit/SellerProductEdit";
 import SellerNewProduct from "./seller/pages/new/product/SellerNewProduct";
-import SellerOrderListScreen from "./seller/pages/list/main/order/SellerOrderListScreen";
-import SellerScreen from "./seller/pages/single/main/SellerScreen";
-import SellerProductListScreen from "./seller/pages/list/main/product/SellerProductListScreen";
 import SellerDashboard from "./seller/pages/dashboard/Dashboard";
 import UnSubscribeScreen from "./screens/formscreens/unsubscribescreen/UnsubcribeScreen";
 import Withdrawal from "./admin/pages/single/withdrawal request/Withdrawal";
 import SellerWithdraw from "./seller/pages/single/withrawal request/SellerWithdraw";
+import SellerProductListScreen from "./seller/pages/list/product/SellerProductList";
+import SellerOrderListScreen from "./seller/pages/list/order/SellerOrderList";
+import SellerScreen from "./seller/pages/single/vendor/Seller";
+import VendorListScreen from "./seller/pages/list/vendors/VendorListScreen";
+import CompanyViewScreen from "./seller/pages/single/company view/CompanyView";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -143,7 +145,7 @@ function App() {
   //============================
   // Set the PayPal client ID on the window object
   useEffect(() => {
-    window.paypalClientId = paypal; // Replace this with the actual PayPal client ID
+    window.paypalClientId = paypal;
   }, [paypal]);
 
   ReactGA.initialize(process.env.REACT_APP_GOOGLE_TRACKING, {
@@ -179,7 +181,12 @@ function App() {
             path="/order-details/:id"
             element={<OrderDetailScreen />}
           ></Route>
+
+          {/* VENDOR */}
           <Route path="/vendor-products/:id" element={<SellerScreen />}></Route>
+          <Route path="/vendors" element={<VendorListScreen />}></Route>
+          <Route path="/company-view" element={<CompanyViewScreen />}></Route>
+          {/* VENDOR */}
 
           <Route path="/store-locations" element={<OurStoreScreen />}></Route>
           <Route path="/privacy-policy" element={<PrivacyScreen />}></Route>
@@ -259,11 +266,11 @@ function App() {
             }
           ></Route>
           <Route
-            path="/application"
+            path="/apply-for-vendor"
             element={
-              <ProtectedRoute>
-                <VendorScreen />
-              </ProtectedRoute>
+              // <ProtectedRoute>
+              <VendorScreen />
+              // </ProtectedRoute>
             }
           ></Route>
           <Route path="/unsubscribe" element={<UnSubscribeScreen />}></Route>

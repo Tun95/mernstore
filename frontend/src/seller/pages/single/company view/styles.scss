@@ -1,0 +1,117 @@
+.company {
+  margin-top: 10px;
+  .content {
+    margin-bottom: 60px;
+    a {
+      color: var(--color-tab);
+      transition: var(--transition);
+      font-size: 13px;
+
+      &:hover {
+        color: var(--color-link-hover);
+      }
+    }
+    .header {
+      margin-bottom: 20px;
+      h2 {
+        margin: 15px 0px;
+        margin-bottom: 10px;
+      }
+    }
+    .about {
+      gap: 40px;
+      /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+      @media (max-width: 512px) {
+        flex-direction: column;
+      }
+      .info {
+        gap: 135px;
+        width: 100%;
+
+        /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+        @media (max-width: 787px) {
+          flex-direction: column;
+          gap: 20px;
+        }
+        h4 {
+          margin-bottom: 10px;
+        }
+      }
+    }
+    .lower {
+      margin-top: 20px;
+
+      .switch {
+        gap: 20px;
+        span {
+          cursor: pointer;
+          // transition: var(--transition);
+          &:hover {
+            color: var(--color-gray);
+          }
+        }
+        .active {
+          border-bottom: 2px solid var(--color-tab);
+        }
+      }
+      .lower_main {
+        margin-top: 10px;
+        .reviews {
+          li {
+            gap: 20px;
+            border-bottom: 1px solid var(--color-border);
+            padding: 20px 0px;
+            &:last-child {
+              border-bottom: none;
+            }
+            /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+            @media (max-width: 900px) {
+              flex-direction: column;
+              align-items: flex-start;
+              .user_info {
+                width: 100%;
+                .user {
+                  width: 100%;
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                }
+              }
+            }
+          }
+          .user_info {
+            gap: 10px;
+            .short {
+              min-width: 50px;
+              min-height: 50px;
+              border-radius: 50%;
+              color: var(--color-white);
+              background-color: var(--color-short);
+              h2 {
+                font-size: 20px;
+              }
+            }
+            .user {
+              h4 {
+                white-space: nowrap;
+              }
+              .date_time {
+                color: var(--color-gray);
+              }
+            }
+          }
+        }
+      }
+    }
+    .btn {
+      button {
+        padding: 10px 15px;
+        background-color: var(--color-primary);
+        color: var(--color-white);
+        font-size: 15px;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+    }
+  }
+}
