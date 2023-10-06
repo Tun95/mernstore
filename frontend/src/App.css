@@ -21,12 +21,12 @@
   --color-tab: #389efd;
   --color-text: #0f3460;
   --color-text-dull: #8a95ad;
-  --color-dark: #111;
+  --color-dark: #111111;
   --color-black: #2e2e2e;
-  --color-white: #fff;
+  --color-white: #ffffff;
   --color-gray: #777777;
   --color-light-gray: #999999;
-  --color-light: #eee;
+  --color-light: #eeeeee;
   --color-short: #e1e1e1;
   --transition: all 400ms ease;
   --box-shadow: 0 33px 40px 0 hsla(0, 0%, 73.3%, 0.1);
