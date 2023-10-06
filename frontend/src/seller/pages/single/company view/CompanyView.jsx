@@ -89,7 +89,7 @@ function CompanyViewScreen() {
                       <span>BestBuy</span>
                     </li>
                     <li className="c_flex">
-                      <label>E-mail: </label>&#160;&#160;
+                      <label>Email: </label>&#160;&#160;
                       <span>
                         <a href="mailto:BestBuy@example.com">
                           BestBuy@example.com

@@ -119,7 +119,7 @@ function Head() {
                       <Link to="/apply-for-vendor">Become a seller</Link>
                     </Typography>
                     <Typography sx={{ minWidth: 100 }}>
-                      <Link to="">Vendors plans</Link>
+                      <Link to="/vendors-plan">Vendors plans</Link>
                     </Typography>
                     <Typography sx={{ minWidth: 80 }}>
                       <Link to="/vendors">Vendors</Link>
@@ -185,31 +185,31 @@ function Head() {
                 >
                   <MenuItem
                     component={Link}
-                    to="/track-order"
+                    to="/apply-for-vendor"
                     onClick={handleCloseInfo}
                   >
-                    Delivery and payment
+                    Become a seller
                   </MenuItem>
                   <MenuItem
                     component={Link}
-                    to="/track-order"
+                    to="/vendors-plan"
                     onClick={handleCloseInfo}
                   >
-                    Returns
+                    Vendors plans
                   </MenuItem>
                   <MenuItem
                     component={Link}
-                    to="/track-order"
+                    to="/vendors"
                     onClick={handleCloseInfo}
                   >
-                    Store locators
+                    Vendors
                   </MenuItem>
                   <MenuItem
                     component={Link}
-                    to="/contact"
+                    to="/blog"
                     onClick={handleCloseInfo}
                   >
-                    Contact
+                    Our Blog
                   </MenuItem>
                 </Menu>
               </React.Fragment>

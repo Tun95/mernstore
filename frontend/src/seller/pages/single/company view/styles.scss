@@ -27,7 +27,11 @@
       .info {
         gap: 135px;
         width: 100%;
-
+        .contact {
+          label {
+            word-wrap: normal;
+          }
+        }
         /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
         @media (max-width: 787px) {
           flex-direction: column;
