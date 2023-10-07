@@ -28,6 +28,7 @@
   --color-light-gray: #999999;
   --color-light: #eeeeee;
   --color-short: #e1e1e1;
+  --color-filter: #e6e6e6;
   --transition: all 400ms ease;
   --box-shadow: 0 33px 40px 0 hsla(0, 0%, 73.3%, 0.1);
   --light-shadow: rgb(3 0 71 / 5%) 0px 1px 3px;
