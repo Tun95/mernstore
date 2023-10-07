@@ -60,7 +60,7 @@ function StoreItems({ product, index }) {
   // TEXT TRUNCATE
   //==============
   const [truncatedName, setTruncatedName] = useState(
-    truncateText(product.name, 9)
+    truncateText(product.name, 8)
   );
 
   useEffect(() => {
@@ -68,7 +68,7 @@ function StoreItems({ product, index }) {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
       if (screenWidth >= 1200) {
-        setTruncatedName(truncateText(product.name, 9)); // Adjust the number of words for larger screens
+        setTruncatedName(truncateText(product.name, 8)); // Adjust the number of words for larger screens
       } else if (screenWidth >= 992) {
         setTruncatedName(truncateText(product.name, 7)); // Adjust the number of words for medium screens
       } else {
