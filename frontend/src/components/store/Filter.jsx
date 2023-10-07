@@ -4,7 +4,7 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import FiberManualRecordIcon from "@mui/icons-material/FiberManualRecord";
 import { Slider, InputNumber, Checkbox } from "antd";
 import { styled } from "@mui/system";
-import { Checkbox as MyCheckbox, FormControlLabel } from "@mui/material";
+import { Checkbox as MyCheckbox } from "@mui/material";
 import RestartAltIcon from "@mui/icons-material/RestartAlt";
 
 const colorData = [
@@ -109,41 +109,21 @@ const FilterSection = ({ title, children }) => {
     <li className="filter_list">
       <div className="filter_header" onClick={toggleSection}>
         <span>{title}</span>
-        {isOpen ? <RemoveIcon className="remove_icon"/> : <AddIcon />}
+        {isOpen ? <RemoveIcon className="remove_icon" /> : <AddIcon />}
       </div>
       {isOpen && children}
     </li>
   );
 };
 function Filter(props) {
-  const [minValue, setMinValue] = useState(1);
-  const [maxValue, setMaxValue] = useState(20);
-  const [sliderValue, setSliderValue] = useState([minValue, maxValue]);
-
-  const onChangeMinInput = (value) => {
-    if (isNaN(value)) {
-      return;
-    }
-    setMinValue(value);
-    updateSliderValue([value, sliderValue[1]]);
-  };
-
-  const onChangeMaxInput = (value) => {
-    if (isNaN(value)) {
-      return;
-    }
-    setMaxValue(value);
-    updateSliderValue([sliderValue[0], value]);
-  };
-
-  const onChangeSlider = (value) => {
-    setSliderValue(value);
-  };
-
-  const updateSliderValue = (value) => {
-    setSliderValue(value);
-  };
-
+  const {
+    minValue,
+    onChangeMinInput,
+    maxValue,
+    onChangeMaxInput,
+    onChangeSlider,
+    sliderValue,
+  } = props;
   //==================
   const [activeCategory, setActiveCategory] = useState(null);
 
@@ -232,29 +212,37 @@ function Filter(props) {
             <FilterSection title="Price">
               <div className="lower_list">
                 {/* Price filter content */}
-                <span className="c_flex">
+                <span className="c_flex input_price">
                   <InputNumber
                     min={1}
                     max={20}
-                    style={{ margin: "0 16px" }}
                     value={minValue}
                     onChange={onChangeMinInput}
                   />
                   <InputNumber
                     min={1}
                     max={20}
-                    style={{ margin: "0 16px" }}
                     value={maxValue}
                     onChange={onChangeMaxInput}
                   />
                 </span>
-                <Slider
-                  range
-                  min={1}
-                  max={20}
-                  onChange={onChangeSlider}
-                  value={sliderValue}
-                />
+                <span className="slider">
+                  <Slider
+                    range
+                    trackStyle={{
+                      backgroundColor: "var(--color-primary)",
+                      color: "var(--color-primary)",
+                    }}
+                    handleStyle={{
+                      borderColor: "var(--color-primary)",
+                      color: "var(--color-primary)",
+                    }}
+                    min={1}
+                    max={20}
+                    onChange={onChangeSlider}
+                    value={sliderValue}
+                  />
+                </span>
               </div>
             </FilterSection>
 
