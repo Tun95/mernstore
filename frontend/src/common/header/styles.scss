@@ -195,6 +195,13 @@
     }
   }
 }
+.cart_popover {
+  margin: -11px;
+  width: 300px !important;
+  .content{
+
+  }
+}
 
 .nav_bar {
   padding: 5px 0px;
@@ -258,7 +265,7 @@
       border-radius: 8px;
       background: transparent;
     }
-  
+
     ::placeholder {
       font-size: 15px;
     }

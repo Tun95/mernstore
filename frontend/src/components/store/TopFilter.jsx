@@ -199,6 +199,20 @@ function TopFilter(props) {
       </ul>
     </div>
   );
+  const storage = (
+    <div className="top_popover">
+      <ul className="lower_list">
+        {/* Operating System filter content */}
+        <span className="search_box">
+          <input type="search" placeholder="Search" />
+        </span>
+        <li>
+          <Checkbox>Panasonic</Checkbox>
+          <Checkbox>Samsung</Checkbox>
+        </li>
+      </ul>
+    </div>
+  );
 
   //=============
   //
@@ -220,21 +234,6 @@ function TopFilter(props) {
         <li>16 Per Page </li>
         <li>19 Per Page </li>
         <li> 20 Per Page</li>
-      </ul>
-    </div>
-  );
-
-  const storage = (
-    <div className="top_popover">
-      <ul className="lower_list">
-        {/* Operating System filter content */}
-        <span className="search_box">
-          <input type="search" placeholder="Search" />
-        </span>
-        <li>
-          <Checkbox>Panasonic</Checkbox>
-          <Checkbox>Samsung</Checkbox>
-        </li>
       </ul>
     </div>
   );

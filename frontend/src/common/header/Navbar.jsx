@@ -20,7 +20,10 @@ import { Box, Divider } from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
 import { CallRequestModals } from "../../components/modals/Modals";
-import { SearchMenu } from "../../components/menus/Menu";
+import { CartMenu, SearchMenu } from "../../components/menus/Menu";
+import { Popover } from "antd";
+import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
+import controller from "../../assets/bestsellers/controller.webp";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -174,6 +177,50 @@ function Navbar() {
     localStorage.removeItem("shipmentData");
     window.location.href = "/login";
   };
+
+  // ===========
+  // CART MENU
+  // ===========
+  const cartMenu = (
+    <div className="top_popover cart_popover">
+      <div className="drawers">
+        <div className="cart">
+          <div className="header c_flex">
+            <h3>Cart items:</h3>
+            <CloseOutlinedIcon className="icon" />
+          </div>
+          <div className="content c_flex">
+            <div className="img">
+              <img src={controller} alt="" />
+            </div>
+            <div className="name_qty">
+              <div className="name">
+                <Link to="">
+                  <h3>
+                    Sony - DualShock 4 Wireless Controller for Sony PlayStation
+                    4
+                  </h3>
+                </Link>
+              </div>
+              <div className="qty_price">
+                <span>1 x $2000</span>
+              </div>
+            </div>
+            <div className="close">
+              <CloseOutlinedIcon className="icon" />
+            </div>
+          </div>
+          <div className="drawer_btn c_flex">
+            <button className="view">View cart</button>
+            <button className="c_flex checkout">
+              <CheckCircleOutlineOutlinedIcon className="icon" />
+              <span>Checkout</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
   return (
     <nav>
       <div className="nav_bar">
@@ -502,15 +549,21 @@ function Navbar() {
                     </Menu>
                   </React.Fragment>
                 </div>
-
-                <span>
-                  <span className="l_flex">
-                    <ShoppingCartIcon className="icon" />
+                <Popover
+                  placement="bottomRight"
+                  content={cartMenu}
+                  style={{ padding: 0 }}
+                  trigger="click"
+                >
+                  <span>
+                    <span className="l_flex">
+                      <ShoppingCartIcon className="icon" />
+                    </span>
+                    <span className="badge ">
+                      <span className="badge_count_num l_flex">0</span>
+                    </span>
                   </span>
-                  <span className="badge ">
-                    <span className="badge_count_num l_flex">0</span>
-                  </span>
-                </span>
+                </Popover>
               </div>
             </div>
           </div>
