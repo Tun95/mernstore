@@ -197,6 +197,11 @@ button {
   outline: none;
   background-color: none;
 }
+[type="search"]::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
 .red {
   color: var(--color-primary);
 }

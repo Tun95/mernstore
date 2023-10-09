@@ -237,7 +237,6 @@
     align-items: center;
     height: 40px;
     padding: 0px 10px;
-    /* padding: 10px; */
     border-radius: 8px;
     background-color: var(--color-bg);
 
@@ -255,9 +254,11 @@
       width: 100%;
       outline: none;
       padding: 5px;
+      padding-right: 30px;
       border-radius: 8px;
       background: transparent;
     }
+  
     ::placeholder {
       font-size: 15px;
     }
