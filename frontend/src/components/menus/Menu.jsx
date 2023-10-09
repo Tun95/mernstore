@@ -51,15 +51,10 @@ export function SearchMenu() {
     <div className="search_drawer">
       {["bottom"].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button
-            className="menu_btn_icon"
-            id="demo-customized-button"
-            disableRipple
-            style={{ backgroundColor: "transparent" }}
-            onClick={toggleDrawer(true)}
-          >
-            <SearchIcon className="menu_icon" />
-          </Button>
+          <SearchIcon
+            className="menu_icon"
+            onClick={toggleDrawer(anchor, true)}
+          />
           <Drawer
             anchor={anchor}
             open={searchState[anchor]}
@@ -111,18 +106,12 @@ export function CartMenu() {
     <div>
       {["bottom"].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button
-            className="menu_btn_icon"
-            id="demo-customized-button"
-            disableRipple
-            style={{ backgroundColor: "transparent" }}
-            onClick={toggleDrawer(anchor, true)}
-          >
+          <div className="menu_btn_icon" onClick={toggleDrawer(anchor, true)}>
             <ShoppingCartIcon className="menu_icon" />
             <span className="badge l_flex">
               <span>1</span>
             </span>
-          </Button>{" "}
+          </div>
           <Drawer
             anchor={anchor}
             open={cartState[anchor]}
@@ -194,15 +183,11 @@ export function UserMenu() {
     <div>
       {["bottom"].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button
-            className="menu_btn_icon"
-            id="demo-customized-button"
-            disableRipple
-            style={{ backgroundColor: "transparent" }}
+          <AccountCircleOutlinedIcon
+            className="menu_icon"
             onClick={toggleDrawer(anchor, true)}
-          >
-            <AccountCircleOutlinedIcon className="menu_icon" />
-          </Button>{" "}
+          />
+
           <Drawer
             anchor={anchor}
             open={userState[anchor]}
@@ -270,15 +255,10 @@ export function ContactMenu() {
     <div>
       {["bottom"].map((anchor) => (
         <React.Fragment key={anchor}>
-          <Button
-            className="menu_btn_icon"
-            id="demo-customized-button"
-            disableRipple
-            style={{ backgroundColor: "transparent" }}
+          <CallOutlinedIcon
+            className="menu_icon"
             onClick={toggleDrawer(anchor, true)}
-          >
-            <CallOutlinedIcon className="menu_icon" />
-          </Button>{" "}
+          />
           <Drawer
             anchor={anchor}
             open={contactState[anchor]}

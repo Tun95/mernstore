@@ -106,15 +106,10 @@ function SideBar() {
     <div>
       {["left"]?.map((anchor, index) => (
         <React.Fragment key={index}>
-          <Button
-            className="menu_btn_icon"
-            id="demo-customized-button"
-            disableRipple
-            style={{ backgroundColor: "transparent" }}
+          <MenuIcon
             onClick={toggleDrawer(anchor, true)}
-          >
-            <MenuIcon className="menu_icon" />
-          </Button>
+            className="menu_icon"
+          />
           <Drawer
             anchor={anchor}
             open={state[anchor]}
@@ -299,23 +294,29 @@ function SideBar() {
               <div className="store_info">
                 <ul>
                   <li>
-                    <Link onClick={toggleDrawer(anchor, false)} to="/">
-                      Delivery and payment
+                    <Link
+                      onClick={toggleDrawer(anchor, false)}
+                      to="/apply-for-vendor"
+                    >
+                      Become a seller
                     </Link>
                   </li>
                   <li>
-                    <Link onClick={toggleDrawer(anchor, false)} to="/">
-                      Returns
+                    <Link
+                      onClick={toggleDrawer(anchor, false)}
+                      to="/vendors-plan"
+                    >
+                      Vendors plans
                     </Link>
                   </li>
                   <li>
-                    <Link onClick={toggleDrawer(anchor, false)} to="/">
-                      Store locator
+                    <Link onClick={toggleDrawer(anchor, false)} to="/vendors">
+                      Vendors
                     </Link>
                   </li>
                   <li>
-                    <Link onClick={toggleDrawer(anchor, false)} to="/contact">
-                      Contacts
+                    <Link onClick={toggleDrawer(anchor, false)} to="/blog">
+                      Our Blog
                     </Link>
                   </li>
                 </ul>

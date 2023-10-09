@@ -1,15 +1,10 @@
-.menu_btn_icon {
-  background: transparent;
+.menu_icon {
+  font-size: 30px !important;
+  color: var(--color-primary);
   padding: 0 !important;
-  &:hover {
-    background: transparent !important;
-  }
-  .menu_icon {
-    font-size: 40px !important;
-    color: var(--color-primary);
-    padding: 0 !important;
-  }
+  cursor: pointer;
 }
+
 .cart_badge_icon {
   position: relative;
   top: 8px;

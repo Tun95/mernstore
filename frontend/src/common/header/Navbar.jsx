@@ -20,6 +20,7 @@ import { Box, Divider } from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
 import { CallRequestModals } from "../../components/modals/Modals";
+import { SearchMenu } from "../../components/menus/Menu";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -174,12 +175,12 @@ function Navbar() {
     window.location.href = "/login";
   };
   return (
-    <nav className="navBar">
+    <nav>
       <div className="nav_bar">
         <div className="container ">
-          <div className="c_flex">
+          <div className="navBar c_flex">
             <div className="categories ">
-              <div className="a_flex">
+              <div className="c_flex">
                 <div className="menu_bar">
                   <SideBar />
                 </div>
@@ -222,42 +223,38 @@ function Navbar() {
                 </div>
               </div>
             </div>
-            <div className="search_box_width">
-              <form action="" onSubmit={submitHandler} className="search-box ">
-                <i className="fa fa-search" onClick={submitHandler}></i>
-                <input
-                  value={query}
-                  onChange={(e) => setQuery(e.target.value)}
-                  type="search"
-                  placeholder="Search and hit enter..."
-                />
-              </form>
-            </div>
-            <div className=" left_icons c_flex">
-              <div className="menu_item item_number_box">
+
+            <form action="" onSubmit={submitHandler} className="search ">
+              <i className="fa fa-search" onClick={submitHandler}></i>
+              <input
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                type="search"
+                placeholder="Search and hit enter..."
+              />
+            </form>
+
+            <div className="left_icons c_flex">
+              <div className="drawer_search">
+                <SearchMenu />
+              </div>
+              <div className="nav_call_request">
                 <React.Fragment>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                  >
+                  <Box>
                     <Tooltip>
                       <IconButton
                         onClick={handleClickNav}
                         disableRipple
                         size="small"
-                        sx={{ ml: 2 }}
                         className="icon-button"
                         disableElevation
                         aria-controls={openInfo ? "account-menu" : undefined}
                         aria-haspopup="true"
                         aria-expanded={openInfo ? "true" : undefined}
                       >
-                        <span className="a_flex">
+                        <span className="a_flex default_num">
                           <PhoneInTalkOutlinedIcon />
-                          <span>+0 123-456-7890</span>
+                          <span className="">+0 123-456-7890</span>
                           <KeyboardArrowDownIcon className="icon" />
                         </span>
                       </IconButton>
@@ -369,139 +366,142 @@ function Navbar() {
                     <FavoriteBorderIcon className="icon" />
                   </span>
                 </Tooltip>
-                <React.Fragment>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      textAlign: "center",
-                    }}
-                    className="user_menu_box"
-                  >
-                    <Tooltip>
-                      <IconButton
-                        onClick={handleClickUser}
-                        disableRipple
-                        size="small"
-                        className="icon-button"
-                        disableElevation
-                        aria-controls={
-                          openUserInfo ? "account-menu" : undefined
-                        }
-                        aria-haspopup="true"
-                        aria-expanded={openUserInfo ? "true" : undefined}
-                      >
-                        <span className="l_flex">
-                          <AccountCircleOutlinedIcon className="icon" />
-                        </span>
-                      </IconButton>
-                    </Tooltip>
-                  </Box>
+                <div className="user">
+                  {" "}
+                  <React.Fragment>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        textAlign: "center",
+                      }}
+                      className="user_menu_box"
+                    >
+                      <Tooltip>
+                        <IconButton
+                          onClick={handleClickUser}
+                          disableRipple
+                          size="small"
+                          className="icon-button"
+                          disableElevation
+                          aria-controls={
+                            openUserInfo ? "account-menu" : undefined
+                          }
+                          aria-haspopup="true"
+                          aria-expanded={openUserInfo ? "true" : undefined}
+                        >
+                          <span className="l_flex">
+                            <AccountCircleOutlinedIcon className="icon" />
+                          </span>
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
 
-                  <Menu
-                    anchorEl={anchorUser}
-                    id="account-menu"
-                    open={openUserInfo}
-                    onClose={handleCloseUser}
-                    PaperProps={{
-                      elevation: 0,
-                      sx: {
-                        zIndex: 1,
-                        borderRadius: "10px",
-                        overflow: "visible",
-                        padding: 0,
-                        margin: 0,
-                        filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
-                        ml: 1,
-                        "& .MuiAvatar-root": {
-                          width: 32,
-                          height: 32,
-                          ml: 1.5,
-                          mr: 1,
+                    <Menu
+                      anchorEl={anchorUser}
+                      id="account-menu"
+                      open={openUserInfo}
+                      onClose={handleCloseUser}
+                      PaperProps={{
+                        elevation: 0,
+                        sx: {
+                          zIndex: 1,
+                          borderRadius: "10px",
+                          overflow: "visible",
+                          padding: 0,
+                          margin: 0,
+                          filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                          ml: 1,
+                          "& .MuiAvatar-root": {
+                            width: 32,
+                            height: 32,
+                            ml: 1.5,
+                            mr: 1,
+                          },
+                          "&:before": {
+                            content: '""',
+                            display: "block",
+                            position: "absolute",
+                            top: 0,
+                            right: 24,
+                            width: 15,
+                            height: 15,
+                            bgcolor: "background.paper",
+                            transform: "translateY(-50%) rotate(45deg)",
+                            zIndex: 0,
+                          },
                         },
-                        "&:before": {
-                          content: '""',
-                          display: "block",
-                          position: "absolute",
-                          top: 0,
-                          right: 24,
-                          width: 15,
-                          height: 15,
-                          bgcolor: "background.paper",
-                          transform: "translateY(-50%) rotate(45deg)",
-                          zIndex: 0,
-                        },
-                      },
-                    }}
-                    transformOrigin={{ horizontal: "right", vertical: "top" }}
-                    anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
-                  >
-                    <div className="user_menu_content">
-                      <div className="upper">
-                        <div className="user_head c_flex">
-                          <h4>My Account</h4>
-                          <CloseOutlinedIcon
-                            onClick={handleCloseUser}
-                            className="icon"
-                          />
-                        </div>
-                        <Divider />
-                        <div className="menu_item">
-                          <MenuItem
-                            key="orders"
-                            component={Link}
-                            to="/track-order"
-                            className="list"
-                            onClick={handleCloseUser}
-                            disableRipple
-                          >
-                            Orders
-                          </MenuItem>
-                          <MenuItem
-                            key="orders"
-                            component={Link}
-                            to="/track-order"
-                            className="list"
-                            onClick={handleCloseUser}
-                            disableRipple
-                          >
-                            Comparison list
-                          </MenuItem>
-                          <MenuItem
-                            key="orders"
-                            component={Link}
-                            to="/track-order"
-                            className="list"
-                            onClick={handleCloseUser}
-                            disableRipple
-                          >
-                            Wish list
-                          </MenuItem>
-                        </div>
-                      </div>
-                      <div className="lower">
-                        <div className="content">
-                          <div className="track">
-                            <small>Track my order(s)</small>
-                            <form action="" className="a_flex">
-                              <input
-                                type="text"
-                                placeholder="Order Tracking ID"
-                              />
-                              <button>
-                                <ArrowRightOutlinedIcon />
-                              </button>
-                            </form>
+                      }}
+                      transformOrigin={{ horizontal: "right", vertical: "top" }}
+                      anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                    >
+                      <div className="user_menu_content">
+                        <div className="upper">
+                          <div className="user_head c_flex">
+                            <h4>My Account</h4>
+                            <CloseOutlinedIcon
+                              onClick={handleCloseUser}
+                              className="icon"
+                            />
                           </div>
-                          <div className="reg_login c_flex">
-                            <button className="login">Login</button>
-                            <button>Register</button>
+                          <Divider />
+                          <div className="menu_item">
+                            <MenuItem
+                              key="orders"
+                              component={Link}
+                              to="/track-order"
+                              className="list"
+                              onClick={handleCloseUser}
+                              disableRipple
+                            >
+                              Orders
+                            </MenuItem>
+                            <MenuItem
+                              key="orders"
+                              component={Link}
+                              to="/track-order"
+                              className="list"
+                              onClick={handleCloseUser}
+                              disableRipple
+                            >
+                              Comparison list
+                            </MenuItem>
+                            <MenuItem
+                              key="orders"
+                              component={Link}
+                              to="/track-order"
+                              className="list"
+                              onClick={handleCloseUser}
+                              disableRipple
+                            >
+                              Wish list
+                            </MenuItem>
                           </div>
                         </div>
+                        <div className="lower">
+                          <div className="content">
+                            <div className="track">
+                              <small>Track my order(s)</small>
+                              <form action="" className="a_flex">
+                                <input
+                                  type="text"
+                                  placeholder="Order Tracking ID"
+                                />
+                                <button>
+                                  <ArrowRightOutlinedIcon />
+                                </button>
+                              </form>
+                            </div>
+                            <div className="reg_login c_flex">
+                              <button className="login">Login</button>
+                              <button>Register</button>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </Menu>
-                </React.Fragment>
+                    </Menu>
+                  </React.Fragment>
+                </div>
 
                 <span>
                   <span className="l_flex">
