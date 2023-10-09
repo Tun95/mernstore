@@ -1,12 +1,16 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import { Context } from "../../../context/Context";
 import { Link } from "react-router-dom";
-import { Checkbox, Tooltip } from "@mui/material";
+import { Checkbox } from "@mui/material";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
 import AddchartIcon from "@mui/icons-material/Addchart";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import black from "../../..//assets/bestsellers/black.webp";
+import { Tooltip } from "antd";
+import LocalActivityOutlinedIcon from "@mui/icons-material/LocalActivityOutlined";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -18,6 +22,7 @@ function truncateText(text, maxWords) {
   }
   return words.slice(0, maxWords).join(" ") + " ...";
 }
+
 function DiscountCard({ product, index }) {
   const { convertCurrency } = useContext(Context);
 
@@ -80,6 +85,13 @@ function DiscountCard({ product, index }) {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [product.name]);
+
+  //TOOLTIP
+  const mergedArrow = useMemo(() => {
+    return {
+      pointAtCenter: true,
+    };
+  }, []);
   return (
     <div className="card_content" key={index}>
       <div className="info_top d_flex">
@@ -147,7 +159,11 @@ function DiscountCard({ product, index }) {
       </div>
 
       <Link to="" className="name">
-        <Tooltip className="tooltip" title={product.name}>
+        <Tooltip
+          placement="bottom"
+          title={<span className="tooltip">{product.name}</span>}
+          arrow={mergedArrow}
+        >
           <h5>{truncatedName}</h5>
         </Tooltip>
       </Link>
@@ -163,7 +179,21 @@ function DiscountCard({ product, index }) {
         </span>
 
         <span className="num_rating">{product.rating?.toFixed(1)}</span>
-        <span className="num_review">(Reviews: {product.numReviews})</span>
+        {product.numReviews === 0 ? (
+          ""
+        ) : (
+          <span className="num_review">(Reviews: {product.numReviews})</span>
+        )}
+        <span className="a_flex promo_youtube">
+          <Tooltip
+            placement="bottomRight"
+            title={<span className="tooltip">Promotion</span>}
+            arrow={mergedArrow}
+          >
+            <LocalActivityOutlinedIcon className="icon" />
+          </Tooltip>
+          <YouTubeIcon className="icon" />
+        </span>
       </small>
       <div className="countInStock">
         {product.countInStock > 0 ? (

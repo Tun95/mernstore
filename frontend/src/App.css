@@ -14,6 +14,7 @@
   --color-rating: #ffcd4e;
   --color-primary: #be0318;
   --color-hover: #c72b3d;
+  --color-youtube: #ff0000;
   --color-green: #075e54;
   --color-light-green: #128c7e;
   --color-blue: #3462fa;
@@ -319,7 +320,9 @@ textarea::placeholder {
 }
 
 /*---------product-----------*/
-
+.tooltip {
+  font-size: 12px;
+}
 .discounted {
   font-size: 14px;
   margin-left: 5px;

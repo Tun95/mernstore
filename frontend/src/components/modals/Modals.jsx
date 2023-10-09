@@ -18,6 +18,7 @@ import { getError } from "../utilities/util/Utils";
 import { loginSchema, reviewSchema, validationSchema } from "../schemas/Index";
 import { Rating } from "@mui/material";
 
+//MAP MODAL
 export function LocationModal() {
   //GOOGLE MAP
   const [open, setOpen] = React.useState(false);
@@ -51,14 +52,13 @@ export function LocationModal() {
   );
 }
 
-//REQUEST CALL
+//CALL MODAL
 const initialValues = {
   name: "",
   phone: "",
   convenientTimeFrom: "09:00", // Default start time
   convenientTimeTo: "17:00", // Default end time
 };
-
 export function CallRequestModals() {
   //CALL MODAL
   const [openCall, setOpenCall] = React.useState(false);
@@ -193,11 +193,11 @@ export function CallRequestModals() {
   );
 }
 
+//LOGIN MODAL
 const initialLoginValues = {
   email: "",
   password: "",
 };
-
 export function LoginModals({ toggleDrawer, anchor }) {
   const { state, dispatch: ctxDispatch } = useContext(Context);
 
@@ -361,12 +361,12 @@ export function LoginModals({ toggleDrawer, anchor }) {
   );
 }
 
+//REVIEW MODAL
 const initialReviewValues = {
   name: "",
   rating: "",
   description: "",
 };
-
 export function RatingInput({ field, form }) {
   const { name, value } = field;
 
@@ -503,4 +503,8 @@ export function ReviewModal() {
       </Modal>
     </>
   );
+}
+
+export function RequestCallModals() {
+  return <div>Modals</div>;
 }

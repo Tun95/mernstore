@@ -1,0 +1,18 @@
+.bottom_nav {
+  display: none;
+  .menu_btn_icon {
+    .menu_icon {
+      font-size: 24px !important;
+    }
+  }
+  .MuiBottomNavigationAction-iconOnly {
+    color: var(--color-primary) !important;
+  }
+  .MuiBottomNavigationAction-label {
+    color: var(--color-gray);
+  }
+
+  @media screen and (max-width: 745px) {
+    display: block;
+  }
+}

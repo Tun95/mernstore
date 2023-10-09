@@ -1,15 +1,15 @@
 import React from "react";
 import Head from "./Head";
-import Search from "./Search";
 import Navbar from "./Navbar";
 import "./styles.scss";
+import BottomNav from "../bottom nav/BottomNav";
 
 function Header() {
   return (
     <div>
       <Head />
-      {/* <Search /> */}
       <Navbar />
+      <BottomNav />
     </div>
   );
 }

@@ -7,7 +7,9 @@ import AddchartIcon from "@mui/icons-material/Addchart";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Context } from "../../../context/Context";
 import { Link } from "react-router-dom";
-import Tooltip from "@mui/material/Tooltip";
+import LocalActivityOutlinedIcon from "@mui/icons-material/LocalActivityOutlined";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import { Tooltip } from "antd";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -156,7 +158,11 @@ function BestSellerCard({ product, index }) {
       </div>
 
       <Link to="" className="name">
-        <Tooltip placement="bottom" title={product.name} arrow={mergedArrow}>
+        <Tooltip
+          placement="bottom"
+          title={<span className="tooltip">{product.name}</span>}
+          arrow={mergedArrow}
+        >
           <h5>{truncatedName}</h5>
         </Tooltip>
       </Link>
@@ -172,7 +178,21 @@ function BestSellerCard({ product, index }) {
         </span>
 
         <span className="num_rating">{product.rating?.toFixed(1)}</span>
-        <span className="num_review">(Reviews: {product.numReviews})</span>
+        {product.numReviews === 0 ? (
+          ""
+        ) : (
+          <span className="num_review">(Reviews: {product.numReviews})</span>
+        )}
+        <span className="a_flex promo_youtube">
+          <Tooltip
+            placement="bottomRight"
+            title={<span className="tooltip">Promotion</span>}
+            arrow={mergedArrow}
+          >
+            <LocalActivityOutlinedIcon className="icon" />
+          </Tooltip>
+          <YouTubeIcon className="icon" />
+        </span>
       </small>
       <div className="countInStock">
         {product.countInStock > 0 ? (
