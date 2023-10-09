@@ -1,13 +1,15 @@
 import React from "react";
 import "./styles.scss";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import CallOutlinedIcon from "@mui/icons-material/CallOutlined";
 import BottomNavigation from "@mui/material/BottomNavigation";
 import BottomNavigationAction from "@mui/material/BottomNavigationAction";
 import Paper from "@mui/material/Paper";
 import SideBar from "../side bar/SideBar";
-import { SearchMenu } from "../../components/menus/Menu";
+import {
+  CartMenu,
+  ContactMenu,
+  SearchMenu,
+  UserMenu,
+} from "../../components/menus/Menu";
 
 function BottomNav() {
   const [value, setValue] = React.useState(0);
@@ -38,17 +40,17 @@ function BottomNav() {
           <BottomNavigationAction
             disableRipple
             label="Cart"
-            icon={<ShoppingCartIcon />}
+            icon={<CartMenu />}
           />
           <BottomNavigationAction
             disableRipple
             label="Account"
-            icon={<AccountCircleOutlinedIcon />}
+            icon={<UserMenu />}
           />
           <BottomNavigationAction
             disableRipple
             label="Contact"
-            icon={<CallOutlinedIcon />}
+            icon={<ContactMenu />}
           />
         </BottomNavigation>
       </Paper>

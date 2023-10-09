@@ -505,6 +505,3 @@ export function ReviewModal() {
   );
 }
 
-export function RequestCallModals() {
-  return <div>Modals</div>;
-}

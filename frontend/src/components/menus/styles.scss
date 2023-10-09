@@ -1,25 +1,179 @@
-.menu_inner_form {
+.menu_btn_icon {
+  .badge {
+    width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    color: var(--color-light);
+    background-color: var(--color-tab);
+    position: absolute;
+    right: 15px;
+    bottom: 10px;
+    span {
+      font-size: 13px;
+    }
+  }
+}
+
+.drawers {
+  .close_icon {
+    cursor: pointer;
+  }
+  .header {
+    border-bottom: 1px solid var(--color-border);
+    padding: 8px 10px;
+    .icon {
+      font-size: 30px;
+      color: var(--color-light-gray);
+      cursor: pointer;
+    }
+  }
+  .drawer_btn {
+    background-color: var(--color-light);
+    padding: 15px 10px;
+    button {
+      height: 35px;
+      padding: 0px 15px;
+      color: var(--color-white);
+      border-radius: 20px;
+    }
+    .view {
+      background-color: var(--color-black);
+    }
+    .checkout {
+      background-color: var(--color-primary);
+      .icon {
+        margin-right: 5px;
+      }
+    }
+  }
   .form_group {
-    margin-top: 5px;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
     padding: 0px 10px;
     gap: 20px;
     .input_width {
       width: 100%;
       input {
         border: 1px solid var(--color-border);
-        padding: 8px 10px;
+        padding: 10px;
         border-radius: 6px;
         width: 100%;
         margin-top: 25px;
-        padding-right: 10px;
+        padding-right: 20px;
       }
       .icon {
         float: right;
         position: relative;
-        bottom: 28px;
+        bottom: 29px;
         right: 8px;
       }
     }
+    .close_icon {
+      font-size: 30px;
+      color: var(--color-light-gray);
+    }
+  }
+  .cart {
+    .content {
+      padding: 10px 15px;
+      gap: 10px;
+      .img {
+        img {
+          width: 50px;
+        }
+      }
+      .name_qty {
+        line-height: 20px;
+        .name {
+          a {
+            color: var(--color-tab);
+            h3 {
+              font-weight: 500;
+              font-size: 15px;
+            }
+          }
+        }
+      }
+      .close {
+        .icon {
+          background-color: var(--color-light-gray);
+          color: var(--color-white);
+          border-radius: 50%;
+          font-size: 20px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .account {
+    .content {
+      padding: 20px 15px;
+      a {
+        color: var(--color-tab);
+        transition: var(--transition);
+        &:hover {
+          color: var(--color-link-hover);
+        }
+        .icon {
+          font-size: 15px;
+          color: var(--color-tab);
+        }
+      }
+      .track {
+        margin-top: 10px;
+        small {
+          color: var(--color-gray);
+        }
+        input {
+          padding: 8px;
+          border: 1px solid #b8bbc0;
+          border-top-left-radius: 5px;
+          border-bottom-left-radius: 5px;
+          width: 100%;
+        }
+        button {
+          border-top-right-radius: 5px;
+          border-bottom-right-radius: 5px;
+          border: 1px solid #b8bbc0;
+          padding: 3px 4px;
+          cursor: pointer;
+        }
+      }
+    }
+  }
+  .contact {
+    .content {
+      .menu-content {
+        padding: 16px;
+        width: 100%;
+      }
+    }
+  }
+}
+/* CSS animation for the rotation */
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(720deg); /* Adjust the rotation degrees for faster spin */
+  }
+}
+
+/* Apply the animation to the icon */
+.rotate-icon {
+  animation: spin 0.5s linear, stop-spin 0.5s ease-in-out 1.5s forwards; /* Adjust the timing */
+}
+
+/* Keyframes to stop the rotation smoothly */
+@keyframes stop-spin {
+  0% {
+    transform: rotate(
+      720deg
+    ); /* Should match the final rotation degrees in the spin keyframes */
+  }
+  100% {
+    transform: rotate(
+      720deg
+    ); /* Should match the final rotation degrees in the spin keyframes */
   }
 }
