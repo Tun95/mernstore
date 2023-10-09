@@ -67,6 +67,29 @@ footer {
         padding-bottom: 8px;
         padding-top: -8px;
         cursor: pointer;
+        font-size: 15px;
+        .icon {
+          font-size: 18px;
+        }
+      }
+      ul {
+        li {
+          font-size: 13px;
+          a {
+            font-size: 13px;
+          }
+        }
+      }
+    }
+    .footer_base {
+      p {
+        font-size: 12px;
+      }
+      .img {
+        height: 30px;
+        width: 60px;
+        margin-left: 0;
+        margin-right: 8px;
       }
     }
   }
