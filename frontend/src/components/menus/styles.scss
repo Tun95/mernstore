@@ -1,7 +1,7 @@
 .menu_inner_form {
   .form_group {
-    margin-top: 20px;
-    margin-bottom: 50px;
+    margin-top: 5px;
+    margin-bottom: 40px;
     padding: 0px 10px;
     gap: 20px;
     .input_width {
@@ -11,12 +11,14 @@
         padding: 8px 10px;
         border-radius: 6px;
         width: 100%;
-        margin-top: 10px;
+        margin-top: 25px;
+        padding-right: 10px;
       }
       .icon {
         float: right;
         position: relative;
         bottom: 28px;
+        right: 8px;
       }
     }
   }
