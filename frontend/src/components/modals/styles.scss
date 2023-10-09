@@ -122,7 +122,7 @@
       padding: 15px 20px !important;
       background-color: var(--color-bg);
       width: 100%;
-
+      flex-wrap: wrap-reverse;
       button {
         background-color: var(--color-primary);
         color: var(--color-white);
@@ -140,6 +140,9 @@
     .call {
       .call_btn {
         background: transparent;
+        .remember {
+          margin-bottom: 10px;
+        }
         button {
           width: 100%;
           border-radius: 20px;
