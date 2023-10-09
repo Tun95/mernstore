@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
@@ -83,6 +83,13 @@ function BestSellerCard({ product, index }) {
     return () => window.removeEventListener("resize", handleResize);
   }, [product.name]);
 
+  //TOOLTIP
+  const mergedArrow = useMemo(() => {
+    return {
+      pointAtCenter: true,
+    };
+  }, []);
+
   return (
     <div className="card_content" key={index}>
       <div className="info_top d_flex">
@@ -149,7 +156,7 @@ function BestSellerCard({ product, index }) {
       </div>
 
       <Link to="" className="name">
-        <Tooltip className="tooltip" title={product.name}>
+        <Tooltip placement="bottom" title={product.name} arrow={mergedArrow}>
           <h5>{truncatedName}</h5>
         </Tooltip>
       </Link>

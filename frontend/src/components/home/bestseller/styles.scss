@@ -111,15 +111,14 @@
 
         .product-image {
           position: relative;
-          height: auto; /* Adjust the height as needed */
+          height: auto;
 
           .img {
             position: relative;
             display: block;
             width: 100%;
             height: auto;
-            // display: flex;
-            // justify-content: center;
+
             &:hover {
               .demand-image-list,
               .image-list {
@@ -203,6 +202,9 @@
         .lower_bottom {
           margin-bottom: 10px;
           .price_discount {
+            .a_flex {
+              flex-wrap: wrap;
+            }
             .price {
               color: var(--color-black);
               font-weight: 800;

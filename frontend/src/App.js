@@ -75,7 +75,6 @@ import OrderlistScreen from "./admin/pages/list/order/main/OrderlistScreen";
 import SellerRoute from "./components/utilities/protectedRoute/SellerRoute";
 import ProductlistScreen from "./admin/pages/list/product/main/ProductListScreen";
 import DashboardScreen from "./admin/pages/home/main/DashboardScreen";
-import Settings from "./admin/pages/single/settings/Settings";
 import VendorScreen from "./screens/formscreens/vendorscreen/VendorScreen";
 import Application from "./admin/pages/single/application detail/Application";
 import TrackScreen from "./screens/orderscreen/trackscreen/TrackScreen";
@@ -464,7 +463,7 @@ function App() {
               </AdminRoute>
             }
           ></Route>
-
+          {/* BANNER */}
           <Route
             path="/admin/new-banner"
             element={
@@ -490,14 +489,6 @@ function App() {
             }
           ></Route>
           <Route
-            path="/admin/settings/:id"
-            element={
-              <AdminRoute>
-                <Settings />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
             path="/admin/application-details/:id"
             element={
               <AdminRoute>
@@ -505,7 +496,9 @@ function App() {
               </AdminRoute>
             }
           ></Route>
+          {/* ADMIN ROUTES */}
 
+          {/* SELLER ROUTES */}
           <Route
             path="/vendor/dashboard"
             element={

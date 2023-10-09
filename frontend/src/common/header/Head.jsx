@@ -239,12 +239,12 @@ function Head() {
                   ))}
                 </select>
               </div>
-              <div className="toggle_switch">
+              {/* <div className="toggle_switch">
                 <FormControlLabel
                   onClick={toggle}
                   control={<MaterialUISwitch checked={darkMode} />}
                 />
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
