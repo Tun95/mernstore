@@ -92,9 +92,9 @@ import SellerOrderListScreen from "./seller/pages/list/order/SellerOrderList";
 import SellerScreen from "./seller/pages/single/vendor/Seller";
 import VendorListScreen from "./seller/pages/list/vendors/VendorListScreen";
 import CompanyViewScreen from "./seller/pages/single/company view/CompanyView";
-import BlogPostListScreen from "./screens/blogscreen/BlogPostListScreen";
 import BlogDetailScreen from "./screens/blogdetailscreen/BlogDetailscreen";
 import VendorPlanScreen from "./seller/pages/single/vendors plan/VendorPlanScreen";
+import BlogPostListScreen from "./screens/bloglistscreen/BlogPostListScreen";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
