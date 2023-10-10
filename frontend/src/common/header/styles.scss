@@ -369,6 +369,7 @@
         .search_drawer {
           position: relative;
           top: 3px;
+          right: 4px;
           .menu_icon {
             color: var(--color-gray);
             font-size: 28px !important;
@@ -379,6 +380,15 @@
     .icons {
       .view,
       .user {
+        display: none;
+      }
+    }
+  }
+}
+@media (max-width: 745px) {
+  .nav_bar {
+    .left_icons {
+      .drawer_search {
         display: none;
       }
     }
