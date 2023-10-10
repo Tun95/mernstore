@@ -15,7 +15,7 @@ function BlogDetailScreen() {
         <div className="quick_link ">
           <div className="page a_flex">
             <Link to="/">Home /</Link>
-            <Link to="/"> &#160; Blog /</Link>
+            <Link to="/blog"> &#160; Blog /</Link>
             <p>
               &#160; For those who love sound quality we have awesome Pioneer
               speakers! (Demo)
