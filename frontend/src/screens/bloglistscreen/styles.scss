@@ -1,0 +1,13 @@
+.blog_list_screen {
+  margin-top: 10px;
+  margin-bottom: 30px;
+  .main_content {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+    @media screen and (max-width: 900px) {
+      flex-direction: column;
+    }
+  }
+}

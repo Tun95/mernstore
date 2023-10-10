@@ -223,7 +223,7 @@ function Navbar() {
   );
   return (
     <nav>
-      <div className="nav_bar">
+      <div className="nav_bar light_header">
         <div className="container ">
           <div className="navBar c_flex">
             <div className="categories ">

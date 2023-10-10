@@ -202,10 +202,10 @@
 
 .nav_bar {
   padding: 5px 0px;
-  // position: fixed;
-  // top: 0px;
-  // width: 100%;
-  // z-index: 2000;
+  position: sticky;
+  top: 0px;
+  width: 100%;
+  z-index: 2000;
   background-color: var(--color-white);
   .navBar {
     gap: 10px;

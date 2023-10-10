@@ -15,7 +15,12 @@ import axios from "axios";
 import { request } from "../../base url/BaseUrl";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { getError } from "../utilities/util/Utils";
-import { loginSchema, reviewSchema, validationSchema } from "../schemas/Index";
+import {
+  commentSchema,
+  loginSchema,
+  reviewSchema,
+  validationSchema,
+} from "../schemas/Index";
 import { Rating } from "@mui/material";
 
 //MAP MODAL
@@ -431,6 +436,7 @@ export function ReviewModal() {
                         type="text"
                         id="name"
                         name="name"
+                        placeholder="your name"
                         className={`input_box ${
                           touched.name && errors.name ? "error-border" : ""
                         }`}
@@ -505,3 +511,109 @@ export function ReviewModal() {
   );
 }
 
+const initialCommentValues = {
+  name: "",
+  comment: "",
+};
+export function CommentModal() {
+  //REVIEW MODAL
+  const [openReview, setOpenReview] = React.useState(false);
+  const handleOpenReview = () => setOpenReview(true);
+  const handleCloseReview = () => setOpenReview(false);
+
+  //=========
+  // REVIEW
+  //=========
+  const handleSubmit = () => {};
+  return (
+    <>
+      <button onClick={handleOpenReview}>Write a review</button>
+      <Modal
+        open={openReview}
+        onClose={handleCloseReview}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="customer_call login_modal review_modal">
+          <div className="call_header c_flex">
+            <h1>Write a review</h1>
+            <CloseIcon onClick={handleCloseReview} className="call_icon" />
+          </div>
+          <div className="call login_form">
+            <Formik
+              initialValues={initialCommentValues}
+              validationSchema={commentSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ touched, errors, isSubmitting }) => (
+                <Form>
+                  <div className="call_request">
+                    <div
+                      className={`form_group ${
+                        touched.name && errors.name ? "error" : ""
+                      }`}
+                    >
+                      <label
+                        htmlFor="name"
+                        className={errors.name && touched.name ? "error" : ""}
+                      >
+                        Your name:<span className="red">*</span>
+                      </label>
+                      <Field
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="your name"
+                        className={`input_box ${
+                          touched.name && errors.name ? "error-border" : ""
+                        }`}
+                      />
+                      <ErrorMessage
+                        name="name"
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+
+                    <div className="form_group">
+                      <label
+                        htmlFor="comment"
+                        className={
+                          errors.comment && touched.comment ? "error" : ""
+                        }
+                      >
+                        Your message:<span className="red">*</span>
+                      </label>
+                      <Field
+                        as="textarea"
+                        id="comment"
+                        name="comment"
+                        type="comment"
+                        className={
+                          errors.comment && touched.comment
+                            ? "textarea input-error"
+                            : "textarea"
+                        }
+                        placeholder="your message here..."
+                      />
+                      <ErrorMessage
+                        name="comment"
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                  </div>
+                  <div className="call_btn c_flex">
+                    <button type="submit" disabled={isSubmitting}>
+                      {isSubmitting ? "Submitting..." : "Submit"}
+                    </button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        </Box>
+      </Modal>
+    </>
+  );
+}

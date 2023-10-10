@@ -92,6 +92,8 @@ import SellerOrderListScreen from "./seller/pages/list/order/SellerOrderList";
 import SellerScreen from "./seller/pages/single/vendor/Seller";
 import VendorListScreen from "./seller/pages/list/vendors/VendorListScreen";
 import CompanyViewScreen from "./seller/pages/single/company view/CompanyView";
+import BlogPostListScreen from "./screens/blogscreen/BlogPostListScreen";
+import BlogDetailScreen from "./screens/blogdetailscreen/BlogDetailscreen";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -293,6 +295,11 @@ function App() {
           ></Route>
           <Route path="/finish" element={<FinishScreen />}></Route>
 
+          {/* BLOG */}
+          <Route path="/blog" element={<BlogPostListScreen />}></Route>
+          <Route path="/blog-detail" element={<BlogDetailScreen />}></Route>
+
+          {/* ADMIN ROUTES */}
           <Route
             path="/admin/dashboard"
             element={
@@ -463,6 +470,7 @@ function App() {
               </AdminRoute>
             }
           ></Route>
+
           {/* BANNER */}
           <Route
             path="/admin/new-banner"

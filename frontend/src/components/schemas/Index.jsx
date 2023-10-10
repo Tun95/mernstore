@@ -114,6 +114,11 @@ export const reviewSchema = yup.object().shape({
   description: yup.string().required("Description is required"),
 });
 
+export const commentSchema = yup.object().shape({
+  name: yup.string().required("Your name is required"),
+  comment: yup.string().required("Message is required"),
+});
+
 export const billingSchema = yup.object().shape({
   firstName: yup.string().required("First name is required*"),
   lastName: yup.string().required("Last name is required*"),
