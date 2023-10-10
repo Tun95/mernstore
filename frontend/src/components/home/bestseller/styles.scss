@@ -26,7 +26,6 @@
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         overflow: hidden;
-
         /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
         @media screen and (max-width: 1200px) {
           grid-template-columns: repeat(4, 1fr);
@@ -51,6 +50,7 @@
         padding: 15px;
         overflow: hidden;
         width: 100%;
+
         position: relative;
         .info_top {
           .left {
@@ -213,17 +213,13 @@
           }
         }
         .lower_bottom {
+          margin-bottom: 10px;
+          position: relative;
+          bottom: 0;
           .price_discount {
             .a_flex {
-              flex-wrap: wrap !important;
+              flex-wrap: wrap;
               gap: 5px;
-              line-height: 12px;
-              margin-top: 5px;
-            }
-            .c_flex {
-              gap: 5px;
-              flex-wrap: wrap !important;
-              line-height: 12px;
             }
             .price {
               color: var(--color-black);
@@ -235,7 +231,8 @@
           }
           .add_to_cart_btn {
             gap: 10px;
-
+            position: absolute;
+            right: 8px;
             padding: 4px;
             border-radius: 50px;
             border: 1px solid var(--color-white);

@@ -138,23 +138,6 @@
             }
           }
         }
-        .lower_bottom {
-          margin-bottom: 10px;
-
-          .price_discount {
-            width: 90%;
-            overflow: hidden;
-            .a_flex {
-              flex-direction: column;
-              height: 20px;
-            }
-          }
-          .add_to_cart_btn {
-            position: absolute;
-            float: right;
-            right: 0px;
-          }
-        }
       }
     }
   }
