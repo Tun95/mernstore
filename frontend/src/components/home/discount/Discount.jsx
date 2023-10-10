@@ -193,7 +193,7 @@ function Discount() {
             </div>
           </div>
           <div className="product_list contentWidth">
-            <Slider {...SliderSettings}>
+            <Slider {...SliderSettings} className="slick-slider">
               {products.map((product, index) => (
                 <DiscountCard key={index} product={product} index={index} />
               ))}

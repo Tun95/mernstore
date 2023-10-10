@@ -83,7 +83,7 @@ function Demand() {
             </div>
           </div>
           <div className="product_list">
-            <Slider {...SliderSettings}>
+            <Slider {...SliderSettings} className="slick-slider">
               {products.map((product, index) => (
                 <DemandCard key={index} product={product} index={index} />
               ))}
