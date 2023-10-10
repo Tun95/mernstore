@@ -217,10 +217,13 @@
 
           .price_discount {
             .a_flex {
-              flex-wrap: wrap;
+              flex-wrap: wrap !important;
               gap: 5px;
               line-height: 12px;
               margin-top: 5px;
+            }
+            .c_flex {
+              gap: 5px;
             }
             .price {
               color: var(--color-black);
