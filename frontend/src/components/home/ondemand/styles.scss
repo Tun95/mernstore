@@ -1,13 +1,23 @@
 .on_demand {
+  .countInStock {
+    margin-bottom: 30px;
+  }
   .lower_bottom {
     position: absolute;
     width: 100%;
-    margin-bottom: 20px;
 
+    margin-bottom: 20px;
+    .price_discount {
+      width: 90%;
+      overflow: hidden;
+      .a_flex {
+        flex-wrap: nowrap !important;
+      }
+    }
     .add_to_cart_btn {
       position: absolute;
       // position: relative;
-      right: 0px;
+      right: 20px;
       float: right;
     }
   }

@@ -212,15 +212,11 @@
         .countInStock {
           font-size: 15px;
 
-          margin-bottom: 30px;
-
           .available {
             color: var(--color-tab);
           }
         }
         .lower_bottom {
-          margin-bottom: 20px;
-          position: absolute;
           width: 100%;
           bottom: 0;
           .price_discount {

@@ -144,8 +144,15 @@
         .lower_bottom {
           position: absolute;
           width: 100%;
+
           margin-bottom: 20px;
-         
+          .price_discount {
+            width: 90%;
+            overflow: hidden;
+            .a_flex {
+              flex-wrap: nowrap;
+            }
+          }
           .add_to_cart_btn {
             position: absolute;
             // position: relative;
