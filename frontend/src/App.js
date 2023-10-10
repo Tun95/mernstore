@@ -94,6 +94,7 @@ import VendorListScreen from "./seller/pages/list/vendors/VendorListScreen";
 import CompanyViewScreen from "./seller/pages/single/company view/CompanyView";
 import BlogPostListScreen from "./screens/blogscreen/BlogPostListScreen";
 import BlogDetailScreen from "./screens/blogdetailscreen/BlogDetailscreen";
+import VendorPlanScreen from "./seller/pages/single/vendors plan/VendorPlanScreen";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -187,6 +188,8 @@ function App() {
           <Route path="/vendor-products/:id" element={<SellerScreen />}></Route>
           <Route path="/vendors" element={<VendorListScreen />}></Route>
           <Route path="/company-view" element={<CompanyViewScreen />}></Route>
+          <Route path="/vendors-plan" element={<VendorPlanScreen />}></Route>
+
           {/* VENDOR */}
 
           <Route path="/store-locations" element={<OurStoreScreen />}></Route>

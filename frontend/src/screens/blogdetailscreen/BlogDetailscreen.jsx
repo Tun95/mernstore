@@ -3,10 +3,14 @@ import "./styles.scss";
 import BlogDetails from "../../components/blog/BlogDetails";
 import RecentPost from "../../components/blog/RecentPost";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet-async";
 
 function BlogDetailScreen() {
   return (
     <div className="blog_list_screen blog_details_screen">
+      <Helmet>
+        <title>Blog details</title>
+      </Helmet>
       <div className="container">
         <div className="quick_link ">
           <div className="page a_flex">
