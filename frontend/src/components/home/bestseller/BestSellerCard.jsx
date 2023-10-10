@@ -216,7 +216,7 @@ function BestSellerCard({ product, index }) {
             <div className="price">{convertCurrency(product.price)}</div>
           )}
         </div>
-        <div className="add_to_cart_btn a_flex">
+        <div className="add_to_cart_btn c_flex">
           <div className="quantity a_flex">
             <button>
               <i className="fa-solid fa-minus"></i>

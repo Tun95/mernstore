@@ -111,7 +111,7 @@
       }
     }
     .product_list {
-      height: 100%;
+      // height: 100%;
       /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
       @media screen and (max-width: 1120px) {
         right: 30px;
@@ -129,7 +129,7 @@
         padding: 0px;
       }
       .card_content {
-        height: 100% !important;
+        // height: 100% !important;
         position: relative;
         .info_top {
           .left {
@@ -138,16 +138,23 @@
             }
           }
         }
-        // .lower_bottom {
-        //   margin-bottom: 0;
-        //   height: 100%;
-        //   .price_discount {
-        //     .c_flex {
-        //       height: 100%;
-        //       flex-wrap: wrap !important;
-        //     }
-        //   }
-        // }
+        .lower_bottom {
+          margin-bottom: 10px;
+
+          .price_discount {
+            width: 90%;
+            overflow: hidden;
+            .a_flex {
+              flex-direction: column;
+              height: 20px;
+            }
+          }
+          .add_to_cart_btn {
+            position: absolute;
+            float: right;
+            right: 0px;
+          }
+        }
       }
     }
   }

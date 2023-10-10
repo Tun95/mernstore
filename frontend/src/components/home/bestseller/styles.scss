@@ -213,8 +213,6 @@
           }
         }
         .lower_bottom {
-          margin-bottom: 10px;
-
           .price_discount {
             .a_flex {
               flex-wrap: wrap !important;
@@ -224,6 +222,8 @@
             }
             .c_flex {
               gap: 5px;
+              flex-wrap: wrap !important;
+              line-height: 12px;
             }
             .price {
               color: var(--color-black);
@@ -235,8 +235,7 @@
           }
           .add_to_cart_btn {
             gap: 10px;
-            position: absolute;
-            right: 8px;
+
             padding: 4px;
             border-radius: 50px;
             border: 1px solid var(--color-white);
