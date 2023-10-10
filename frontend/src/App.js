@@ -189,7 +189,6 @@ function App() {
           <Route path="/vendors" element={<VendorListScreen />}></Route>
           <Route path="/company-view" element={<CompanyViewScreen />}></Route>
           <Route path="/vendors-plan" element={<VendorPlanScreen />}></Route>
-
           {/* VENDOR */}
 
           <Route path="/store-locations" element={<OurStoreScreen />}></Route>
@@ -202,6 +201,10 @@ function App() {
           <Route path="/bulk-purchases" element={<BulkScreen />}></Route>
           <Route path="/how-to-buy" element={<BuyInfoScreen />}></Route>
           <Route path="/returns" element={<ReturnScreen />}></Route>
+
+          {/* BLOG */}
+          <Route path="/blog" element={<BlogPostListScreen />}></Route>
+          <Route path="/blog-detail" element={<BlogDetailScreen />}></Route>
 
           <Route
             path="/user-profile/:id"
@@ -297,10 +300,6 @@ function App() {
             }
           ></Route>
           <Route path="/finish" element={<FinishScreen />}></Route>
-
-          {/* BLOG */}
-          <Route path="/blog" element={<BlogPostListScreen />}></Route>
-          <Route path="/blog-detail" element={<BlogDetailScreen />}></Route>
 
           {/* ADMIN ROUTES */}
           <Route

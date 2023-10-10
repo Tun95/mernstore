@@ -178,11 +178,9 @@ function DemandCard({ product, index }) {
         </span>
 
         <span className="num_rating">{product.rating?.toFixed(1)}</span>
-        {product.numReviews === 0 ? (
-          ""
-        ) : (
+        
           <span className="num_review">(Reviews: {product.numReviews})</span>
-        )}
+       
         <span className="a_flex promo_youtube">
           <Tooltip
             placement="bottomRight"

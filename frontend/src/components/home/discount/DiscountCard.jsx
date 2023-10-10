@@ -11,7 +11,6 @@ import { Tooltip } from "antd";
 import LocalActivityOutlinedIcon from "@mui/icons-material/LocalActivityOutlined";
 import YouTubeIcon from "@mui/icons-material/YouTube";
 
-
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 //TEXT TRUNCATE
@@ -179,11 +178,8 @@ function DiscountCard({ product, index }) {
         </span>
 
         <span className="num_rating">{product.rating?.toFixed(1)}</span>
-        {product.numReviews === 0 ? (
-          ""
-        ) : (
-          <span className="num_review">(Reviews: {product.numReviews})</span>
-        )}
+        <span className="num_review">(Reviews: {product.numReviews})</span>
+
         <span className="a_flex promo_youtube">
           <Tooltip
             placement="bottomRight"

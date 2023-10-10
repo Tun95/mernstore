@@ -2,9 +2,12 @@ import React from "react";
 import "./styles.scss";
 import BlogCards from "./BlogCards";
 import data from "./data";
+import { useNavigate } from "react-router-dom";
 
 function Blog() {
   const { posts } = data;
+  const navigate = useNavigate();
+
   return (
     <div className="blog_section">
       <div className="container">
@@ -20,7 +23,7 @@ function Blog() {
             ))}
           </div>
           <div className="btn">
-            <button>All blog articles</button>
+            <button onClick={() => navigate("/blog")}>All blog articles</button>
           </div>
         </div>
       </div>

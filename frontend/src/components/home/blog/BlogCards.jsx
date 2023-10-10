@@ -43,7 +43,7 @@ function BlogCards({ index, post }) {
       <div className="cards">
         <div className="img_date">
           <div className="img">
-            <Link to="">
+            <Link to="/blog-detail">
               <img src={post.img} alt={post.name} />
             </Link>
           </div>
@@ -52,7 +52,7 @@ function BlogCards({ index, post }) {
           </div>
         </div>
         <div className="name">
-          <Link to="">{truncatedName}</Link>
+          <Link to="/blog-detail">{truncatedName}</Link>
         </div>
       </div>
     </div>
