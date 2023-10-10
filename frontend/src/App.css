@@ -31,7 +31,7 @@
   --color-short: #e1e1e1;
   --color-filter: #e6e6e6;
   --transition: all 400ms ease;
-  --box-shadow: 0 33px 40px 0 hsla(0, 0%, 73.3%, 0.1);
+  --box-shadow: 0 0.1rem 2rem rgba(30, 30, 30, 0.1);
   --light-shadow: rgb(3 0 71 / 5%) 0px 1px 3px;
   --border-sty: 1px solid #ebebeb;
   --container-width-lg: 85%;
@@ -99,10 +99,9 @@ body {
   color: red; /* Set the desired color for the checkbox */
 }
 
+
 .box_shadow {
-  -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-  padding: 20px;
+  box-shadow: 0 0.1rem 2rem rgba(30, 30, 30, 0.1);
 }
 .d_flex {
   display: flex;
@@ -330,7 +329,6 @@ textarea::placeholder {
 }
 .discounted {
   font-size: 14px;
-  margin-left: 5px;
   color: var(--color-gray);
 }
 

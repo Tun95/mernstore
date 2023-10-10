@@ -100,7 +100,7 @@
       width: 73%;
       position: relative;
       right: 10px;
-
+      height: 100% !important;
       /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
       @media screen and (max-width: 1120px) {
         padding: 0px 30px;
@@ -111,6 +111,7 @@
       }
     }
     .product_list {
+      height: 100%;
       /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
       @media screen and (max-width: 1120px) {
         right: 30px;
@@ -128,6 +129,8 @@
         padding: 0px;
       }
       .card_content {
+        height: 100% !important;
+        position: relative;
         .info_top {
           .left {
             .num_discount {

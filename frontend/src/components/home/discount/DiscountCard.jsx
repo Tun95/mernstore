@@ -205,7 +205,7 @@ function DiscountCard({ product, index }) {
       <div className="lower_bottom c_flex">
         <div className="price_discount">
           {product.discount > 0 ? (
-            <div className="a_flex">
+            <div className="c_flex">
               <div className="price">
                 {convertCurrency(
                   product.price - (product.price * product.discount) / 100

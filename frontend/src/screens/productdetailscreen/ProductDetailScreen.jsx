@@ -168,18 +168,18 @@ function ProductDetailScreen({ productItems, onAdd }) {
         <Helmet>
           <title>{product?.name}</title>
         </Helmet>
-        {loading ? (
+        {/* {loading ? (
           <LoadingBox></LoadingBox>
         ) : error ? (
           <MessageBox variant="danger">{error}</MessageBox>
-        ) : (
+        ) : ( */}
           <>
             <Details
               product={product}
               affiliateCode={affiliateCode}
               dispatch={dispatch}
             />
-            <ReviewDesc
+            {/* <ReviewDesc
               handleDelete={handleDelete}
               product={product}
               userInfo={userInfo}
@@ -189,9 +189,9 @@ function ProductDetailScreen({ productItems, onAdd }) {
               <Related products={products} dispatch={dispatch} />
             ) : (
               ""
-            )}
+            )} */}
           </>
-        )}
+        {/* )} */}
       </div>
     </div>
   );

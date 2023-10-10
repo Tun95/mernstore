@@ -20,7 +20,7 @@ import { Box, Divider } from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
 import { CallRequestModals } from "../../components/modals/Modals";
-import { CartMenu, SearchMenu } from "../../components/menus/Menu";
+import { SearchMenu } from "../../components/menus/Menu";
 import { Popover } from "antd";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import controller from "../../assets/bestsellers/controller.webp";

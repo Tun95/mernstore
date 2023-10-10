@@ -26,6 +26,7 @@
         display: grid;
         grid-template-columns: repeat(5, 1fr);
         overflow: hidden;
+
         /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
         @media screen and (max-width: 1200px) {
           grid-template-columns: repeat(4, 1fr);
@@ -213,9 +214,13 @@
         }
         .lower_bottom {
           margin-bottom: 10px;
+
           .price_discount {
             .a_flex {
               flex-wrap: wrap;
+              gap: 5px;
+              line-height: 12px;
+              margin-top: 5px;
             }
             .price {
               color: var(--color-black);

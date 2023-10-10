@@ -5,200 +5,7 @@
 
 .product-details-page {
   /*---details---*/
-  .details {
-    // margin-top: 40px;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    .p-width {
-      display: flex;
-      width: 100%;
-      justify-content: space-around;
-    }
-    .images {
-      margin-right: 30px;
-      .img_large {
-        width: 450px;
-        height: 450px;
-        img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          border-radius: 20px;
-        }
-      }
-    }
-    .img_small {
-      display: flex;
-      justify-content: center;
-      .selected_image {
-        border: 2px dotted var(--color-text);
-        position: absolute;
-      }
-      .image-selected-preview-prod {
-        margin-top: 5px;
-        width: 300px;
-        height: 100px;
-        overflow-y: hidden;
-        .small_img_slide {
-          height: 100px;
-          overflow-y: hidden;
-          img {
-            width: 80px;
-            height: 80px;
-            object-fit: contain;
-            cursor: pointer;
-          }
-        }
-      }
-    }
-    .product-details {
-      // width: 100%;
-      display: flex;
-      flex-direction: column;
-      line-height: 40px;
-    }
-    .countInstock {
-      margin-right: 15px;
-      .in_stock {
-        color: var(--color-light-green);
-        font-weight: 800;
-      }
-      .danger {
-        color: var(--color-primary);
-        font-weight: 800;
-      }
-    }
-    .seller_link {
-      a {
-        cursor: pointer;
-        text-decoration: underline;
-        color: var(--color-tab);
-      }
-    }
-    .rate-num {
-      .num-count {
-        color: var(--color-light-gray);
-        font-weight: 600;
-      }
-      .num-count span {
-        color: var(--color-rating);
-      }
-
-      flex-wrap: wrap;
-      .rate {
-        margin-right: 15px;
-        i {
-          font-size: 20px;
-        }
-      }
-    }
-    .product-details .price {
-      font-size: 23px;
-      font-weight: 600;
-      color: var(--color-primary);
-    }
-    .product-details {
-      .product_price {
-        margin-left: 10px;
-        .price_discount {
-          color: var(--color-gray);
-          font-size: 16px;
-          margin-left: 10px;
-        }
-      }
-    }
-    .color {
-      ul {
-        display: inline-flex;
-        width: 280px;
-        flex-wrap: wrap;
-        gap: 5px;
-        position: relative;
-        top: 5px;
-        margin-left: 5px;
-        li {
-          cursor: pointer;
-        }
-        .active::after {
-          position: absolute;
-          content: "";
-          display: inline-block;
-          border: 1px solid #b4b4b4;
-          width: 25px;
-          height: 25px;
-          border-radius: 100%;
-          margin-left: -26.2px;
-          margin-top: -1px;
-        }
-      }
-    }
-    .size {
-      .formControl {
-        margin-left: 10px;
-        width: 200px;
-        border-radius: 20px !important;
-        border: none;
-        #mui_select_size {
-          border-radius: 20px !important;
-        }
-        .mui_simple_select {
-          border-radius: 20px;
-          border-bottom: none;
-        }
-      }
-    }
-
-    .product-details label {
-      font-size: 20px;
-      color: var(--color-light-gray);
-      font-weight: 800;
-    }
-    .quantity button {
-      width: 35px;
-      height: 35px;
-      border-radius: 50%;
-      background-color: #dfdfdf;
-      cursor: pointer;
-    }
-    .quantity .qty {
-      height: 35px;
-      width: 50px;
-      font-size: 18px;
-      border-radius: 20px;
-      margin: 0px 5px;
-      border: 2px solid #b4b4b4;
-    }
-    .desc p {
-      line-height: 20px;
-    }
-    .addtocart {
-      flex-wrap: wrap;
-      .out-o-stock {
-        margin: 10px 0px;
-        margin-top: 20px;
-        width: 160px;
-        height: 40px;
-        font-weight: 600;
-        font-size: 16px;
-        border-radius: 5px;
-        background-color: #e0e0e0;
-        cursor: auto;
-      }
-      .add-to-cart {
-        margin: 10px 0px;
-        margin-top: 20px;
-        width: 160px;
-        height: 40px;
-        background-color: var(--color-primary);
-        color: var(--color-white);
-        font-weight: 600;
-        font-size: 16px;
-        border-radius: 5px;
-        cursor: pointer;
-      }
-    }
-  }
+  
 
   /*---Review---*/
   .review-section {
@@ -373,42 +180,13 @@
     }
   }
   @media screen and (max-width: 1050px) {
-    .details .p-width {
-      width: 100%;
-    }
-    .details .product-details {
-      width: 60%;
-    }
-    .details .images {
-      margin-left: 20px;
-    }
+  
   }
   @media screen and (max-width: 900px) {
-    .details {
-      .images {
-        .img_large {
-          width: 100%;
-          height: 400px;
-        }
-      }
-    }
+   
   }
   @media screen and (max-width: 720px) {
-    .details {
-      .p-width {
-        display: flex;
-        flex-direction: column;
-        .product-details {
-          margin-left: 0px;
-          position: relative;
-          left: 0;
-          width: 100%;
-          .add_wish {
-            margin-right: 10px;
-          }
-        }
-      }
-    }
+   
   }
   @media screen and (max-width: 650px) {
     .related_product {
@@ -422,42 +200,10 @@
     }
   }
   @media screen and (max-width: 450px) {
-    .details {
-      .p-width {
-        .images {
-          .img_large {
-            height: auto;
-            img {
-              width: 100%;
-              object-fit: contain;
-              border-radius: 10px;
-            }
-          }
-        }
-      }
-    }
+   
   }
   @media screen and (max-width: 400px) {
-    .details {
-      .product-details {
-        .det-header {
-          h2 {
-            font-size: 18px;
-          }
-        }
-        label {
-          font-size: 16px;
-        }
-        .price {
-          font-size: 16px;
-        }
-      }
-      .img_small {
-        .image-selected-preview-prod {
-          width: 100%;
-        }
-      }
-    }
+   
     .review-section {
       width: 100%;
 
@@ -482,15 +228,7 @@
     }
   }
   @media screen and (max-width: 320px) {
-    .details {
-      .product-details {
-        .size {
-          .formControl {
-            width: 150px;
-          }
-        }
-      }
-    }
+    
     .review-section {
       .review-details {
         .rev-header {
