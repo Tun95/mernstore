@@ -198,6 +198,10 @@
 .cart_popover {
   margin: -11px;
   width: 300px !important;
+  overflow: hidden;
+  .drawer_btn{
+    border-radius: 0px 0px 5px 5px;
+  }
 }
 
 .nav_bar {
