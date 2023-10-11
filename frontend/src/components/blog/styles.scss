@@ -12,6 +12,10 @@
         img {
           width: 350px;
           border-radius: 20px;
+          /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+          @media screen and (max-width: 375px) {
+            width: 100%;
+          }
         }
       }
       .left {
