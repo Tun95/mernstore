@@ -6,11 +6,11 @@ import BottomNav from "../bottom nav/BottomNav";
 
 function Header() {
   return (
-    <div>
+    <>
       <Head />
       <Navbar />
       <BottomNav />
-    </div>
+    </>
   );
 }
 

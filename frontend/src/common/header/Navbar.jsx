@@ -222,7 +222,7 @@ function Navbar() {
     </div>
   );
   return (
-    <nav>
+    <>
       <div className="nav_bar light_header">
         <div className="container ">
           <div className="navBar c_flex">
@@ -569,7 +569,7 @@ function Navbar() {
           </div>
         </div>
       </div>
-    </nav>
+    </>
   );
 }
 

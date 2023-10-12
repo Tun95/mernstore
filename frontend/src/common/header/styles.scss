@@ -199,21 +199,26 @@
   margin: -11px;
   width: 300px !important;
   overflow: hidden;
-  .drawer_btn{
+  .drawer_btn {
     border-radius: 0px 0px 5px 5px;
   }
 }
 
 .nav_bar {
   padding: 5px 0px;
-  // position: sticky;
-  // top: 0px;
+  position: sticky !important;
+  top: 0px !important;
   // width: 100%;
-  // z-index: 2000;
+  z-index: 1000 !important;
   background-color: var(--color-white);
+  .container {
+    position: relative;
+    top: 2px;
+  }
   .navBar {
     gap: 10px;
     width: 100%;
+    overflow: hidden;
     word-wrap: normal;
   }
 

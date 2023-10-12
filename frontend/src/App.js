@@ -169,396 +169,402 @@ function App() {
         <ToastContainer />
         <ScrollToTop />
         <Header />
+        <div className="overflow">
+          <Routes>
+            <Route path="*" element={<NotFoundScreen />} />
+            <Route path="/" exact element={<HomeScreen />}></Route>
+            <Route path="/cart" element={<Cart />}></Route>
+            <Route path="/store" element={<StoreScreen />}></Route>
+            <Route
+              path="/product/:slug"
+              element={<ProductDetailScreen />}
+            ></Route>
+            <Route
+              path="/order-details/:id"
+              element={<OrderDetailScreen />}
+            ></Route>
 
-        <Routes>
-          <Route path="*" element={<NotFoundScreen />} />
-          <Route path="/" exact element={<HomeScreen />}></Route>
-          <Route path="/cart" element={<Cart />}></Route>
-          <Route path="/store" element={<StoreScreen />}></Route>
-          <Route
-            path="/product/:slug"
-            element={<ProductDetailScreen />}
-          ></Route>
-          <Route
-            path="/order-details/:id"
-            element={<OrderDetailScreen />}
-          ></Route>
+            {/* VENDOR */}
+            <Route
+              path="/vendor-products/:id"
+              element={<SellerScreen />}
+            ></Route>
+            <Route path="/vendors" element={<VendorListScreen />}></Route>
+            <Route path="/company-view" element={<CompanyViewScreen />}></Route>
+            <Route path="/vendors-plan" element={<VendorPlanScreen />}></Route>
+            {/* VENDOR */}
 
-          {/* VENDOR */}
-          <Route path="/vendor-products/:id" element={<SellerScreen />}></Route>
-          <Route path="/vendors" element={<VendorListScreen />}></Route>
-          <Route path="/company-view" element={<CompanyViewScreen />}></Route>
-          <Route path="/vendors-plan" element={<VendorPlanScreen />}></Route>
-          {/* VENDOR */}
+            <Route path="/store-locations" element={<OurStoreScreen />}></Route>
+            <Route path="/privacy-policy" element={<PrivacyScreen />}></Route>
+            <Route path="/terms-and-conditons" element={<TermScreen />}></Route>
+            <Route path="/careers" element={<CareerScreen />}></Route>
+            <Route path="/our-cares" element={<OurCareScreen />}></Route>
+            <Route path="/theme-faq" element={<ThemeFaqScreen />}></Route>
 
-          <Route path="/store-locations" element={<OurStoreScreen />}></Route>
-          <Route path="/privacy-policy" element={<PrivacyScreen />}></Route>
-          <Route path="/terms-and-conditons" element={<TermScreen />}></Route>
-          <Route path="/careers" element={<CareerScreen />}></Route>
-          <Route path="/our-cares" element={<OurCareScreen />}></Route>
-          <Route path="/theme-faq" element={<ThemeFaqScreen />}></Route>
+            <Route path="/bulk-purchases" element={<BulkScreen />}></Route>
+            <Route path="/how-to-buy" element={<BuyInfoScreen />}></Route>
+            <Route path="/returns" element={<ReturnScreen />}></Route>
 
-          <Route path="/bulk-purchases" element={<BulkScreen />}></Route>
-          <Route path="/how-to-buy" element={<BuyInfoScreen />}></Route>
-          <Route path="/returns" element={<ReturnScreen />}></Route>
+            {/* BLOG */}
+            <Route path="/blog" element={<BlogPostListScreen />}></Route>
+            <Route path="/blog-detail" element={<BlogDetailScreen />}></Route>
 
-          {/* BLOG */}
-          <Route path="/blog" element={<BlogPostListScreen />}></Route>
-          <Route path="/blog-detail" element={<BlogDetailScreen />}></Route>
+            <Route
+              path="/user-profile/:id"
+              element={
+                <ProtectedRoute>
+                  <UserProfileScreen />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route
+              path="/vendor-profile/:id"
+              element={
+                <ProtectedRoute>
+                  <VendorProfileScreen />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route
+              path="/wish-list/:id"
+              element={
+                <ProtectedRoute>
+                  <WishlistScreen />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route
+              path="/orders"
+              element={
+                <ProtectedRoute>
+                  <OrderHistoryScreen />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route
+              path="/track-shipment"
+              element={
+                <ProtectedRoute>
+                  <TrackScreen />
+                </ProtectedRoute>
+              }
+            ></Route>
+            {/* USER */}
 
-          <Route
-            path="/user-profile/:id"
-            element={
-              <ProtectedRoute>
-                <UserProfileScreen />
-              </ProtectedRoute>
-            }
-          ></Route>
-          <Route
-            path="/vendor-profile/:id"
-            element={
-              <ProtectedRoute>
-                <VendorProfileScreen />
-              </ProtectedRoute>
-            }
-          ></Route>
-          <Route
-            path="/wish-list/:id"
-            element={
-              <ProtectedRoute>
-                <WishlistScreen />
-              </ProtectedRoute>
-            }
-          ></Route>
-          <Route
-            path="/orders"
-            element={
-              <ProtectedRoute>
-                <OrderHistoryScreen />
-              </ProtectedRoute>
-            }
-          ></Route>
-          <Route
-            path="/track-shipment"
-            element={
-              <ProtectedRoute>
-                <TrackScreen />
-              </ProtectedRoute>
-            }
-          ></Route>
-          {/* USER */}
+            {/* VALIDATION */}
+            <Route path="/login" element={<LoginScreen />}></Route>
+            <Route path="/register" element={<RegisterScreen />}></Route>
+            <Route path="/contact" element={<ContactScreen />}></Route>
+            <Route
+              path="/forgot-password"
+              element={<PasswordEmailResetScreen />}
+            ></Route>
+            <Route
+              path="/:id/new-password/:token"
+              element={<PasswordResetFormScreen />}
+            ></Route>
+            <Route
+              path="/account-verification"
+              element={<AccountVerifyScreen />}
+            ></Route>
+            <Route
+              path="/verify-success/:id/:token"
+              element={
+                <ProtectedRoute>
+                  <VerifySuccessScreen />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route
+              path="/apply-for-vendor"
+              element={
+                // <ProtectedRoute>
+                <VendorScreen />
+                // </ProtectedRoute>
+              }
+            ></Route>
+            <Route path="/unsubscribe" element={<UnSubscribeScreen />}></Route>
 
-          {/* VALIDATION */}
-          <Route path="/login" element={<LoginScreen />}></Route>
-          <Route path="/register" element={<RegisterScreen />}></Route>
-          <Route path="/contact" element={<ContactScreen />}></Route>
-          <Route
-            path="/forgot-password"
-            element={<PasswordEmailResetScreen />}
-          ></Route>
-          <Route
-            path="/:id/new-password/:token"
-            element={<PasswordResetFormScreen />}
-          ></Route>
-          <Route
-            path="/account-verification"
-            element={<AccountVerifyScreen />}
-          ></Route>
-          <Route
-            path="/verify-success/:id/:token"
-            element={
-              <ProtectedRoute>
-                <VerifySuccessScreen />
-              </ProtectedRoute>
-            }
-          ></Route>
-          <Route
-            path="/apply-for-vendor"
-            element={
-              // <ProtectedRoute>
-              <VendorScreen />
-              // </ProtectedRoute>
-            }
-          ></Route>
-          <Route path="/unsubscribe" element={<UnSubscribeScreen />}></Route>
+            <Route
+              path="/billing"
+              element={
+                <ProtectedRoute>
+                  <ShippingScreen />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route
+              path="/confirmation"
+              element={<ConfirmationScreen />}
+            ></Route>
+            <Route
+              path="/payment/:id"
+              element={
+                <ProtectedRoute>
+                  <PaymentScreen />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route path="/finish" element={<FinishScreen />}></Route>
 
-          <Route
-            path="/billing"
-            element={
-              <ProtectedRoute>
-                <ShippingScreen />
-              </ProtectedRoute>
-            }
-          ></Route>
-          <Route path="/confirmation" element={<ConfirmationScreen />}></Route>
-          <Route
-            path="/payment/:id"
-            element={
-              <ProtectedRoute>
-                <PaymentScreen />
-              </ProtectedRoute>
-            }
-          ></Route>
-          <Route path="/finish" element={<FinishScreen />}></Route>
+            {/* ADMIN ROUTES */}
+            <Route
+              path="/admin/dashboard"
+              element={
+                <AdminRoute>
+                  <DashboardScreen />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/users"
+              element={
+                <AdminRoute>
+                  <UserList />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/user/:id"
+              element={
+                <AdminRoute>
+                  <UserInfo />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/user/new"
+              element={
+                <AdminRoute>
+                  <NewUser />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/user/:id/edit"
+              element={
+                <AdminRoute>
+                  <UserEdit />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/vendors"
+              element={
+                <AdminRoute>
+                  <VendorList />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/products"
+              element={
+                <AdminRoute>
+                  <ProductlistScreen />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/product/new"
+              element={
+                <AdminRoute>
+                  <NewProduct />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/product/:id/edit"
+              element={
+                <AdminRoute>
+                  <ProductEdit />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/orders"
+              element={
+                <AdminRoute>
+                  <OrderlistScreen />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/withdrawal-request"
+              element={
+                <AdminRoute>
+                  <Withdrawal />
+                </AdminRoute>
+              }
+            ></Route>
 
-          {/* ADMIN ROUTES */}
-          <Route
-            path="/admin/dashboard"
-            element={
-              <AdminRoute>
-                <DashboardScreen />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/users"
-            element={
-              <AdminRoute>
-                <UserList />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/user/:id"
-            element={
-              <AdminRoute>
-                <UserInfo />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/user/new"
-            element={
-              <AdminRoute>
-                <NewUser />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/user/:id/edit"
-            element={
-              <AdminRoute>
-                <UserEdit />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/vendors"
-            element={
-              <AdminRoute>
-                <VendorList />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/products"
-            element={
-              <AdminRoute>
-                <ProductlistScreen />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/product/new"
-            element={
-              <AdminRoute>
-                <NewProduct />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/product/:id/edit"
-            element={
-              <AdminRoute>
-                <ProductEdit />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/orders"
-            element={
-              <AdminRoute>
-                <OrderlistScreen />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/withdrawal-request"
-            element={
-              <AdminRoute>
-                <Withdrawal />
-              </AdminRoute>
-            }
-          ></Route>
+            {/* FILTERS */}
+            <Route
+              path="/admin/new-category"
+              element={
+                <AdminRoute>
+                  <Category />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/new-brand"
+              element={
+                <AdminRoute>
+                  <Brand />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/new-size"
+              element={
+                <AdminRoute>
+                  <Size />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/new-color"
+              element={
+                <AdminRoute>
+                  <Color />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/new-price"
+              element={
+                <AdminRoute>
+                  <Price />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/category/:id"
+              element={
+                <AdminRoute>
+                  <CategoryUpdate />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/brand/:id"
+              element={
+                <AdminRoute>
+                  <BrandUpdate />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/size/:id"
+              element={
+                <AdminRoute>
+                  <SizeUpdate />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/price/:id"
+              element={
+                <AdminRoute>
+                  <PriceUpdate />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/color/:id"
+              element={
+                <AdminRoute>
+                  <ColorUpdate />
+                </AdminRoute>
+              }
+            ></Route>
 
-          {/* FILTERS */}
-          <Route
-            path="/admin/new-category"
-            element={
-              <AdminRoute>
-                <Category />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/new-brand"
-            element={
-              <AdminRoute>
-                <Brand />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/new-size"
-            element={
-              <AdminRoute>
-                <Size />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/new-color"
-            element={
-              <AdminRoute>
-                <Color />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/new-price"
-            element={
-              <AdminRoute>
-                <Price />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/category/:id"
-            element={
-              <AdminRoute>
-                <CategoryUpdate />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/brand/:id"
-            element={
-              <AdminRoute>
-                <BrandUpdate />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/size/:id"
-            element={
-              <AdminRoute>
-                <SizeUpdate />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/price/:id"
-            element={
-              <AdminRoute>
-                <PriceUpdate />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/color/:id"
-            element={
-              <AdminRoute>
-                <ColorUpdate />
-              </AdminRoute>
-            }
-          ></Route>
+            {/* BANNER */}
+            <Route
+              path="/admin/new-banner"
+              element={
+                <AdminRoute>
+                  <NewBanner />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/banner/:id"
+              element={
+                <AdminRoute>
+                  <BannerUpdate />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/settings"
+              element={
+                <AdminRoute>
+                  <OtherScreen />
+                </AdminRoute>
+              }
+            ></Route>
+            <Route
+              path="/admin/application-details/:id"
+              element={
+                <AdminRoute>
+                  <Application />
+                </AdminRoute>
+              }
+            ></Route>
+            {/* ADMIN ROUTES */}
 
-          {/* BANNER */}
-          <Route
-            path="/admin/new-banner"
-            element={
-              <AdminRoute>
-                <NewBanner />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/banner/:id"
-            element={
-              <AdminRoute>
-                <BannerUpdate />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/settings"
-            element={
-              <AdminRoute>
-                <OtherScreen />
-              </AdminRoute>
-            }
-          ></Route>
-          <Route
-            path="/admin/application-details/:id"
-            element={
-              <AdminRoute>
-                <Application />
-              </AdminRoute>
-            }
-          ></Route>
-          {/* ADMIN ROUTES */}
-
-          {/* SELLER ROUTES */}
-          <Route
-            path="/vendor/dashboard"
-            element={
-              <SellerRoute>
-                <SellerDashboard />
-              </SellerRoute>
-            }
-          ></Route>
-          <Route
-            path="/vendor/products"
-            element={
-              <SellerRoute>
-                <SellerProductListScreen />
-              </SellerRoute>
-            }
-          ></Route>
-          <Route
-            path="/vendor/product/:id/edit"
-            element={
-              <SellerRoute>
-                <SellerProductEdit />
-              </SellerRoute>
-            }
-          ></Route>
-          <Route
-            path="/vendor/product/new"
-            element={
-              <SellerRoute>
-                <SellerNewProduct />
-              </SellerRoute>
-            }
-          ></Route>
-          <Route
-            path="/vendor/orders"
-            element={
-              <SellerRoute>
-                <SellerOrderListScreen />
-              </SellerRoute>
-            }
-          ></Route>
-          <Route
-            path="/vendor/withdraw"
-            element={
-              <SellerRoute>
-                <SellerWithdraw />
-              </SellerRoute>
-            }
-          ></Route>
-        </Routes>
-
+            {/* SELLER ROUTES */}
+            <Route
+              path="/vendor/dashboard"
+              element={
+                <SellerRoute>
+                  <SellerDashboard />
+                </SellerRoute>
+              }
+            ></Route>
+            <Route
+              path="/vendor/products"
+              element={
+                <SellerRoute>
+                  <SellerProductListScreen />
+                </SellerRoute>
+              }
+            ></Route>
+            <Route
+              path="/vendor/product/:id/edit"
+              element={
+                <SellerRoute>
+                  <SellerProductEdit />
+                </SellerRoute>
+              }
+            ></Route>
+            <Route
+              path="/vendor/product/new"
+              element={
+                <SellerRoute>
+                  <SellerNewProduct />
+                </SellerRoute>
+              }
+            ></Route>
+            <Route
+              path="/vendor/orders"
+              element={
+                <SellerRoute>
+                  <SellerOrderListScreen />
+                </SellerRoute>
+              }
+            ></Route>
+            <Route
+              path="/vendor/withdraw"
+              element={
+                <SellerRoute>
+                  <SellerWithdraw />
+                </SellerRoute>
+              }
+            ></Route>
+          </Routes>
+        </div>
         {/* <MessengerCustomerChat
             pageId={messengerPageId}
             appId={messengerAppId}
