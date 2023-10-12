@@ -219,7 +219,7 @@ function Head() {
               <div className="currency_state">
                 <select
                   className={
-                    darkMode ? "dark_mode currency_symbol" : "currency_symbol"
+                    darkMode ? "currency_symbol" : "currency_symbol"
                   }
                   value={toCurrencies}
                   onChange={(e) => {
