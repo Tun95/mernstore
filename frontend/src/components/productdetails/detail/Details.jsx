@@ -35,6 +35,7 @@ import AnnouncementOutlinedIcon from "@mui/icons-material/AnnouncementOutlined";
 import NewReleasesOutlinedIcon from "@mui/icons-material/NewReleasesOutlined";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined";
+import { SelectLocationModal, ShippingModal } from "../../modals/Modals";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -69,6 +70,24 @@ const PrevArrow = (props) => {
   );
 };
 
+const FilterSection = ({ title, children }) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleSection = () => {
+    setIsOpen(!isOpen);
+  };
+
+  return (
+    <li className="drop_list">
+      <div className="drop_header c_flex" onClick={toggleSection}>
+        <span>{title}</span>
+        {isOpen ? <RemoveIcon className="remove_icon" /> : <AddIcon />}
+      </div>
+      {isOpen && children}
+    </li>
+  );
+};
+
 function Details() {
   let days = "00";
   let hours = "00";
@@ -81,6 +100,8 @@ function Details() {
     id: 1,
     name: "Apple AirPods Pro with Wireless Charging Case",
     slug: "Apple AirPods Pro with Wireless Charging Case",
+    description:
+      "The iPhone 14 Pro and iPhone 14 Pro Max are smartphones designed and marketed by Apple Inc. They are the sixteenth generation flagship iPhones, succeeding the iPhone 13 Pro and iPhone 13 Pro Max.",
     images: [
       {
         id: 1,
@@ -150,237 +171,308 @@ function Details() {
 
   return (
     <div className="details">
-      <div className="content">
-        <div className="img_slides">
-          <div className="image">
-            <div className="f_flex">
-              <div className="thumbnail_slider">
-                <Slider {...SliderSettings} className="slick-slider">
-                  {product.images.map((image) => (
-                    <div key={image.id}>
-                      <img
-                        src={image.img}
-                        alt={product.name}
-                        className="small_images"
-                        onClick={() => setSelectedImage(image.img)}
-                      />
-                    </div>
-                  ))}
-                </Slider>
-              </div>
-              <div className="main_image">
-                <ReactImageMagnify
-                  {...{
-                    smallImage: {
-                      alt: product.name,
-                      isFluidWidth: true,
-                      src: selectedImage,
-                    },
-                    largeImage: {
-                      src: selectedImage,
-                      width: 1600,
-                      height: 1600,
-                    },
-
-                    enlargedImageContainerStyle: {
-                      zIndex: 5,
-                    },
-                    enlargedImageContainerDimensions: {
-                      width: "70%",
-                      height: "70%",
-                    },
-                    shouldUsePositiveSpaceLens: true,
-                  }}
-                />
-                <div className="specifications l_flex">
-                  <div className="a_flex">
-                    {product.specification.map((item, index) => (
-                      <img
-                        src={item.img}
-                        alt={product.name}
-                        key={index}
-                        className="img"
-                      />
+      <div className="container">
+        <div className="content">
+          <div className="img_slides">
+            <div className="image">
+              <div className="f_flex">
+                <div className="thumbnail_slider">
+                  <Slider {...SliderSettings} className="slick-slider">
+                    {product.images.map((image) => (
+                      <div key={image.id}>
+                        <img
+                          src={image.img}
+                          alt={product.name}
+                          className="small_images"
+                          onClick={() => setSelectedImage(image.img)}
+                        />
+                      </div>
                     ))}
+                  </Slider>
+                </div>
+                <div className="main_image">
+                  <ReactImageMagnify
+                    {...{
+                      smallImage: {
+                        alt: product.name,
+                        isFluidWidth: true,
+                        src: selectedImage,
+                      },
+                      largeImage: {
+                        src: selectedImage,
+                        width: 1600,
+                        height: 1600,
+                      },
+
+                      enlargedImageContainerStyle: {
+                        zIndex: 5,
+                      },
+                      enlargedImageContainerDimensions: {
+                        width: "70%",
+                        height: "70%",
+                      },
+                      shouldUsePositiveSpaceLens: true,
+                    }}
+                  />
+                  <div className="specifications l_flex">
+                    <div className="a_flex">
+                      {product.specification.map((item, index) => (
+                        <img
+                          src={item.img}
+                          alt={product.name}
+                          key={index}
+                          className="img"
+                        />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="top_info">
+                <div className="black">
+                  <img src={black} alt="" />
+                </div>
+                <div className="popular">Bestseller</div>
+              </div>
+            </div>
+          </div>
+          <div className="product_details">
+            <div className="rating_code c_flex">
+              <div className="rating c_flex">
+                <div className="ratings c_flex">
+                  <Rating
+                    rating={product.rating}
+                    className={product.rating === 0 ? "rating_color" : ""}
+                  />
+                  <span className="count">5</span>
+                </div>
+                <div className="reviews c_flex">
+                  <a href="/#" className="rev_count">
+                    Reviews: 5
+                  </a>
+                  <Link to="">Write a review</Link>
+                </div>
+              </div>
+              <div className="code c_flex">
+                <span>CODE: </span>
+                <span>MQ0G3RX/A</span>
+              </div>
+            </div>
+            <div className="name">
+              <h2>AB: Apple iPhone 14 Pro 128GB Deep Purple (MQ0G3RX/A)</h2>
+            </div>
+            <div className="price_discount">
+              {product.discount > 0 ? (
+                <div className="a_flex">
+                  <div className="price">
+                    {convertCurrency(
+                      product.price - (product.price * product.discount) / 100
+                    )}
+                  </div>
+                  <s className="discounted">{convertCurrency(product.price)}</s>
+                </div>
+              ) : (
+                <div className="price">{convertCurrency(product.price)}</div>
+              )}
+            </div>
+            <bdi className="save a_flex">
+              <span>You save: </span>
+              <span>{convertCurrency(save)}</span>
+            </bdi>
+            <div className="countInStock">
+              {product.countInStock > 0 ? (
+                <span className="available">In stock</span>
+              ) : (
+                <span>unavailable</span>
+              )}
+            </div>
+            <div className="size f_flex">
+              <label htmlFor="size">Screen Size: </label>
+              <select name="" id="size">
+                <option value="50">50 in</option>
+                <option value="40">40 in</option>
+                <option value="30">50 in</option>
+              </select>
+            </div>
+            <div className="promotion d_flex">
+              <div className="left">
+                <h3>
+                  It’s Black Friday all month long with new deals each week.
+                </h3>
+                <Link to="" className="a_flex">
+                  Promotion details <ArrowRightAltIcon className="icon" />
+                </Link>
+              </div>
+              <div className="right">
+                <div className="time_period">
+                  <div className="time">
+                    <span className="c_flex">
+                      <small className="">
+                        <p>Promotions expires within:</p>
+                      </small>
+                      <ul>
+                        <li>
+                          <span>{days}</span>
+                          <small>days</small>
+                        </li>
+                        <li>
+                          <span>{hours}</span>
+                          <small>hours</small>
+                        </li>
+                        <li>
+                          <span>{minutes}</span>
+                          <small>minutes</small>
+                        </li>
+                        <li>
+                          <span className="seconds">{seconds}</span>
+                          <small>seconds</small>
+                        </li>
+                      </ul>
+                    </span>
                   </div>
                 </div>
               </div>
             </div>
-
-            <div className="top_info">
-              <div className="black">
-                <img src={black} alt="" />
+            <div className="btn a_flex">
+              <div className="qty c_flex">
+                <button>
+                  <RemoveIcon className="icon" />
+                </button>
+                <span className="count">1</span>
+                <button>
+                  <AddIcon className="icon" />
+                </button>
               </div>
-              <div className="popular">Bestseller</div>
-            </div>
-          </div>
-        </div>
-        <div className="product_details">
-          <div className="rating_code c_flex">
-            <div className="rating c_flex">
-              <div className="ratings c_flex">
-                <Rating
-                  rating={product.rating}
-                  className={product.rating === 0 ? "rating_color" : ""}
-                />
-                <span className="count">5</span>
+              <div className="add_to_cart">
+                <button className="l_flex">
+                  <ShoppingCartIcon /> <span>Add to cart</span>
+                </button>
               </div>
-              <div className="reviews c_flex">
-                <a href="/#" className="rev_count">
-                  Reviews: 5
-                </a>
-                <Link to="">Write a review</Link>
+              <div className="buy_now">
+                <button>Buy now with 1-click</button>
               </div>
             </div>
-            <div className="code c_flex">
-              <span>CODE: </span>
-              <span>MQ0G3RX/A</span>
-            </div>
-          </div>
-          <div className="name">
-            <h2>AB: Apple iPhone 14 Pro 128GB Deep Purple (MQ0G3RX/A)</h2>
-          </div>
-          <div className="price_discount">
-            {product.discount > 0 ? (
+            <div className="add_compare_share l_flex">
               <div className="a_flex">
-                <div className="price">
-                  {convertCurrency(
-                    product.price - (product.price * product.discount) / 100
-                  )}
-                </div>
-                <s className="discounted">{convertCurrency(product.price)}</s>
+                <label htmlFor="icon" className="wish a_flex">
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        {...label}
+                        disableRipple
+                        className="icon"
+                        sx={{
+                          "& .MuiSvgIcon-root": {
+                            fontSize: 20,
+                            borderColor: "var(--color-tab)",
+                          },
+                        }}
+                        disableFocusRipple
+                        icon={<FavoriteBorder />}
+                        checkedIcon={<Favorite />}
+                      />
+                    }
+                    label={<small>Add to wish list</small>}
+                  />
+                </label>
+                <Link to="" className="a_flex">
+                  <AddchartIcon className="icon" />
+                  <small>Compare</small>
+                </Link>
+                <Link to="" className="a_flex share">
+                  <ShareIcon className="icon" />
+                  <small>Share</small>
+                </Link>
               </div>
-            ) : (
-              <div className="price">{convertCurrency(product.price)}</div>
-            )}
-          </div>
-          <bdi className="save a_flex">
-            <span>You save: </span>
-            <span>{convertCurrency(save)}</span>
-          </bdi>
-          <div className="countInStock">
-            {product.countInStock > 0 ? (
-              <span className="available">In stock</span>
-            ) : (
-              <span>unavailable</span>
-            )}
-          </div>
-          <div className="size f_flex">
-            <label htmlFor="size">Screen Size: </label>
-            <select name="" id="size">
-              <option value="50">50 in</option>
-              <option value="40">40 in</option>
-              <option value="30">50 in</option>
-            </select>
-          </div>
-          <div className="promotion d_flex">
-            <div className="left">
-              <h3>
-                It’s Black Friday all month long with new deals each week.
-              </h3>
-              <Link to="" className="a_flex">
-                Promotion details <ArrowRightAltIcon className="icon" />
-              </Link>
             </div>
-            <div className="right">
-              <div className="time_period">
-                <div className="time">
-                  <span className="c_flex">
-                    <small className="">
-                      <p>Promotions expires within:</p>
-                    </small>
-                    <ul>
-                      <li>
-                        <span>{days}</span>
-                        <small>days</small>
-                      </li>
-                      <li>
-                        <span>{hours}</span>
-                        <small>hours</small>
-                      </li>
-                      <li>
-                        <span>{minutes}</span>
-                        <small>minutes</small>
-                      </li>
-                      <li>
-                        <span className="seconds">{seconds}</span>
-                        <small>seconds</small>
-                      </li>
-                    </ul>
+            <div className="seller a_flex">
+              <div className="img">
+                <img src={bestbuy} alt="" />
+              </div>
+              <div className="info">
+                <div className="name a_flex">
+                  <h5>Vendor:</h5>
+                  <Link to="/company-view">BestBuy</Link>
+                </div>
+                <div className="desc">
+                  <p>{truncateText(desc, 10)}</p>
+                </div>
+                <div className="question">
+                  <span className="link a_flex">
+                    <AnnouncementOutlinedIcon className="icon" />
+                    <span>Ask a question</span>
                   </span>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="btn a_flex">
-            <div className="qty c_flex">
-              <button>
-                <RemoveIcon className="icon" />
-              </button>
-              <span className="count">1</span>
-              <button>
-                <AddIcon className="icon" />
-              </button>
-            </div>
-            <div className="add_to_cart">
-              <button className="l_flex">
-                <ShoppingCartIcon /> <span>Add to cart</span>
-              </button>
-            </div>
-            <div className="buy_now">
-              <button>Buy now with 1-click</button>
-            </div>
-          </div>
-          <div className="add_compare_share l_flex">
-            <div className="a_flex">
-              <label htmlFor="icon" className="wish a_flex">
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      {...label}
-                      disableRipple
-                      className="icon"
-                      sx={{
-                        "& .MuiSvgIcon-root": {
-                          fontSize: 20,
-                          borderColor: "var(--color-tab)",
-                        },
-                      }}
-                      disableFocusRipple
-                      icon={<FavoriteBorder />}
-                      checkedIcon={<Favorite />}
-                    />
+            <div className="box">
+              <div className="delivery">
+                <FilterSection
+                  title={
+                    <span className="a_flex">
+                      <LocalShippingOutlinedIcon className="icon" />
+                      <h4>Delivery</h4>
+                    </span>
                   }
-                  label={<small>Add to wish list</small>}
-                />
-              </label>
-              <Link to="" className="a_flex">
-                <AddchartIcon className="icon" />
-                <small>Compare</small>
-              </Link>
-              <Link to="" className="a_flex share">
-                <ShareIcon className="icon" />
-                <small>Share</small>
-              </Link>
+                >
+                  <ul className="lower_list">
+                    <li className="list">— For USA - $10</li>
+                    <li className="list">— Worldwide - from $30</li>
+                  </ul>
+                </FilterSection>
+              </div>
+              <div className="payment">
+                <FilterSection
+                  title={
+                    <span className="a_flex">
+                      <CreditCardOutlinedIcon className="icon" />
+                      <h4>Payment options</h4>
+                    </span>
+                  }
+                >
+                  <ul className="lower_list">
+                    <li className="list">— Cash on delivery</li>
+                    <li className="list">— Visa and MasterCard</li>
+                    <li className="list">— Cashless payments</li>
+                    <li className="list">— Invoices</li>
+                  </ul>
+                </FilterSection>
+              </div>
+              <div className="advantages">
+                <FilterSection
+                  title={
+                    <span className="a_flex">
+                      <NewReleasesOutlinedIcon className="icon" />
+                      <h4>Our advantages</h4>
+                    </span>
+                  }
+                >
+                  <ul className="lower_list">
+                    <li className="list">— 12 months warranty</li>
+                    <li className="list">— SMS notification</li>
+                    <li className="list">— Return and exchange</li>
+                    <li className="list">— Different payment methods</li>
+                    <li className="list">— Best price</li>
+                  </ul>
+                </FilterSection>
+              </div>
             </div>
-          </div>
-          <div className="seller a_flex">
-            <div className="img">
-              <img src={bestbuy} alt="" />
-            </div>
-            <div className="info">
-              <div className="name a_flex">
-                <h5>Vendor:</h5>
-                <Link to="/company-view">BestBuy</Link>
+            <div className="lower_text">
+              <div className="location">
+                <small className="a_flex">
+                  <span>Shipping time and rates: </span>
+                  <SelectLocationModal />
+                </small>
+              </div>
+              <div className="shipping a_flex">
+                <small className="link a_flex">
+                  <ShippingModal />
+                </small>
+                <small>about 3-5 days, from $25.45</small>
               </div>
               <div className="desc">
-                <p>{truncateText(desc, 10)}</p>
-              </div>
-              <div className="question">
-                <span className="link a_flex">
-                  <AnnouncementOutlinedIcon className="icon" />
-                  <span>Ask a question</span>
-                </span>
+                <p>{truncateText(product.description, 27)}</p>
               </div>
             </div>
           </div>

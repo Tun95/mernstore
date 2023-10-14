@@ -22,6 +22,7 @@ import {
   validationSchema,
 } from "../schemas/Index";
 import { Rating } from "@mui/material";
+import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 
 //MAP MODAL
 export function LocationModal() {
@@ -45,6 +46,40 @@ export function LocationModal() {
         <Box className="customer_location">
           <div className="map_header c_flex">
             <h1>Customer location</h1>
+            <CloseIcon onClick={handleClose} className="map_icon" />
+          </div>
+          <div className="map"></div>
+          <div className="map_btn">
+            <button>OK</button>
+          </div>
+        </Box>
+      </Modal>
+    </span>
+  );
+}
+
+//SELECT LOCATION MODAL
+export function SelectLocationModal() {
+  //GOOGLE MAP
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  return (
+    <span>
+      <Button disableRipple onClick={handleOpen} className="button-text a_flex">
+        <NearMeIcon className="icon" />
+        <small>My Location</small>
+      </Button>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="customer_location">
+          <div className="map_header c_flex">
+            <h1>Select your city</h1>
             <CloseIcon onClick={handleClose} className="map_icon" />
           </div>
           <div className="map"></div>
@@ -511,18 +546,19 @@ export function ReviewModal() {
   );
 }
 
+//COMMENT MODAL
 const initialCommentValues = {
   name: "",
   comment: "",
 };
 export function CommentModal() {
-  //REVIEW MODAL
+  //COMMENT MODAL
   const [openReview, setOpenReview] = React.useState(false);
   const handleOpenReview = () => setOpenReview(true);
   const handleCloseReview = () => setOpenReview(false);
 
   //=========
-  // REVIEW
+  // COMMENT
   //=========
   const handleSubmit = () => {};
   return (
@@ -611,6 +647,82 @@ export function CommentModal() {
                 </Form>
               )}
             </Formik>
+          </div>
+        </Box>
+      </Modal>
+    </>
+  );
+}
+
+//SHIPPING MODAL
+export function ShippingModal() {
+  //SHIPPING MODAL
+  const [openShipping, setOpenShipping] = React.useState(false);
+  const handleOpenShipping = () => setOpenShipping(true);
+  const handleCloseShipping = () => setOpenShipping(false);
+
+  //============
+  //SHIPPING HANDLER
+  //============
+  const handleSubmit = (values) => {
+    // Handle form submission here
+    console.log(values);
+  };
+  return (
+    <>
+      <Button
+        disableRipple
+        onClick={handleOpenShipping}
+        className="button-text a_flex"
+      >
+        <LocalShippingOutlinedIcon className="icon" />
+        <small>Shipping: </small>
+      </Button>
+      <Modal
+        open={openShipping}
+        onClose={handleCloseShipping}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="customer_call  shipping_modal">
+          <div className="call_header c_flex">
+            <span></span>
+            <CloseIcon onClick={handleCloseShipping} className="call_icon" />
+          </div>
+          <div className="shipping">
+            <div className="content">
+              <div className="rate a_flex">
+                <h5>Shipping time and rates: </h5>
+                <SelectLocationModal />
+              </div>
+              <div className="table">
+                {" "}
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Shipping method</th>
+                      <th>Shipping time</th>
+                      <th>Cost</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Standard Shipping</td>
+                      <td>2-5 days</td>
+                      <td>$5.99</td>
+                    </tr>
+                    <tr>
+                      <td>Express Shipping</td>
+                      <td>1-2 days</td>
+                      <td>$12.99</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div className="shipping_btn">
+              <button onClick={handleCloseShipping}>Close</button>
+            </div>
           </div>
         </Box>
       </Modal>

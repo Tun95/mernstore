@@ -1,4 +1,5 @@
 .product-details-page {
+  margin-bottom: 20px;
   .product_control_btn {
     .next {
       position: relative;
@@ -77,6 +78,7 @@
             position: relative;
             left: 10%;
             .specifications {
+              margin-top: 10px;
               .a_flex {
                 gap: 10px;
                 .img {
@@ -320,9 +322,9 @@
           }
         }
         .seller {
-          margin-top: 10px;
+          margin-top: 15px;
           border: 1px solid var(--color-border);
-          border-radius: 20px;
+          border-radius: 10px;
           gap: 10px;
           padding: 10px 15px;
           .img {
@@ -347,6 +349,94 @@
               .icon {
                 font-size: 18px;
               }
+            }
+          }
+        }
+        .box {
+          margin-top: 15px;
+          border: 1px solid var(--color-border);
+          border-radius: 10px;
+          div {
+            border-top: 0.5px solid var(--color-border);
+
+            &:hover {
+              cursor: pointer;
+              h4 {
+                color: var(--color-tab);
+                transition: var(--transition);
+              }
+            }
+            &:first-child {
+              border: none;
+            }
+          }
+          h4 {
+            font-size: 14px;
+          }
+          .icon {
+            color: var(--color-gray);
+            margin-right: 5px;
+            font-size: 19px;
+          }
+          .drop_list {
+            .remove_icon {
+              color: var(--color-gray);
+            }
+            .drop_header {
+              padding: 8px 20px;
+            }
+          }
+          .lower_list {
+            margin-left: 30px;
+            padding-bottom: 20px;
+            li {
+              font-size: 13px;
+              color: var(--color-gray);
+            }
+          }
+        }
+        .lower_text {
+          margin-top: 10px;
+          .link {
+            text-decoration: underline;
+            text-underline-offset: 1.3px;
+            text-decoration-style: dotted;
+            text-decoration-thickness: 1px;
+            text-decoration-color: var(--color-tab);
+            margin-right: 5px;
+          }
+          .icon {
+            font-size: 17px;
+            margin-right: 4px;
+          }
+          .button-text {
+            text-transform: none;
+            font-size: 15px;
+            background: transparent;
+            text-decoration: underline;
+            text-underline-offset: 1.3px;
+            text-decoration-style: dotted;
+            text-decoration-thickness: 1px;
+            text-decoration-color: var(--color-tab);
+            padding: 0;
+            margin-left: 5px;
+            color: var(--color-tab);
+            &:hover {
+              color: var(--color-link-hover);
+            }
+          }
+          .location {
+            .link {
+              margin-left: 5px;
+            }
+          }
+          .shipping {
+            margin: 5px 0px;
+          }
+          .desc {
+            p {
+              line-height: 17px;
+              font-size: 14px;
             }
           }
         }

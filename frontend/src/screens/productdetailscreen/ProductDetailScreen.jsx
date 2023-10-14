@@ -165,7 +165,7 @@ function ProductDetailScreen({ productItems, onAdd }) {
 
   return (
     <div className="background product-details-page">
-      <div className="container  ">
+      <div className="">
         <Helmet>
           <title>{product?.name}</title>
         </Helmet>
@@ -175,10 +175,12 @@ function ProductDetailScreen({ productItems, onAdd }) {
           <MessageBox variant="danger">{error}</MessageBox>
         ) : ( */}
         <>
-          <div className="quick_link ">
-            <div className="page a_flex">
-              <Link to="/">Home /</Link>
-              <p>&#160; Electronics</p>
+          <div className="container">
+            <div className="quick_link ">
+              <div className="page a_flex">
+                <Link to="/">Home /</Link>
+                <p>&#160; Electronics</p>
+              </div>
             </div>
           </div>
           <Details

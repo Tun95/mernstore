@@ -127,7 +127,7 @@ function StoreItems({ product, index }) {
       </div>
       <div className="product-image">
         <Link
-          to=""
+          to="/product/:slug"
           className="img"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -155,7 +155,7 @@ function StoreItems({ product, index }) {
         </Link>
       </div>
 
-      <Link to="" className="name">
+      <Link to="/product/:slug" className="name">
         <Tooltip
           placement="bottom"
           title={<span className="tooltip">{product.name}</span>}
