@@ -22,7 +22,7 @@ function BlogPostListScreen() {
           <div>
             <BlogPost />
           </div>
-          <div>
+          <div className="scroll_box">
             <RecentPost />
           </div>
         </div>

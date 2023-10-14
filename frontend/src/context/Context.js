@@ -294,9 +294,9 @@ export function ContextProvider(props) {
     localStorage.setItem("darkMode", darkMode);
   }, [darkMode]);
 
-  //==================
-  //TEST FOR CONVERSION
-  //==================
+  //=============
+  //  CONVERSION
+  //=============
   const { currency } =
     (settings &&
       settings

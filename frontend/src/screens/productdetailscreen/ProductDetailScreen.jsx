@@ -12,6 +12,7 @@ import "./styles.scss";
 import { Context } from "../../context/Context";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
+import { Link } from "react-router-dom";
 
 const initialState = {
   products: [],
@@ -173,13 +174,19 @@ function ProductDetailScreen({ productItems, onAdd }) {
         ) : error ? (
           <MessageBox variant="danger">{error}</MessageBox>
         ) : ( */}
-          <>
-            <Details
-              product={product}
-              affiliateCode={affiliateCode}
-              dispatch={dispatch}
-            />
-            {/* <ReviewDesc
+        <>
+          <div className="quick_link ">
+            <div className="page a_flex">
+              <Link to="/">Home /</Link>
+              <p>&#160; Electronics</p>
+            </div>
+          </div>
+          <Details
+            product={product}
+            affiliateCode={affiliateCode}
+            dispatch={dispatch}
+          />
+          {/* <ReviewDesc
               handleDelete={handleDelete}
               product={product}
               userInfo={userInfo}
@@ -190,7 +197,7 @@ function ProductDetailScreen({ productItems, onAdd }) {
             ) : (
               ""
             )} */}
-          </>
+        </>
         {/* )} */}
       </div>
     </div>

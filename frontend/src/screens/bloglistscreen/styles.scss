@@ -1,13 +1,26 @@
 .blog_list_screen {
   margin-top: 10px;
   margin-bottom: 30px;
-  .main_content {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
-    @media screen and (max-width: 900px) {
-      flex-direction: column;
+  position: relative;
+  .container {
+    position: relative;
+    .main_content {
+      display: flex;
+      justify-content: space-between;
+      gap: 20px;
+      position: relative;
+      .scroll_box {
+        position: relative;
+        .recent_post {
+          position: sticky;
+          top: 0;
+          z-index: 200;
+        }
+      }
+      /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+      @media screen and (max-width: 900px) {
+        flex-direction: column;
+      }
     }
   }
 }

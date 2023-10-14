@@ -215,6 +215,9 @@
           .available {
             color: var(--color-tab);
           }
+          .unavailable {
+            color: var(--color-primary);
+          }
         }
         .lower_bottom {
           width: 100%;

@@ -26,7 +26,7 @@ function BlogDetailScreen() {
           <div>
             <BlogDetails />
           </div>
-          <div>
+          <div className="scroll_box">
             <RecentPost />
           </div>
         </div>
