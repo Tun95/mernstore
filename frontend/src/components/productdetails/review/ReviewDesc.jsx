@@ -11,6 +11,7 @@ import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { styled, alpha } from "@mui/material/styles";
+import { ProductReviewModal } from "../../modals/Modals";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -56,21 +57,8 @@ const StyledMenu = styled((props) => (
     },
   },
 }));
-function ReviewDesc({ product, userInfo, handleDelete, dispatch }) {
-  //=== Review ==//
-  const [review, setReview] = useState(false);
-  const closeReview = () => {
-    setReview(false);
-    document.body.style.overflow = "unset";
-  };
-  const showReview = () => {
-    setReview(true);
-  };
-  const ReviewDetail = () => {
-    showReview();
-    closeDescription();
-  };
 
+function ReviewDesc({ product, userInfo, handleDelete, dispatch }) {
   // ===Description===//
   const [description, setDescription] = useState(true);
   const closeDescription = () => {
@@ -83,6 +71,37 @@ function ReviewDesc({ product, userInfo, handleDelete, dispatch }) {
   const DescriptionDetail = () => {
     showDescription();
     closeReview();
+    closeFeature();
+  };
+
+  //=== Review ==//
+  const [review, setReview] = useState(false);
+  const closeReview = () => {
+    setReview(false);
+    document.body.style.overflow = "unset";
+  };
+  const showReview = () => {
+    setReview(true);
+  };
+  const ReviewDetail = () => {
+    showReview();
+    closeDescription();
+    closeFeature();
+  };
+
+  // ===Features===//
+  const [feature, setFeature] = useState(false);
+  const closeFeature = () => {
+    setFeature(false);
+    document.body.style.overflow = "unset";
+  };
+  const showFeature = () => {
+    setFeature(true);
+  };
+  const FeatureDetail = () => {
+    showFeature();
+    closeReview();
+    closeDescription();
   };
 
   // ==== REVIEW DRAWER ====//
@@ -97,110 +116,56 @@ function ReviewDesc({ product, userInfo, handleDelete, dispatch }) {
 
   return (
     <>
-      <section className="review-section ">
-        <div className="rev ">
-          <div className="rev-style">
-            <div className="rev-head c_flex">
-              <div className="d_flex rev_desc">
-                <button
-                  onClick={DescriptionDetail}
-                  className={description === true ? "active" : ""}
-                >
-                  Descriptions
-                </button>
-                <button
-                  onClick={ReviewDetail}
-                  className={review === true ? "active" : ""}
-                >
-                  Reviews <span>({product.numReviews})</span>
-                </button>
-              </div>
-              <div>
-                {userInfo ? (
-                  <button className="write_review" onClick={ReviewDetail}>
-                    <a href="#textBox">Write a review</a>
-                  </button>
-                ) : null}
-              </div>
+      <section className="review_section ">
+        <div className="container ">
+          <div className="rev_style">
+            <div className="switch f_flex">
+              <span
+                className={description ? "active" : ""}
+                onClick={DescriptionDetail}
+              >
+                Description
+              </span>
+              <span className={review ? "active" : ""} onClick={ReviewDetail}>
+                Reviews
+              </span>
+              <span className={feature ? "active" : ""} onClick={FeatureDetail}>
+                Features
+              </span>
             </div>
 
+            {description && (
+              <div className="description mt">
+                <p>
+                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
+                  Ratione magni facilis pariatur quaerat distinctio eveniet
+                  omnis animi placeat veritatis dolore! Quod velit dolore atque
+                  ipsa, ea nesciunt corporis possimus recusandae, excepturi odit
+                  vero natus, repellendus nam unde esse animi rerum!
+                </p>
+              </div>
+            )}
             {review && (
               <>
-                <div className="noreviews">
-                  {product?.reviews?.length === 0 && (
-                    <MessageBox>There is no review</MessageBox>
-                  )}
-                </div>
-                {product.reviews?.map((review, index) => (
-                  <div className="review-details" key={index}>
-                    <div className="rev-header c_flex">
-                      <div className="a_flex">
-                        <div className="img">
-                          <img src={review.image ? review.image : me} alt="" />
-                        </div>
-                        <div className="name-stars ">
-                          <div className="name">
-                            {review.lastName} {review.firstName}
-                          </div>
-                          <div className="rate c_flex">
-                            <Rating rating={review.rating} />
-                            <small className="rate_num">
-                              ({review.rating})
-                            </small>
-                          </div>
-                        </div>
-                      </div>
-                      <div className="date a_flex">
-                        {userInfo && userInfo.email === review.email ? (
-                          <span>
-                            <MoreVertIcon
-                              onClick={handleClickUsr}
-                              className="mui_icon"
-                            />
-                            <StyledMenu
-                              id="demo-customized-menu"
-                              MenuListProps={{
-                                "aria-labelledby": "demo-customized-button",
-                              }}
-                              anchorEl={anchorUsr}
-                              open={openUsr}
-                              onClose={handleCloseUsr}
-                            >
-                              <MenuItem
-                                onClick={() => handleDelete(review._id)}
-                                disableRipple
-                              >
-                                <DeleteForeverIcon />
-                                Delete
-                              </MenuItem>
-                            </StyledMenu>
-                          </span>
-                        ) : null}
-                        <ReactTimeAgo
-                          date={Date.parse(review.createdAt)}
-                          locale="en-US"
-                          className="date_time"
-                        />
+                <div className="review mt">
+                  <div className="d_flex">
+                    <div className="list">
+                      <div className="no_post l_flex">
+                        <h3>No reviews found</h3>
                       </div>
                     </div>
-                    <div className="comment">
-                      <p>{review.comment}</p>
+                    <div className="review_box">
+                      <h3>Review this product</h3>
+                      <small>Share your thoughts with other customers</small>
+                      <div className="btn">
+                        <ProductReviewModal />
+                      </div>
                     </div>
-                    {/* <div className="like">
-                      <button className="reply_btn">Reply</button>
-                    </div> */}
                   </div>
-                ))}
-                <div className="review-details">
-                  <ReviewBox product={product} dispatch={dispatch} />
                 </div>
               </>
             )}
-            {description && (
-              <div className="discriptions review-details">
-                <p className="mtb">{parse(`<p>${product.desc}</p>`)} </p>
-              </div>
-            )}
+            {feature && <></>}
           </div>
         </div>
       </section>

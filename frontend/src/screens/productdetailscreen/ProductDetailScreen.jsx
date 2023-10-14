@@ -188,12 +188,13 @@ function ProductDetailScreen({ productItems, onAdd }) {
             affiliateCode={affiliateCode}
             dispatch={dispatch}
           />
-          {/* <ReviewDesc
-              handleDelete={handleDelete}
-              product={product}
-              userInfo={userInfo}
-              dispatch={dispatch}
-            />
+          <ReviewDesc
+            handleDelete={handleDelete}
+            product={product}
+            userInfo={userInfo}
+            dispatch={dispatch}
+          />
+          {/* 
             {products.length !== 0 ? (
               <Related products={products} dispatch={dispatch} />
             ) : (

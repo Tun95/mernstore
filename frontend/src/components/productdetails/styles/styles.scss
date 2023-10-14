@@ -443,4 +443,68 @@
       }
     }
   }
+  .description {
+    p {
+      font-size: 15px;
+    }
+  }
+  .review_section {
+    .rev_style {
+      .switch {
+        gap: 20px;
+        border-bottom: 1px solid var(--color-border);
+        span {
+          cursor: pointer;
+          &:hover {
+            transition: var(--transition);
+            border-bottom: 2px solid var(--color-light);
+          }
+        }
+        .active {
+          border-bottom: 2px solid var(--color-primary);
+          &:hover {
+            color: var(--color-primary);
+            transition: var(--transition);
+            border-bottom: 2px solid var(--color-primary);
+          }
+        }
+      }
+      .review {
+        .d_flex {
+          gap: 20px;
+        }
+        .list {
+          width: 100%;
+          .no_post {
+            padding: 60px 0px;
+            border: 1px solid var(--color-border);
+            width: 100%;
+            border-radius: 10px;
+            h3 {
+              font-size: 16px;
+              color: var(--color-light-gray);
+              font-weight: 300;
+            }
+          }
+        }
+        .review_box {
+          text-align: center;
+          padding: 15px 20px;
+          border-radius: 10px;
+          min-width: 350px;
+          background-color: var(--color-light-light-gray);
+          .btn {
+            margin-top: 15px;
+            .review_btn {
+              background-color: var(--color-primary);
+              color: var(--color-white);
+              padding: 10px 15px;
+              border-radius: 20px;
+              cursor: pointer;
+            }
+          }
+        }
+      }
+    }
+  }
 }

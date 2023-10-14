@@ -546,6 +546,153 @@ export function ReviewModal() {
   );
 }
 
+//PRODUCT REVIEW MODAL
+const initialProductReviewValues = {
+  name: "",
+  rating: "",
+  description: "",
+};
+export function ProductRatingInput({ field, form }) {
+  const { name, value } = field;
+
+  return (
+    <div className="review_rating">
+      <Rating
+        name="rating"
+        className="rating"
+        value={value}
+        onChange={(event, newValue) => {
+          form.setFieldValue(name, newValue);
+        }}
+      />
+    </div>
+  );
+}
+export function ProductReviewModal() {
+  //REVIEW MODAL
+  const [openReview, setOpenReview] = React.useState(false);
+  const handleOpenReview = () => setOpenReview(true);
+  const handleCloseReview = () => setOpenReview(false);
+
+  //=========
+  // REVIEW
+  //=========
+  const handleSubmit = () => {};
+  return (
+    <>
+      <button onClick={handleOpenReview} className="review_btn">
+        Write a review
+      </button>
+      <Modal
+        open={openReview}
+        onClose={handleCloseReview}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="customer_call login_modal review_modal">
+          <div className="call_header c_flex">
+            <h1>Write a review</h1>
+            <CloseIcon onClick={handleCloseReview} className="call_icon" />
+          </div>
+          <div className="call login_form">
+            <Formik
+              initialValues={initialProductReviewValues}
+              validationSchema={reviewSchema}
+              onSubmit={handleSubmit}
+            >
+              {({ touched, errors, isSubmitting }) => (
+                <Form>
+                  <div className="call_request">
+                    <div
+                      className={`form_group ${
+                        touched.name && errors.name ? "error" : ""
+                      }`}
+                    >
+                      <label
+                        htmlFor="name"
+                        className={errors.name && touched.name ? "error" : ""}
+                      >
+                        Your name:<span className="red">*</span>
+                      </label>
+                      <Field
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="your name"
+                        className={`input_box ${
+                          touched.name && errors.name ? "error-border" : ""
+                        }`}
+                      />
+                      <ErrorMessage
+                        name="name"
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                    <div className="form_group">
+                      <label
+                        htmlFor="rating"
+                        className={
+                          errors.rating && touched.rating ? "error" : ""
+                        }
+                      >
+                        Your rating:<span className="red">*</span>
+                      </label>
+                      <Field
+                        name="rating"
+                        component={ProductRatingInput} // Use the custom RatingInput component
+                      />
+                      <ErrorMessage
+                        name="rating"
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                    <div className="form_group">
+                      <label
+                        htmlFor="description"
+                        className={
+                          errors.description && touched.description
+                            ? "error"
+                            : ""
+                        }
+                      >
+                        Description:<span className="red">*</span>
+                      </label>
+                      <Field
+                        as="textarea"
+                        id="description"
+                        name="description"
+                        type="description"
+                        className={
+                          errors.description && touched.description
+                            ? "textarea input-error"
+                            : "textarea"
+                        }
+                        placeholder="Tell us about your products and store..."
+                      />
+                      <ErrorMessage
+                        name="description"
+                        component="div"
+                        className="error"
+                      />
+                    </div>
+                  </div>
+                  <div className="call_btn c_flex">
+                    <button type="submit" disabled={isSubmitting}>
+                      {isSubmitting ? "Submitting..." : "Submit"}
+                    </button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
+          </div>
+        </Box>
+      </Modal>
+    </>
+  );
+}
+
 //COMMENT MODAL
 const initialCommentValues = {
   name: "",
