@@ -13,6 +13,7 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { styled, alpha } from "@mui/material/styles";
 import { ProductReviewModal } from "../../modals/Modals";
 import Description from "./Description";
+import ReviewList from "./ReviewList";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -156,8 +157,11 @@ function ReviewDesc({ userInfo, handleDelete, dispatch }) {
                 <div className="review mt">
                   <div className="d_flex">
                     <div className="list">
-                      <div className="no_post l_flex">
+                      {/* <div className="no_post l_flex">
                         <h3>No reviews found</h3>
+                      </div> */}
+                      <div className="review_list ">
+                        <ReviewList />
                       </div>
                     </div>
                     <div className="review_box">

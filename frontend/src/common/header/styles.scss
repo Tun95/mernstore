@@ -1,6 +1,6 @@
-/*------head-----------*/
+/*------head_nav-----------*/
 
-.head {
+.head_nav {
   width: 100%;
   color: var(--color-light-gray);
   border-bottom: 1px solid var(--color-border);
@@ -344,7 +344,7 @@
   }
 }
 @media (max-width: 1024px) {
-  .head {
+  .head_nav {
     .right {
       .list {
         display: none;
@@ -419,6 +419,13 @@
           width: 100px;
           height: auto;
         }
+      }
+    }
+  }
+  .head_nav {
+    .right {
+      .icon-button{
+        display: none;
       }
     }
   }

@@ -99,14 +99,14 @@ function Head() {
 
   return (
     <div>
-      <section className="head">
+      <section className="head_nav">
         <div className="container  head-position">
           <div className="c_flex">
             <div className="left">
               <LocationModal />
             </div>
             <div className="right a_flex">
-              <React.Fragment>
+              <React.Fragment className="fragment">
                 <Box
                   sx={{
                     display: "flex",

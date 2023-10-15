@@ -655,12 +655,83 @@
               font-weight: 300;
             }
           }
+          .review_list {
+            .review_list_box {
+              .reviewList {
+                gap: 50px;
+                .rating {
+                  text-align: center;
+                  .box {
+                    background-color: var(--color-light-light-gray);
+                    padding: 8px 0px;
+                    width: 110px;
+                    border-radius: 10px;
+                    gap: 5px;
+                    margin-bottom: 10px;
+                  }
+                  .num_reviews {
+                    margin-top: 7px;
+                    span {
+                      margin-left: 5px;
+                    }
+                  }
+                }
+                .rating_bars {
+                  line-height: 25px;
+
+                  .bar {
+                    gap: 30px;
+
+                    .LineProgressBar {
+                      width: 320px;
+                      position: relative;
+                      left: 10px;
+                    }
+                    small {
+                      word-wrap: normal;
+                      gap: 10px;
+                      width: 30px;
+                      text-align: center;
+                    }
+                  }
+                }
+                /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+                @media screen and (max-width: 625px) {
+                  width: 100% !important;
+                  gap: 30px;
+                  .rating_bars {
+                    width: 80%;
+                    .bar {
+                      width: 100% !important;
+                      .LineProgressBar {
+                        width: 100% !important;
+                      }
+                    }
+                  }
+                }
+                /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+                @media screen and (max-width: 460px) {
+                  flex-direction: column;
+                  .rating {
+                    display: flex;
+
+                    flex-direction: column;
+                    align-items: center;
+                  }
+                  .rating_bars {
+                    width: 100%;
+                  }
+                }
+              }
+            }
+          }
         }
         .review_box {
           text-align: center;
           padding: 15px 20px;
           border-radius: 10px;
           min-width: 350px;
+          height: 150px;
           background-color: var(--color-light-light-gray);
           .btn {
             margin-top: 15px;
