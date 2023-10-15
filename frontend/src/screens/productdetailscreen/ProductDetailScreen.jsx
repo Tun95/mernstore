@@ -13,6 +13,8 @@ import { Context } from "../../context/Context";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import Banner from "../../components/productdetails/banner/Banner";
+import Wrapper from "../../components/productdetails/wrapper/Wrapper";
 
 const initialState = {
   products: [],
@@ -194,6 +196,11 @@ function ProductDetailScreen({ productItems, onAdd }) {
             userInfo={userInfo}
             dispatch={dispatch}
           />
+          <div className="related_border_top">
+            <Related products={products} dispatch={dispatch} />
+          </div>
+          <Banner />
+          <Wrapper />
           {/* 
             {products.length !== 0 ? (
               <Related products={products} dispatch={dispatch} />

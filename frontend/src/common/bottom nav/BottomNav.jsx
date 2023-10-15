@@ -21,34 +21,39 @@ function BottomNav() {
       >
         <BottomNavigation
           showLabels
-          className="menus"
           value={value}
+          className="bottom_menu"
           onChange={(event, newValue) => {
             setValue(newValue);
           }}
         >
           <BottomNavigationAction
             disableRipple
+            className="menus"
             label="Menu"
             icon={<SideBar />}
           />
           <BottomNavigationAction
             disableRipple
+            className="menus"
             label="Search"
             icon={<SearchMenu />}
           />
           <BottomNavigationAction
             disableRipple
+            className="menus"
             label="Cart"
             icon={<CartMenu />}
           />
           <BottomNavigationAction
             disableRipple
+            className="menus"
             label="Account"
             icon={<UserMenu />}
           />
           <BottomNavigationAction
             disableRipple
+            className="menus"
             label="Contact"
             icon={<ContactMenu />}
           />

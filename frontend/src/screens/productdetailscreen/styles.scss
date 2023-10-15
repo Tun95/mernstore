@@ -1,3 +1,7 @@
 .product-details-page {
   margin-top: 10px;
+  .related_border_top {
+    margin-top: 40px;
+    border-top: 1px solid var(--color-border);
+  }
 }

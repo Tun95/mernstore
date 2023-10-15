@@ -12,6 +12,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { styled, alpha } from "@mui/material/styles";
 import { ProductReviewModal } from "../../modals/Modals";
+import Description from "./Description";
 
 const StyledMenu = styled((props) => (
   <Menu
@@ -58,7 +59,7 @@ const StyledMenu = styled((props) => (
   },
 }));
 
-function ReviewDesc({ product, userInfo, handleDelete, dispatch }) {
+function ReviewDesc({ userInfo, handleDelete, dispatch }) {
   // ===Description===//
   const [description, setDescription] = useState(true);
   const closeDescription = () => {
@@ -114,6 +115,17 @@ function ReviewDesc({ product, userInfo, handleDelete, dispatch }) {
     setAnchorUsr(null);
   };
 
+  const product = {
+    name: "Phone",
+    features: [
+      { label: "Battery capacity", value: "3700 mAh" },
+      { label: "Number of cores", value: "6" },
+      { label: "Operating System", value: "iOS" },
+      { label: "Processor", value: "Apple A16 Bionic" },
+      { label: "RAM", value: "6 GB" },
+      { label: "Screen diagonal", value: "6.1" },
+    ],
+  };
   return (
     <>
       <section className="review_section ">
@@ -136,13 +148,7 @@ function ReviewDesc({ product, userInfo, handleDelete, dispatch }) {
 
             {description && (
               <div className="description mt">
-                <p>
-                  Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                  Ratione magni facilis pariatur quaerat distinctio eveniet
-                  omnis animi placeat veritatis dolore! Quod velit dolore atque
-                  ipsa, ea nesciunt corporis possimus recusandae, excepturi odit
-                  vero natus, repellendus nam unde esse animi rerum!
-                </p>
+                <Description />
               </div>
             )}
             {review && (
@@ -165,7 +171,20 @@ function ReviewDesc({ product, userInfo, handleDelete, dispatch }) {
                 </div>
               </>
             )}
-            {feature && <></>}
+            {feature && (
+              <>
+                <div className="features mt">
+                  <ul>
+                    {product.features.map((item, index) => (
+                      <li className="feature_list c_flex" key={index}>
+                        <span className="spec">{item.label}</span>
+                        <span>{item.value}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </section>

@@ -156,11 +156,17 @@ function Details() {
     prevArrow: <PrevArrow />,
     responsive: [
       {
-        breakpoint: 600,
+        breakpoint: 1024,
         settings: {
-          arrows: false,
+          vertical: false,
         },
       },
+      // {
+      //   breakpoint: 600,
+      //   settings: {
+      //     arrows: false,
+      //   },
+      // },
     ],
   };
 
@@ -176,19 +182,21 @@ function Details() {
           <div className="img_slides">
             <div className="image">
               <div className="f_flex">
-                <div className="thumbnail_slider">
-                  <Slider {...SliderSettings} className="slick-slider">
-                    {product.images.map((image) => (
-                      <div key={image.id}>
-                        <img
-                          src={image.img}
-                          alt={product.name}
-                          className="small_images"
-                          onClick={() => setSelectedImage(image.img)}
-                        />
-                      </div>
-                    ))}
-                  </Slider>
+                <div className="slider_style">
+                  <div className="thumbnail_slider">
+                    <Slider {...SliderSettings} className="slick-slider">
+                      {product.images.map((image) => (
+                        <div key={image.id}>
+                          <img
+                            src={image.img}
+                            alt={product.name}
+                            className="small_images"
+                            onClick={() => setSelectedImage(image.img)}
+                          />
+                        </div>
+                      ))}
+                    </Slider>
+                  </div>
                 </div>
                 <div className="main_image">
                   <ReactImageMagnify
@@ -205,7 +213,7 @@ function Details() {
                       },
 
                       enlargedImageContainerStyle: {
-                        zIndex: 5,
+                        zIndex: 10,
                       },
                       enlargedImageContainerDimensions: {
                         width: "70%",

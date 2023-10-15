@@ -1,63 +1,80 @@
-import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import Checkbox from "@mui/material/Checkbox";
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import Favorite from "@mui/icons-material/Favorite";
+import black from "../../../assets/bestsellers/black.webp";
+import AddchartIcon from "@mui/icons-material/Addchart";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { Link } from "react-router-dom";
-import Slider from "react-slick";
-import Rating from "../../utilities/rating/Ratings";
 import { Context } from "../../../context/Context";
-import { request } from "../../../base url/BaseUrl";
-import { toast } from "react-toastify";
-import DoDisturbIcon from "@mui/icons-material/DoDisturb";
-import { RWebShare } from "react-web-share";
-import ShareIcon from "@mui/icons-material/Share";
+import { Tooltip } from "antd";
+import LocalActivityOutlinedIcon from "@mui/icons-material/LocalActivityOutlined";
+import YouTubeIcon from "@mui/icons-material/YouTube";
 
-const NextArrow = (props) => {
-  const { onClick } = props;
-  return (
-    <div className="control-btn" onClick={onClick}>
-      <button className="next">
-        <i className="fa fa-long-arrow-alt-right"></i>
-      </button>
-    </div>
-  );
-};
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-const PrevArrow = (props) => {
-  const { onClick } = props;
-  return (
-    <div className="control-btn" onClick={onClick}>
-      <button className="prev">
-        <i className="fa fa-long-arrow-alt-left"></i>
-      </button>
-    </div>
-  );
-};
+//TEXT TRUNCATE
+function truncateText(text, maxWords) {
+  const words = text.split(" ");
+  if (words.length <= maxWords) {
+    return text;
+  }
+  return words.slice(0, maxWords).join(" ") + " ...";
+}
+function RelatedCard({ product, index }) {
+  const { convertCurrency } = useContext(Context);
 
-function RelatedCard({ products, dispatch }) {
-  const { state, dispatch: ctxDispatch, convertCurrency } = useContext(Context);
-  const {
-    cart: { cartItems },
-  } = state;
+  //===========
+  //IMAGE WHEEL
+  //===========
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
-  const [count, setCount] = useState(0);
-  const increment = () => {
-    setCount(count + 1);
+  const handleMouseEnter = () => {
+    setIsHovered(true);
   };
 
-  //===========
-  //REACT SLICK
-  //===========
-  const [slidesToShow, setSlidesToShow] = useState(1);
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
+  const handleMouseMove = (e) => {
+    if (isHovered) {
+      const containerWidth = e.currentTarget.clientWidth;
+      const totalImages = product.images.length;
+
+      // Calculate the index based on the mouse position
+      const offsetIndex = Math.floor(
+        (e.nativeEvent.clientX - e.currentTarget.getBoundingClientRect().left) /
+          (containerWidth / totalImages)
+      );
+
+      // Ensure the offset index is within the valid range
+      const imageIndex = Math.max(0, Math.min(offsetIndex, totalImages - 1));
+
+      if (imageIndex !== selectedImage) {
+        setSelectedImage(imageIndex);
+      }
+    }
+  };
+
+  //==============
+  // TEXT TRUNCATE
+  //==============
+  const [truncatedName, setTruncatedName] = useState(
+    truncateText(product.name, 9)
+  );
+
   useEffect(() => {
+    // Update the truncation value based on screen size
     const handleResize = () => {
       const screenWidth = window.innerWidth;
       if (screenWidth >= 1200) {
-        setSlidesToShow(Math.min(4, products.length));
+        setTruncatedName(truncateText(product.name, 9)); // Adjust the number of words for larger screens
       } else if (screenWidth >= 992) {
-        setSlidesToShow(Math.min(3, products.length));
-      } else if (screenWidth >= 650) {
-        setSlidesToShow(Math.min(2, products.length));
+        setTruncatedName(truncateText(product.name, 7)); // Adjust the number of words for medium screens
       } else {
-        setSlidesToShow(Math.min(1, products.length));
+        setTruncatedName(truncateText(product.name, 5)); // Default truncation for smaller screens
       }
     };
 
@@ -65,171 +82,153 @@ function RelatedCard({ products, dispatch }) {
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [products.length]);
+  }, [product.name]);
 
-  const Slidersettings = {
-    dots: false,
-    infinite: true,
-    speed: 500,
-    slidesToShow: slidesToShow,
-    slidesToScroll: 1,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-    responsive: [
-      {
-        breakpoint: 650,
-        settings: {
-          arrows: false,
-        },
-      },
-    ],
-  };
-
-  //ADD TO CART
-  //Color Style
-  const [color, setColor] = useState("");
-
-  //Size state
-  const [size, setSize] = useState("");
-
-  //Product Quantity
-  const [quantity, setQuantity] = useState(1);
-
-  //===========
-  //ADD TO CART
-  //===========
-  const addToCartHandler = async (item) => {
-    const { data } = await axios.get(`${request}/api/products/${item._id}`);
-
-    if (
-      cartItems.length > 0 &&
-      data.seller &&
-      data.seller._id !== cartItems[0].seller.id
-    ) {
-      dispatch({
-        type: "CART_ADD_ITEM_FAIL",
-        payload: `Can't Add To Cart. Buy only from ${cartItems[0].seller.seller.name} in this order`,
-      });
-      toast.error(
-        `Can't Add To Cart. Buy only from ${cartItems[0].seller.seller.name} in this order`,
-        {
-          position: "bottom-center",
-        }
-      );
-    } else {
-      if (data.countInStock < quantity) {
-        toast.error("Sorry, Product stock limit reached or out of stock", {
-          position: "bottom-center",
-        });
-        return;
-      } else {
-        toast.success(`${item.name} is successfully added to cart`, {
-          position: "bottom-center",
-        });
-      }
-
-      ctxDispatch({
-        type: "CART_ADD_ITEM",
-        payload: {
-          ...item,
-          discount: data.discount,
-          seller: data.seller,
-          sellerName: item?.seller?.seller?.name,
-          category: item?.category,
-          quantity,
-          size,
-          color,
-        },
-      });
-    }
-  };
-
-  //PAGE URL
-  const pageURL = process.env.REACT_APP_FRONTEND_URL;
+  //TOOLTIP
+  const mergedArrow = useMemo(() => {
+    return {
+      pointAtCenter: true,
+    };
+  }, []);
   return (
-    <>
-      <Slider {...Slidersettings}>
-        {products?.map((product, index) => (
-          <div className="box" key={index}>
-            <div
-              className={
-                products.length === 1
-                  ? "product product_width mtop"
-                  : "product mtop"
-              }
-            >
-              <div className="img">
-                {product.discount > 0 ? (
-                  <span className="discount">{product.discount}% Off</span>
-                ) : null}
-                <Link to={`/product/${product.slug}`}>
-                  <img src={product.image} alt="" />
-                </Link>
-                <div className="product-like">
-                  {product.flashdeal ? <i className="fa fa-bolt"></i> : ""}
-                  <span className="related_icon l_flex">
-                    <RWebShare
-                      data={{
-                        text: `Check out this cool ${product.name}`,
-                        url: `${pageURL}/product/${product.slug}`,
-                        title: product.name,
-                      }}
-                      onClick={() => console.log("shared successfully!")}
-                    >
-                      <ShareIcon className="related_icons" />
-                    </RWebShare>
-                  </span>
-                </div>
-                {/* <div className="product-like">
-                  <label htmlFor="">{count}</label>
-                  <br />
-                  <i className="fa-regular fa-heart" onClick={increment}></i>
-                </div> */}
+    <div className="card_content" key={index}>
+      <div className="info_top d_flex">
+        <div className="left f_flex">
+          {product.discount > 0 ? (
+            <span className="num_discount l_flex">-{product.discount}%</span>
+          ) : (
+            ""
+          )}
+          {product.status ? <span className="new l_flex">New</span> : ""}
+          <span className="most_popular l_flex">Most popular</span>
+          <span>
+            {product.blackFriday ? (
+              <img src={black} alt="black friday l_flex" />
+            ) : (
+              ""
+            )}
+          </span>
+        </div>
+        <div className="right f_flex">
+          <span className="favorite right_background l_flex">
+            <Checkbox
+              className="icon"
+              {...label}
+              disableRipple
+              disableFocusRipple
+              icon={<FavoriteBorder />}
+              checkedIcon={<Favorite />}
+            />
+          </span>
+          <span className="compare right_background l_flex">
+            <AddchartIcon className="icon" />
+          </span>
+        </div>
+      </div>
+      <div className="product-image">
+        <Link
+          to=""
+          className="img"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onMouseMove={handleMouseMove}
+        >
+          {product.images ? (
+            <>
+              <div className="image_img ">
+                <span
+                  className={`demand-image-list demand-image-list-${index}`}
+                >
+                  {product.images.map((item, imageIndex) => (
+                    <span key={imageIndex} className="image-bar"></span>
+                  ))}
+                </span>
               </div>
-              <div className="product-details">
-                <Link to={`/product/${product.slug}`}>
-                  <h3>{product.name}</h3>
-                </Link>
-                <div className="rate">
-                  <Rating rating={product.rating} />
-                </div>
-                <div className="price">
-                  {product.discount > 0 ? (
-                    <div className="a_flex">
-                      <div className="price">
-                        {convertCurrency(
-                          product.price -
-                            (product.price * product.discount) / 100
-                        )}
-                      </div>
-                      <s className="discounted">
-                        {convertCurrency(product.price)}
-                      </s>
-                    </div>
-                  ) : (
-                    <div className="price">
-                      {convertCurrency(product.price)}
-                    </div>
-                  )}
-                  {product.countInStock === 0 ? (
-                    <button className="disabled l_flex" disabled>
-                      <DoDisturbIcon className="" />
-                    </button>
-                  ) : (
-                    <button
-                      className="dark-btn"
-                      onClick={() => addToCartHandler(product)}
-                    >
-                      <i className="fa fa-plus"></i>
-                    </button>
-                  )}
-                </div>
+              <img
+                src={product.images[selectedImage]?.img || product.img}
+                alt=""
+                className="main-image"
+              />
+            </>
+          ) : (
+            ""
+          )}
+        </Link>
+      </div>
+
+      <Link to="" className="name">
+        <Tooltip
+          placement="bottom"
+          title={<span className="tooltip">{product.name}</span>}
+          arrow={mergedArrow}
+        >
+          <h5>{truncatedName}</h5>
+        </Tooltip>
+      </Link>
+      <small className="ratings a_flex">
+        <span className="star">
+          <i
+            className={
+              product.rating > 0
+                ? "fa-sharp fa-solid fa-star rated"
+                : "fa-sharp fa-solid fa-star not_rated"
+            }
+          ></i>
+        </span>
+
+        <span className="num_rating">{product.rating?.toFixed(1)}</span>
+
+        <span className="num_review">(Reviews: {product.numReviews})</span>
+
+        <span className="a_flex promo_youtube">
+          <Tooltip
+            placement="bottomRight"
+            title={<span className="tooltip">Promotion</span>}
+            arrow={mergedArrow}
+          >
+            <LocalActivityOutlinedIcon className="icon" />
+          </Tooltip>
+          <YouTubeIcon className="icon" />
+        </span>
+      </small>
+      <div className="countInStock">
+        {product.countInStock > 0 ? (
+          <span className="available">In stock</span>
+        ) : (
+          <span>unavailable</span>
+        )}
+      </div>
+      <div className="lower_bottom c_flex">
+        <div className="price_discount">
+          {product.discount > 0 ? (
+            <div className="a_flex">
+              <div className="price">
+                {convertCurrency(
+                  product.price - (product.price * product.discount) / 100
+                )}
               </div>
+              <s className="discounted">{convertCurrency(product.price)}</s>
             </div>
+          ) : (
+            <div className="price">{convertCurrency(product.price)}</div>
+          )}
+        </div>
+        <div className="add_to_cart_btn c_flex">
+          <div className="quantity a_flex">
+            <button>
+              <i className="fa-solid fa-minus"></i>
+            </button>
+            <span className="qty p_flex">10</span>
+            <button>
+              <i className="fa-solid fa-plus"></i>
+            </button>
           </div>
-        ))}
-      </Slider>
-    </>
+          <div className="btn l_flex">
+            <ShoppingCartIcon className="icon" />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 
