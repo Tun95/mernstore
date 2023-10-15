@@ -44,6 +44,13 @@ footer {
       margin-left: 8px;
     }
   }
+  @media screen and (max-width: 900px) {
+    .grid2 {
+      grid-template-columns: repeat(2, 1fr);
+      justify-content: space-between;
+      width: 100%;
+    }
+  }
   @media screen and (max-width: 770px) {
     .footer_base {
       flex-direction: column;
