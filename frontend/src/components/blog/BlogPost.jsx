@@ -30,7 +30,7 @@ function BlogPost() {
             <div className="date ">
               <span className="a_flex">
                 <EventOutlinedIcon className="icon" />
-                <span>August 3, 2019</span>
+                <span>October 3, 2023</span>
               </span>
             </div>
             <div className="description">

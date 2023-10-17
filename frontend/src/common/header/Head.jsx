@@ -106,7 +106,7 @@ function Head() {
               <LocationModal />
             </div>
             <div className="right a_flex">
-              <React.Fragment className="fragment">
+              <React.Fragment>
                 <Box
                   sx={{
                     display: "flex",
@@ -218,9 +218,7 @@ function Head() {
               </label>
               <div className="currency_state">
                 <select
-                  className={
-                    darkMode ? "currency_symbol" : "currency_symbol"
-                  }
+                  className={darkMode ? "currency_symbol" : "currency_symbol"}
                   value={toCurrencies}
                   onChange={(e) => {
                     const selectedCurrency = e.target.value;
