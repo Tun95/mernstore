@@ -624,6 +624,20 @@
         border-bottom: 1px solid var(--color-border);
         span {
           cursor: pointer;
+          .count {
+            margin-left: 5px;
+            margin-bottom: -1px;
+            background-color: var(--color-tab);
+            padding: 0px 5px;
+            height: 15px;
+            border-radius: 20px;
+            color: var(--color-white);
+            position: relative;
+            top: 5px;
+            small {
+              margin-top: 1px;
+            }
+          }
           &:hover {
             transition: var(--transition);
             border-bottom: 2px solid var(--color-light);
@@ -720,6 +734,87 @@
                   }
                   .rating_bars {
                     width: 100%;
+                  }
+                }
+              }
+              .sort_bar {
+                margin-top: 30px;
+                border: 1px solid var(--color-border);
+                border-radius: 10px;
+                padding: 8px 15px;
+                a {
+                  color: var(--color-tab);
+                  text-decoration: underline;
+                  text-underline-offset: 1.3px;
+                  text-decoration-style: dotted;
+                  text-decoration-thickness: 1px;
+                  text-decoration-color: var(--color-tab);
+                  transition: var(--transition);
+                  &:hover {
+                    color: var(--color-link-hover);
+                  }
+                }
+
+                label {
+                  margin-right: 5px;
+                }
+                .icon {
+                  font-size: 18px;
+                  margin-right: 4px;
+                }
+              }
+              .comment_list {
+                margin-top: 30px;
+
+                .list {
+                  border: 1px solid var(--color-border);
+                  padding: 10px 15px;
+                  border-radius: 10px;
+                  padding-bottom: 30px;
+                  position: relative;
+                  .header {
+                    margin-bottom: 20px;
+                    .rating {
+                      span {
+                        .fa-star,
+                        .fa-star-half-alt {
+                          font-size: 13px;
+                        }
+                      }
+                      small {
+                        position: relative;
+                        top: 2.5px;
+                        left: 7px;
+                      }
+                    }
+                    .date_time {
+                      .date {
+                        margin-right: 5px;
+                      }
+                    }
+                  }
+                  .comment {
+                    h5 {
+                      margin-bottom: 5px;
+                    }
+                    p {
+                      font-size: 14px;
+                    }
+                  }
+                  .like_dislike {
+                    float: right;
+                    padding-bottom: 20px;
+                    .fa-regular {
+                      cursor: pointer;
+                      margin-right: 3px;
+                      &:hover {
+                        transition: var(--transition);
+                        color: var(--color-tab);
+                      }
+                    }
+                    .like {
+                      margin-right: 13px;
+                    }
                   }
                 }
               }

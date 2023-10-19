@@ -1,184 +1,245 @@
-import React, { useContext, useEffect, useReducer, useState } from "react";
-import "./styles.scss";
-import axios from "axios";
-import { toast } from "react-toastify";
-import { getError } from "../utilities/util/Utils";
+import React, { useContext, useEffect, useMemo, useState } from "react";
+import Checkbox from "@mui/material/Checkbox";
+import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
+import Favorite from "@mui/icons-material/Favorite";
+import black from "../../assets/bestsellers/black.webp";
+import AddchartIcon from "@mui/icons-material/Addchart";
+import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
+import { Link } from "react-router-dom";
+import LocalActivityOutlinedIcon from "@mui/icons-material/LocalActivityOutlined";
+import YouTubeIcon from "@mui/icons-material/YouTube";
+import { Tooltip } from "antd";
 import { Context } from "../../context/Context";
-import { Link, useParams } from "react-router-dom";
-import { request } from "../../base url/BaseUrl";
-import LoadingBox from "../utilities/message loading/LoadingBox";
-import MessageBox from "../utilities/message loading/MessageBox";
-import Rating from "../utilities/rating/Ratings";
-import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
+import "./styles.scss";
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "FETCH_REQUEST":
-      return { ...state, loading: true };
-    case "FETCH_SUCCESS":
-      return { ...state, loading: false, user: action.payload };
-    case "FETCH_FAIL":
-      return { ...state, loading: false, error: action.payload };
+const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
-    case "DELETE_REQUEST":
-      return { ...state, loadingDelete: true, successDelete: false };
-    case "DELETE_SUCCESS":
-      return { ...state, loadingDelete: false, successDelete: true };
-    case "DELETE_FAIL":
-      return {
-        ...state,
-        loadingDelete: false,
-        successDelete: false,
-      };
-    case "DELETE_RESET":
-      return {
-        ...state,
-        loadingDelete: false,
-        successDelete: false,
-      };
-
-    default:
-      return state;
+//TEXT TRUNCATE
+function truncateText(text, maxWords) {
+  const words = text.split(" ");
+  if (words.length <= maxWords) {
+    return text;
   }
-};
-function Wish() {
-  const [count, setCount] = useState(0);
-  const increment = () => {
-    setCount(count + 1);
+  return words.slice(0, maxWords).join(" ") + " ...";
+}
+
+function Wish({ product, index }) {
+  const { convertCurrency } = useContext(Context);
+
+  //===========
+  //IMAGE WHEEL
+  //===========
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
   };
 
-  const { state, dispatch: ctxDispatch, convertCurrency } = useContext(Context);
-  const { userInfo } = state;
-  const params = useParams();
-  const { id: userId } = params;
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
 
-  const [{ loading, error, user, successDelete }, dispatch] = useReducer(
-    reducer,
-    {
-      loading: true,
-      error: "",
-      user: [],
+  const handleMouseMove = (e) => {
+    if (isHovered) {
+      const containerWidth = e.currentTarget.clientWidth;
+      const totalImages = product.images.length;
+
+      // Calculate the index based on the mouse position
+      const offsetIndex = Math.floor(
+        (e.nativeEvent.clientX - e.currentTarget.getBoundingClientRect().left) /
+          (containerWidth / totalImages)
+      );
+
+      // Ensure the offset index is within the valid range
+      const imageIndex = Math.max(0, Math.min(offsetIndex, totalImages - 1));
+
+      if (imageIndex !== selectedImage) {
+        setSelectedImage(imageIndex);
+      }
     }
+  };
+
+  //==============
+  // TEXT TRUNCATE
+  //==============
+  const [truncatedName, setTruncatedName] = useState(
+    truncateText(product.name, 9)
   );
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(
-          `${request}/api/users/info/${userId}`,
-          {
-            headers: { Authorization: `Bearer ${userInfo.token}` },
-          }
-        );
-        dispatch({ type: "FETCH_SUCCESS", payload: data });
-      } catch (err) {
-        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+    // Update the truncation value based on screen size
+    const handleResize = () => {
+      const screenWidth = window.innerWidth;
+      if (screenWidth >= 1200) {
+        setTruncatedName(truncateText(product.name, 9)); // Adjust the number of words for larger screens
+      } else if (screenWidth >= 992) {
+        setTruncatedName(truncateText(product.name, 7)); // Adjust the number of words for medium screens
+      } else {
+        setTruncatedName(truncateText(product.name, 5)); // Default truncation for smaller screens
       }
     };
-    if (successDelete) {
-      dispatch({ type: "DELETE_RESET" });
-    } else {
-      fetchData();
-    }
-  }, [successDelete, userId, userInfo]);
-  console.log(user);
 
-  //==============
-  //DELETE PRODUCT
-  //==============
-  const deleteHandler = async (wish) => {
-    try {
-      await axios.delete(`${request}/api/wishes/${wish._id}`, {
-        headers: { Authorization: `Bearer ${userInfo.token}` },
-      });
-      dispatch({ type: "DELETE_SUCCESS" });
-      toast.success("Remove successfully", {
-        position: "bottom-center",
-      });
-      window.scrollTo(0, 0);
-    } catch (err) {
-      toast.error(getError(err), { position: "bottom-center" });
-      dispatch({ type: "DELETE_FAIL" });
-    }
-  };
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, [product.name]);
+
+  //TOOLTIP
+  const mergedArrow = useMemo(() => {
+    return {
+      pointAtCenter: true,
+    };
+  }, []);
 
   return (
-    <>
-      {loading ? (
-        <LoadingBox></LoadingBox>
-      ) : error ? (
-        <MessageBox>{error}</MessageBox>
-      ) : (
-        <>
-          {user?.wish?.length === 0 && (
-            <span className="product-not">
-              <MessageBox>No Product Found </MessageBox>
-            </span>
+    <div className="card_content" key={index}>
+      <div className="remove l_flex">
+        <button className="a_flex">
+          <CloseOutlinedIcon className="icon" />
+          <span>Remove</span>
+        </button>
+      </div>
+      <div className="info_top d_flex">
+        <div className="left f_flex">
+          {product.discount > 0 ? (
+            <span className="num_discount l_flex">-{product.discount}%</span>
+          ) : (
+            ""
           )}
-          {user?.wish?.map((product, index) => {
-            console.log(product.rating);
-            return (
-              <div className="box" key={index}>
-                <div className="product mtop">
-                  <div className="img">
-                    {product.discount > 0 ? (
-                      <span className="discount">{product.discount}% Off</span>
-                    ) : null}
-                    <Link to={`/product/${product.slug}`}>
-                      <img src={product.image} alt="" />
-                    </Link>
-                    <div className="product-like">
-                      {product.flashdeal ? <i className="fa fa-bolt"></i> : ""}
-                    </div>
-                    {/* <div className="product-like">
-                      <label>{count}</label> <br />
-                      <i
-                        className="fa-regular fa-heart"
-                        onClick={increment}
-                      ></i>
-                    </div> */}
-                  </div>
-                  <div className="product-details">
-                    <Link to={`/product/${product.slug}`}>
-                      <h3>{product.name}</h3>
-                    </Link>
-                    <div className="rate">
-                      <Rating rating={product.rating} />
-                    </div>
-                    <div className="price">
-                      {product.discount > 0 ? (
-                        <div className="a_flex">
-                          <div className="price">
-                            {convertCurrency(
-                              product.price -
-                                (product.price * product.discount) / 100
-                            )}
-                          </div>
-                          <s className="discounted">
-                            {convertCurrency(product.price)}
-                          </s>
-                        </div>
-                      ) : (
-                        <div className="price">
-                          {convertCurrency(product.price)}
-                        </div>
-                      )}
-                      <button
-                        className="dark-btn"
-                        onClick={() => deleteHandler(product)}
-                      >
-                        <DeleteOutlineIcon className="deleteBtn" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
+          {product.status ? <span className="new l_flex">New</span> : ""}
+          <span className="most_popular l_flex">Most popular</span>
+          <span>
+            {product.blackFriday ? (
+              <img src={black} alt="black friday l_flex" />
+            ) : (
+              ""
+            )}
+          </span>
+        </div>
+        <div className="right f_flex">
+          <span className="favorite right_background l_flex">
+            <Checkbox
+              className="icon"
+              {...label}
+              disableRipple
+              disableFocusRipple
+              icon={<FavoriteBorder />}
+              checkedIcon={<Favorite />}
+            />
+          </span>
+          <span className="compare right_background l_flex">
+            <AddchartIcon className="icon" />
+          </span>
+        </div>
+      </div>
+      <div className="product-image">
+        <Link
+          to="/product/:slug"
+          className="img"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onMouseMove={handleMouseMove}
+        >
+          {product.images ? (
+            <>
+              <div className="image_img ">
+                <span className={`image-list image-list-${index}`}>
+                  {product.images.map((item, imageIndex) => (
+                    <span key={imageIndex} className="image-bar"></span>
+                  ))}
+                </span>
               </div>
-            );
-          })}
-        </>
-      )}
-    </>
+
+              <img
+                src={product.images[selectedImage]?.img || product.img}
+                alt=""
+                className="main-image"
+              />
+            </>
+          ) : (
+            ""
+          )}
+        </Link>
+      </div>
+
+      <Link to="/product/:slug" className="name">
+        <Tooltip
+          placement="bottom"
+          title={<span className="tooltip">{product.name}</span>}
+          arrow={mergedArrow}
+        >
+          <h5>{truncatedName}</h5>
+        </Tooltip>
+      </Link>
+      <small className="ratings a_flex">
+        <span className="star">
+          <i
+            className={
+              product.rating > 0
+                ? "fa-sharp fa-solid fa-star rated"
+                : "fa-sharp fa-solid fa-star not_rated"
+            }
+          ></i>
+        </span>
+
+        <span className="num_rating">{product.rating?.toFixed(1)}</span>
+        {product.numReviews === 0 ? (
+          ""
+        ) : (
+          <span className="num_review">(Reviews: {product.numReviews})</span>
+        )}
+        <span className="a_flex promo_youtube">
+          <Tooltip
+            placement="bottomRight"
+            title={<span className="tooltip">Promotion</span>}
+            arrow={mergedArrow}
+          >
+            <LocalActivityOutlinedIcon className="icon" />
+          </Tooltip>
+          <YouTubeIcon className="icon" />
+        </span>
+      </small>
+      <div className="countInStock">
+        {product.countInStock > 0 ? (
+          <span className="available">In stock</span>
+        ) : (
+          <span>unavailable</span>
+        )}
+      </div>
+      <div className="lower_bottom c_flex">
+        <div className="price_discount">
+          {product.discount > 0 ? (
+            <div className="a_flex">
+              <div className="price">
+                {convertCurrency(
+                  product.price - (product.price * product.discount) / 100
+                )}
+              </div>
+              <s className="discounted">{convertCurrency(product.price)}</s>
+            </div>
+          ) : (
+            <div className="price">{convertCurrency(product.price)}</div>
+          )}
+        </div>
+        <div className="add_to_cart_btn c_flex">
+          <div className="quantity a_flex">
+            <button>
+              <i className="fa-solid fa-minus"></i>
+            </button>
+            <span className="qty p_flex">10</span>
+            <button>
+              <i className="fa-solid fa-plus"></i>
+            </button>
+          </div>
+          <div className="btn l_flex">
+            <ShoppingCartIcon className="icon" />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }
 

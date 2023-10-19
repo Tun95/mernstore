@@ -159,6 +159,7 @@ function VendorListScreen() {
                       id="account-menu"
                       open={openInfo}
                       onClose={handleClose}
+                      disableScrollLock={true}
                       PaperProps={{
                         elevation: 0,
                         sx: {

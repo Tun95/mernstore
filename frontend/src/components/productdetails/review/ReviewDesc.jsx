@@ -139,8 +139,14 @@ function ReviewDesc({ userInfo, handleDelete, dispatch }) {
               >
                 Description
               </span>
-              <span className={review ? "active" : ""} onClick={ReviewDetail}>
+              <span
+                className={review ? "active d_flex" : "d_flex"}
+                onClick={ReviewDetail}
+              >
                 Reviews
+                <span className="count l_flex">
+                  <small>1</small>
+                </span>
               </span>
               <span className={feature ? "active" : ""} onClick={FeatureDetail}>
                 Features

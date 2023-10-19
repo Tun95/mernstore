@@ -669,7 +669,7 @@ export function ProductReviewModal() {
                             ? "textarea input-error"
                             : "textarea"
                         }
-                        placeholder="Tell us about your products and store..."
+                        placeholder="Write your experience here..."
                       />
                       <ErrorMessage
                         name="description"

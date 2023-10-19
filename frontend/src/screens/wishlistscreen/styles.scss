@@ -1,10 +1,66 @@
 .wish_container {
-  @media screen and (max-width: 420px) {
-    margin-top: 20px;
-    .box_shadow {
-      box-shadow: none;
-      padding: 0px;
-      margin: 0px;
+  margin-top: 10px;
+  margin-bottom: 20px;
+  .content {
+    margin-top: 15px;
+    .empty {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      margin-top: 30px;
+      .empty_box {
+        background-color: var(--color-light-light-gray);
+        height: 200px;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--color-text-gray);
+      }
+
+      /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+      @media screen and (max-width: 960px) {
+        grid-template-columns: repeat(3, 1fr);
+        .empty_box:nth-child(4) {
+          display: none;
+        }
+      }
+      /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+      @media screen and (max-width: 745px) {
+        grid-template-columns: repeat(2, 1fr);
+        .empty_box:nth-child(3) {
+          display: none;
+        }
+      }
+      /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+      @media screen and (max-width: 545px) {
+        grid-template-columns: 1fr;
+        .empty_box:nth-child(2) {
+          display: none;
+        }
+      }
+    }
+    .clear_continue_btn {
+      margin-top: 20px;
+      a {
+        background-color: var(--color-primary);
+        padding: 8px 15px;
+        border-radius: 20px;
+        color: var(--color-white);
+        font-size: 13px !important;
+      }
+      button {
+        background-color: var(--color-light-light-gray);
+        color: var(--color-black);
+        padding: 11px;
+        margin-right: 10px;
+        border-radius: 20px;
+        cursor: pointer;
+        .icon {
+          font-size: 16px;
+          margin-right: 3px;
+        }
+      }
     }
   }
 }

@@ -296,4 +296,23 @@
       }
     }
   }
+  @media (max-width: 400px) {
+    width: 100%;
+    .shipping {
+      .table {
+        thead {
+          right: 0px !important;
+          th:nth-child(1) {
+            right: 0px !important;
+          }
+        }
+      }
+      .shipping_btn {
+        background: transparent;
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
 }

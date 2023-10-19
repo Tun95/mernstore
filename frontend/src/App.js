@@ -95,6 +95,7 @@ import CompanyViewScreen from "./seller/pages/single/company view/CompanyView";
 import BlogDetailScreen from "./screens/blogdetailscreen/BlogDetailscreen";
 import VendorPlanScreen from "./seller/pages/single/vendors plan/VendorPlanScreen";
 import BlogPostListScreen from "./screens/bloglistscreen/BlogPostListScreen";
+import ComparisonScreen from "./screens/comparisonscreen/ComparisonScreen";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -226,10 +227,18 @@ function App() {
               }
             ></Route>
             <Route
-              path="/wish-list/:id"
+              path="/wish-list"
               element={
                 <ProtectedRoute>
                   <WishlistScreen />
+                </ProtectedRoute>
+              }
+            ></Route>
+            <Route
+              path="/compare"
+              element={
+                <ProtectedRoute>
+                  <ComparisonScreen />
                 </ProtectedRoute>
               }
             ></Route>

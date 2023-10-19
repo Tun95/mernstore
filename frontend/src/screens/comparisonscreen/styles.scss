@@ -1,0 +1,17 @@
+.comparison_container {
+  .content {
+    .empty {
+      display: flex;
+      width: 100%;
+    }
+    .clear_continue_btn {
+      background-color: var(--color-light-light-gray);
+      padding: 15px;
+      .clear {
+        background-color: var(--color-white);
+        border: 1px solid var(--color-plan);
+        margin-right: 0;
+      }
+    }
+  }
+}

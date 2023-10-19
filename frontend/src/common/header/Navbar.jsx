@@ -313,6 +313,7 @@ function Navbar() {
                     id="account-menu"
                     open={openInfo}
                     onClose={handleCloseNav}
+                    disableScrollLock={true}
                     PaperProps={{
                       elevation: 0,
                       sx: {
@@ -404,14 +405,14 @@ function Navbar() {
               </div>
               <div className="icons c_flex">
                 <Tooltip title="View comparison list" className="view">
-                  <span className="l_flex">
+                  <Link to="/compare" className="l_flex">
                     <EqualizerIcon className="icon" />
-                  </span>
+                  </Link>
                 </Tooltip>
                 <Tooltip title="View wish list" className="view">
-                  <span className="l_flex">
+                  <Link to="/wish-list" className="l_flex">
                     <FavoriteBorderIcon className="icon" />
-                  </span>
+                  </Link>
                 </Tooltip>
                 <div className="user">
                   {" "}
@@ -449,6 +450,7 @@ function Navbar() {
                       id="account-menu"
                       open={openUserInfo}
                       onClose={handleCloseUser}
+                      disableScrollLock={true}
                       PaperProps={{
                         elevation: 0,
                         sx: {
