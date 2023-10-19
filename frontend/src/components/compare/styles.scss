@@ -22,8 +22,6 @@
     }
   }
   .product_list {
-    // position: relative;
-    // left: 20px;
     .product_card {
       display: flex !important;
       justify-content: space-between;
@@ -33,7 +31,17 @@
         text-align: center;
         min-width: 250px;
         .remove {
-          z-index: 5 !important;
+          z-index: 0 !important;
+          position: relative;
+          height: 20px;
+        }
+        .product-image {
+          .img {
+            .demand-image-list,
+            .image-list {
+              display: none;
+            }
+          }
         }
 
         .price_discount {
@@ -104,9 +112,9 @@
   }
   .left_btn {
     background-color: var(--color-white);
-    height: 60vh;
+    height: 65vh;
     z-index: 20px !important;
-    width: 190px;
+    min-width: 180px;
   }
   .table {
     border-collapse: collapse;
