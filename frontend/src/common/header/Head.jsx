@@ -152,6 +152,7 @@ function Head() {
                   open={openInfo}
                   onClose={handleCloseInfo}
                   onClick={handleCloseInfo}
+                  disableScrollLock={true}
                   PaperProps={{
                     elevation: 0,
                     sx: {

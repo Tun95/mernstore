@@ -1,0 +1,124 @@
+.comparison_container {
+  overflow: hidden;
+  .compare_btn {
+    margin-top: 10px;
+    .btn_list {
+      button {
+        color: var(--color-tab);
+        font-size: 15px;
+        background: transparent;
+        padding: 10px;
+        cursor: pointer;
+      }
+      .active {
+        background-color: var(--color-link-hover);
+        color: var(--color-white);
+        width: 140px;
+        border-radius: 8px;
+        display: flex;
+      }
+    }
+  }
+  .product_list {
+    .product_card {
+      display: flex !important;
+      justify-content: space-between;
+    
+    
+      .card_content {
+        border: none;
+        text-align: center;
+
+        .price_discount {
+          text-align: center;
+          flex-direction: column;
+          margin: 5px 0px;
+          .a_flex {
+            flex-direction: column;
+          }
+          .price {
+            color: var(--color-black);
+            font-weight: 800;
+          }
+          .discounted {
+            font-size: 12px;
+          }
+        }
+        .ratings {
+          text-align: center;
+          .num_rating {
+            margin-right: 4px;
+          }
+        }
+        .lower_bottom {
+          .add_to_cart_btn {
+            position: relative;
+            right: 0;
+            float: none;
+            border: none;
+            border-radius: none;
+            &:hover {
+              border: none;
+              background-color: transparent;
+            }
+            .btn {
+              background-color: var(--color-primary);
+              color: var(--color-white);
+              width: auto;
+              height: auto;
+              padding: 8px 15px;
+              border-radius: 20px;
+              cursor: pointer;
+              .icon {
+                font-size: 20px;
+                margin-right: 6px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .compare_table {
+    width: 100%;
+    overflow-x: auto;
+    .table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      display: table;
+      border-collapse: separate;
+      box-sizing: border-box;
+      text-indent: initial;
+      border-color: var(--color-gray);
+      width: 100%;
+      table-layout: fixed;
+      .compare_feature_row {
+        font-size: 14px;
+        &:hover {
+          background-color: var(--color-light-light-gray);
+        }
+        .compare_sort {
+          background-color: var(--color-light-light-gray);
+          width: 180px;
+          position: sticky;
+          left: 0;
+          z-index: 1;
+        }
+        .compare_feature_item {
+          padding: 8px 10px;
+          border: 1px solid var(--color-border);
+          vertical-align: middle;
+          text-align: left;
+        }
+        .feature_item_size {
+          padding: 0 10px;
+          overflow: hidden;
+          width: 260px;
+          white-space: nowrap;
+          font-size: 13px !important;
+          z-index: 0;
+        }
+      }
+    }
+  }
+}

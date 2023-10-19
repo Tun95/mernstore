@@ -4,6 +4,25 @@
       display: flex;
       width: 100%;
     }
+    .compare_btn_list {
+      gap: 40px;
+      .right {
+        /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+        @media screen and (max-width: 1245px) {
+          overflow: hidden;
+          overflow-x: scroll;
+          .product_list {
+            width: 1120px;
+            .product_card {
+              gap: 0px !important;
+              .card_content {
+                width: 250px;
+              }
+            }
+          }
+        }
+      }
+    }
     .clear_continue_btn {
       background-color: var(--color-light-light-gray);
       padding: 15px;

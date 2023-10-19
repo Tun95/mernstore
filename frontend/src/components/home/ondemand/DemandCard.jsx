@@ -110,6 +110,16 @@ function DemandCard({ product, index }) {
             )}
           </span>
         </div>
+        <div className="favorite small_device right_background l_flex">
+          <Checkbox
+            className="icon"
+            {...label}
+            disableRipple
+            disableFocusRipple
+            icon={<FavoriteBorder />}
+            checkedIcon={<Favorite />}
+          />
+        </div>
         <div className="right f_flex">
           <span className="favorite right_background l_flex">
             <Checkbox
@@ -121,6 +131,7 @@ function DemandCard({ product, index }) {
               checkedIcon={<Favorite />}
             />
           </span>
+
           <span className="compare right_background l_flex">
             <AddchartIcon className="icon" />
           </span>
@@ -178,9 +189,9 @@ function DemandCard({ product, index }) {
         </span>
 
         <span className="num_rating">{product.rating?.toFixed(1)}</span>
-        
-          <span className="num_review">(Reviews: {product.numReviews})</span>
-       
+
+        <span className="num_review">(Reviews: {product.numReviews})</span>
+
         <span className="a_flex promo_youtube">
           <Tooltip
             placement="bottomRight"

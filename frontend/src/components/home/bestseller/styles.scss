@@ -82,6 +82,25 @@
               border-radius: 15px;
             }
           }
+          .small_device {
+            position: absolute;
+            display: none;
+            z-index: 2;
+            right: 15px;
+            width: 35px;
+            height: 35px;
+            color: var(--color-gray);
+            background-color: rgba(255, 255, 255, 0.5);
+            border-radius: 5px;
+            backdrop-filter: blur(5px);
+            .icon {
+              cursor: pointer;
+              transition: var(--transition);
+              &:hover {
+                color: var(--color-tab);
+              }
+            }
+          }
           .right {
             display: none;
             position: absolute;
@@ -281,6 +300,17 @@
               height: 35px;
               border-radius: 50%;
               cursor: pointer;
+            }
+          }
+        }
+        /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+        @media screen and (max-width: 745px) {
+          .info_top {
+            .right {
+              display: none;
+            }
+            .small_device {
+              display: flex;
             }
           }
         }

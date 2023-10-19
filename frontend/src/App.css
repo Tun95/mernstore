@@ -425,9 +425,6 @@ select.input-error {
 }
 
 @media screen and (max-width: 320px) {
-  .container {
-    width: var(--container-width-md);
-  }
   .product-content .product .price .a_flex {
     flex-direction: column;
     align-items: flex-start;

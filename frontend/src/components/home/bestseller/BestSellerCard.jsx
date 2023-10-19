@@ -111,6 +111,16 @@ function BestSellerCard({ product, index }) {
             )}
           </span>
         </div>
+        <div className="favorite small_device right_background l_flex">
+          <Checkbox
+            className="icon"
+            {...label}
+            disableRipple
+            disableFocusRipple
+            icon={<FavoriteBorder />}
+            checkedIcon={<Favorite />}
+          />
+        </div>
         <div className="right f_flex">
           <span className="favorite right_background l_flex">
             <Checkbox
@@ -122,6 +132,7 @@ function BestSellerCard({ product, index }) {
               checkedIcon={<Favorite />}
             />
           </span>
+
           <span className="compare right_background l_flex">
             <AddchartIcon className="icon" />
           </span>
