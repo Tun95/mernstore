@@ -27,6 +27,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import GridViewIcon from "@mui/icons-material/GridView";
 import { LocationModal, LoginModals } from "../../components/modals/Modals";
+import EqualizerIcon from "@mui/icons-material/Equalizer";
 
 const StyledDivider = styled(Divider)(({ theme, darkMode }) => ({
   backgroundColor: darkMode ? "#ffffff" : "", // Change colors accordingly
@@ -177,7 +178,7 @@ function SideBar() {
                           <li>
                             <Link
                               onClick={toggleDrawer(anchor, false)}
-                              to="/track-shipment"
+                              to="/track-orders"
                               className="c_flex"
                             >
                               <span>Track orders</span>
@@ -201,12 +202,24 @@ function SideBar() {
                           <li>
                             <Link
                               onClick={toggleDrawer(anchor, false)}
-                              to={`/wish-list/${userInfo._id}`}
+                              to="/wish-list"
                               className="c_flex"
                             >
-                              <span>Wishlish</span>
+                              <span>Wish list</span>
                               <span>
                                 <FavoriteIcon className="icon" />
+                              </span>
+                            </Link>
+                          </li>
+                          <li>
+                            <Link
+                              onClick={toggleDrawer(anchor, false)}
+                              to="/compare"
+                              className="c_flex"
+                            >
+                              <span>Comparison list</span>
+                              <span>
+                                <EqualizerIcon className="icon" />
                               </span>
                             </Link>
                           </li>

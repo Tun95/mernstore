@@ -21,7 +21,6 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
 import { CallRequestModals } from "../../components/modals/Modals";
 import { SearchMenu } from "../../components/menus/Menu";
-import { Popover } from "antd";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import controller from "../../assets/bestsellers/controller.webp";
 
@@ -459,7 +458,7 @@ function Navbar() {
                             <MenuItem
                               key="orders"
                               component={Link}
-                              to="/track-order"
+                              to="/orders"
                               className="list"
                               onClick={handleCloseUser}
                               disableRipple
@@ -467,9 +466,9 @@ function Navbar() {
                               Orders
                             </MenuItem>
                             <MenuItem
-                              key="orders"
+                              key="comparison"
                               component={Link}
-                              to="/track-order"
+                              to="/compare"
                               className="list"
                               onClick={handleCloseUser}
                               disableRipple
@@ -479,7 +478,7 @@ function Navbar() {
                             <MenuItem
                               key="orders"
                               component={Link}
-                              to="/track-order"
+                              to="/wish-list"
                               className="list"
                               onClick={handleCloseUser}
                               disableRipple
