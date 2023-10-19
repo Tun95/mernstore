@@ -31,22 +31,28 @@ function ComparisonScreen() {
             <span>No products selected</span>
           </div>
         </div> */}
-        <div className="compare_btn_list d_flex">
-          <div className="left">
-            <CompareBtn />
+        <div className="compare_main_body">
+          <table className="compare_btn_list">
+            <tbody>
+              <tr className="compare_row">
+                <td className="compare_sort left_btn   ">
+                  <CompareBtn />
+                </td>
+                <td className="right">
+                  <div className="product_list">
+                    <div className="product_card">
+                      {products.slice(0, 4)?.map((product, index) => (
+                        <Compare product={product} index={index} />
+                      ))}
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div className="compare_list_table">
+            <CompareTable />
           </div>
-          <div className="right">
-            <div className="product_list">
-              <div className="product_card">
-                {products.slice(0, 4)?.map((product, index) => (
-                  <Compare product={product} index={index} />
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="compare_list_table">
-          <CompareTable />
         </div>
 
         <div className="clear_continue_btn c_flex">

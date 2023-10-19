@@ -2,6 +2,8 @@
   overflow: hidden;
   .compare_btn {
     margin-top: 10px;
+    // background-color: var(--color-white);
+
     .btn_list {
       button {
         color: var(--color-tab);
@@ -20,14 +22,19 @@
     }
   }
   .product_list {
+    // position: relative;
+    // left: 20px;
     .product_card {
       display: flex !important;
       justify-content: space-between;
-    
-    
+      gap: 20px;
       .card_content {
         border: none;
         text-align: center;
+        min-width: 250px;
+        .remove {
+          z-index: 5 !important;
+        }
 
         .price_discount {
           text-align: center;
@@ -79,45 +86,57 @@
       }
     }
   }
-  .compare_table {
+
+  .compare_sort {
+    background-color: var(--color-light-light-gray);
+    width: 180px;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+  }
+  .compare_btn_list {
+    display: flex;
+    flex-direction: row;
+    .compare_row {
+      display: flex;
+      flex-direction: row;
+    }
+  }
+  .left_btn {
+    background-color: var(--color-white);
+    height: 60vh;
+    z-index: 20px !important;
+    width: 190px;
+  }
+  .table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: table;
+    border-collapse: separate;
+    box-sizing: border-box;
+    text-indent: initial;
+    border-color: var(--color-gray);
     width: 100%;
-    overflow-x: auto;
-    .table {
-      border-collapse: collapse;
-      border-spacing: 0;
-      display: table;
-      border-collapse: separate;
-      box-sizing: border-box;
-      text-indent: initial;
-      border-color: var(--color-gray);
-      width: 100%;
-      table-layout: fixed;
-      .compare_feature_row {
-        font-size: 14px;
-        &:hover {
-          background-color: var(--color-light-light-gray);
-        }
-        .compare_sort {
-          background-color: var(--color-light-light-gray);
-          width: 180px;
-          position: sticky;
-          left: 0;
-          z-index: 1;
-        }
-        .compare_feature_item {
-          padding: 8px 10px;
-          border: 1px solid var(--color-border);
-          vertical-align: middle;
-          text-align: left;
-        }
-        .feature_item_size {
-          padding: 0 10px;
-          overflow: hidden;
-          width: 260px;
-          white-space: nowrap;
-          font-size: 13px !important;
-          z-index: 0;
-        }
+    table-layout: fixed;
+    .compare_feature_row {
+      font-size: 14px;
+      &:hover {
+        background-color: var(--color-light-light-gray);
+      }
+
+      .compare_feature_item {
+        padding: 8px 10px;
+        border: 1px solid var(--color-border);
+        vertical-align: middle;
+        text-align: left;
+      }
+      .feature_item_size {
+        padding: 0 10px;
+        overflow: hidden;
+        width: 265px;
+        white-space: nowrap;
+        font-size: 13px !important;
+        z-index: 0;
       }
     }
   }
