@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, Popover } from "antd";
 import { DownOutlined, CloseOutlined } from "@ant-design/icons";
 import { Slider, Checkbox, InputNumber } from "antd";
@@ -7,12 +7,15 @@ import { Checkbox as MyCheckbox } from "@mui/material";
 import SortIcon from "@mui/icons-material/Sort";
 import { Link } from "react-router-dom";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-
-const text = (
-  <span className="float_icon">
-    <CloseOutlined className="icon" />
-  </span>
-);
+import {
+  Box,
+  Divider,
+  IconButton,
+  Menu,
+  MenuItem,
+  Tooltip,
+} from "@mui/material";
+import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
 //===================
 const colorData = [
@@ -83,13 +86,30 @@ function TopFilter(props) {
     sliderValue,
   } = props;
 
-  //===========
-  // POPOVERS
-  //===========
-  const brand = (
+  //=============
+  // HANDLE CLOSE
+  //=============
+  const [popovers, setPopovers] = useState(new Array(7).fill(false));
+
+  const togglePopover = (index) => {
+    const newPopovers = [...popovers];
+    newPopovers[index] = !newPopovers[index];
+    setPopovers(newPopovers);
+  };
+
+  const closePopover = (index) => {
+    const newPopovers = [...popovers];
+    newPopovers[index] = false;
+    setPopovers(newPopovers);
+  };
+
+  //=================
+  // POPOVERS CONTENT
+  //=================
+  const contentList = [
+    // Brand filter content
     <div className="top_popover">
       <ul className="lower_list">
-        {/* Brand filter content */}
         <span className="search_box">
           <input type="search" placeholder="Search" />
         </span>
@@ -97,10 +117,8 @@ function TopFilter(props) {
           <Checkbox>Panasonic</Checkbox>
         </li>
       </ul>
-    </div>
-  );
-
-  const color = (
+    </div>,
+    // Color filter content
     <div className="top_popover">
       <ul className="lower_list color_check a_flex">
         {colorData.map((colorItem, index) => (
@@ -121,9 +139,8 @@ function TopFilter(props) {
           </li>
         ))}
       </ul>
-    </div>
-  );
-  const price = (
+    </div>,
+    // Price filter content
     <div className="top_popover">
       <div className="lower_list " style={{ marginLeft: 0 }}>
         {/* Price filter content */}
@@ -159,24 +176,18 @@ function TopFilter(props) {
           />
         </span>
       </div>
-    </div>
-  );
-
-  const size = (
+    </div>,
+    // Size filter content
     <div className="top_popover">
       <ul className="lower_list" style={{ marginLeft: 5 }}>
-        {/* Size filter content */}
         <li>
           <Checkbox>71.8 W X 50.8 H X 33.6 D (MM)</Checkbox>
         </li>
       </ul>
-    </div>
-  );
-
-  const system = (
+    </div>,
+    // Operating System filter content
     <div className="top_popover">
       <ul className="lower_list">
-        {/* Operating System filter content */}
         <span className="search_box">
           <input type="search" placeholder="Search" />
         </span>
@@ -185,24 +196,19 @@ function TopFilter(props) {
           <Checkbox>Samsung</Checkbox>
         </li>
       </ul>
-    </div>
-  );
-
-  const display = (
+    </div>,
+    // Display filter content
     <div className="top_popover">
       <ul className="lower_list" style={{ marginLeft: 5 }}>
-        {/* Display filter content */}
         <li>
           <Checkbox>Panasonic</Checkbox>
           <Checkbox>Samsung</Checkbox>
         </li>
       </ul>
-    </div>
-  );
-  const storage = (
+    </div>,
+    // Storage Capacity filter content
     <div className="top_popover">
       <ul className="lower_list">
-        {/* Operating System filter content */}
         <span className="search_box">
           <input type="search" placeholder="Search" />
         </span>
@@ -211,165 +217,342 @@ function TopFilter(props) {
           <Checkbox>Samsung</Checkbox>
         </li>
       </ul>
-    </div>
-  );
+    </div>,
+  ];
 
   //=============
   // SORT BY
   //=============
-  const sortList = (
-    <div className="sort_show_list">
-      <ul>
-        <li>from A to Z</li>
-        <li>from Z to A</li>
-        <li> Price: Low to High</li>
-        <li> Price: High to Low</li>
-        <li>Popular First</li>
-      </ul>
-    </div>
-  );
-  const pageList = (
-    <div className="sort_show_list">
-      <ul>
-        <li>16 Per Page </li>
-        <li>19 Per Page </li>
-        <li> 20 Per Page</li>
-      </ul>
-    </div>
-  );
+  const [displayText, setDisplayText] = useState("from A to Z");
+  const handleMenuClick = (text) => {
+    setDisplayText(text);
+    handleClose();
+  };
+
+  //SORT INFO
+  const [anchor, setAnchor] = React.useState(null);
+  const openInfo = Boolean(anchor);
+  const handleClick = (event) => {
+    setAnchor(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchor(null);
+  };
+
+  //=========
+  // PAGE BY
+  //=========
+  const [displayPageText, setDisplayPageText] = useState("19 Per Page");
+  const handlePageMenuClick = (text) => {
+    setDisplayPageText(text);
+    handlePageClose();
+  };
+  //PAGE INFO
+  const [pageAnchor, setPageAnchor] = React.useState(null);
+  const pageInfo = Boolean(pageAnchor);
+  const handlePage = (event) => {
+    setPageAnchor(event.currentTarget);
+  };
+  const handlePageClose = () => {
+    setPageAnchor(null);
+  };
 
   return (
     <div className="top_filter">
       <div className="content">
         <div className="list_items a_flex">
-          <div className="list">
-            <Popover
-              placement="bottomLeft"
-              title={text}
-              content={brand}
-              trigger="click"
-            >
-              <Button>
-                <span>Brand</span>
-                <DownOutlined className="icon" />
-              </Button>
-            </Popover>
-          </div>
-          <div className="list">
-            <Popover
-              placement="bottomLeft"
-              title={text}
-              content={color}
-              trigger="click"
-            >
-              <Button>
-                <span>Color</span>
-                <DownOutlined className="icon" />
-              </Button>
-            </Popover>
-          </div>
-          <div className="list">
-            <Popover
-              placement="bottomLeft"
-              title={text}
-              content={price}
-              trigger="click"
-            >
-              <Button>
-                <span>Price</span>
-                <DownOutlined className="icon" />
-              </Button>
-            </Popover>
-          </div>
-          <div className="list">
-            <Popover
-              placement="bottomLeft"
-              title={text}
-              content={size}
-              trigger="click"
-            >
-              <Button>
-                <span>Size</span>
-                <DownOutlined className="icon" />
-              </Button>
-            </Popover>
-          </div>
-          <div className="list">
-            <Popover
-              placement="bottomLeft"
-              title={text}
-              content={system}
-              trigger="click"
-            >
-              <Button>
-                <span>Operating System</span>
-                <DownOutlined className="icon" />
-              </Button>
-            </Popover>
-          </div>
-          <div className="list">
-            <Popover
-              placement="bottomLeft"
-              title={text}
-              content={display}
-              trigger="click"
-            >
-              <Button>
-                <span>Display</span>
-                <DownOutlined className="icon" />
-              </Button>
-            </Popover>
-          </div>
-          <div className="list">
-            <Popover
-              placement="bottomLeft"
-              title={text}
-              content={storage}
-              trigger="click"
-            >
-              <Button>
-                <span>Storage Capacity </span>
-                <DownOutlined className="icon" />
-              </Button>
-            </Popover>
-          </div>
+          {popovers.map((popover, index) => (
+            <div className="list" key={index}>
+              <Popover
+                placement="bottomLeft"
+                title={
+                  <span className="float_icon">
+                    <CloseOutlined
+                      className="icon"
+                      onClick={() => closePopover(index)}
+                    />
+                  </span>
+                }
+                content={contentList[index]}
+                trigger="click"
+                open={popovers[index]}
+                onOpenChange={() => togglePopover(index)}
+              >
+                <Button>
+                  <span>
+                    {index === 0
+                      ? "Brand"
+                      : index === 1
+                      ? "Color"
+                      : index === 2
+                      ? "Price"
+                      : index === 3
+                      ? "Size"
+                      : index === 4
+                      ? "System"
+                      : index === 5
+                      ? "Display"
+                      : index === 6
+                      ? "Storage"
+                      : null}
+                  </span>
+                  <DownOutlined className="icon" />
+                </Button>
+              </Popover>
+            </div>
+          ))}
         </div>
         <div className="sort_show">
           <small className="small a_flex">
-            <span className="sort a_flex">
+            <div className="sort_bar">
               <span className="a_flex">
-                <SortIcon className="icon" />
-              </span>
-              <Popover
-                placement="bottom"
-                title={<span className="header">sort by</span>}
-                content={sortList}
-                trigger="click"
-              >
                 <span className="a_flex">
+                  <SortIcon className="icon" />
                   <label>Sort by:</label>
-                  <Link to="" className="a_flex">
-                    <p>Newest Items First</p>
-                    <KeyboardArrowDownIcon className="icon" />
-                  </Link>
                 </span>
-              </Popover>
-            </span>
-            <Popover
-              placement="bottom"
-              title={<span className="header">19 Per Page</span>}
-              content={pageList}
-              style={{ padding: 0 }}
-              trigger="click"
-            >
-              <span className="show a_flex">
-                <label>Show: </label>
-                <Link to="" className="a_flex">
-                  <p>19</p>
-                  <KeyboardArrowDownIcon className="icon" />
-                </Link>
+                <React.Fragment>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                    className="user_menu_box"
+                  >
+                    <Tooltip>
+                      <IconButton
+                        onClick={handleClick}
+                        disableRipple
+                        size="small"
+                        className="icon-button"
+                        disableElevation
+                        aria-controls={openInfo ? "account-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={openInfo ? "true" : undefined}
+                      >
+                        <Link to="" className="sort_list a_flex">
+                          <p>{displayText}</p>
+                          <KeyboardArrowDownIcon className="icon" />
+                        </Link>
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+
+                  <Menu
+                    anchorEl={anchor}
+                    id="account-menu"
+                    open={openInfo}
+                    onClose={handleClose}
+                    disableScrollLock={true}
+                    PaperProps={{
+                      elevation: 0,
+                      sx: {
+                        zIndex: 1,
+                        borderRadius: "10px",
+                        overflow: "visible",
+                        padding: 0,
+                        margin: 0,
+                        filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                        ml: 2,
+                        "& .MuiAvatar-root": {
+                          width: 32,
+                          height: 32,
+                          ml: 1.5,
+                          mr: 1,
+                        },
+                        "&:after": {
+                          content: '""',
+                          display: "block",
+                          position: "absolute",
+                          top: 0,
+                          left: 24,
+                          width: 10,
+                          height: 10,
+                          bgcolor: "background.paper",
+                          transform: "translateY(-50%) rotate(45deg)",
+                          zIndex: 0,
+                        },
+                      },
+                    }}
+                    transformOrigin={{ horizontal: "left", vertical: "top" }}
+                    anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+                  >
+                    <div className="user_menu_content">
+                      <div className="upper">
+                        <div className="user_head c_flex">
+                          <h4>Sort by</h4>
+                          <CloseOutlinedIcon
+                            onClick={handleClose}
+                            className="icon"
+                          />
+                        </div>
+                        <Divider />
+                        <div className="menu_item">
+                          <MenuItem
+                            key="alphabetical-az"
+                            className="list"
+                            onClick={() => handleMenuClick("from A to Z")}
+                            disableRipple
+                          >
+                            from A to Z
+                          </MenuItem>
+                          <MenuItem
+                            key="alphabetical-za"
+                            className="list"
+                            onClick={() => handleMenuClick("from Z to A")}
+                            disableRipple
+                          >
+                            from Z to A
+                          </MenuItem>
+                          <MenuItem
+                            key="rating-low-high"
+                            className="list"
+                            onClick={() =>
+                              handleMenuClick("Price: Low to High")
+                            }
+                            disableRipple
+                          >
+                            Price: Low to High
+                          </MenuItem>
+                          <MenuItem
+                            key="rating-high-low"
+                            className="list"
+                            onClick={() =>
+                              handleMenuClick("Price: High to Low")
+                            }
+                            disableRipple
+                          >
+                            Price: High to Low
+                          </MenuItem>
+                          <MenuItem
+                            key="low-rated"
+                            className="list"
+                            onClick={() => handleMenuClick("Popular First")}
+                            disableRipple
+                          >
+                            Popular First
+                          </MenuItem>{" "}
+                        </div>
+                      </div>
+                    </div>
+                  </Menu>
+                </React.Fragment>
               </span>
-            </Popover>
+            </div>
+            <div className="sort_bar">
+              <span className="a_flex">
+                <span className="a_flex">
+                  <label>Show:</label>
+                </span>
+                <React.Fragment>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      textAlign: "center",
+                    }}
+                    className="user_menu_box"
+                  >
+                    <Tooltip>
+                      <IconButton
+                        onClick={handlePage}
+                        disableRipple
+                        size="small"
+                        className="icon-button"
+                        disableElevation
+                        aria-controls={pageInfo ? "account-menu" : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={pageInfo ? "true" : undefined}
+                      >
+                        <Link to="" className="sort_list a_flex">
+                          <p>{displayPageText}</p>
+                          <KeyboardArrowDownIcon className="icon" />
+                        </Link>
+                      </IconButton>
+                    </Tooltip>
+                  </Box>
+
+                  <Menu
+                    anchorEl={pageAnchor}
+                    id="account-menu"
+                    open={pageInfo}
+                    onClose={handlePageClose}
+                    disableScrollLock={true}
+                    PaperProps={{
+                      elevation: 0,
+                      sx: {
+                        zIndex: 1,
+                        borderRadius: "10px",
+                        overflow: "visible",
+                        padding: 0,
+                        margin: 0,
+                        filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                        ml: 2,
+                        "& .MuiAvatar-root": {
+                          width: 32,
+                          height: 32,
+                          ml: 1.5,
+                          mr: 1,
+                        },
+                        "&:after": {
+                          content: '""',
+                          display: "block",
+                          position: "absolute",
+                          top: 0,
+                          left: 24,
+                          width: 10,
+                          height: 10,
+                          bgcolor: "background.paper",
+                          transform: "translateY(-50%) rotate(45deg)",
+                          zIndex: 0,
+                        },
+                      },
+                    }}
+                    transformOrigin={{ horizontal: "left", vertical: "top" }}
+                    anchorOrigin={{ horizontal: "left", vertical: "bottom" }}
+                  >
+                    <div className="user_menu_content">
+                      <div className="upper">
+                        <div className="user_head c_flex">
+                          <h4>{displayPageText}</h4>
+                          <CloseOutlinedIcon
+                            onClick={handlePageClose}
+                            className="icon"
+                          />
+                        </div>
+                        <Divider />
+                        <div className="menu_item">
+                          <MenuItem
+                            key="16-per"
+                            className="list"
+                            onClick={() => handlePageMenuClick("16 Per Page")}
+                            disableRipple
+                          >
+                            16 Per Page
+                          </MenuItem>
+                          <MenuItem
+                            key="19-per"
+                            className="list"
+                            onClick={() => handlePageMenuClick("19 Per Page")}
+                            disableRipple
+                          >
+                            19 Per Page
+                          </MenuItem>{" "}
+                          <MenuItem
+                            key="30-per"
+                            className="list"
+                            onClick={() => handlePageMenuClick("30 Per Page")}
+                            disableRipple
+                          >
+                            30 Per Page
+                          </MenuItem>
+                        </div>
+                      </div>
+                    </div>
+                  </Menu>
+                </React.Fragment>
+              </span>
+            </div>
           </small>
         </div>
       </div>

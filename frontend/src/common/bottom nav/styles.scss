@@ -15,18 +15,9 @@
     display: block;
   }
   /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
-  @media screen and (max-width: 375px) {
-    .MuiBottomNavigation-root {
-      gap: 0 !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      width: 100% !important;
-    }
-    .MuiBottomNavigationAction-root {
-      gap: 0 !important;
-      padding: 0 !important;
-      margin: 0 !important;
-      width: 20px !important;
+  @media screen and (max-width: 360px) {
+    .menus_contact {
+      display: none;
     }
   }
 }

@@ -125,7 +125,7 @@ function Navbar() {
     navigate(`/store?category=${category}`);
   };
 
-  //INFO
+  //CONTACT MENU
   const [anchorEle, setAnchorEle] = React.useState(null);
   const openInfo = Boolean(anchorEle);
   const handleClickNav = (event) => {
@@ -135,7 +135,7 @@ function Navbar() {
     setAnchorEle(null);
   };
 
-  //INFO
+  //USER MENU
   const [anchorUser, setAnchorUser] = React.useState(null);
   const openUserInfo = Boolean(anchorUser);
   const handleClickUser = (event) => {
@@ -143,6 +143,16 @@ function Navbar() {
   };
   const handleCloseUser = () => {
     setAnchorUser(null);
+  };
+
+  //CART MENU
+  const [anchorCart, setAnchorCart] = React.useState(null);
+  const openCartInfo = Boolean(anchorCart);
+  const handleClickCart = (event) => {
+    setAnchorCart(event.currentTarget);
+  };
+  const handleCloseCart = () => {
+    setAnchorCart(null);
   };
 
   //=========
@@ -167,49 +177,6 @@ function Navbar() {
     window.location.href = "/login";
   };
 
-  // ===========
-  // CART MENU
-  // ===========
-  const cartMenu = (
-    <div className="top_popover cart_popover">
-      <div className="drawers">
-        <div className="cart">
-          <div className="header c_flex">
-            <h3>Cart items:</h3>
-            <CloseOutlinedIcon className="icon" />
-          </div>
-          <div className="content c_flex">
-            <div className="img">
-              <img src={controller} alt="" />
-            </div>
-            <div className="name_qty">
-              <div className="name">
-                <Link to="">
-                  <h3>
-                    Sony - DualShock 4 Wireless Controller for Sony PlayStation
-                    4
-                  </h3>
-                </Link>
-              </div>
-              <div className="qty_price">
-                <span>1 x $2000</span>
-              </div>
-            </div>
-            <div className="close">
-              <CloseOutlinedIcon className="icon" />
-            </div>
-          </div>
-          <div className="drawer_btn c_flex">
-            <button className="view">View cart</button>
-            <button className="c_flex checkout">
-              <CheckCircleOutlineOutlinedIcon className="icon" />
-              <span>Checkout</span>
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
   return (
     <>
       <div className="nav_bar light_header">
@@ -410,7 +377,6 @@ function Navbar() {
                   </span>
                 </Tooltip>
                 <div className="user">
-                  {" "}
                   <React.Fragment>
                     <Box
                       sx={{
@@ -546,21 +512,121 @@ function Navbar() {
                     </Menu>
                   </React.Fragment>
                 </div>
-                <Popover
-                  placement="bottomRight"
-                  content={cartMenu}
-                  style={{ padding: 0 }}
-                  trigger="click"
-                >
-                  <span>
-                    <span className="l_flex">
-                      <ShoppingCartIcon className="icon" />
-                    </span>
-                    <span className="badge ">
-                      <span className="badge_count_num l_flex">0</span>
-                    </span>
-                  </span>
-                </Popover>
+                <div className="cart">
+                  <React.Fragment>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        textAlign: "center",
+                      }}
+                      className="user_menu_box"
+                    >
+                      <Tooltip>
+                        <IconButton
+                          onClick={handleClickCart}
+                          disableRipple
+                          size="small"
+                          className="icon-button"
+                          disableElevation
+                          aria-controls={
+                            openCartInfo ? "account-menu" : undefined
+                          }
+                          aria-haspopup="true"
+                          aria-expanded={openCartInfo ? "true" : undefined}
+                        >
+                          <span className="cart_icon">
+                            <ShoppingCartIcon className="icon" />
+                            <span className="badge ">
+                              <span className="badge_count_num l_flex">0</span>
+                            </span>
+                          </span>
+                        </IconButton>
+                      </Tooltip>
+                    </Box>
+
+                    <Menu
+                      anchorEl={anchorCart}
+                      id="account-menu"
+                      open={openCartInfo}
+                      onClose={handleCloseCart}
+                      disableScrollLock={true}
+                      PaperProps={{
+                        elevation: 0,
+                        sx: {
+                          zIndex: 1,
+                          borderRadius: "10px",
+                          overflow: "visible",
+                          padding: 0,
+                          margin: 0,
+                          filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                          ml: 1,
+                          "& .MuiAvatar-root": {
+                            width: 32,
+                            height: 32,
+                            ml: 1.5,
+                            mr: 1,
+                          },
+                          "&:before": {
+                            content: '""',
+                            display: "block",
+                            position: "absolute",
+                            top: 0,
+                            right: 24,
+                            width: 15,
+                            height: 15,
+                            bgcolor: "background.paper",
+                            transform: "translateY(-50%) rotate(45deg)",
+                            zIndex: 0,
+                          },
+                        },
+                      }}
+                      transformOrigin={{ horizontal: "right", vertical: "top" }}
+                      anchorOrigin={{ horizontal: "right", vertical: "bottom" }}
+                    >
+                      <div className="cart_popover">
+                        <div className="upper">
+                          <div className="cart_head c_flex">
+                            <h4>Cart items: </h4>
+                            <CloseOutlinedIcon
+                              onClick={handleCloseCart}
+                              className="icon"
+                            />
+                          </div>
+                          <Divider />
+                          <div className="content c_flex">
+                            <div className="img">
+                              <img src={controller} alt="" />
+                            </div>
+                            <div className="name_qty">
+                              <div className="name">
+                                <Link to="">
+                                  <h3>
+                                    Sony - DualShock 4 Wireless Controller for
+                                    Sony PlayStation 4
+                                  </h3>
+                                </Link>
+                              </div>
+                              <div className="qty_price">
+                                <span>1 x $2000</span>
+                              </div>
+                            </div>
+                            <div className="close">
+                              <CloseOutlinedIcon className="icon" />
+                            </div>
+                          </div>
+                        </div>
+                        <div className="drawer_btn c_flex">
+                          <button className="view">View cart</button>
+                          <button className="c_flex checkout">
+                            <CheckCircleOutlineOutlinedIcon className="icon" />
+                            <span>Checkout</span>
+                          </button>
+                        </div>
+                      </div>
+                    </Menu>
+                  </React.Fragment>
+                </div>
               </div>
             </div>
           </div>

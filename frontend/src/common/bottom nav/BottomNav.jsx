@@ -53,7 +53,7 @@ function BottomNav() {
           />
           <BottomNavigationAction
             disableRipple
-            className="menus"
+            className="menus_contact"
             label="Contact"
             icon={<ContactMenu />}
           />

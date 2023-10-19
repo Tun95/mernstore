@@ -21,6 +21,7 @@ function ReviewList() {
     setDisplayText(text);
     handleClose();
   };
+  
   //INFO
   const [anchor, setAnchor] = React.useState(null);
   const openInfo = Boolean(anchor);
