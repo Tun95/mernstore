@@ -80,8 +80,6 @@ const StyledMenu = styled((props) => (
 }));
 
 function Navbar() {
-  const navbar = document.querySelector(".navBar");
-
   const navigate = useNavigate();
 
   let storeRef = useRef(null);
@@ -125,15 +123,6 @@ function Navbar() {
     }
 
     navigate(`/store?category=${category}`);
-  };
-
-  const handleOpen = () => {
-    if (!userInfo) {
-      toast.error("You need to login first", { position: "bottom-center" });
-      navigate(`/login?redirect=/application`);
-    } else {
-      navigate(`/application`);
-    }
   };
 
   //INFO
@@ -408,11 +397,17 @@ function Navbar() {
                   <Link to="/compare" className="l_flex">
                     <EqualizerIcon className="icon" />
                   </Link>
+                  <span className="badge ">
+                    <span className="badge_count_num l_flex">0</span>
+                  </span>
                 </Tooltip>
                 <Tooltip title="View wish list" className="view">
                   <Link to="/wish-list" className="l_flex">
                     <FavoriteBorderIcon className="icon" />
                   </Link>
+                  <span className="badge ">
+                    <span className="badge_count_num l_flex">0</span>
+                  </span>
                 </Tooltip>
                 <div className="user">
                   {" "}
