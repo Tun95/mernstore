@@ -146,6 +146,10 @@
       height: 75vh;
     }
     /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+    @media screen and (max-width: 450px) {
+      height: 65vh;
+    }
+    /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
     @media screen and (max-width: 400px) {
       min-width: 150px;
     }
