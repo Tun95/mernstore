@@ -1,5 +1,8 @@
 footer {
   background-color: var(--color-black);
+  .container {
+    overflow: hidden;
+  }
   h4 {
     margin-bottom: 10px;
   }
