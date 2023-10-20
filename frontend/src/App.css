@@ -376,7 +376,6 @@ select.input-error {
   border-color: var(--color-primary);
 }
 
-/*----- form container -------*/
 
 .paidAt {
   color: var(--color-tab);
@@ -414,7 +413,6 @@ select.input-error {
   border: 1px dotted var(--color-rating);
 }
 
-/*----- whatsapp btn -------*/
 
 /*----- Resolutions -------*/
 /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
@@ -424,9 +422,3 @@ select.input-error {
   }
 }
 
-@media screen and (max-width: 320px) {
-  .product-content .product .price .a_flex {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-}
