@@ -96,6 +96,9 @@
       @media screen and (max-width: 450px) {
         .card_content {
           min-width: 220px;
+          .remove {
+            margin-bottom: 5px;
+          }
         }
         gap: 15px;
       }
@@ -106,6 +109,11 @@
         }
         gap: 5px;
       }
+      /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+      @media screen and (max-width: 360px) {
+        position: relative;
+        right: 10px;
+      }
     }
   }
 
@@ -115,6 +123,10 @@
     position: sticky;
     left: 0;
     z-index: 1;
+    /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+    @media screen and (max-width: 400px) {
+      width: 150px;
+    }
   }
   .compare_btn_list {
     display: flex;
@@ -132,6 +144,10 @@
     /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
     @media screen and (max-width: 1200px) {
       height: 75vh;
+    }
+    /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+    @media screen and (max-width: 400px) {
+      min-width: 150px;
     }
   }
   .table {
@@ -168,9 +184,16 @@
           width: 230px;
         }
         /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+        @media screen and (max-width: 400px) {
+        }
+        /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
         @media screen and (max-width: 375px) {
           width: 200px;
         }
+        /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+        // @media screen and (max-width: 360px) {
+        //   width: 180px;
+        // }
       }
     }
   }
