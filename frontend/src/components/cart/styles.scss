@@ -165,9 +165,7 @@
       @media screen and (max-width: 765px) {
         display: block;
         border: 1px solid var(--color-border);
-        tr {
-          padding: 10px;
-        }
+
         thead,
         th,
         tr,
@@ -181,6 +179,10 @@
         tbody {
           .small_device {
             display: block;
+          }
+          td {
+            padding: 10px;
+            border-bottom: 1px solid var(--color-border);
           }
         }
       }
