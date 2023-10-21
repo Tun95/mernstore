@@ -252,16 +252,10 @@
           width: 100%;
         }
         thead {
-          position: relative;
-          right: 10px;
+          width: 100%;
           th {
-            margin-left: 0;
-            padding-left: 0;
+            text-align: left;
             font-size: 13px;
-          }
-          th:nth-child(1) {
-            position: relative;
-            right: 10px;
           }
         }
         th,
@@ -299,18 +293,102 @@
   @media (max-width: 400px) {
     width: 100%;
     .shipping {
-      .table {
-        thead {
-          right: 0px !important;
-          th:nth-child(1) {
-            right: 0px !important;
-          }
-        }
-      }
       .shipping_btn {
         background: transparent;
         button {
           width: 100%;
+        }
+      }
+    }
+  }
+}
+.cart_discount_modal {
+  .content {
+    .table {
+      table {
+        td,
+        th {
+          border: 1px solid var(--color-border);
+          padding: 10px !important;
+        }
+        .qty {
+          text-align: center;
+        }
+      }
+    }
+  }
+}
+.calculate_shipping_modal {
+  .over_flow {
+    overflow-y: scroll;
+  }
+  .inner_form,
+  .details {
+    padding: 10px 20px;
+    padding-top: 20px;
+  }
+  .inner_form {
+    .form-group {
+      gap: 40px;
+      margin-bottom: 15px;
+      label {
+        font-weight: 300;
+        font-size: 14px;
+      }
+      input {
+        border: 1px solid var(--color-light-gray);
+        padding: 8px;
+        width: 310px;
+        border-radius: 5px;
+      }
+      .select_styles {
+        width: 310px;
+        padding: 8px;
+        border-radius: 5px;
+      }
+      @media (max-width: 500px) {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+        input,
+        .select_styles {
+          width: 100%;
+        }
+      }
+    }
+  }
+  .details {
+    .header {
+      h3 {
+        color: var(--color-light-gray);
+        font-size: 16px;
+      }
+      h4 {
+        font-size: 15px;
+      }
+    }
+    .list {
+      margin-top: 5px;
+      li {
+        font-size: 14px;
+      }
+    }
+    .shipping_method {
+      margin: 5px 0px;
+      .custom {
+        input {
+          margin-right: 5px;
+        }
+        p {
+          font-weight: 400;
+          font-size: 14px;
+          color: var(--color-black);
+        }
+      }
+      .total {
+        margin-top: 5px;
+        h5 {
+          margin-right: 5px;
         }
       }
     }

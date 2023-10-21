@@ -23,6 +23,7 @@ import {
 } from "../schemas/Index";
 import { Rating } from "@mui/material";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
+import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 
 //MAP MODAL
 export function LocationModal() {
@@ -801,7 +802,7 @@ export function CommentModal() {
   );
 }
 
-//SHIPPING MODAL
+//SHIPPING METHOD MODAL
 export function ShippingModal() {
   //SHIPPING MODAL
   const [openShipping, setOpenShipping] = React.useState(false);
@@ -870,6 +871,212 @@ export function ShippingModal() {
             <div className="shipping_btn">
               <button onClick={handleCloseShipping}>Close</button>
             </div>
+          </div>
+        </Box>
+      </Modal>
+    </>
+  );
+}
+
+//DISCOUNT MODAL
+export function CartDiscountModal() {
+  //DISCOUNT MODAL
+  const [openDiscount, setOpenDiscount] = React.useState(false);
+  const handleOpenDiscount = () => setOpenDiscount(true);
+  const handleCloseDiscount = () => setOpenDiscount(false);
+
+  //============
+  //DISCOUNT HANDLER
+  //============
+  const handleSubmit = (values) => {
+    // Handle form submission here
+    console.log(values);
+  };
+  return (
+    <>
+      <Button
+        disableRipple
+        onClick={handleOpenDiscount}
+        className="button-text a_flex"
+      >
+        <small>Discount</small>
+      </Button>
+      <Modal
+        open={openDiscount}
+        onClose={handleCloseDiscount}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="customer_call  shipping_modal cart_discount_modal">
+          <div className="call_header c_flex">
+            <span>Discount</span>
+            <CloseIcon onClick={handleCloseDiscount} className="call_icon" />
+          </div>
+          <div className="shipping">
+            <div className="content">
+              <div className="table">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Price</th>
+                      <th>Quantity</th>
+                      <th>Discount</th>
+                      <th>Subtotal</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>$1,489.00</td>
+                      <td className="qty">1</td>
+                      <td>$893.40</td>
+                      <td>$595.60</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </Box>
+      </Modal>
+    </>
+  );
+}
+
+//CALCULATE SHIPPING MODAL
+const initialShippingValues = { city: "", zipCode: "" };
+export function CalculateShippingModals() {
+  //CALCULATE MODAL
+  const [openCalculate, setOpenCalculate] = React.useState(false);
+  const handleOpenCalculate = () => setOpenCalculate(true);
+  const handleCloseCalculate = () => setOpenCalculate(false);
+
+  const [selectedCountry, setSelectedCountry] = useState("");
+  const [selectedState, setSelectedState] = useState("");
+
+  //============
+  //CALCULATE HANDLER
+  //============
+  const handleSubmit = (values) => {
+    // Handle form submission here
+    console.log(values);
+  };
+  return (
+    <>
+      <Button
+        disableRipple
+        onClick={handleOpenCalculate}
+        className="button-text a_flex"
+      >
+        <small>Calculate</small>
+      </Button>
+      <Modal
+        open={openCalculate}
+        onClose={handleCloseCalculate}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="customer_call calculate_shipping_modal">
+          <div className="call_header c_flex">
+            <h1>Calculate shipping cost</h1>
+            <CloseIcon onClick={handleCloseCalculate} className="call_icon" />
+          </div>
+          <div className="call">
+            <Formik
+              initialValues={initialShippingValues}
+              onSubmit={handleSubmit}
+            >
+              {({
+                handleSubmit,
+                handleChange,
+                handleBlur,
+                isSubmitting,
+                values,
+              }) => (
+                <Form action="" onSubmit={handleSubmit} className="over_flow">
+                  <div className="inner_form">
+                    <div className="form-group c_flex">
+                      <label htmlFor="country">
+                        Country: <span className="red">*</span>
+                      </label>
+                      <CountryDropdown
+                        name="country"
+                        value={selectedCountry} // Use selectedCountry state
+                        onChange={(val) => setSelectedCountry(val)} // Update selectedCountry state
+                        onBlur={handleBlur}
+                        className="select_styles"
+                      />
+                    </div>
+                    <div className="form-group c_flex">
+                      <label htmlFor="state">State/Province:</label>
+                      <RegionDropdown
+                        country={selectedCountry} // Use selectedCountry state
+                        name="state"
+                        value={selectedState} // Use selectedState state
+                        onChange={(val) => setSelectedState(val)} // Update selectedState state
+                        onBlur={handleBlur}
+                        className="select_styles"
+                      />
+                    </div>
+                    <div className="form-group c_flex">
+                      <label htmlFor="city">City:</label>
+                      <Field
+                        name="city"
+                        type="city"
+                        value={values.city}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        id="city"
+                        placeholder="City"
+                      />
+                    </div>
+                    <div className="form-group c_flex">
+                      <label htmlFor="zipCode">ZipCode:</label>
+                      <Field
+                        name="zipCode"
+                        type="zipCode"
+                        value={values.zipCode}
+                        onChange={handleChange}
+                        onBlur={handleBlur}
+                        id="zipCode"
+                        placeholder="Zip Code"
+                      />
+                    </div>
+                  </div>
+                  <div className="details">
+                    <div className="header">
+                      <h3>Select shipping method</h3>
+                      <h4>BestBuy</h4>
+                    </div>
+                    <div className="list">
+                      <ul>
+                        <li>
+                          AB: Apple MacBook Air 13.6" M2 256GB 2022 (MLXW3UA/A)
+                          Space Gray
+                        </li>
+                        <li>
+                          AB: Apple iPhone 14 Pro 128GB Deep Purple (MQ0G3RX/A)
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="shipping_method">
+                      <label htmlFor="custom" className="custom a_flex">
+                        <input type="radio" id="custom" />
+                        <p>Custom shipping method (3-5 days) $25.45</p>
+                      </label>
+                      <div className="total a_flex">
+                        <h5>Total: </h5>
+                        <small>$25.45</small>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="btn call_btn c_flex">
+                    {/* <button>Get rate</button> */}
+                    <button>Recalculate rates</button>
+                    <button>Select shipping method</button>
+                  </div>
+                </Form>
+              )}
+            </Formik>
           </div>
         </Box>
       </Modal>

@@ -616,7 +616,12 @@ function Navbar() {
                           </div>
                         </div>
                         <div className="drawer_btn c_flex">
-                          <button className="view">View cart</button>
+                          <button
+                            className="view"
+                            onClick={() => navigate("/cart")}
+                          >
+                            View cart
+                          </button>
                           <button className="c_flex checkout">
                             <CheckCircleOutlineOutlinedIcon className="icon" />
                             <span>Checkout</span>

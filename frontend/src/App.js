@@ -13,7 +13,6 @@ import LoadingOverlayComponent from "./components/utilities/message loading/Over
 
 import Header from "./common/header/Header";
 import HomeScreen from "./screens/homescreen/HomeScreen";
-import Cart from "./common/cart/Cart";
 import StoreScreen from "./screens/storescreen/StoreScreen";
 import ProductDetailScreen from "./screens/productdetailscreen/ProductDetailScreen";
 import WishlistScreen from "./screens/wishlistscreen/WishlistScreen";
@@ -96,6 +95,7 @@ import BlogDetailScreen from "./screens/blogdetailscreen/BlogDetailscreen";
 import VendorPlanScreen from "./seller/pages/single/vendors plan/VendorPlanScreen";
 import BlogPostListScreen from "./screens/bloglistscreen/BlogPostListScreen";
 import ComparisonScreen from "./screens/comparisonscreen/ComparisonScreen";
+import CartScreen from "./screens/cartscreen/CartScreen";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -174,7 +174,7 @@ function App() {
           <Routes>
             <Route path="*" element={<NotFoundScreen />} />
             <Route path="/" exact element={<HomeScreen />}></Route>
-            <Route path="/cart" element={<Cart />}></Route>
+            <Route path="/cart" element={<CartScreen />}></Route>
             <Route path="/store" element={<StoreScreen />}></Route>
             <Route
               path="/product/:slug"
