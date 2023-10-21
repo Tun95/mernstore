@@ -88,7 +88,6 @@ import Withdrawal from "./admin/pages/single/withdrawal request/Withdrawal";
 import SellerWithdraw from "./seller/pages/single/withrawal request/SellerWithdraw";
 import SellerProductListScreen from "./seller/pages/list/product/SellerProductList";
 import SellerOrderListScreen from "./seller/pages/list/order/SellerOrderList";
-import SellerScreen from "./seller/pages/single/vendor/Seller";
 import VendorListScreen from "./seller/pages/list/vendors/VendorListScreen";
 import CompanyViewScreen from "./seller/pages/single/company view/CompanyView";
 import BlogDetailScreen from "./screens/blogdetailscreen/BlogDetailscreen";
@@ -96,6 +95,7 @@ import VendorPlanScreen from "./seller/pages/single/vendors plan/VendorPlanScree
 import BlogPostListScreen from "./screens/bloglistscreen/BlogPostListScreen";
 import ComparisonScreen from "./screens/comparisonscreen/ComparisonScreen";
 import CartScreen from "./screens/cartscreen/CartScreen";
+import VendorProductScreen from "./seller/pages/single/vendor/VendorScreen";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -188,7 +188,7 @@ function App() {
             {/* VENDOR */}
             <Route
               path="/vendor-products/:id"
-              element={<SellerScreen />}
+              element={<VendorProductScreen />}
             ></Route>
             <Route path="/vendors" element={<VendorListScreen />}></Route>
             <Route path="/company-view" element={<CompanyViewScreen />}></Route>

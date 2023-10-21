@@ -73,7 +73,9 @@ function CompanyViewScreen() {
         <div className="content">
           <div className="header">
             <h2>BestBuy</h2>
-            <Link to="">View vendor products (673 item(s))</Link>
+            <Link to="/vendor-products/:id">
+              View vendor products (673 item(s))
+            </Link>
           </div>
           <div className="about f_flex">
             <div className="img">

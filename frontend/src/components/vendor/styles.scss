@@ -1,0 +1,82 @@
+.vendor_product_screen {
+  width: 100%;
+  .vendor_details {
+    width: 260px;
+    border: 1px solid var(--color-border);
+    padding: 15px;
+    border-radius: 8px;
+    a {
+      color: var(--color-tab);
+      text-decoration: underline;
+      transition: var(--transition);
+      font-size: 18px;
+      font-weight: 500;
+      &:hover {
+        color: var(--color-link-hover);
+      }
+    }
+    .link {
+      color: var(--color-tab);
+      transition: var(--transition);
+      &:hover {
+        color: var(--color-link-hover);
+      }
+    }
+    .img {
+      // width: 200px;
+      img {
+        width: 100%;
+      }
+    }
+    .name {
+      margin: 5px 0px;
+    }
+    .desc_details {
+      p {
+        line-height: 18px;
+        font-size: 14px;
+      }
+    }
+    .btn {
+      margin-top: 10px;
+      button {
+        padding: 10px 15px;
+        border-radius: 20px;
+        cursor: pointer;
+      }
+    }
+    .questions {
+      margin-top: 15px;
+      span {
+        cursor: pointer;
+        .icon {
+          font-size: 18px;
+          margin-right: 4px;
+        }
+        .ask {
+          font-size: 14px;
+        }
+      }
+    }
+  }
+  .top_filter {
+    .header {
+      flex-wrap: wrap;
+    }
+  }
+
+  .vendor_products {
+    gap: 30px;
+    margin-top: 15px;
+    width: 100%;
+    .top_filters_product_list {
+      width: 100%;
+    }
+  }
+  /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+  @media screen and (max-width: 767px) {
+    .vendor_img_details_filters {
+      display: none;
+    }
+  }
+}

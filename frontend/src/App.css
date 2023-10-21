@@ -166,6 +166,7 @@ li {
   border-bottom: 1px solid var(--color-border);
   padding: 5px 0px;
   padding-top: 0px;
+  white-space: nowrap;
 }
 .quick_link a:hover {
   color: var(--color-link-hover);
@@ -376,7 +377,6 @@ select.input-error {
   border-color: var(--color-primary);
 }
 
-
 .paidAt {
   color: var(--color-tab);
   font-weight: 600;
@@ -413,7 +413,6 @@ select.input-error {
   border: 1px dotted var(--color-rating);
 }
 
-
 /*----- Resolutions -------*/
 /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
 @media screen and (max-width: 1300px) {
@@ -421,4 +420,3 @@ select.input-error {
     width: var(--container-width-md);
   }
 }
-

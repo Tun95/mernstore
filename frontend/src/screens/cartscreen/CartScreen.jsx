@@ -29,7 +29,7 @@ function CartScreen() {
               </Link>
             </span>
             <span className="flex_direction a_flex">
-              <Link to="" className="checkout top a_flex">
+              <Link to="" className="checkout checkout_top a_flex">
                 <CheckCircleOutlineOutlinedIcon className="icon" />{" "}
                 <span>Proceed to checkout</span>
               </Link>
