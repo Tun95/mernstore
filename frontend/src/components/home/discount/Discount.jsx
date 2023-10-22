@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DiscountCard from "./DiscountCard";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import data from "../bestseller/data";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -30,6 +30,8 @@ const PrevArrow = (props) => {
 };
 function Discount() {
   const { products } = data;
+
+  const navigate = useNavigate();
 
   //TIMER
   const [targetDate, setTargetDate] = useState("");
@@ -184,10 +186,12 @@ function Discount() {
               </div>
               <div className="btn a_flex">
                 <div className="btn_btn">
-                  <button>More</button>
+                  <button onClick={() => navigate("/promotions/:slug")}>
+                    More
+                  </button>
                 </div>
                 <div className="link">
-                  <Link to="">All promotion</Link>
+                  <Link to="/promotions/:slug">All promotion</Link>
                 </div>
               </div>
             </div>
