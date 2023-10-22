@@ -29,7 +29,7 @@ function CartScreen() {
               </Link>
             </span>
             <span className="flex_direction a_flex">
-              <Link to="" className="checkout checkout_top a_flex">
+              <Link to="/checkout" className="checkout checkout_top a_flex">
                 <CheckCircleOutlineOutlinedIcon className="icon" />{" "}
                 <span>Proceed to checkout</span>
               </Link>
@@ -55,7 +55,7 @@ function CartScreen() {
               </button>
             </span>
             <span className="flex_direction a_flex">
-              <Link to="" className="checkout a_flex">
+              <Link to="/checkout" className="checkout a_flex">
                 <CheckCircleOutlineOutlinedIcon className="icon" />{" "}
                 <span>Proceed to checkout</span>
               </Link>

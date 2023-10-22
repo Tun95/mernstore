@@ -502,8 +502,23 @@ function Navbar() {
                               </form>
                             </div>
                             <div className="reg_login c_flex">
-                              <button className="login">Login</button>
-                              <button>Register</button>
+                              <button
+                                onClick={() => {
+                                  handleCloseUser();
+                                  navigate("/login");
+                                }}
+                                className="login"
+                              >
+                                Login
+                              </button>
+                              <button
+                                onClick={() => {
+                                  handleCloseUser();
+                                  navigate("/register");
+                                }}
+                              >
+                                Register
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -618,11 +633,20 @@ function Navbar() {
                         <div className="drawer_btn c_flex">
                           <button
                             className="view"
-                            onClick={() => navigate("/cart")}
+                            onClick={() => {
+                              handleCloseCart();
+                              navigate("/cart");
+                            }}
                           >
                             View cart
                           </button>
-                          <button className="c_flex checkout">
+                          <button
+                            onClick={() => {
+                              handleCloseCart();
+                              navigate("/checkout");
+                            }}
+                            className="c_flex checkout"
+                          >
                             <CheckCircleOutlineOutlinedIcon className="icon" />
                             <span>Checkout</span>
                           </button>

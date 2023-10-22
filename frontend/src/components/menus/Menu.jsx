@@ -1,11 +1,10 @@
 import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import Drawer from "@mui/material/Drawer";
-import Button from "@mui/material/Button";
 import "./styles.scss";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import controller from "../../assets/bestsellers/controller.webp";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
@@ -88,6 +87,8 @@ export function SearchMenu() {
 
 //CART MENU
 export function CartMenu() {
+  const navigate = useNavigate();
+
   const [cartState, setCartState] = React.useState({
     bottom: false,
   });
@@ -148,8 +149,13 @@ export function CartMenu() {
                   </div>
                 </div>
                 <div className="drawer_btn c_flex">
-                  <button className="view">View cart</button>
-                  <button className="c_flex checkout">
+                  <button onClick={() => navigate("/cart")} className="view">
+                    View cart
+                  </button>
+                  <button
+                    onClick={() => navigate("/checkout")}
+                    className="c_flex checkout"
+                  >
                     <CheckCircleOutlineOutlinedIcon className="icon" />
                     <span>Checkout</span>
                   </button>

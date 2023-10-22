@@ -64,10 +64,6 @@ import OurCareScreen from "./screens/aboutscreen/ourcarescreen/OurCareScreen";
 import BulkScreen from "./screens/customercarescreen/bulkscreen/BulkScreen";
 import BuyInfoScreen from "./screens/customercarescreen/buyinfoscreen/BuyInfoScreen";
 import ReturnScreen from "./screens/customercarescreen/returnscreen/ReturnScreen";
-import ShippingScreen from "./screens/checkoutscreen/shippingscreen/ShippingScreen";
-import ConfirmationScreen from "./screens/checkoutscreen/confirmation screen/ConfirmationScreen";
-import PaymentScreen from "./screens/checkoutscreen/paymentscreen/PaymentScreen";
-import FinishScreen from "./screens/checkoutscreen/finishscreen/FinishScreen";
 import OrderHistoryScreen from "./screens/orderscreen/orderhistoryscren/OrderHistoryScreen";
 import OrderDetailScreen from "./screens/orderscreen/orderdetailscreen/OrderDetailScreen";
 import OrderlistScreen from "./admin/pages/list/order/main/OrderlistScreen";
@@ -98,6 +94,7 @@ import CartScreen from "./screens/cartscreen/CartScreen";
 import VendorProductScreen from "./seller/pages/single/vendor/VendorScreen";
 import PromotionListScreen from "./screens/promotionscreen/promotionlist/PromotionListScreen";
 import PromotionDetailScreen from "./screens/promotionscreen/promotiondetails/PromotionDetailScreen";
+import CheckoutScreen from "./screens/checkoutscreen/CheckoutScreen";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -219,7 +216,6 @@ function App() {
               path="/promotions/:slug"
               element={<PromotionDetailScreen />}
             ></Route>
-
             {/* PROMOTION */}
 
             {/* USER */}
@@ -292,28 +288,11 @@ function App() {
               }
             ></Route>
             <Route path="/unsubscribe" element={<UnSubscribeScreen />}></Route>
+            {/* VALIDATION */}
 
-            <Route
-              path="/billing"
-              element={
-                <ProtectedRoute>
-                  <ShippingScreen />
-                </ProtectedRoute>
-              }
-            ></Route>
-            <Route
-              path="/confirmation"
-              element={<ConfirmationScreen />}
-            ></Route>
-            <Route
-              path="/payment/:id"
-              element={
-                <ProtectedRoute>
-                  <PaymentScreen />
-                </ProtectedRoute>
-              }
-            ></Route>
-            <Route path="/finish" element={<FinishScreen />}></Route>
+            {/* CHECKOUT */}
+            <Route path="/checkout" element={<CheckoutScreen />}></Route>
+            {/* CHECKOUT */}
 
             {/* ADMIN ROUTES */}
             <Route
