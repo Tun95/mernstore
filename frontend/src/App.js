@@ -96,6 +96,8 @@ import BlogPostListScreen from "./screens/bloglistscreen/BlogPostListScreen";
 import ComparisonScreen from "./screens/comparisonscreen/ComparisonScreen";
 import CartScreen from "./screens/cartscreen/CartScreen";
 import VendorProductScreen from "./seller/pages/single/vendor/VendorScreen";
+import PromotionListScreen from "./screens/promotionscreen/promotionlist/PromotionListScreen";
+import PromotionDetailScreen from "./screens/promotionscreen/promotiondetails/PromotionDetailScreen";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -209,7 +211,18 @@ function App() {
             {/* BLOG */}
             <Route path="/blog" element={<BlogPostListScreen />}></Route>
             <Route path="/blog-detail" element={<BlogDetailScreen />}></Route>
+            {/* BLOG */}
 
+            {/* PROMOTION */}
+            <Route path="/promotions" element={<PromotionListScreen />}></Route>
+            <Route
+              path="/promotions/:slug"
+              element={<PromotionDetailScreen />}
+            ></Route>
+
+            {/* PROMOTION */}
+
+            {/* USER */}
             <Route
               path="/user-profile/:id"
               element={

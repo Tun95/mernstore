@@ -9,7 +9,7 @@ function truncateText(text, maxWords) {
   }
   return words.slice(0, maxWords).join(" ") + " ...";
 }
-function PromotionCard({ item, index }) {
+function PromotionList({ item, index }) {
   //==============
   // TEXT TRUNCATE
   //==============
@@ -36,7 +36,7 @@ function PromotionCard({ item, index }) {
     return () => window.removeEventListener("resize", handleResize);
   }, [item.name]);
   return (
-    <div className="promotion_card" key={index}>
+    <div className="promotion_card cards" key={index}>
       <div className="content">
         <div className="img">
           <Link to="/promotions/:slug">
@@ -63,4 +63,4 @@ function PromotionCard({ item, index }) {
   );
 }
 
-export default PromotionCard;
+export default PromotionList;

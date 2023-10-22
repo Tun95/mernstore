@@ -1,0 +1,34 @@
+.promotions_list_screen {
+  background: transparent;
+  margin-top: 10px;
+  padding: 0;
+  .content {
+    .main_header {
+      margin-top: 10px;
+      h2 {
+        color: var(--color-black);
+      }
+    }
+    .product_list {
+      .product_card {
+        grid-template-columns: repeat(4, 1fr);
+        .content {
+          border: 1px solid var(--color-border);
+          padding: 0;
+        }
+        /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+        @media screen and (max-width: 900px) {
+          grid-template-columns: repeat(3, 1fr);
+        }
+        /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+        @media screen and (max-width: 625px) {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+        @media screen and (max-width: 385px) {
+          grid-template-columns: 1fr;
+        }
+      }
+    }
+  }
+}

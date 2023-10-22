@@ -1,0 +1,56 @@
+.promotion_detail_screen {
+  .promotions_main {
+    gap: 30px;
+    .filter_promotion {
+      .side_filter {
+        width: 260px;
+      }
+    }
+    .promotion_detail {
+      margin-top: 20px;
+      display: grid;
+      grid-template-columns: 50% 50%;
+      gap: 20px;
+      .img {
+        img {
+          width: 100%;
+          border-radius: 10px;
+        }
+      }
+      .details {
+        .name {
+          h2 {
+            line-height: 26px;
+          }
+        }
+        .short_name {
+          margin-top: 20px;
+          margin-bottom: 10px;
+        }
+        .description {
+          p {
+            font-size: 14px;
+          }
+        }
+        .time_period {
+          margin-top: 10px;
+        }
+        .period {
+          color: var(--color-gray);
+        }
+      }
+    }
+    /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+    @media screen and (max-width: 975px) {
+      .promotion_detail {
+        grid-template-columns: 100%;
+      }
+    }
+    /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+    @media screen and (max-width: 767px) {
+      .filter_promotion {
+        display: none;
+      }
+    }
+  }
+}

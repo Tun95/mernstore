@@ -114,7 +114,7 @@ function Footer() {
                     <Link to="/how-to-buy">How to Buy </Link>
                   </li>
                   <li>
-                    <Link to="/track-shipment">Track Your Order </Link>
+                    <Link to="/orders">About Your Order </Link>
                   </li>
                   <li>
                     <Link to="/bulk-purchases">
@@ -235,7 +235,7 @@ function Footer() {
                     <Link to="/how-to-buy">How to Buy </Link>
                   </li>
                   <li>
-                    <Link to="/track-shipment">Track Your Order </Link>
+                    <Link to="/orders">About Your Order </Link>
                   </li>
                   <li>
                     <Link to="/bulk-purchases">

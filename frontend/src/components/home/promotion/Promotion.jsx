@@ -5,6 +5,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import Slider from "react-slick";
 import "./styles.scss";
 import data from "./data";
+import { useNavigate } from "react-router-dom";
 
 const NextArrow = (props) => {
   const { onClick } = props;
@@ -29,6 +30,8 @@ const PrevArrow = (props) => {
 };
 function Promotion() {
   const { promotions } = data;
+
+  const navigate = useNavigate();
 
   //===========
   //REACT SLICK
@@ -88,7 +91,9 @@ function Promotion() {
             </Slider>
           </div>
           <div className="btn">
-            <button>All promotions</button>
+            <button onClick={() => navigate("/promotions")}>
+              All promotions
+            </button>
           </div>
         </div>
       </div>
