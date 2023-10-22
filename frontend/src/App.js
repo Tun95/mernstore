@@ -239,22 +239,8 @@ function App() {
                 </ProtectedRoute>
               }
             ></Route>
-            <Route
-              path="/wish-list"
-              element={
-                <ProtectedRoute>
-                  <WishlistScreen />
-                </ProtectedRoute>
-              }
-            ></Route>
-            <Route
-              path="/compare"
-              element={
-                <ProtectedRoute>
-                  <ComparisonScreen />
-                </ProtectedRoute>
-              }
-            ></Route>
+            <Route path="/wish-list" element={<WishlistScreen />}></Route>
+            <Route path="/compare" element={<ComparisonScreen />}></Route>
             <Route
               path="/orders"
               element={
