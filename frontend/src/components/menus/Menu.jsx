@@ -149,11 +149,20 @@ export function CartMenu() {
                   </div>
                 </div>
                 <div className="drawer_btn c_flex">
-                  <button onClick={() => navigate("/cart")} className="view">
+                  <button
+                    onClick={() => {
+                      navigate("/cart");
+                      toggleDrawer(anchor, false);
+                    }}
+                    className="view"
+                  >
                     View cart
                   </button>
                   <button
-                    onClick={() => navigate("/checkout")}
+                    onClick={() => {
+                      toggleDrawer(anchor, false);
+                      navigate("/checkout");
+                    }}
                     className="c_flex checkout"
                   >
                     <CheckCircleOutlineOutlinedIcon className="icon" />
@@ -171,6 +180,8 @@ export function CartMenu() {
 
 //USER MENU
 export function UserMenu() {
+  const navigate = useNavigate();
+
   const [userState, setUserState] = React.useState({
     bottom: false,
   });
@@ -211,13 +222,13 @@ export function UserMenu() {
                 <div className="content">
                   <ul className="list">
                     <li>
-                      <Link to="">Orders</Link>
+                      <Link to="/orders">Orders</Link>
                     </li>
                     <li>
-                      <Link to="">Comparison list</Link>
+                      <Link to="/compare">Comparison list</Link>
                     </li>
                     <li>
-                      <Link to="">Wish list</Link>
+                      <Link to="/wish-list">Wish list</Link>
                     </li>
                   </ul>
                   <div className="track">
@@ -231,8 +242,15 @@ export function UserMenu() {
                   </div>
                 </div>
                 <div className="drawer_btn c_flex">
-                  <button className="view">Sign in</button>
-                  <button className="checkout">Register</button>
+                  <button onClick={() => navigate("/login")} className="view">
+                    Sign in
+                  </button>
+                  <button
+                    onClick={() => navigate("/register")}
+                    className="checkout"
+                  >
+                    Register
+                  </button>
                 </div>
               </div>
             </div>
@@ -242,6 +260,8 @@ export function UserMenu() {
     </div>
   );
 }
+
+//CONTACT MENU
 export function ContactMenu() {
   const [contactState, setContactState] = React.useState({
     bottom: false,
