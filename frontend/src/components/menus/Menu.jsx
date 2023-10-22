@@ -4,7 +4,7 @@ import Drawer from "@mui/material/Drawer";
 import "./styles.scss";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import controller from "../../assets/bestsellers/controller.webp";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
@@ -87,7 +87,6 @@ export function SearchMenu() {
 
 //CART MENU
 export function CartMenu() {
-  const navigate = useNavigate();
 
   const [cartState, setCartState] = React.useState({
     bottom: false,
@@ -149,25 +148,21 @@ export function CartMenu() {
                   </div>
                 </div>
                 <div className="drawer_btn c_flex">
-                  <button
-                    onClick={() => {
-                      navigate("/cart");
-                      toggleDrawer(anchor, false);
-                    }}
+                  <Link
+                    onClick={toggleDrawer(anchor, false)}
+                    to="/cart"
                     className="view"
                   >
                     View cart
-                  </button>
-                  <button
-                    onClick={() => {
-                      toggleDrawer(anchor, false);
-                      navigate("/checkout");
-                    }}
+                  </Link>
+                  <Link
+                    onClick={toggleDrawer(anchor, false)}
+                    to="/checkout"
                     className="c_flex checkout"
                   >
                     <CheckCircleOutlineOutlinedIcon className="icon" />
                     <span>Checkout</span>
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -180,8 +175,6 @@ export function CartMenu() {
 
 //USER MENU
 export function UserMenu() {
-  const navigate = useNavigate();
-
   const [userState, setUserState] = React.useState({
     bottom: false,
   });
@@ -222,13 +215,22 @@ export function UserMenu() {
                 <div className="content">
                   <ul className="list">
                     <li>
-                      <Link to="/orders">Orders</Link>
+                      <Link onClick={toggleDrawer(anchor, false)} to="/orders">
+                        Orders
+                      </Link>
                     </li>
                     <li>
-                      <Link to="/compare">Comparison list</Link>
+                      <Link onClick={toggleDrawer(anchor, false)} to="/compare">
+                        Comparison list
+                      </Link>
                     </li>
                     <li>
-                      <Link to="/wish-list">Wish list</Link>
+                      <Link
+                        onClick={toggleDrawer(anchor, false)}
+                        to="/wish-list"
+                      >
+                        Wish list
+                      </Link>
                     </li>
                   </ul>
                   <div className="track">
@@ -242,15 +244,20 @@ export function UserMenu() {
                   </div>
                 </div>
                 <div className="drawer_btn c_flex">
-                  <button onClick={() => navigate("/login")} className="view">
+                  <Link
+                    onClick={toggleDrawer(anchor, false)}
+                    to="/login"
+                    className="view"
+                  >
                     Sign in
-                  </button>
-                  <button
-                    onClick={() => navigate("/register")}
+                  </Link>
+                  <Link
+                    onClick={toggleDrawer(anchor, false)}
+                    to="/register"
                     className="checkout"
                   >
                     Register
-                  </button>
+                  </Link>
                 </div>
               </div>
             </div>

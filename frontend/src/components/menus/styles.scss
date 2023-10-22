@@ -31,12 +31,15 @@
   .drawer_btn {
     background-color: var(--color-light);
     padding: 15px 10px;
-    button {
+    a {
       height: 35px;
       padding: 0px 15px;
       color: var(--color-white);
       border-radius: 20px;
       cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
     .view {
       background-color: var(--color-black);
