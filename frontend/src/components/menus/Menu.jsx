@@ -13,6 +13,8 @@ import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
 import { Divider } from "@mui/material";
 import { CallRequestModals } from "../modals/Modals";
 
+
+
 //SEARCH MENU
 export function SearchMenu() {
   const [searchState, setSearchState] = React.useState({
