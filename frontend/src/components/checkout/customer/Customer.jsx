@@ -16,10 +16,25 @@ function Customer() {
     {
       name: "AB: Apple iPhone 14 Pro 128GB Deep Purple (MQ0G3RX/A)",
       img: airpod,
+      features: [
+        { name: "RAM", subFeatures: ["8 GB DDR", "16 GB DDR", "32 GB DDR"] },
+        { name: "Processor Count", subFeatures: ["1", "2"] },
+        {
+          name: "Processor",
+          subFeatures: [
+            "2.7 GHz Intel Core i5",
+            "2.7 GHz Intel Core i7",
+            "3.1 GHz Intel Core i5",
+          ],
+        },
+      ],
+      seller: "Newegg",
     },
     {
       name: `AB: Apple MacBook Air 13.6" M2 256GB 2022 (MLXW3UA/A) Space Gray`,
       img: controller,
+      features: [],
+      seller: "BestBuy",
     },
   ];
   return (
@@ -126,6 +141,21 @@ function Customer() {
                             </div>
                             <div className="code">
                               <small>Code: MLXW3UA/A</small>
+                            </div>
+                            <div className="features_box">
+                              {item.features.map((feature, featureIndex) => (
+                                <div
+                                  key={featureIndex}
+                                  className="features a_flex"
+                                >
+                                  <small>{feature.name}: </small>
+                                  <small>
+                                    <strong>
+                                      &#160; {feature.subFeatures[0]}
+                                    </strong>
+                                  </small>
+                                </div>
+                              ))}
                             </div>
                             <div className="vendor">
                               <small>

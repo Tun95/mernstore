@@ -643,11 +643,13 @@ productRouter.get(
   })
 );
 
-//CATEGORIES
+//************
+// CATEGORIES
+//************
 productRouter.get(
   "/categories",
   expressAsyncHandler(async (req, res) => {
-    const categories = await Product.find(req.params.category);
+    const categories = await Product.distinct("category");
     res.send(categories);
   })
 );

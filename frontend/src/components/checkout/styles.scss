@@ -137,6 +137,9 @@
                         line-height: 10px;
                       }
                     }
+                    .features_box {
+                      padding: 10px 0px;
+                    }
                   }
                   .qty_price_amount {
                     small {
@@ -163,6 +166,81 @@
               border: none;
             }
           }
+        }
+      }
+    }
+  }
+
+  .delivery {
+    .main_content {
+      .shipping_methods {
+        .header {
+          margin: 0;
+        }
+        .methods {
+          .head {
+            color: var(--color-gray);
+            margin: 10px 0px;
+            margin-bottom: 15px;
+          }
+          .method_box {
+            .box {
+              border: 2px solid var(--color-link-hover);
+              box-shadow: 0 0 10px rgba(37, 33, 250, 0.2);
+              border-radius: 10px;
+              .box_head {
+                border: 1px solid var(--color-link-hover);
+                border-radius: 8px 8px 10px 10px;
+                padding: 15px;
+                background-color: #e4f1ff;
+                cursor: pointer;
+                small {
+                  color: var(--color-light-gray);
+                }
+                input {
+                  width: 25px;
+                  height: 25px;
+                  cursor: pointer;
+                }
+                &:hover {
+                  h4 {
+                    transition: var(--transition);
+                    color: var(--color-link-hover);
+                  }
+                }
+              }
+              .text {
+                padding: 15px;
+                p {
+                  font-size: 14px;
+                  line-height: 28px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .payment {
+    .main_content {
+      .payment_methods {
+        .methods {
+          width: 350px;
+          padding: 6px;
+          height: 45px;
+          background-color: var(--color-white);
+          border: 1px solid var(--color-border);
+          border-radius: 5px;
+          margin-bottom: 10px;
+          cursor: pointer;
+          input {
+            margin-right: 8px;
+          }
+        }
+        .methods.active {
+          border: 1px solid var(--color-link-hover);
+          box-shadow: 0 0 10px rgba(37, 33, 250, 0.2);
         }
       }
     }
