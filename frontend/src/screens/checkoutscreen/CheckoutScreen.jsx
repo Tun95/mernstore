@@ -6,6 +6,7 @@ import Customer from "../../components/checkout/customer/Customer";
 import Delivery from "../../components/checkout/delivery/Delivery";
 import Payment from "../../components/checkout/payment/Payment";
 import Notes from "../../components/checkout/notes/Notes";
+import { Divider } from "@mui/material";
 
 function CheckoutScreen() {
   return (
@@ -15,14 +16,14 @@ function CheckoutScreen() {
       </Helmet>
       <div className="container">
         <div className="content">
-          <div className="productTitleContainer ">
-            <h2 className="uppercase">Checkout</h2>
-          </div>
-          <div className="d_flex">
+          <div className="d_grid">
             <div>
               <Customer />
+              <Divider />
               <Delivery />
+              <Divider />
               <Payment />
+              <Divider />
               <Notes />
             </div>
             <div>
