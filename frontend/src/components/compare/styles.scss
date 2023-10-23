@@ -123,6 +123,36 @@
     position: sticky;
     left: 0;
     z-index: 1;
+    white-space: nowrap;
+    span {
+      width: auto;
+      .icon {
+        font-size: 14px;
+        background-color: var(--color-light-gray);
+        color: var(--color-white);
+        border-radius: 50%;
+        margin-left: 5px;
+        display: none;
+        cursor: pointer;
+        &:hover {
+          transition: var(--transition);
+          background-color: var(--color-blue);
+        }
+      }
+    }
+    &:hover {
+      .icon {
+        display: flex;
+      }
+    }
+    /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+    @media screen and (max-width: 745px) {
+      span {
+        .icon {
+          display: flex;
+        }
+      }
+    }
     /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
     @media screen and (max-width: 400px) {
       width: 150px;
