@@ -34,14 +34,38 @@
 /* ERROR 404 */
 .page_not_found {
   width: 100%;
-  min-height: 600px;
+  min-height: 500px;
+  justify-content: flex-start;
+  position: relative;
+  left: 5%;
 }
-.page_not_found .found_text {
+.page_not_found .text {
+  gap: 120px;
+}
+.page_not_found .header {
   text-align: center;
-  margin-left: 10px;
+  color: var(--color-primary);
+  line-height: 70px;
+}
+.page_not_found .found_text p {
+  margin: 30px 0px;
+  color: var(--color-light-gray);
+  font-size: 14px;
 }
 .page_not_found .head_size {
-  font-size: 130px;
+  font-size: 80px;
+}
+.page_not_found .found_text .link {
+  gap: 25px;
+}
+.page_not_found a {
+  color: var(--color-tab);
+  text-decoration: underline;
+  font-size: 13px;
+}
+.page_not_found a:hover {
+  transition: var(--transition);
+  color: var(--color-link-hover);
 }
 
 /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
@@ -79,8 +103,21 @@
 }
 
 /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
-@media screen and (max-width: 480px) {
-  .page_not_found .a_flex {
+@media screen and (max-width: 945px) {
+  .page_not_found {
+    left: auto;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+  }
+  .page_not_found .text {
     flex-direction: column;
+    gap: 10px;
+    text-align: center;
+  }
+  .page_not_found .link {
+    display: flex;
+    width: 100%;
+    justify-content: center;
   }
 }

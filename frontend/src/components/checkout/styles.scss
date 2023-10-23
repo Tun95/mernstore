@@ -1,6 +1,7 @@
 .checkout_screen {
   .customer {
     margin-top: 30px;
+    margin-bottom: 20px;
     width: 100%;
     .productTitleContainer {
       margin-bottom: 10px;
@@ -114,7 +115,7 @@
                 .main_ul {
                   gap: 20px;
                   .close_icon {
-                    margin-top: 26px;
+                    margin-top: 28px;
                     .icon_btn {
                       .icon {
                         background-color: var(--color-light-gray);
@@ -139,7 +140,7 @@
                   }
                   .qty_price_amount {
                     small {
-                      margin-bottom: 8px;
+                      margin-bottom: 10px;
                       color: var(--color-gray);
                     }
                     span,
@@ -161,6 +162,32 @@
             &:last-child {
               border: none;
             }
+          }
+        }
+      }
+    }
+  }
+  .customer_notes {
+    .content {
+      .number {
+        span {
+          background: transparent;
+        }
+      }
+      .main_content {
+        .header {
+          h2 {
+            color: var(--color-black);
+          }
+        }
+        .text {
+          .textarea {
+            border: 1px solid var(--color-border);
+            width: 100%;
+            padding: 10px;
+            min-height: 150px;
+            resize: vertical;
+            border-radius: 10px;
           }
         }
       }
