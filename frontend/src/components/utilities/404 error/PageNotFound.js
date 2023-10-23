@@ -1,9 +1,9 @@
 import React from "react";
-import img from "../../../assets/notImg.png";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function NotFoundScreen() {
+  const navigate = useNavigate();
   return (
     <div className="container">
       <Helmet>
@@ -22,7 +22,9 @@ function NotFoundScreen() {
             <p>Error code: Page Not Found</p>
             <div className="link a_flex">
               <Link to="/">Go to the homepage</Link>
-              <Link>Go back</Link>
+              <Link to="" onClick={() => navigate(-1)}>
+                Go back
+              </Link>
             </div>
           </span>
         </div>
