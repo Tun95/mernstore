@@ -1,7 +1,9 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../../../context/Context";
+import { useNavigate } from "react-router-dom";
 
 function Summary() {
+  const navigate = useNavigate();
   const { convertCurrency } = useContext(Context);
 
   const [details, setDetails] = useState({
@@ -76,7 +78,10 @@ function Summary() {
           </div>
         </div>
         <div className="btn p_flex">
-          <button className="l_flex">
+          <button
+            className="l_flex"
+            onClick={() => navigate("/order-details/:id")}
+          >
             <span>
               <span className="place">Place order</span>
               <span>({convertCurrency(1901.97)})</span>
