@@ -56,4 +56,11 @@
       }
     }
   }
+  .customer_notes {
+    .text {
+      .textarea {
+        resize: none !important;
+      }
+    }
+  }
 }
