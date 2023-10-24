@@ -1,12 +1,9 @@
-import React, { useContext, useRef } from "react";
+import React, { useContext } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { styled } from "@mui/material/styles";
 import { Context } from "../../context/Context";
-import { toast } from "react-toastify";
-import GridViewIcon from "@mui/icons-material/GridView";
 import SideBar from "../side bar/SideBar";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
@@ -20,70 +17,14 @@ import { Box, Divider } from "@mui/material";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
 import { CallRequestModals } from "../../components/modals/Modals";
-import { SearchMenu } from "../../components/menus/Menu";
+import { CategoryMenu, SearchMenu } from "../../components/menus/Menu";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import controller from "../../assets/bestsellers/controller.webp";
-
-const StyledMenu = styled((props) => (
-  <Menu
-    elevation={0}
-    PaperProps={{
-      elevation: 0,
-      sx: {
-        zIndex: 1, // Set a lower z-index value
-        // Other styles...
-      },
-    }}
-    anchorOrigin={{
-      vertical: "bottom",
-      horizontal: "center",
-    }}
-    transformOrigin={{
-      vertical: "top",
-      horizontal: "center",
-    }}
-    {...props}
-  />
-))(({ theme, darkMode }) => ({
-  "& .MuiPaper-root": {
-    borderRadius: 6,
-    marginTop: theme.spacing(3),
-    height: "400px",
-    color:
-      theme.palette.mode === "light"
-        ? "rgb(55, 65, 81)"
-        : theme.palette.grey[300],
-    backgroundColor: darkMode ? "rgb(0,0,0,0.8)" : "",
-    boxShadow:
-      "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
-    "& .MuiMenu-list": {
-      padding: "15px",
-      // margin: "0px 15px",
-    },
-    "& .MuiMenuItem-root": {
-      margin: "5px 0px",
-      color: darkMode ? "#ffffff" : "#2e2e2e",
-      padding: "5px 60px",
-      fontWeight: "500",
-      transition: "all 500ms ease",
-      "& .MuiSvgIcon-root": {
-        fontSize: 16,
-        color: theme.palette.text.secondary,
-        marginRight: theme.spacing(1.5),
-      },
-      "&:hover": {
-        backgroundColor: darkMode ? "#2e2e2e" : "", // Change to the desired hover color
-      },
-    },
-  },
-}));
 
 function Navbar() {
   const navigate = useNavigate();
 
-  let storeRef = useRef(null);
-
-  const { state, dispatch: ctxDispatch, darkMode } = useContext(Context);
+  const { state, dispatch: ctxDispatch } = useContext(Context);
   const { userInfo, categories, settings } = state;
   const { logo } =
     (settings &&
@@ -93,36 +34,6 @@ function Navbar() {
         }))
         .find(() => true)) ||
     {};
-
-  const [anchorEl, setAnchorEl] = React.useState(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleCategoryClick = (event, category) => {
-    event.preventDefault();
-
-    // Close the menu
-    handleClose();
-
-    // Log storeRef and its current value
-    console.log("storeRef:", storeRef.current);
-
-    // Scroll to the "store" section
-    if (storeRef.current) {
-      console.log("Scrolling to:", storeRef.current.offsetTop);
-      window.scrollTo({
-        behavior: "smooth",
-        top: storeRef.current.offsetTop,
-      });
-    }
-
-    navigate(`/store?category=${category}`);
-  };
 
   //CONTACT MENU
   const [anchorEle, setAnchorEle] = React.useState(null);
@@ -192,36 +103,7 @@ function Navbar() {
                   </Link>
                 </div>
                 <div className="category_modal">
-                  <div className="c_flex ctg_btn" onClick={handleClick}>
-                    <GridViewIcon className="align_left" />
-                    <h5>Categories</h5>
-                    <KeyboardArrowDownIcon className="icon" />
-                  </div>
-                  {categories?.length > 0 ? (
-                    <StyledMenu
-                      darkMode={darkMode}
-                      id="demo-customized-menu"
-                      className="demo_customized_menu"
-                      MenuListProps={{
-                        "aria-labelledby": "demo-customized-button",
-                      }}
-                      anchorEl={anchorEl}
-                      open={open}
-                      onClose={handleClose}
-                    >
-                      {categories?.map((c, index) => (
-                        <MenuItem
-                          key={index}
-                          component={Link}
-                          to={`/store?category=${c.category}`}
-                          onClick={(e) => handleCategoryClick(e, c.category)}
-                          disableRipple
-                        >
-                          {c.category}
-                        </MenuItem>
-                      ))}
-                    </StyledMenu>
-                  ) : null}
+                  <CategoryMenu />
                 </div>
               </div>
             </div>
@@ -289,7 +171,7 @@ function Navbar() {
                           display: "block",
                           position: "absolute",
                           top: 0,
-                          right: 24,
+                          right: 28,
                           width: 15,
                           height: 15,
                           bgcolor: "background.paper",
@@ -432,7 +314,7 @@ function Navbar() {
                             display: "block",
                             position: "absolute",
                             top: 0,
-                            right: 24,
+                            right: 26,
                             width: 15,
                             height: 15,
                             bgcolor: "background.paper",

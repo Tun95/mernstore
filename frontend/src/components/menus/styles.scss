@@ -15,6 +15,18 @@
   }
 }
 
+.category_menu {
+  width: 100% !important;
+  height: 500px;
+}
+.category_menu_popover {
+  .popover-inner {
+    width: 100% !important;
+  }
+  .popover {
+  }
+}
+
 .drawers {
   .close_icon {
     cursor: pointer;

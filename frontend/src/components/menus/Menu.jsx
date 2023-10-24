@@ -12,11 +12,17 @@ import CallOutlinedIcon from "@mui/icons-material/CallOutlined";
 import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
 import { Divider } from "@mui/material";
 import { CallRequestModals } from "../modals/Modals";
-import { Button, Popover } from "antd";
+import { Popover } from "antd";
+import GridViewIcon from "@mui/icons-material/GridView";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 //CATEGORY MENU
-const categoryContent = <div></div>;
-export function CategoryMenu() {
+const categoryContent = (
+  <div className="category_menu">
+    <div className="container"></div>
+  </div>
+);
+export function CategoryMenu({ anchor, toggleDrawer }) {
   const [open, setOpen] = useState(false);
   const hide = () => {
     setOpen(false);
@@ -25,15 +31,26 @@ export function CategoryMenu() {
     setOpen(newOpen);
   };
   return (
-    <Popover
-      content={categoryContent}
-      title="Title"
-      trigger="click"
-      open={open}
-      onOpenChange={handleOpenChange}
-    >
-      <Button type="primary">Click me</Button>
-    </Popover>
+    <div className="category_menu_popover ">
+      <Popover
+        content={categoryContent}
+        title="Title"
+        trigger="click"
+        overlayStyle={{
+          // display: "flex",
+          // justifyContent: "center",
+          width: "100%",
+        }}
+        open={open}
+        onOpenChange={handleOpenChange}
+      >
+        <div className="c_flex ctg_btn">
+          <GridViewIcon className="align_left" />
+          <h5>Categories</h5>
+          <KeyboardArrowDownIcon className="icon" />
+        </div>
+      </Popover>
+    </div>
   );
 }
 
