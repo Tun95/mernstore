@@ -172,10 +172,10 @@ function NewProduct() {
           <title>Add New Product</title>
         </Helmet>
         <div className="container">
-          <div className="product_edit">
-            <div className="box_shadow mtb">
+          <div className="product_edit ">
+            <div className=" ">
               <div className="productTitleContainer">
-                <h2 className="productTitle featured uppercase">
+                <h2 className="productTitle light_shadow uppercase">
                   New Product{" "}
                 </h2>
               </div>
@@ -327,7 +327,7 @@ function NewProduct() {
                           </Select>
                         </FormControl>
                         <label htmlFor="brand" className="ccatb-des">
-                          Manufacturer
+                          Brand
                         </label>
                         <FormControl
                           variant="filled"
@@ -372,7 +372,7 @@ function NewProduct() {
                       </div>
                     </div>
                     <div className="productFormRight mtb c_flex">
-                      <div className="productUpload box_shadow">
+                      <div className="productUpload light_shadow">
                         <img
                           src={image || photo}
                           alt=""
@@ -392,7 +392,7 @@ function NewProduct() {
                           style={{ display: "none" }}
                         />
                       </div>
-                      <div className="productUpload box_shadow mtb">
+                      <div className="productUpload light_shadow mtb">
                         <div className="productUploadImg-delete">
                           {images.map((x) => (
                             <div key={x}>

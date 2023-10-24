@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import "../styles/styles.scss";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { Context } from "../../../context/Context";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -212,12 +212,20 @@ function User() {
   };
 
   return (
-    <div className="mtb user_profile_page">
+    <div className=" user_profile_page">
       <div className="container ">
-        <div className="profile  box_shadow">
+        <div className="profile  ">
           <Helmet>
-            <title>Profile</title>
+            <title>User :: {`${user?.lastName} ${user?.firstName}`}</title>
           </Helmet>
+          <div className="quick_link ">
+            <div className="page a_flex">
+              <Link to="/">Home /</Link>
+              <p>
+                &#160;{user?.lastName} {user?.firstName}
+              </p>
+            </div>
+          </div>
           <>
             {loading ? (
               <LoadingBox></LoadingBox>

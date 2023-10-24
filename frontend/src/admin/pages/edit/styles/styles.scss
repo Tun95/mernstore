@@ -1,5 +1,7 @@
 .container {
   .product_edit {
+    // padding: 15px;
+    margin: 10px 0px;
     .c_flex {
       flex-wrap: wrap;
     }
@@ -11,11 +13,20 @@
       border-bottom: 1px solid #6c6c6c;
       width: 100%;
     }
+    .productTitleContainer {
+      .productTitle {
+        padding: 10px;
+        border-radius: 8px;
+      }
+    }
     .productTop {
       gap: 20px;
       .productTopLeft,
       .productTopRight {
         padding: 20px 20px;
+      }
+      .light_shadow {
+        width: 100%;
       }
       .productTopRight {
         .productInfoImg {
@@ -23,6 +34,7 @@
           height: 100px;
           object-fit: cover;
           border-radius: 10px;
+          border: 1px solid var(--color-border);
         }
         .top_right_label {
           font-weight: 600;

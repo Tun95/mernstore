@@ -12,7 +12,6 @@ import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
 import DeleteIcon from "@mui/icons-material/Delete";
 import "../styles/styles.scss";
-import men2 from "../../../assets/men2.png";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
 import { Context } from "../../../../context/Context";
@@ -59,17 +58,14 @@ function ProductEdit() {
   const params = useParams();
   const { id: productId } = params;
 
-  const { state, convertCurrency, toCurrencies } = useContext(Context);
+  const { state } = useContext(Context);
   const { userInfo, colors, categories, brands, sizes } = state;
 
-  const [{ loading, error, product, loadingUpload }, dispatch] = useReducer(
-    reducer,
-    {
-      product: [],
-      loading: true,
-      error: "",
-    }
-  );
+  const [{ product, loadingUpload }, dispatch] = useReducer(reducer, {
+    product: [],
+    loading: true,
+    error: "",
+  });
 
   const [name, setName] = useState("");
   const [slug, setSlug] = useState("");
@@ -261,12 +257,12 @@ function ProductEdit() {
       </Helmet>
       <div className="container">
         <div className="product_edit">
-          <div className="box_shadow mtb">
+          <div className="">
             <div className="productTitleContainer">
-              <h2 className="productTitle featured uppercase">Product Edit </h2>
+              <h2 className="productTitle light_shadow uppercase">Product Edit </h2>
             </div>
             <div className="productTop d_flex mtb">
-              <div className="productTopLeft featured">
+              <div className="productTopLeft light_shadow">
                 <Chart
                   data={salesStats}
                   CustomTooltip={CustomTooltip}
@@ -275,7 +271,7 @@ function ProductEdit() {
                   title="Sales Performance"
                 />
               </div>
-              <div className="productTopRight featured">
+              <div className="productTopRight light_shadow">
                 <div className="productInfoTop">
                   <img src={product.image} alt="" className="productInfoImg" />
                   <div>
@@ -510,7 +506,7 @@ function ProductEdit() {
                     </div>
                   </div>
                   <div className="productFormRight mtb c_flex">
-                    <div className="productUpload box_shadow">
+                    <div className="productUpload light_shadow">
                       <img
                         src={image || photo}
                         alt=""
@@ -530,7 +526,7 @@ function ProductEdit() {
                         style={{ display: "none" }}
                       />
                     </div>
-                    <div className="productUpload box_shadow mtb">
+                    <div className="productUpload light_shadow mtb">
                       <div className="productUploadImg-delete">
                         {images?.map((x) => (
                           <div key={x}>

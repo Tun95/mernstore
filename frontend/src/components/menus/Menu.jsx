@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import Drawer from "@mui/material/Drawer";
 import "./styles.scss";
@@ -12,8 +12,30 @@ import CallOutlinedIcon from "@mui/icons-material/CallOutlined";
 import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
 import { Divider } from "@mui/material";
 import { CallRequestModals } from "../modals/Modals";
+import { Button, Popover } from "antd";
 
-
+//CATEGORY MENU
+const categoryContent = <div></div>;
+export function CategoryMenu() {
+  const [open, setOpen] = useState(false);
+  const hide = () => {
+    setOpen(false);
+  };
+  const handleOpenChange = (newOpen) => {
+    setOpen(newOpen);
+  };
+  return (
+    <Popover
+      content={categoryContent}
+      title="Title"
+      trigger="click"
+      open={open}
+      onOpenChange={handleOpenChange}
+    >
+      <Button type="primary">Click me</Button>
+    </Popover>
+  );
+}
 
 //SEARCH MENU
 export function SearchMenu() {
@@ -89,7 +111,6 @@ export function SearchMenu() {
 
 //CART MENU
 export function CartMenu() {
-
   const [cartState, setCartState] = React.useState({
     bottom: false,
   });
