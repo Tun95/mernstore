@@ -53,6 +53,9 @@ function Customer() {
 
     setState({ ...state, [anchor]: open });
   };
+
+  const [billingDifferent, setBillingDifferent] = useState(false);
+
   return (
     <div className="customer">
       <div className="productTitleContainer ">
@@ -68,7 +71,6 @@ function Customer() {
             <span>
               <LoginModals toggleDrawer={toggleDrawer} />
             </span>
-            {/* <button onClick={() => navigate("/login")}>Sign in</button> */}
           </div>
           <div className="inner_form">
             <div className="inline_input c_flex">
@@ -84,50 +86,57 @@ function Customer() {
             </div>
             <div className="check_form">
               <label htmlFor="billing" className="a_flex">
-                <input type="checkbox" id="billing" />
+                <input
+                  type="checkbox"
+                  id="billing"
+                  onChange={() => setBillingDifferent(!billingDifferent)}
+                />{" "}
                 <small>
                   My billing address is different from shipping address
                 </small>
               </label>
             </div>
-            <div className="inline_input c_flex">
-              <div className="form_group">
-                <input type="text" placeholder="First Name and Last Name" />
-              </div>
-              <div className="form_group">
-                <input type="text" placeholder="Phone" />
-              </div>{" "}
-              <div className="form_group">
-                <input type="text" placeholder="address" />
-              </div>
-            </div>{" "}
-            <div className="inline_input c_flex">
-              <div className="form_group">
-                <input type="text" placeholder="Zip/postal code" />
-              </div>
-              <div className="form_group">
-                <input type="text" placeholder="city" />
-              </div>
-              <div className="form_group">
-                <RegionDropdown
-                  country={selectedCountry} // Use selectedCountry state
-                  name="state"
-                  value={selectedState} // Use selectedState state
-                  onChange={(val) => setSelectedState(val)} // Update selectedState state
-                  // onBlur={handleBlur}
-                  className="select_styles"
-                />
-              </div>
-            </div>
-            <div className="form_group">
-              <CountryDropdown
-                name="country"
-                value={selectedCountry} // Use selectedCountry state
-                onChange={(val) => setSelectedCountry(val)} // Update selectedCountry state
-                // onBlur={handleBlur}
-                className="select_styles"
-              />
-            </div>
+            {billingDifferent && (
+              <span className="checked">
+                {" "}
+                <div className="inline_input  c_flex">
+                  <div className="form_group">
+                    <input type="text" placeholder="First Name and Last Name" />
+                  </div>
+                  <div className="form_group">
+                    <input type="text" placeholder="Phone" />
+                  </div>{" "}
+                  <div className="form_group">
+                    <input type="text" placeholder="address" />
+                  </div>
+                </div>{" "}
+                <div className="inline_input c_flex">
+                  <div className="form_group">
+                    <input type="text" placeholder="Zip/postal code" />
+                  </div>
+                  <div className="form_group">
+                    <input type="text" placeholder="city" />
+                  </div>
+                  <div className="form_group">
+                    <RegionDropdown
+                      country={selectedCountry}
+                      name="state"
+                      value={selectedState}
+                      onChange={(val) => setSelectedState(val)}
+                      className="select_styles"
+                    />
+                  </div>
+                </div>
+                <div className="form_group">
+                  <CountryDropdown
+                    name="country"
+                    value={selectedCountry}
+                    onChange={(val) => setSelectedCountry(val)}
+                    className="select_styles"
+                  />
+                </div>
+              </span>
+            )}
           </div>
           <div className="cart_order">
             <div className="head c_flex">
