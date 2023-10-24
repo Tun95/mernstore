@@ -5,6 +5,7 @@ import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import "../styles.scss";
 import airpod from "../../../assets/bestsellers/airpod.webp";
 import controller from "../../../assets/bestsellers/controller.webp";
+import { LoginModals } from "../../modals/Modals";
 
 function Customer() {
   const navigate = useNavigate();
@@ -37,6 +38,21 @@ function Customer() {
       seller: "BestBuy",
     },
   ];
+
+  const [state, setState] = React.useState({
+    right: false,
+  });
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    if (
+      event.type === "keydown" &&
+      (event.key === "Tab" || event.key === "Shift")
+    ) {
+      return;
+    }
+
+    setState({ ...state, [anchor]: open });
+  };
   return (
     <div className="customer">
       <div className="productTitleContainer ">
@@ -49,7 +65,10 @@ function Customer() {
         <div className="main_content">
           <div className="header c_flex">
             <h2>Customer</h2>
-            <button onClick={() => navigate("/login")}>Sign in</button>
+            <span>
+              <LoginModals toggleDrawer={toggleDrawer} />
+            </span>
+            {/* <button onClick={() => navigate("/login")}>Sign in</button> */}
           </div>
           <div className="inner_form">
             <div className="inline_input c_flex">
@@ -135,9 +154,6 @@ function Customer() {
                               <div className="name">
                                 <Link to="">{item.name}</Link>
                               </div>
-                              {/* <div className="icon_btn">
-                      <CloseOutlinedIcon className="icon" />
-                      </div> */}
                             </div>
                             <div className="code">
                               <small>Code: MLXW3UA/A</small>

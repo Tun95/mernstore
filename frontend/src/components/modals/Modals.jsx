@@ -945,6 +945,7 @@ export function CartDiscountModal() {
 //CALCULATE SHIPPING MODAL
 const initialShippingValues = { city: "", zipCode: "" };
 export function CalculateShippingModals() {
+  const { convertCurrency } = useContext(Context);
   //CALCULATE MODAL
   const [openCalculate, setOpenCalculate] = React.useState(false);
   const handleOpenCalculate = () => setOpenCalculate(true);
@@ -1061,11 +1062,14 @@ export function CalculateShippingModals() {
                     <div className="shipping_method">
                       <label htmlFor="custom" className="custom a_flex">
                         <input type="radio" id="custom" />
-                        <p>Custom shipping method (3-5 days) $25.45</p>
+                        <p>
+                          Custom shipping method (3-5 days){" "}
+                          {convertCurrency(25.45)}
+                        </p>
                       </label>
                       <div className="total a_flex">
                         <h5>Total: </h5>
-                        <small>$25.45</small>
+                        <small>{convertCurrency(25.45)}</small>
                       </div>
                     </div>
                   </div>

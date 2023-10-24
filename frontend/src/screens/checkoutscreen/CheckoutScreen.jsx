@@ -26,7 +26,7 @@ function CheckoutScreen() {
               <Divider />
               <Notes />
             </div>
-            <div>
+            <div className="summary_scroll">
               <Summary />
             </div>
           </div>

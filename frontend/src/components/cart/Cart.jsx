@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 import RemoveOutlinedIcon from "@mui/icons-material/RemoveOutlined";
@@ -8,8 +8,11 @@ import airpod from "../../assets/bestsellers/airpod.webp";
 import controller from "../../assets/bestsellers/controller.webp";
 import { CalculateShippingModals, CartDiscountModal } from "../modals/Modals";
 import FlightOutlinedIcon from "@mui/icons-material/FlightOutlined";
+import { Context } from "../../context/Context";
 
 function Cart() {
+  const { convertCurrency } = useContext(Context);
+
   const cartItems = [
     {
       name: "AB: Apple iPhone 14 Pro 128GB Deep Purple (MQ0G3RX/A)",
@@ -111,7 +114,7 @@ function Cart() {
                 </td>
                 <td>
                   <th className="small_device">Unit Price</th>
-                  <span className="price">$594.00</span>
+                  <span className="price">{convertCurrency(594)}</span>
                 </td>
                 <td>
                   <th className="small_device">Quantity</th>
@@ -125,7 +128,7 @@ function Cart() {
                 </td>
                 <td>
                   <th className="small_device">Price</th>
-                  <span className="price">$594.00</span>
+                  <span className="price">{convertCurrency(594)}</span>
                 </td>
               </tr>
             ))}
@@ -145,7 +148,7 @@ function Cart() {
             <ul>
               <li className="c_flex">
                 <span>Subtotal</span>
-                <span>$1,191.20</span>
+                <span>{convertCurrency(1191.2)}</span>
               </li>
               <li className="c_flex">
                 <span>Shipping cost</span>
@@ -156,7 +159,7 @@ function Cart() {
               </li>
               <li className="discount c_flex">
                 <span>Including discount</span>
-                <span>-$1,786.80</span>
+                <span>-{convertCurrency(1786.8)}</span>
               </li>
             </ul>
           </div>
@@ -167,7 +170,7 @@ function Cart() {
             <ul>
               <li className="c_flex">
                 <h3>Total cost </h3>
-                <h3>$1,191.20</h3>
+                <h3>{convertCurrency(1191.2)}</h3>
               </li>
             </ul>
           </span>

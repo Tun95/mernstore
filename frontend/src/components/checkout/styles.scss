@@ -1,4 +1,30 @@
 .checkout_screen {
+  .discount {
+    color: var(--color-primary);
+  }
+  .link {
+    color: var(--color-tab);
+    cursor: pointer;
+    &:hover {
+      text-decoration: underline;
+      color: var(--color-link-hover);
+      transition: var(--transition);
+    }
+  }
+  /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+  @media screen and (max-width: 845px) {
+    .number {
+      display: none;
+    }
+  }
+  .inner_form {
+    .inline_input {
+      /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+      @media screen and (max-width: 530px) {
+        flex-wrap: wrap;
+      }
+    }
+  }
   .customer {
     margin-top: 30px;
     margin-bottom: 20px;
@@ -155,9 +181,26 @@
                       display: flex;
                       flex-direction: column;
                     }
-                    .discount {
-                      color: var(--color-primary);
-                    }
+                  }
+                  /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+                  @media screen and (max-width: 1140px) {
+                    flex-direction: column;
+                  }
+                }
+              }
+            }
+            /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+            @media screen and (max-width: 470px) {
+              padding: 5px 0px;
+              .cart_table {
+                gap: 0;
+                flex-direction: column;
+                .content_value {
+                  .main_ul {
+                    gap: 5px;
+                  }
+                  .name__amount {
+                    gap: 5px;
                   }
                 }
               }
@@ -169,8 +212,11 @@
         }
       }
     }
+    /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+    @media screen and (max-width: 845px) {
+      margin-top: 10px;
+    }
   }
-
   .delivery {
     .main_content {
       .shipping_methods {
@@ -237,6 +283,10 @@
           input {
             margin-right: 8px;
           }
+          /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+          @media screen and (max-width: 420px) {
+            width: 100%;
+          }
         }
         .methods.active {
           border: 1px solid var(--color-link-hover);
@@ -266,6 +316,100 @@
             min-height: 150px;
             resize: vertical;
             border-radius: 10px;
+          }
+        }
+      }
+    }
+  }
+  .summary {
+    margin-top: 10px;
+    .promo_box {
+      background-color: var(--color-light-light-gray);
+      padding: 25px 20px;
+      border-radius: 8px;
+
+      .inner_form {
+        margin-top: 5px;
+        .form_group {
+          input {
+            border: 1px solid var(--color-light-gray);
+            padding: 8px;
+            width: 100%;
+            border-top-left-radius: 5px;
+            border-bottom-left-radius: 5px;
+          }
+
+          button {
+            border-top-right-radius: 5px;
+            border-bottom-right-radius: 5px;
+            border: 1px solid #b8bbc0;
+            padding: 9px 20px;
+            cursor: pointer;
+          }
+        }
+      }
+    }
+    .order_summary {
+      margin-top: 20px;
+      padding: 20px !important;
+      background-color: var(--color-light-light-gray);
+
+      .order_status {
+        ul {
+          padding: 10px 0px;
+          li {
+            line-height: 30px;
+          }
+        }
+        .total {
+          border-top: 1px solid var(--color-border);
+          border-bottom: 1px solid var(--color-border);
+        }
+      }
+      .btn {
+        margin: 40px 0px;
+        button {
+          background-color: var(--color-primary);
+          color: var(--color-white);
+          padding: 15px 20px;
+          width: 100%;
+          border-radius: 30px;
+          font-size: 16px;
+          cursor: pointer;
+          font-weight: 600;
+          .place {
+            margin-right: 5px;
+          }
+        }
+      }
+      .check {
+        display: flex;
+        flex-direction: column;
+        .main_term {
+          margin-bottom: 15px;
+        }
+        .check_box {
+          .link {
+            color: var(--color-tab);
+            text-decoration: underline;
+            text-underline-offset: 1.3px;
+            text-decoration-style: dotted;
+            text-decoration-thickness: 1px;
+            text-decoration-color: var(--color-tab);
+            transition: var(--transition);
+            font-size: 13px;
+            &:hover {
+              color: var(--color-link-hover);
+            }
+          }
+          input {
+            width: 17px !important;
+            height: 17px !important;
+            border-radius: 5px !important;
+            margin-right: 8px;
+          }
+          small {
+            font-size: 14px;
           }
         }
       }

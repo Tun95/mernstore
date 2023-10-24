@@ -2,7 +2,23 @@
   margin-top: 10px;
   .content {
     .d_grid {
-      grid-template-columns: 70% 30%;
+      grid-template-columns: 67% 30%;
+      gap: 30px;
+    }
+    .summary_scroll {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+  }
+  /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+  @media screen and (max-width: 845px) {
+    margin-top: 0;
+    .content {
+      .d_grid {
+        grid-template-columns: 100%;
+        gap: 10px;
+      }
     }
   }
 }
