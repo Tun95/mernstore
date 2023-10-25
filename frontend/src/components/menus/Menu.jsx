@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import Drawer from "@mui/material/Drawer";
 import "./styles.scss";
@@ -10,46 +10,302 @@ import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutli
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import CallOutlinedIcon from "@mui/icons-material/CallOutlined";
 import ArrowRightOutlinedIcon from "@mui/icons-material/ArrowRightOutlined";
-import { Divider } from "@mui/material";
 import { CallRequestModals } from "../modals/Modals";
-import { Popover } from "antd";
 import GridViewIcon from "@mui/icons-material/GridView";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import IconButton from "@mui/material/IconButton";
+import Tooltip from "@mui/material/Tooltip";
+import Menu from "@mui/material/Menu";
+import { Box, Divider } from "@mui/material";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import c1 from "../../assets/category/c1.webp";
+import c2 from "../../assets/category/c2.webp";
+import c3 from "../../assets/category/c3.webp";
+import c4 from "../../assets/category/c4.webp";
+import c5 from "../../assets/category/c5.webp";
+import c6 from "../../assets/category/c6.webp";
+import img1 from "../../assets/category/img1.webp";
+import img2 from "../../assets/category/img2.webp";
+import img3 from "../../assets/category/img3.webp";
+// import img4 from "../../assets/category/img4.webp";
+import img5 from "../../assets/category/img5.webp";
+import img6 from "../../assets/category/img6.webp";
 
-//CATEGORY MENU
-const categoryContent = (
-  <div className="category_menu">
-    <div className="container"></div>
-  </div>
-);
-export function CategoryMenu({ anchor, toggleDrawer }) {
-  const [open, setOpen] = useState(false);
-  const hide = () => {
-    setOpen(false);
+export function CategoryMenu() {
+  //CONTACT MENU
+  const [anchorEle, setAnchorEle] = React.useState(null);
+  const openInfo = Boolean(anchorEle);
+  const handleClickNav = (event) => {
+    setAnchorEle(event.currentTarget);
   };
-  const handleOpenChange = (newOpen) => {
-    setOpen(newOpen);
+  const handleCloseNav = () => {
+    setAnchorEle(null);
   };
+
+  const categories = [
+    {
+      id: 1,
+      icon: c1,
+      name: "Electronics",
+      description: "Popular gadgets and accessories",
+      subCategories: [
+        {
+          name: "Computers",
+          img: img1,
+          subItems: ["Laptops", "Desktops", "Accessories"],
+        },
+        {
+          name: "Smartphones",
+          img: img2,
+          subItems: ["iPhone", "Android", "Accessories"],
+        },
+        {
+          name: "Accessories",
+          img: img3,
+          subItems: ["Headphones", "Chargers", "Cables"],
+        },
+        {
+          name: "Game consoles",
+          img: img6,
+          subItems: ["Peripheral devices", "Consoles"],
+        },
+        {
+          name: "TV & Video",
+          img: img5,
+          subItems: [
+            "LED TVs",
+            "Plasma TVs",
+            "3D TVs",
+            "DVD & Blu-ray Players",
+            "Home Theater Systems",
+          ],
+        },
+      ],
+    },
+    {
+      id: 2,
+      icon: c2,
+      name: "Sports & Outdoors",
+      description: "Popular gadgets and accessories",
+      subCategories: [
+        {
+          name: "Outdoor Gear",
+          subItems: ["Tents", "Backpacks", "Camping Accessories"],
+        },
+        {
+          name: "Athletic Clothing",
+          subItems: ["Shirts", "Shorts", "Running Shoes"],
+        },
+        {
+          name: "Footwear",
+          subItems: ["Hiking Boots", "Sneakers", "Sandals"],
+        },
+      ],
+    },
+    {
+      id: 3,
+      icon: c3,
+      name: "Apparel",
+      description: "Popular clothing for all ages",
+      subCategories: [
+        {
+          name: "Men's Clothing",
+          subItems: ["Shirts", "Pants", "Jackets"],
+        },
+        {
+          name: "Women's Clothing",
+          subItems: ["Dresses", "Blouses", "Skirts"],
+        },
+        {
+          name: "Kids' Clothing",
+          subItems: [`Children's Dresses`, `Kids' T-Shirts`, "Baby Clothes"],
+        },
+      ],
+    },
+    {
+      id: 4,
+      icon: c4,
+      name: "Office Supplies",
+      description: "Essential office products",
+      subCategories: [
+        {
+          name: "Stationery",
+          subItems: ["Pens", "Notebooks", "Staplers"],
+        },
+        {
+          name: "Office Furniture",
+          subItems: ["Desks", "Chairs", "File Cabinets"],
+        },
+      ],
+    },
+    {
+      id: 5,
+      icon: c5,
+      name: "Multimedia",
+      description: "Entertainment and media products",
+      subCategories: [
+        {
+          name: "Movies",
+          subItems: ["Action", "Comedy", "Drama"],
+        },
+        {
+          name: "Music",
+          subItems: ["Rock", "Pop", "Hip-Hop"],
+        },
+        {
+          name: "Video Games",
+          subItems: ["Action", "Adventure", "Simulation"],
+        },
+      ],
+    },
+    {
+      id: 6,
+      icon: c6,
+      name: "AB: Sports and outdoors",
+      description: "Popular gadgets and accessories",
+      subCategories: [
+        {
+          name: "Outdoor Equipment",
+          subItems: ["Climbing Gear", "Cycling Accessories", "Hiking Gear"],
+        },
+        {
+          name: "Sports Clothing",
+          subItems: ["Jerseys", "Shorts", "Sportswear"],
+        },
+        {
+          name: "Footwear",
+          subItems: ["Running Shoes", "Hiking Boots", "Sneakers"],
+        },
+      ],
+    },
+  ];
+
   return (
     <div className="category_menu_popover ">
-      <Popover
-        content={categoryContent}
-        title="Title"
-        trigger="click"
-        overlayStyle={{
-          // display: "flex",
-          // justifyContent: "center",
-          width: "100%",
-        }}
-        open={open}
-        onOpenChange={handleOpenChange}
-      >
-        <div className="c_flex ctg_btn">
-          <GridViewIcon className="align_left" />
-          <h5>Categories</h5>
-          <KeyboardArrowDownIcon className="icon" />
+      <React.Fragment>
+        <Box>
+          <Tooltip>
+            <IconButton
+              onClick={handleClickNav}
+              disableRipple
+              size="small"
+              className="icon-button"
+              disableElevation
+              aria-controls={openInfo ? "account-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={openInfo ? "true" : undefined}
+            >
+              <div className="c_flex ctg_btn">
+                <GridViewIcon className="align_left" />
+                <h5>Categories</h5>
+                <KeyboardArrowDownIcon className="icon" />
+              </div>
+            </IconButton>
+          </Tooltip>
+        </Box>
+
+        {openInfo && (
+          <div className="overlay-backdrop" onClick={handleCloseNav} />
+        )}
+        <div className="centered_menu_container">
+          <Menu
+            anchorEl={anchorEle}
+            id="account-menu"
+            open={openInfo}
+            onClose={handleCloseNav}
+            disableScrollLock={true}
+            PaperProps={{
+              elevation: 0,
+              sx: {
+                borderRadius: "10px",
+                overflow: "visible",
+                zIndex: 1,
+                filter: "drop-shadow(0px 2px 8px rgba(0,0,0,0.32))",
+                mt: 0.4,
+                height: "540px",
+                width: "100%",
+                pt: -5,
+                "& .MuiAvatar-root": {
+                  ml: -0.5,
+                  mr: -1,
+                },
+                "&:before": {
+                  content: '""',
+                  display: "block",
+                  position: "absolute",
+                  top: 0,
+                  left: "23%",
+                  width: 14,
+                  height: 14,
+                  bgcolor: "background.paper",
+                  transform: "translateY(-50%) rotate(45deg)",
+                  zIndex: 0,
+                },
+              },
+            }}
+            transformOrigin={{ horizontal: "center", vertical: "top" }}
+            anchorOrigin={{ horizontal: "center", vertical: "bottom" }}
+          >
+            <div className="category_drop_menu">
+              <div className="cat_border">
+                <div className="border">
+                  {categories.map((item, index) => (
+                    <div className="list" key={index}>
+                      <ul>
+                        <li className="category">
+                          <Link to="" className="main_list c_flex">
+                            <div className="img">
+                              <img src={item.icon} alt={item.name} />
+                            </div>
+                            <div className="name_desc">
+                              <span className="name">
+                                <h4>{item.name}</h4>
+                              </span>
+                              <span className="description">
+                                <p>{item.description}</p>
+                              </span>
+                            </div>
+                            <div className="icon_box">
+                              <KeyboardArrowRightIcon className="icon" />
+                            </div>
+                          </Link>
+                          <div className="sub_list">
+                            <ul className="sub_category ">
+                              {item.subCategories.map(
+                                (subCategory, subIndex) => (
+                                  <li key={subIndex}>
+                                    <Link to="">
+                                      <div className="sub_img">
+                                        <img src={subCategory.img} alt="" />
+                                      </div>
+                                      <div className="name">
+                                        <h4>{subCategory.name}</h4>
+                                      </div>{" "}
+                                    </Link>
+                                    <ul>
+                                      {subCategory.subItems.map(
+                                        (subItem, subItemIndex) => (
+                                          <li key={subItemIndex}>
+                                            <Link to="">{subItem}</Link>
+                                          </li>
+                                        )
+                                      )}
+                                    </ul>
+                                  </li>
+                                )
+                              )}
+                            </ul>
+                          </div>
+                        </li>
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </Menu>
         </div>
-      </Popover>
+      </React.Fragment>
     </div>
   );
 }
