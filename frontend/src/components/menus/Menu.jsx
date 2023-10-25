@@ -27,9 +27,9 @@ import c6 from "../../assets/category/c6.webp";
 import img1 from "../../assets/category/img1.webp";
 import img2 from "../../assets/category/img2.webp";
 import img3 from "../../assets/category/img3.webp";
-// import img4 from "../../assets/category/img4.webp";
 import img5 from "../../assets/category/img5.webp";
 import img6 from "../../assets/category/img6.webp";
+import b1 from "../../assets/category/b1.jpg";
 
 export function CategoryMenu() {
   //CONTACT MENU
@@ -46,6 +46,7 @@ export function CategoryMenu() {
     {
       id: 1,
       icon: c1,
+      background: "",
       name: "Electronics",
       description: "Popular gadgets and accessories",
       subCategories: [
@@ -85,6 +86,7 @@ export function CategoryMenu() {
     {
       id: 2,
       icon: c2,
+      background: b1,
       name: "Sports & Outdoors",
       description: "Popular gadgets and accessories",
       subCategories: [
@@ -105,6 +107,7 @@ export function CategoryMenu() {
     {
       id: 3,
       icon: c3,
+      background: "",
       name: "Apparel",
       description: "Popular clothing for all ages",
       subCategories: [
@@ -125,6 +128,7 @@ export function CategoryMenu() {
     {
       id: 4,
       icon: c4,
+      background: "",
       name: "Office Supplies",
       description: "Essential office products",
       subCategories: [
@@ -141,6 +145,7 @@ export function CategoryMenu() {
     {
       id: 5,
       icon: c5,
+      background: "",
       name: "Multimedia",
       description: "Entertainment and media products",
       subCategories: [
@@ -161,6 +166,7 @@ export function CategoryMenu() {
     {
       id: 6,
       icon: c6,
+      background: "",
       name: "AB: Sports and outdoors",
       description: "Popular gadgets and accessories",
       subCategories: [
@@ -253,23 +259,26 @@ export function CategoryMenu() {
                     <div className="list" key={index}>
                       <ul>
                         <li className="category">
-                          <Link to="" className="main_list c_flex">
-                            <div className="img">
-                              <img src={item.icon} alt={item.name} />
-                            </div>
-                            <div className="name_desc">
-                              <span className="name">
-                                <h4>{item.name}</h4>
-                              </span>
-                              <span className="description">
-                                <p>{item.description}</p>
-                              </span>
-                            </div>
-                            <div className="icon_box">
-                              <KeyboardArrowRightIcon className="icon" />
+                          <Link to="" className="main_list ">
+                            <div className="c_flex">
+                              <div className="img">
+                                <img src={item.icon} alt={item.name} />
+                              </div>
+                              <div className="name_desc">
+                                <span className="name">
+                                  <h4>{item.name}</h4>
+                                </span>
+                                <span className="description">
+                                  <p>{item.description}</p>
+                                </span>
+                              </div>
+                              <div className="icon_box">
+                                <KeyboardArrowRightIcon className="icon" />
+                              </div>
                             </div>
                           </Link>
                           <div className="sub_list">
+                            {/* <img src={item.background} alt="" /> */}
                             <ul className="sub_category ">
                               {item.subCategories.map(
                                 (subCategory, subIndex) => (
