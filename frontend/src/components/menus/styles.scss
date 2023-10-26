@@ -20,7 +20,6 @@
   margin: -10px 0px;
   padding-top: 10px;
 
-  overflow: hidden;
   outline: none;
   .cat_border {
     .border {
@@ -31,6 +30,8 @@
           position: relative;
           display: grid;
           grid-template-columns: 20% 80%;
+
+          overflow: hidden !important;
           .c_flex {
             gap: 20px;
             margin-bottom: 15px;
@@ -40,6 +41,7 @@
             width: fit-content;
             height: 100%;
             padding-left: 10px;
+            z-index: 10;
             .c_flex {
               height: 60px;
               position: relative;
@@ -129,11 +131,27 @@
               padding-left: 30px;
               text-align: center;
               overflow: hidden !important;
-              .sub_img {
-                img {
-                  width: 100px;
+              border-bottom-right-radius: 10px;
+              .background_img {
+                position: absolute;
+                bottom: 0;
+                // z-index: 1;
+                .img {
+                  img {
+                    object-fit: contain;
+                  }
                 }
               }
+              .sub_category_list {
+                z-index: 8;
+                .sub_img {
+                  img {
+                    width: 100px;
+                    border-bottom-right-radius: 10px;
+                  }
+                }
+              }
+
               /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
               @media screen and (max-width: 1290px) {
                 grid-template-columns: repeat(3, 1fr);

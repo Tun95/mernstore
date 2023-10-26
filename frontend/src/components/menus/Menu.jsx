@@ -30,6 +30,7 @@ import img3 from "../../assets/category/img3.webp";
 import img5 from "../../assets/category/img5.webp";
 import img6 from "../../assets/category/img6.webp";
 import b1 from "../../assets/category/b1.jpg";
+import b2 from "../../assets/category/b2.jpg";
 
 export function CategoryMenu() {
   //CONTACT MENU
@@ -145,7 +146,7 @@ export function CategoryMenu() {
     {
       id: 5,
       icon: c5,
-      background: "",
+      background: b2,
       name: "Multimedia",
       description: "Entertainment and media products",
       subCategories: [
@@ -278,14 +279,23 @@ export function CategoryMenu() {
                             </div>
                           </Link>
                           <div className="sub_list">
-                            {/* <img src={item.background} alt="" /> */}
                             <ul className="sub_category ">
+                              <img
+                                className="background_img"
+                                src={item.background}
+                                alt=""
+                              />
                               {item.subCategories.map(
                                 (subCategory, subIndex) => (
-                                  <li key={subIndex}>
+                                  <li
+                                    key={subIndex}
+                                    className="sub_category_list"
+                                  >
                                     <Link to="">
                                       <div className="sub_img">
-                                        <img src={subCategory.img} alt="" />
+                                        <div className="img">
+                                          <img src={subCategory.img} alt="" />
+                                        </div>
                                       </div>
                                       <div className="name">
                                         <h4>{subCategory.name}</h4>
