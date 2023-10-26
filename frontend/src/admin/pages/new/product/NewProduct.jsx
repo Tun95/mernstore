@@ -169,14 +169,14 @@ function NewProduct() {
     <>
       <>
         <Helmet>
-          <title>Add New Product</title>
+          <title>Add Product</title>
         </Helmet>
         <div className="container">
           <div className="product_edit ">
             <div className=" ">
               <div className="productTitleContainer">
                 <h2 className="productTitle light_shadow uppercase">
-                  New Product{" "}
+                  Add Product
                 </h2>
               </div>
               <div className="productBottom mtb">
@@ -254,6 +254,23 @@ function NewProduct() {
                             ))}
                           </Select>
                         </FormControl>
+
+                        <select
+                          // value={selectedOption}
+                          // onChange={handleSelectChange}
+                        >
+                          <option value="">Select an option</option>
+                          <optgroup label="Group 1">
+                            <option value="Option 1.1">Option 1.1</option>
+                            <option value="Option 1.2">Option 1.2</option>
+                            <option value="Option 1.3">Option 1.3</option>
+                          </optgroup>
+                          <optgroup label="Group 2">
+                            <option value="Option 2.1">Option 2.1</option>
+                            <option value="Option 2.2">Option 2.2</option>
+                            <option value="Option 2.3">Option 2.3</option>
+                          </optgroup>
+                        </select>
                         <label htmlFor="color" className="ccatb-des">
                           Color
                         </label>
@@ -262,9 +279,6 @@ function NewProduct() {
                           size="small"
                           id="formControl"
                         >
-                          {/* <InputLabel id="mui-simple-select-label">
-                        Color
-                      </InputLabel> */}
                           <Select
                             labelId="mui-simple-select-label"
                             id="mui_simple_select"
@@ -306,7 +320,6 @@ function NewProduct() {
                           size="small"
                           id="formControl"
                         >
-                          {/* <InputLabel id="mui-simple-select-label">Size</InputLabel> */}
                           <Select
                             labelId="mui-simple-select-label"
                             id="mui_simple_select"
@@ -441,9 +454,12 @@ function NewProduct() {
                       onChange={(newContent) => {}}
                     />
                   </div>
-                  <button className="productButton main_btn mtb ">
-                    Add New
-                  </button>
+                  <div className="btn">
+                    <button className="productButton main_btn mtb ">
+                      Cancel
+                    </button>
+                    <button type="submit">Save</button>
+                  </div>
                 </form>
               </div>
             </div>
