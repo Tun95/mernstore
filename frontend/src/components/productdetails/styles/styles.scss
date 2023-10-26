@@ -95,17 +95,18 @@
     margin-top: 20px;
     .content {
       display: grid;
-      grid-template-columns: 60% 40%;
+      grid-template-columns: 55% 45%;
       gap: 20px;
       .img_slides {
         position: relative;
         .image {
           position: relative;
-          width: 95%;
+          // width: 95%;
           margin-bottom: 30px;
           .top_info {
             position: absolute;
             top: 0;
+            z-index: 10;
             left: 12%;
             .popular {
               background-color: #b05cf5;
@@ -115,29 +116,54 @@
               border-radius: 15px;
             }
           }
-          .main_image {
+          .product_gallery_container {
+            width: 100%;
+            flex-direction: column;
             position: relative;
-            left: 10%;
+            overflow: hidden;
+            .img_large {
+              .product_main_image_slider {
+                width: 80%;
+              }
+            }
+            .horizontal_img {
+              overflow: hidden;
+              position: absolute;
+              top: 0;
+              .img_small {
+                height: 300px;
+                width: 75px;
+                .product_main_image_thumbs {
+                  height: 100%;
 
-            .specifications {
-              margin-top: 10px;
-              .a_flex {
-                gap: 10px;
-                .img {
-                  border-radius: 15px;
-                  width: 60px;
-                  height: 60px;
+                  .swiper-slide {
+                    width: 60px;
+                    padding: 5px;
+                    cursor: pointer;
+                    outline: none;
+                    &-thumb-active {
+                      border: 1px solid var(--color-border);
+                    }
+                    .img {
+                      img {
+                        width: 50px;
+                      }
+                    }
+                  }
                 }
               }
             }
           }
-        }
-
-        .thumbnail_slider {
-          width: 70px;
-          margin-top: 15px;
-          .small_images {
-            width: 60px;
+          .specifications {
+            margin-top: 10px;
+            .a_flex {
+              gap: 10px;
+              .img {
+                border-radius: 15px;
+                width: 60px;
+                height: 60px;
+              }
+            }
           }
         }
       }
@@ -536,16 +562,15 @@
             .top_info {
               left: -15%;
             }
-            .main_image {
-              .specifications {
-                .a_flex {
-                  flex-wrap: wrap;
-                  justify-content: center;
-                  .img {
-                    border-radius: 10px;
-                    width: 40px !important;
-                    height: 40px !important;
-                  }
+
+            .specifications {
+              .a_flex {
+                flex-wrap: wrap;
+                justify-content: center;
+                .img {
+                  border-radius: 10px;
+                  width: 40px !important;
+                  height: 40px !important;
                 }
               }
             }
@@ -563,6 +588,31 @@
           margin-right: 0px;
           width: 100%;
           padding: 0;
+        }
+      }
+      /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+      @media screen and (max-width: 600px) {
+        .img_slides {
+          .image {
+            .product_gallery_container {
+              flex-direction: row;
+              .horizontal_img {
+                position: relative;
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                .img_small {
+                  width: 300px;
+                  height: 75px;
+                  margin-top: 20px;
+                  .product_main_image_thumbs {
+                    height: auto;
+                    width: 100%;
+                  }
+                }
+              }
+            }
+          }
         }
       }
       /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
@@ -596,18 +646,14 @@
       @media screen and (max-width: 300px) {
         .img_slides {
           .image {
-            .main_image {
-              .specifications {
-                .a_flex {
-                  .img {
-                    width: 100%;
-                  }
+            .specifications {
+              .a_flex {
+                .img {
+                  width: 100%;
                 }
               }
             }
           }
-        }
-        .product_details {
         }
       }
     }

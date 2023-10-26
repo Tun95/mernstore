@@ -36,6 +36,11 @@ import NewReleasesOutlinedIcon from "@mui/icons-material/NewReleasesOutlined";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import CreditCardOutlinedIcon from "@mui/icons-material/CreditCardOutlined";
 import { SelectLocationModal, ShippingModal } from "../../modals/Modals";
+import "swiper/css";
+import "swiper/css/navigation";
+import "swiper/css/thumbs";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Thumbs } from "swiper/modules";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -170,7 +175,7 @@ function Details() {
     ],
   };
 
-  const [selectedImage, setSelectedImage] = useState(product.images[0].img);
+  const [activeThumb, setActiveThumb] = useState(null);
 
   const save =
     product.price - (product.price - (product.price * product.discount) / 100);
@@ -181,62 +186,113 @@ function Details() {
         <div className="content">
           <div className="img_slides">
             <div className="image">
-              <div className="f_flex">
-                <div className="slider_style">
-                  <div className="thumbnail_slider">
-                    <Slider {...SliderSettings} className="slick-slider">
-                      {product.images.map((image) => (
-                        <div key={image.id}>
-                          <img
-                            src={image.img}
-                            alt={product.name}
-                            className="small_images"
-                            onClick={() => setSelectedImage(image.img)}
-                          />
-                        </div>
+              <div className="product_gallery_container ">
+                <div className="img_large l_flex">
+                  <Swiper
+                    loop={false}
+                    spaceBetween={10}
+                    modules={[Navigation, Thumbs]}
+                    grabCursor={true}
+                    thumbs={{
+                      swiper:
+                        activeThumb && !activeThumb.destroyed
+                          ? activeThumb
+                          : null,
+                    }}
+                    className="product_main_image_slider"
+                  >
+                    {product.images.map((item, index) => (
+                      <SwiperSlide key={index} className="swiper_slide ">
+                        <ReactImageMagnify
+                          {...{
+                            smallImage: {
+                              alt: product.name,
+                              isFluidWidth: true,
+                              src: item.img,
+                            },
+                            largeImage: {
+                              src: item.img,
+                              width: 1600,
+                              height: 1600,
+                            },
+
+                            enlargedImageContainerStyle: {
+                              position: "absolute",
+                              left: "50%",
+                              zIndex: 10,
+                              transform: "translateX(-50%)",
+                            },
+                            enlargedImageContainerDimensions: {
+                              width: "70%",
+                              height: "70%",
+                              zIndex: 10,
+                            },
+                            shouldUsePositiveSpaceLens: true,
+                          }}
+                        />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                </div>
+                <div className="horizontal_img">
+                  <div className="img_small ">
+                    <Swiper
+                      onSwiper={setActiveThumb}
+                      loop={false}
+                      // spaceBetween={10}
+                      slidesPerView={5}
+                      breakpoints={{
+                        0: { direction: "horizontal" },
+                        600: { direction: "vertical" },
+                      }}
+                      className="product_main_image_thumbs"
+                      navigation={true}
+                      modules={[Navigation, Thumbs]}
+                    >
+                      {product.images.map((item, index) => (
+                        <SwiperSlide key={index}>
+                          <div className="img l_flex">
+                            <img src={item.img} alt="product images" />
+                          </div>
+                        </SwiperSlide>
                       ))}
-                    </Slider>
+                    </Swiper>
                   </div>
                 </div>
-                <div className="main_image">
-                  <ReactImageMagnify
-                    {...{
-                      smallImage: {
-                        alt: product.name,
-                        isFluidWidth: true,
-                        src: selectedImage,
-                      },
-                      largeImage: {
-                        src: selectedImage,
-                        width: 1600,
-                        height: 1600,
-                      },
-
-                      enlargedImageContainerStyle: {
-                        zIndex: 10,
-                      },
-                      enlargedImageContainerDimensions: {
-                        width: "70%",
-                        height: "70%",
-                      },
-                      shouldUsePositiveSpaceLens: true,
-                    }}
-                  />
-                  <div className="specifications l_flex">
-                    <div className="a_flex">
-                      {product.specification.map((item, index) => (
-                        <img
-                          src={item.img}
-                          alt={product.name}
-                          key={index}
-                          className="img"
-                        />
+                {/* <div className="p_flex horizontal_img">
+                  <span className="horizontal_img_small">
+                    <Swiper
+                      onSwiper={setActiveThumb}
+                      loop={true}
+                      // spaceBetween={10}
+                      slidesPerView={5}
+                      className="product_main_image_thumbs"
+                      navigation={true}
+                      modules={[Navigation, Thumbs]}
+                    >
+                      {product.images.map((item, index) => (
+                        <SwiperSlide key={index}>
+                          <div className="img l_flex">
+                            <img src={item.img} alt="product images" />
+                          </div>
+                        </SwiperSlide>
                       ))}
-                    </div>
-                  </div>
+                    </Swiper>
+                  </span>
+                </div> */}
+              </div>
+              <div className="specifications l_flex">
+                <div className="a_flex">
+                  {product.specification.map((item, index) => (
+                    <img
+                      src={item.img}
+                      alt={product.name}
+                      key={index}
+                      className="img"
+                    />
+                  ))}
                 </div>
               </div>
-
               <div className="top_info">
                 <div className="black">
                   <img src={black} alt="" />
