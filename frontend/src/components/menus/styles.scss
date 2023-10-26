@@ -21,6 +21,10 @@
   padding-top: 10px;
 
   outline: none;
+  // /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+  // @media screen and (max-width: 900px) {
+  //   display: none;
+  // }
   .cat_border {
     .border {
       .list {
@@ -95,9 +99,6 @@
                 color: var(--color-tab) !important;
               }
             }
-          }
-
-          &:hover {
             .sub_list {
               display: block;
             }
@@ -188,6 +189,10 @@
     background-color: rgba(0, 0, 0, 0.5);
     z-index: 1000;
     cursor: pointer;
+  }
+  /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+  @media screen and (max-width: 900px) {
+    display: none;
   }
 }
 

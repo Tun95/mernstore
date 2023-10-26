@@ -127,20 +127,47 @@
     }
     .category_btn {
       padding: 15px 20px;
-      button {
-        background-color: var(--color-black);
-        color: var(--color-white);
-        padding: 7.5px;
-        width: 100%;
-        border-radius: 20px;
-        cursor: pointer;
-        .a_flex {
-          .icon {
-            margin-right: 5px;
+      .list {
+        margin-bottom: 10px;
+        .main_list {
+          .c_flex {
+            gap: 20px;
           }
-          span {
-            font-size: 15px;
-            font-weight: 300;
+          .img {
+            img {
+              width: 35px;
+              height: 35px;
+              object-fit: cover;
+            }
+          }
+          .name_desc {
+            width: 200px;
+            .name {
+              h4 {
+                color: var(--color-black);
+              }
+            }
+            .description {
+              p {
+                font-size: 12px;
+                color: var(--color-gray);
+              }
+            }
+          }
+          .icon_box {
+            margin-right: 5px;
+            .icon {
+              font-size: 19px;
+              color: var(--color-light-gray) !important;
+            }
+          }
+          &:hover {
+            .icon_box {
+              .icon {
+                transition: var(--transition);
+                color: var(--color-tab) !important;
+              }
+            }
           }
         }
       }

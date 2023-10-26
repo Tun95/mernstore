@@ -25,15 +25,18 @@ import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CloseIcon from "@mui/icons-material/Close";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
-import GridViewIcon from "@mui/icons-material/GridView";
 import { LocationModal, LoginModals } from "../../components/modals/Modals";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
+import data from "../../components/menus/data";
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 
 const StyledDivider = styled(Divider)(({ theme, darkMode }) => ({
   backgroundColor: darkMode ? "#ffffff" : "", // Change colors accordingly
 }));
 
 function SideBar() {
+  const { categories } = data;
+
   const {
     state: states,
     dispatch: ctxDispatch,
@@ -258,13 +261,38 @@ function SideBar() {
                 </div>
               </div>
               <div className="category_btn">
-                <button className="l_flex">
-                  <span className="a_flex">
-                    <GridViewIcon className="icon" />
-                    <span>Categories</span>
-                  </span>
-                </button>
+                {categories.map((item, index) => (
+                  <div className="list" key={index}>
+                    <ul>
+                      <li className="category">
+                        <Link
+                          to="/store"
+                          className="main_list "
+                          onClick={toggleDrawer(anchor, false)}
+                        >
+                          <div className="c_flex">
+                            <div className="img">
+                              <img src={item.icon} alt={item.name} />
+                            </div>
+                            <div className="name_desc">
+                              <span className="name">
+                                <h4>{item.name}</h4>
+                              </span>
+                              <span className="description">
+                                <p>{item.description}</p>
+                              </span>
+                            </div>
+                            <div className="icon_box">
+                              <KeyboardArrowRightIcon className="icon" />
+                            </div>
+                          </div>
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                ))}
               </div>
+              <Divider />
               <div className="lang_currency_locate">
                 <div className="language  a_flex">
                   <span className="label">Language: </span>
