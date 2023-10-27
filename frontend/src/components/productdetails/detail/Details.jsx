@@ -202,34 +202,36 @@ function Details() {
                     className="product_main_image_slider"
                   >
                     {product.images.map((item, index) => (
-                      <SwiperSlide key={index} className="swiper_slide ">
-                        <ReactImageMagnify
-                          {...{
-                            smallImage: {
-                              alt: product.name,
-                              isFluidWidth: true,
-                              src: item.img,
-                            },
-                            largeImage: {
-                              src: item.img,
-                              width: 1600,
-                              height: 1600,
-                            },
+                      <SwiperSlide key={index} className="swiper_slide">
+                        <div className="magnifier">
+                          <ReactImageMagnify
+                            {...{
+                              smallImage: {
+                                alt: product.name,
+                                isFluidWidth: true,
+                                src: item.img,
+                              },
+                              largeImage: {
+                                src: item.img,
+                                width: 1600,
+                                height: 1600,
+                              },
 
-                            enlargedImageContainerStyle: {
-                              position: "absolute",
-                              left: "50%",
-                              zIndex: 10,
-                              transform: "translateX(-50%)",
-                            },
-                            enlargedImageContainerDimensions: {
-                              width: "70%",
-                              height: "70%",
-                              zIndex: 10,
-                            },
-                            shouldUsePositiveSpaceLens: true,
-                          }}
-                        />
+                              enlargedImageContainerStyle: {
+                                position: "absolute",
+                                left: "50%",
+                                zIndex: 10,
+                                transform: "translateX(-50%)",
+                              },
+                              enlargedImageContainerDimensions: {
+                                width: "70%",
+                                height: "70%",
+                                zIndex: 10,
+                              },
+                              shouldUsePositiveSpaceLens: true,
+                            }}
+                          />
+                        </div>
                       </SwiperSlide>
                     ))}
                   </Swiper>
@@ -237,9 +239,11 @@ function Details() {
                 <div className="horizontal_img">
                   <div className="img_small ">
                     <Swiper
+                      style={{
+                        "--swiper-navigation-size": "20px",
+                      }}
                       onSwiper={setActiveThumb}
                       loop={false}
-                      // spaceBetween={10}
                       slidesPerView={5}
                       breakpoints={{
                         0: { direction: "horizontal" },
@@ -259,27 +263,6 @@ function Details() {
                     </Swiper>
                   </div>
                 </div>
-                {/* <div className="p_flex horizontal_img">
-                  <span className="horizontal_img_small">
-                    <Swiper
-                      onSwiper={setActiveThumb}
-                      loop={true}
-                      // spaceBetween={10}
-                      slidesPerView={5}
-                      className="product_main_image_thumbs"
-                      navigation={true}
-                      modules={[Navigation, Thumbs]}
-                    >
-                      {product.images.map((item, index) => (
-                        <SwiperSlide key={index}>
-                          <div className="img l_flex">
-                            <img src={item.img} alt="product images" />
-                          </div>
-                        </SwiperSlide>
-                      ))}
-                    </Swiper>
-                  </span>
-                </div> */}
               </div>
               <div className="specifications l_flex">
                 <div className="a_flex">
