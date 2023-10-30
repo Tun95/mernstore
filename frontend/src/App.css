@@ -87,6 +87,9 @@ body {
   box-shadow: rgba(0, 0, 0, 0.03) 0 1px 1px, rgba(0, 0, 0, 0.03) 0 3px 3px,
     rgba(0, 0, 0, 0.03) 0 7px 7px;
 }
+.page_background {
+  background: var(--color-background);
+}
 
 .custom_tooltip {
   background-color: var(--color-bg);
@@ -95,10 +98,6 @@ body {
 .tableCellPrice {
   color: var(--color-primary) !important;
   font-weight: 600 !important;
-}
-
-.MuiDataGrid-checkboxInput:checked + .MuiDataGrid-checkbox {
-  color: red; /* Set the desired color for the checkbox */
 }
 
 .box_shadow {
@@ -148,6 +147,9 @@ body {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-gap: 10px;
+}
+.mt {
+  margin-top: 20px;
 }
 
 a {

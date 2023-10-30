@@ -183,13 +183,24 @@ function NewProduct() {
     updatedFeatureData[featureIndex].subFeatures.push("");
     setFeatureData(updatedFeatureData);
   };
+
+  //==================
+  //TOGGLE COLOR BOX
+  //==================
+  const [colorData, setColorData] = useState([
+    { colorName: "", colorImg: "" }, // Initialize with one empty Color and one sub-Color
+  ]);
+
+  const addMoreColor = () => {
+    setColorData([...colorData, { colorName: "", colorImg: "" }]);
+  };
   return (
     <>
       <>
         <Helmet>
           <title>Add Product</title>
         </Helmet>
-        <div className="product_edit ">
+        <div className="product_edit page_background">
           <div className="container">
             <div className=" ">
               <div className="productTitleContainer">
@@ -200,13 +211,13 @@ function NewProduct() {
               <div className="productBottom mtb">
                 <form action="" onSubmit={submitHandler}>
                   <div className="productForm">
-                    <div className="product_info">
-                      <div className="light_shadow">
+                    <div className="product_info product___">
+                      <div className="light_shadow product___main">
                         <div
                           className={
-                            !openBox === 0
-                              ? "header border c_flex"
-                              : "header c_flex"
+                            openBox === 0
+                              ? "header  c_flex"
+                              : "header border c_flex"
                           }
                           onClick={() => toggleBox(0)}
                         >
@@ -296,12 +307,12 @@ function NewProduct() {
                           </div>
                         )}
                       </div>
-                      <div className="features_box light_shadow">
+                      <div className="features_box mt light_shadow">
                         <div
                           className={
-                            !openBox === 1
-                              ? "header border c_flex"
-                              : "header c_flex"
+                            openBox === 1
+                              ? "header  c_flex"
+                              : "header border c_flex"
                           }
                           onClick={() => toggleBox(1)}
                         >
@@ -394,6 +405,80 @@ function NewProduct() {
                               <span onClick={addFeature}>
                                 Add More Features
                               </span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="light_shadow mt product_color">
+                        <div
+                          className={
+                            openBox === 2
+                              ? "header  c_flex"
+                              : "header border c_flex"
+                          }
+                          onClick={() => toggleBox(2)}
+                        >
+                          <div className="left">
+                            <div className="d_flex">
+                              <div className="number l_flex">
+                                <span>03</span>
+                              </div>
+                              <div className="text">
+                                <h4>Product Color</h4>
+                                <small>
+                                  Upload multiple image of product with
+                                  different color
+                                </small>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="right">
+                            {openBox === 2 ? (
+                              <KeyboardArrowUpIcon className="icon" />
+                            ) : (
+                              <KeyboardArrowDownIcon className="icon" />
+                            )}
+                          </div>
+                        </div>
+                        {openBox === 2 && (
+                          <div className="product_info_color">
+                            <div className="product_info_box box">
+                              {colorData.map((color, colorIndex) => (
+                                <div className="form-group" key={colorIndex}>
+                                  <label htmlFor="color">Color</label>
+                                  <span className="color_name">
+                                    <input
+                                      type="text"
+                                      id="color"
+                                      value={color.colorName}
+                                      onChange={(e) => {
+                                        const updatedColorData = [...colorData];
+                                        updatedColorData[colorIndex].colorName =
+                                          e.target.value;
+                                        setColorData(updatedColorData);
+                                      }}
+                                      placeholder="color name"
+                                    />
+                                  </span>
+                                  <span className="link_img">
+                                    <input
+                                      type="text"
+                                      id="color"
+                                      value={color.colorImg}
+                                      onChange={(e) => {
+                                        const updatedColorData = [...colorData];
+                                        updatedColorData[colorIndex].colorImg =
+                                          e.target.value;
+                                        setColorData(updatedColorData);
+                                      }}
+                                      placeholder="product image color link"
+                                    />
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="add_more_btn">
+                              <span onClick={addMoreColor}>Add More Color</span>
                             </div>
                           </div>
                         )}
