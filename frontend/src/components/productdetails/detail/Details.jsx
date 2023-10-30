@@ -109,8 +109,8 @@ function Details() {
       },
     ],
     color: [
-      { name: "Silver", img: s6 },
-      { name: "Gray", img: s5 },
+      { name: "Silver", img: phone5 },
+      { name: "Gray", img: phone4 },
     ],
     specification: [
       { img: s1 },
