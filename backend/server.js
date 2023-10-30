@@ -3,6 +3,8 @@ import cors from "cors";
 import express from "express";
 import path from "path";
 import dotenv from "dotenv";
+import { Server } from "socket.io";
+import { createServer } from "http";
 import seedRouter from "./routes/seedRoutes.js";
 import productRouter from "./routes/productRoutes.js";
 import userRouter from "./routes/userRoutes.js";
@@ -19,13 +21,12 @@ import wishRouter from "./routes/wishRoutes.js";
 import priceRoutes from "./routes/priceRoutes.js";
 import bannerRoutes from "./routes/bannerRoutes.js";
 import colorRoutes from "./routes/colorRoutes.js";
-import cartRoutes from "./routes/cartRoutes.js";
 import applicationRoutes from "./routes/applicationRoutes.js";
 import passport from "passport";
 import showRoutes from "./routes/showroomRoutes.js";
 import wrapperRouter from "./routes/wrapperRoutes.js";
 import updateRouter from "./routes/updateRoutes.js";
-import http from "http";
+import promotionRouter from "./routes/promotionRoutes.js";
 
 dotenv.config();
 
@@ -95,14 +96,17 @@ app.use("/api/brand", brandRoutes);
 app.use("/api/size", sizeRoutes);
 app.use("/api/color", colorRoutes);
 app.use("/api/price", priceRoutes);
+
+app.use("/api/promotions", promotionRouter);
+
 app.use("/api/banner", bannerRoutes);
 app.use("/api/settings", settingsRoutes);
-app.use("/api/cart", cartRoutes);
 app.use("/api/checkout", stripeRouter);
 app.use("/api/apply", applicationRoutes);
 app.use("/api/showroom", showRoutes);
 app.use("/api/wrappers", wrapperRouter);
 app.use("/api/updates", updateRouter);
+
 
 const _dirname = path.resolve();
 app.use(express.static(path.join(_dirname, "/frontend/build")));
@@ -114,10 +118,39 @@ app.use((err, req, res, next) => {
   res.status(500).send({ message: err.message });
 });
 
+const server = createServer(app);
+// const io = new Server(server, { cors: { origin: "*" } });
+
+// // Handle the connection event
+// io.on("connection", (socket) => {
+//   console.log("A client connected");
+
+//   // Handle the promotion countdown timer updates
+//  socket.on("updateCountdownTimer", async () => {
+//    try {
+//      // Query promotions with countdown timers
+//      const promotions = await Promotion.find({
+//        "countDownTimer.seconds": { $gt: 0 },
+//      });
+
+//      // Update the countdown timers
+//      promotions.forEach((promotion) => {
+//        promotion.updateCountDownTimer();
+//        promotion.save();
+//      });
+
+//      // Emit updated promotions with countdown timers to clients
+//      io.emit("countdownTimerUpdate", promotions);
+
+//      console.log(promotions);
+//    } catch (error) {
+//      console.error("Error while updating countdown timers:", error);
+//    }
+//  });
+
+// });
+
 const port = process.env.PORT || 5000;
-
-const server = app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+server.listen(port, () => {
+  console.log(`serve at http://localhost:${port}`);
 });
-
-server.timeout = 600000; // Set the timeout to 10 minutes (600,000 milliseconds)

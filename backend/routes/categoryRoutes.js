@@ -1,52 +1,44 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import Category from "../models/category.js";
-import { isAdmin, isAuth } from "../utils.js";
 
 const categoryRoutes = express.Router();
 
-// Centralized error handler middleware
-const errorHandler = (res, error) => {
-  console.error(error); // Log the error for debugging purposes
-  res.status(500).json({ message: "An error occurred" });
-};
-
-//create
+//====================
+// Create a new category
+//====================
 categoryRoutes.post(
-  "/",
-  isAuth,
-  isAdmin,
+  "/create",
   expressAsyncHandler(async (req, res) => {
     try {
-      const category = await Category.create({
-        category: req.body.category,
-        categoryImg: req.body.categoryImg,
-        user: req.user._id,
-      });
-      res.send(category);
+      const categoryData = req.body;
+      const newCategory = new Category(categoryData);
+      const createdCategory = await newCategory.save();
+      res.status(201).json(createdCategory);
     } catch (error) {
-      errorHandler(res, error);
+      res.status(500).json({ message: "Error creating category" });
     }
   })
 );
 
-//Fetch all
+//================
+// Get all filters
+//================
 categoryRoutes.get(
   "/",
   expressAsyncHandler(async (req, res) => {
     try {
-      const categories = await Category.find({})
-        .populate("user")
-        .sort("-createdAt");
-      res.send(categories);
+      const categories = await Category.find({});
+      res.json(categories);
     } catch (error) {
-      errorHandler(res, error);
+      res.status(500).json({ message: "Error fetching category" });
     }
   })
 );
-//=============
+
+//=========================
 //FETCH ALL ALPHA. CATEGORY
-//=============
+//=========================
 categoryRoutes.get(
   "/alphabetic",
   expressAsyncHandler(async (req, res) => {
@@ -55,61 +47,122 @@ categoryRoutes.get(
       const categories = await Category.find({}).sort(mysort).populate("user");
       res.send(categories);
     } catch (error) {
-      errorHandler(res, error);
+      res.status(500).json({ message: "Error fetching category" });
     }
   })
 );
 
-//Fetch single
-categoryRoutes.get(
-  "/:id",
-  isAuth,
-  isAdmin,
+//=======================
+// Add items by ID
+//=======================
+categoryRoutes.patch(
+  "/update/:id",
   expressAsyncHandler(async (req, res) => {
-    const { id } = req.params;
     try {
-      const category = await Category.findById(id);
-      res.send(category);
+      const categoryId = req.params.id;
+      const { path, data } = req.body;
+
+      // Find the category by ID
+      const category = await Category.findById(categoryId);
+
+      if (!category) {
+        return res.status(404).json({ message: "Category not found" });
+      }
+
+      // Use a dynamic function to update the specific element based on the path
+      const updateElement = (object, pathArray, newData) => {
+        if (pathArray.length === 0) {
+          object.push(...newData); // If the path is empty, add data to the current element
+        } else {
+          const [currentPath, ...remainingPath] = pathArray;
+          const currentElement = object[currentPath];
+          updateElement(currentElement, remainingPath, newData);
+        }
+      };
+
+      const pathArray = path.split(".").map((item) => {
+        if (!isNaN(item)) {
+          return parseInt(item, 10);
+        }
+        return item;
+      });
+
+      updateElement(category, pathArray, data);
+
+      // Save the updated category
+      const updatedCategory = await category.save();
+
+      res.json(updatedCategory);
     } catch (error) {
-      errorHandler(res, error);
+      res.status(500).json({ message: "Error updating category" });
     }
   })
 );
 
-//Update
+//===========================
+// Update the entire category
+//===========================
 categoryRoutes.put(
-  "/:id",
-  isAuth,
-  isAdmin,
+  "/update/:id",
   expressAsyncHandler(async (req, res) => {
-    const { id } = req.params;
     try {
-      const category = await Category.findByIdAndUpdate(
-        id,
-        {
-          ...req.body,
-        },
+      const categoryId = req.params.id;
+      const updatedCategoryData = req.body;
+
+      const updatedCategory = await Category.findByIdAndUpdate(
+        categoryId,
+        updatedCategoryData,
         { new: true }
       );
-      res.send(category);
+
+      if (!updatedCategory) {
+        return res.status(404).json({ message: "Category not found" });
+      }
+
+      res.json(updatedCategory);
     } catch (error) {
-      errorHandler(res, error);
+      console.error("Error updating category", error);
+      res.status(500).json({ message: "Error updating category" });
     }
   })
 );
 
-//Delete single
-categoryRoutes.delete(
+//====================
+// Get a Category by ID
+//====================
+categoryRoutes.get(
   "/:id",
-  isAuth,
-  isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const { id } = req.params;
     try {
-      const category = await Category.findByIdAndDelete(id);
-      res.send(category);
+      const categoryId = req.params.id;
+      const category = await Category.findById(categoryId);
+      if (category) {
+        res.json(category);
+      } else {
+        res.status(404).json({ message: "Category not found" });
+      }
     } catch (error) {
-      errorHandler(res, error);
+      res.status(500).json({ message: "Error fetching category" });
+    }
+  })
+);
+
+//======================
+// Delete a Category by ID
+//======================
+categoryRoutes.delete(
+  "/delete/:id",
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const categoryId = req.params.id;
+      const deletedCategory = await Category.findByIdAndDelete(categoryId);
+      if (deletedCategory) {
+        res.json({ message: "Category deleted" });
+      } else {
+        res.status(404).json({ message: "Category not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Error deleting category" });
     }
   })
 );

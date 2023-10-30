@@ -62,10 +62,10 @@ function Footer() {
                       </Link>
                     </li>
                     <li>
-                      <Link to="/track-order">Orders</Link>
+                      <Link to="/orders">Orders</Link>
                     </li>
                     <li>
-                      <Link to={`/wish-list/${userInfo._id}`}>Wishlist</Link>
+                      <Link to="/wish-list">Wishlist</Link>
                     </li>
                   </Fade>
                 ) : (
@@ -168,10 +168,10 @@ function Footer() {
                       </Link>
                     </li>
                     <li>
-                      <Link to="/track-order">Orders</Link>
+                      <Link to="/orders">Orders</Link>
                     </li>
                     <li>
-                      <Link to={`/wish-list/${userInfo._id}`}>Wishlist</Link>
+                      <Link to="/wish-list">Wishlist</Link>
                     </li>
                   </Fade>
                 ) : (

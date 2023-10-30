@@ -11,10 +11,6 @@ import s3 from "../../../assets/details/s3.webp";
 import s4 from "../../../assets/details/s4.webp";
 import s5 from "../../../assets/details/s5.webp";
 import s6 from "../../../assets/details/s6.webp";
-
-import Slider from "react-slick";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import ReactImageMagnify from "react-image-magnify";
 import Rating from "../../utilities/rating/Ratings";
 import black from "../../../assets/bestsellers/black.webp";
@@ -41,6 +37,7 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Thumbs } from "swiper/modules";
+import CheckIcon from "@mui/icons-material/Check";
 
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
@@ -52,28 +49,6 @@ function truncateText(text, maxWords) {
   }
   return words.slice(0, maxWords).join(" ") + " ...";
 }
-
-const NextArrow = (props) => {
-  const { onClick } = props;
-  return (
-    <div className="product_control_btn l_flex" onClick={onClick}>
-      <button className="next l_flex">
-        <KeyboardArrowDownIcon className="icon" />
-      </button>
-    </div>
-  );
-};
-
-const PrevArrow = (props) => {
-  const { onClick } = props;
-  return (
-    <div className="product_control_btn l_flex" onClick={onClick}>
-      <button className="prev l_flex">
-        <KeyboardArrowUpIcon className="icon" />
-      </button>
-    </div>
-  );
-};
 
 const FilterSection = ({ title, children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -133,6 +108,10 @@ function Details() {
         img: phone5,
       },
     ],
+    color: [
+      { name: "Silver", img: s6 },
+      { name: "Gray", img: s5 },
+    ],
     specification: [
       { img: s1 },
       { img: s2 },
@@ -140,6 +119,18 @@ function Details() {
       { img: s4 },
       { img: s5 },
       { img: s6 },
+    ],
+    features: [
+      { name: "RAM", subFeatures: ["8 GB DDR", "16 GB DDR", "32 GB DDR"] },
+      { name: "Processor Count", subFeatures: ["1", "2"] },
+      {
+        name: "Processor",
+        subFeatures: [
+          "2.7 GHz Intel Core i5",
+          "2.7 GHz Intel Core i7",
+          "3.1 GHz Intel Core i5",
+        ],
+      },
     ],
     price: 1245,
     discount: 10,
@@ -150,36 +141,19 @@ function Details() {
   };
   const { convertCurrency } = useContext(Context);
 
-  const SliderSettings = {
-    dots: false,
-    infinite: false,
-    speed: 500,
-    slidesToShow: 5,
-    slidesToScroll: 1,
-    vertical: true,
-    nextArrow: <NextArrow />,
-    prevArrow: <PrevArrow />,
-    responsive: [
-      {
-        breakpoint: 1024,
-        settings: {
-          vertical: false,
-        },
-      },
-      // {
-      //   breakpoint: 600,
-      //   settings: {
-      //     arrows: false,
-      //   },
-      // },
-    ],
-  };
-
+  //SLIDER SAVE
   const [activeThumb, setActiveThumb] = useState(null);
 
+  //AMOUNT SAVE
   const save =
     product.price - (product.price - (product.price * product.discount) / 100);
 
+  //COLOR SWITCH
+  const [isSelected, setIsSelected] = useState(0); // Default to the first color
+
+  const handleColorClick = (index) => {
+    setIsSelected(index);
+  };
   return (
     <div className="details">
       <div className="container">
@@ -334,14 +308,43 @@ function Details() {
                 <span>unavailable</span>
               )}
             </div>
-            <div className="size f_flex">
-              <label htmlFor="size">Screen Size: </label>
-              <select name="" id="size">
-                <option value="50">50 in</option>
-                <option value="40">40 in</option>
-                <option value="30">50 in</option>
-              </select>
+            {product.features.map((item, index) => (
+              <div className="size f_flex" key={index}>
+                <label htmlFor="size">{item.name}: </label>
+
+                <select name="" id="size">
+                  {item.subFeatures.map((s, subIndex) => (
+                    <option key={subIndex} value={s}>
+                      {s}
+                    </option>
+                  ))}
+                </select>
+              </div>
+            ))}
+
+            <div className="color size">
+              <label className="a_flex">
+                Color:
+                {product.color.map((item, index) => (
+                  <p key={index}>{index === isSelected ? item.name : ""}</p>
+                ))}
+              </label>
+              <div className="gap a_flex">
+                {product.color.map((item, index) => (
+                  <div
+                    key={index}
+                    onClick={() => handleColorClick(index)}
+                    className={`colorImg ${
+                      index === isSelected ? "active" : ""
+                    }`}
+                  >
+                    <img src={item.img} alt={item.name} />
+                    <CheckIcon className="icon" />
+                  </div>
+                ))}
+              </div>
             </div>
+
             <div className="promotion d_flex">
               <div className="left">
                 <h3>

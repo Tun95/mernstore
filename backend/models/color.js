@@ -5,10 +5,8 @@ const colorSchema = new mongoose.Schema(
     color: {
       type: String,
       required: true,
-      default:
-        "https://res.cloudinary.com/dstj5eqcd/image/upload/v1673947522/ryctyvbnjapn0zruozqa.png",
     },
-    colorName: {
+    hexCode: {
       type: String,
       required: true,
     },

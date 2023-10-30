@@ -1,12 +1,5 @@
 import mongoose from "mongoose";
 
-const wishlistSchema = new mongoose.Schema({
-  checked: { type: Boolean, default: false },
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
-});
 const reviewSchema = new mongoose.Schema(
   {
     firstName: { type: String, required: true },
@@ -15,6 +8,8 @@ const reviewSchema = new mongoose.Schema(
     image: { type: String },
     comment: { type: String, required: true },
     rating: { type: Number, required: true },
+    likes: { type: Number, default: 0 },
+    dislikes: { type: Number, default: 0 },
   },
   {
     timestamps: true,
@@ -27,10 +22,39 @@ const productSchema = new mongoose.Schema(
     seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
     slug: { type: String, required: true, unique: true },
     keygen: { type: String },
-    category: [{ type: String }], // Updated to array type
-    size: [{ type: String }], // Updated to array type
-    color: [{ type: String }], // Updated to array type
+    category: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category", // Reference to the Category model
+    },
+    subcategory: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category.subCategories", // Reference the subcategories within the Category
+    },
+    subitem: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Category.subCategories.subItems", // Reference the subitems within the subcategories
+    },
+    size: [{ type: String }],
+    color: [{ type: String }],
+    colorImg: [String],
+    brand: [{ type: String }],
     price: { type: Number },
+    images: [String],
+    specification: [String],
+    video: [
+      {
+        name: { type: String },
+        videoLink: { type: String },
+        description: { type: String },
+      },
+    ],
+    desc: { type: String },
+    features: [
+      {
+        name: { type: String },
+        subFeatures: [{ type: String }],
+      },
+    ],
     countInStock: { type: Number, default: 0 },
     numSales: { type: Number, default: 0 },
     sold: [
@@ -40,17 +64,10 @@ const productSchema = new mongoose.Schema(
       },
     ],
     discount: { type: Number, default: 0 },
-    brand: [{ type: String }], // Updated to array type
-    image: { type: String },
-    flashdeal: { type: Boolean, default: false },
-    images: [String],
-    desc: { type: String },
+    blackFriday: { type: Boolean, default: false },
     rating: { type: Number, default: 0 },
     numReviews: { type: Number, default: 0 },
     reviews: [reviewSchema],
-    weight: { type: Number, default: 0 },
-    wish: [wishlistSchema],
-    numWish: { type: Number, default: 0 },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -80,6 +97,13 @@ productSchema.pre("save", function (next) {
 productSchema.virtual("order", {
   ref: "Order",
   foreignField: "orderItems.product",
+  localField: "_id",
+});
+
+//Virtual method to populate created order
+productSchema.virtual("promotion", {
+  ref: "Promotion",
+  foreignField: "product",
   localField: "_id",
 });
 

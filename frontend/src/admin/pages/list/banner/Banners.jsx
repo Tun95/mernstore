@@ -1,11 +1,4 @@
 import React, { useContext, useEffect, useReducer } from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { request } from "../../../../base url/BaseUrl";
@@ -115,7 +108,7 @@ function Banners() {
   //===============
   useEffect(() => {
     const fetchData = async () => {
-      dispatch({ type: "FETCH_CATEGORY_REQUEST" });
+      dispatch({ type: "FETCH_REQUEST" });
       try {
         const { data } = await axios.get(`${request}/api/banner`, {
           headers: { Authorization: `Bearer ${userInfo.token}` },

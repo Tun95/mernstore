@@ -20,16 +20,19 @@ const categorySchema = new mongoose.Schema({
   subCategories: [subCategorySchema],
 });
 
-const categoryModel = new mongoose.Schema(
-  {
-    categories: [categorySchema],
-  },
-  {
-    timestamps: true,
-    toJSON: { virtuals: true }, // Enable virtuals to be included in toJSON output
-    toObject: { virtuals: true }, // Enable virtuals to be included in toObject output
-  }
-);
+const colorFilterSchema = new mongoose.Schema({
+  name: String,
+  hexCode: String,
+});
 
-const Category = mongoose.model("Category", categoryModel);
-export default Category;
+const filterModel = new mongoose.Schema({
+  categories: [categorySchema],
+  prices: {
+    minPrice: Number,
+    maxPrice: Number,
+  },
+  colors: [colorFilterSchema],
+});
+
+const Filters = mongoose.model("Filters", filterModel);
+export default Filters;

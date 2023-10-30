@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import PromotionCard from "./PromotionCard";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
@@ -28,7 +28,27 @@ const PrevArrow = (props) => {
     </div>
   );
 };
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "FETCH_REQUEST":
+      return { ...state, loading: true };
+    case "FETCH_SUCCESS":
+      return { ...state, loading: false, promotions: action.payload };
+    case "FETCH_FAIL":
+      return { ...state, loading: false, errors: action.payload };
+
+    default:
+      return state;
+  }
+};
 function Promotion() {
+  const [{ loading, error }, dispatch] = useReducer(reducer, {
+    loading: true,
+    error: "",
+    promotions: [],
+  });
+
   const { promotions } = data;
 
   const navigate = useNavigate();

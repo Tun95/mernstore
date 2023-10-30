@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import data from "../bestseller/data";
 import DemandCard from "./DemandCard";
 import Slider from "react-slick";
@@ -27,8 +27,29 @@ const PrevArrow = (props) => {
     </div>
   );
 };
+
+const reducer = (state, action) => {
+  switch (action.type) {
+    case "FETCH_REQUEST":
+      return { ...state, loading: true };
+    case "FETCH_SUCCESS":
+      return { ...state, loading: false, promotions: action.payload };
+    case "FETCH_FAIL":
+      return { ...state, loading: false, errors: action.payload };
+
+    default:
+      return state;
+  }
+};
+
 function Demand() {
   const { products } = data;
+
+  const [{ loading, error, promotions }, dispatch] = useReducer(reducer, {
+    loading: true,
+    error: "",
+    banners: [],
+  });
 
   //===========
   //REACT SLICK
