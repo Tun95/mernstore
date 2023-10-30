@@ -1,9 +1,6 @@
 import React, { useContext, useReducer, useRef, useState } from "react";
 import JoditEditor from "jodit-react";
 import PublishIcon from "@mui/icons-material/Publish";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import DeleteIcon from "@mui/icons-material/Delete";
 import photo from "../../../assets/photo.jpg";
 import { Helmet } from "react-helmet-async";
@@ -13,6 +10,8 @@ import axios from "axios";
 import { request } from "../../../../base url/BaseUrl";
 import { toast } from "react-toastify";
 import { getError } from "../../../../components/utilities/util/Utils";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -155,15 +154,34 @@ function NewProduct() {
     });
   };
 
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 210,
-      },
-    },
+  //============
+  //TOGGLE BOX
+  //============
+  const [openBox, setOpenBox] = useState(null);
+
+  const toggleBox = (index) => {
+    if (openBox === index) {
+      setOpenBox(null);
+    } else {
+      setOpenBox(index);
+    }
+  };
+
+  //==================
+  //TOGGLE FEATURE BOX
+  //==================
+  const [featureData, setFeatureData] = useState([
+    { featureName: "", subFeatures: [""] }, // Initialize with one empty feature and one sub-feature
+  ]);
+
+  const addFeature = () => {
+    setFeatureData([...featureData, { featureName: "", subFeatures: [""] }]);
+  };
+
+  const addSubFeature = (featureIndex) => {
+    const updatedFeatureData = [...featureData];
+    updatedFeatureData[featureIndex].subFeatures.push("");
+    setFeatureData(updatedFeatureData);
   };
   return (
     <>
@@ -171,217 +189,212 @@ function NewProduct() {
         <Helmet>
           <title>Add Product</title>
         </Helmet>
-        <div className="container">
-          <div className="product_edit ">
+        <div className="product_edit ">
+          <div className="container">
             <div className=" ">
               <div className="productTitleContainer">
-                <h2 className="productTitle light_shadow uppercase">
+                <h3 className="productTitle light_shadow uppercase">
                   Add Product
-                </h2>
+                </h3>
               </div>
               <div className="productBottom mtb">
                 <form action="" onSubmit={submitHandler}>
                   <div className="productForm">
-                    <div className="productFormLeft_styles">
-                      <div className="productFormLeft productFormLeft-one">
-                        <label htmlFor="name">Name</label>
-                        <input
-                          type="text"
-                          id="name"
-                          value={name}
-                          maxLength="23"
-                          onChange={(e) => setName(e.target.value)}
-                          placeholder="Bracelet Armchair Fendi"
-                        />
-                        <label htmlFor="slug">Slug</label>
-                        <input
-                          type="text"
-                          id="slug"
-                          value={slug}
-                          onChange={(e) => setSlug(e.target.value)}
-                          placeholder="Bracelet Armchair Fendi"
-                        />
-                        <label htmlFor="keygen">Keygen</label>
-                        <input
-                          type="text"
-                          id="keygen"
-                          value={keygen}
-                          onChange={(e) => setKeygen(e.target.value)}
-                          placeholder="SKU BK3569"
-                        />
-                        <label htmlFor="qty">Quantity</label>
-                        <input
-                          type="text"
-                          id="qty"
-                          value={countInStock}
-                          onChange={(e) => setCountInStock(e.target.value)}
-                          placeholder="123"
-                        />
-                        <label htmlFor="weight">Weight</label>
-                        <input
-                          type="text"
-                          id="weight"
-                          value={weight}
-                          onChange={(e) => setWeight(e.target.value)}
-                          placeholder="225 in kg"
-                        />
+                    <div className="product_info">
+                      <div className="light_shadow">
+                        <div
+                          className={
+                            !openBox === 0
+                              ? "header border c_flex"
+                              : "header c_flex"
+                          }
+                          onClick={() => toggleBox(0)}
+                        >
+                          <div className="left">
+                            <div className="d_flex">
+                              <div className="number l_flex">
+                                <span>01</span>
+                              </div>
+                              <div className="text">
+                                <h4>Product Info</h4>
+                                <small>Fill all information below</small>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="right">
+                            {openBox === 0 ? (
+                              <KeyboardArrowUpIcon className="icon" />
+                            ) : (
+                              <KeyboardArrowDownIcon className="icon" />
+                            )}
+                          </div>
+                        </div>
+                        {openBox === 0 && (
+                          <div className="product_info_box box">
+                            <div className="form-group">
+                              <label htmlFor="name">Name</label>
+                              <input
+                                type="text"
+                                id="name"
+                                placeholder="product name"
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="quantity">Quantity</label>
+                              <input
+                                type="text"
+                                id="quantity"
+                                placeholder="123"
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="price">Price</label>
+                              <input
+                                type="text"
+                                id="price"
+                                placeholder="1023"
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="discount">Discount</label>
+                              <input
+                                type="text"
+                                id="discount"
+                                placeholder="15"
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="weight">Weight</label>
+                              <input
+                                type="text"
+                                id="weight"
+                                placeholder="225g"
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="category">Category</label>
+                              <select name="category" id="category">
+                                <option value="category">category</option>
+                              </select>
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="brand">Brand</label>
+                              <input
+                                type="text"
+                                id="brand"
+                                placeholder="brand"
+                              />
+                            </div>{" "}
+                            <div className="form-group">
+                              <label htmlFor="image">Image</label>
+                              <input
+                                type="text"
+                                id="image"
+                                placeholder="image link"
+                              />
+                            </div>
+                          </div>
+                        )}
                       </div>
-                      <div className="productFormLeft productFormLeft-Two">
-                        <label htmlFor="category" className="ccatb-des">
-                          Category
-                        </label>
-                        <FormControl
-                          variant="filled"
-                          size="small"
-                          id="formControl"
+                      <div className="features_box light_shadow">
+                        <div
+                          className={
+                            !openBox === 1
+                              ? "header border c_flex"
+                              : "header c_flex"
+                          }
+                          onClick={() => toggleBox(1)}
                         >
-                          <Select
-                            labelId="mui-simple-select-label"
-                            id="mui_simple_select"
-                            multiple
-                            MenuProps={MenuProps}
-                            SelectDisplayProps={{
-                              style: { paddingTop: 8, paddingBottom: 8 },
-                            }}
-                            value={category}
-                            label={category}
-                            onChange={(e) => setCategory(e.target.value)}
-                          >
-                            {categories?.map((c, index) => (
-                              <MenuItem key={index} value={c.category}>
-                                {c.category}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-
-                        <select
-                          // value={selectedOption}
-                          // onChange={handleSelectChange}
-                        >
-                          <option value="">Select an option</option>
-                          <optgroup label="Group 1">
-                            <option value="Option 1.1">Option 1.1</option>
-                            <option value="Option 1.2">Option 1.2</option>
-                            <option value="Option 1.3">Option 1.3</option>
-                          </optgroup>
-                          <optgroup label="Group 2">
-                            <option value="Option 2.1">Option 2.1</option>
-                            <option value="Option 2.2">Option 2.2</option>
-                            <option value="Option 2.3">Option 2.3</option>
-                          </optgroup>
-                        </select>
-                        <label htmlFor="color" className="ccatb-des">
-                          Color
-                        </label>
-                        <FormControl
-                          variant="filled"
-                          size="small"
-                          id="formControl"
-                        >
-                          <Select
-                            labelId="mui-simple-select-label"
-                            id="mui_simple_select"
-                            multiple
-                            MenuProps={MenuProps}
-                            SelectDisplayProps={{
-                              style: { paddingTop: 8, paddingBottom: 8 },
-                            }}
-                            value={color}
-                            label={color}
-                            onChange={(e) => setColor(e.target.value)}
-                          >
-                            {colors?.map((c, index) => (
-                              <MenuItem key={index} value={c.color}>
-                                <img
-                                  src={c.color}
-                                  alt={c.color}
-                                  className="color_image_size"
-                                />
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                        <label htmlFor="img" className="ccatb-des">
-                          Image
-                        </label>
-                        <input
-                          type="text"
-                          id="img"
-                          value={image}
-                          onChange={(e) => setImage(e.target.value)}
-                          placeholder="/imgs/kid1.png"
-                        />
-                      </div>
-                      <div className="productFormLeft productFormLeft-three">
-                        <label htmlFor="size">Size</label>
-                        <FormControl
-                          variant="filled"
-                          size="small"
-                          id="formControl"
-                        >
-                          <Select
-                            labelId="mui-simple-select-label"
-                            id="mui_simple_select"
-                            multiple
-                            MenuProps={MenuProps}
-                            SelectDisplayProps={{
-                              style: { paddingTop: 8, paddingBottom: 8 },
-                            }}
-                            value={size}
-                            label={size}
-                            onChange={(e) => setSize(e.target.value)}
-                          >
-                            {sizes?.map((s, index) => (
-                              <MenuItem key={index} value={s.size}>
-                                {s.size}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                        <label htmlFor="brand" className="ccatb-des">
-                          Brand
-                        </label>
-                        <FormControl
-                          variant="filled"
-                          size="small"
-                          id="formControl"
-                        >
-                          <Select
-                            labelId="mui-simple-select-label"
-                            id="mui_simple_select"
-                            multiple
-                            MenuProps={MenuProps}
-                            SelectDisplayProps={{
-                              style: { paddingTop: 8, paddingBottom: 8 },
-                            }}
-                            value={brand}
-                            label={brand}
-                            onChange={(e) => setBrand(e.target.value)}
-                          >
-                            {brands?.map((b, index) => (
-                              <MenuItem key={index} value={b.brand}>
-                                {b.brand}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        </FormControl>
-                        <label htmlFor="price">Price</label>
-                        <input
-                          type="text"
-                          id="price"
-                          value={price}
-                          onChange={(e) => setPrice(e.target.value)}
-                          placeholder="23"
-                        />
-                        <label htmlFor="discount">Discount</label>
-                        <input
-                          type="text"
-                          id="discount"
-                          value={discount}
-                          onChange={(e) => setDiscount(e.target.value)}
-                          placeholder="10"
-                        />
+                          <div className="left">
+                            <div className="d_flex">
+                              <div className="number l_flex">
+                                <span>02</span>
+                              </div>
+                              <div className="text">
+                                <h4>Features</h4>
+                                <small>Add product features below</small>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="right">
+                            {openBox === 1 ? (
+                              <KeyboardArrowUpIcon className="icon" />
+                            ) : (
+                              <KeyboardArrowDownIcon className="icon" />
+                            )}
+                          </div>
+                        </div>
+                        {openBox === 1 && (
+                          <div className="features box">
+                            <div className="more_feature">
+                              {featureData.map((feature, featureIndex) => (
+                                <div
+                                  className="more_feature_box"
+                                  key={featureIndex}
+                                >
+                                  <div className="form-group">
+                                    <label htmlFor="feature">Feature</label>
+                                    <input
+                                      type="text"
+                                      placeholder="feature name"
+                                      value={feature.featureName}
+                                      onChange={(e) => {
+                                        const updatedFeatureData = [
+                                          ...featureData,
+                                        ];
+                                        updatedFeatureData[
+                                          featureIndex
+                                        ].featureName = e.target.value;
+                                        setFeatureData(updatedFeatureData);
+                                      }}
+                                    />
+                                  </div>
+                                  <div className="form-group">
+                                    {feature.subFeatures.map(
+                                      (subFeature, subFeatureIndex) => (
+                                        <div
+                                          className="sub_features a_flex"
+                                          key={subFeatureIndex}
+                                        >
+                                          <input
+                                            type="text"
+                                            className="sub-features"
+                                            placeholder="sub-features name"
+                                            value={subFeature}
+                                            onChange={(e) => {
+                                              const updatedFeatureData = [
+                                                ...featureData,
+                                              ];
+                                              updatedFeatureData[
+                                                featureIndex
+                                              ].subFeatures[subFeatureIndex] =
+                                                e.target.value;
+                                              setFeatureData(
+                                                updatedFeatureData
+                                              );
+                                            }}
+                                          />
+                                          <div className="btn">
+                                            <span
+                                              onClick={() =>
+                                                addSubFeature(featureIndex)
+                                              }
+                                            >
+                                              Add
+                                            </span>
+                                          </div>
+                                        </div>
+                                      )
+                                    )}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="add_more_btn">
+                              <span onClick={addFeature}>Add More</span>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                     <div className="productFormRight mtb c_flex">
