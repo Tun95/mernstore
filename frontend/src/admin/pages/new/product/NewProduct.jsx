@@ -374,24 +374,26 @@ function NewProduct() {
                                               );
                                             }}
                                           />
-                                          <div className="btn">
-                                            <span
-                                              onClick={() =>
-                                                addSubFeature(featureIndex)
-                                              }
-                                            >
-                                              Add
-                                            </span>
-                                          </div>
                                         </div>
                                       )
                                     )}
+                                    <div className="add_btn">
+                                      <span
+                                        onClick={() =>
+                                          addSubFeature(featureIndex)
+                                        }
+                                      >
+                                        Add Sub-Features
+                                      </span>
+                                    </div>
                                   </div>
                                 </div>
                               ))}
                             </div>
                             <div className="add_more_btn">
-                              <span onClick={addFeature}>Add More</span>
+                              <span onClick={addFeature}>
+                                Add More Features
+                              </span>
                             </div>
                           </div>
                         )}
