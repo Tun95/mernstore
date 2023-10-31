@@ -34,21 +34,24 @@ const productSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "Category.subCategories.subItems", // Reference the subitems within the subcategories
     },
-    size: [{ type: String }],
-    color: [{ type: String }],
-    colorImg: [String],
-    brand: [{ type: String }],
-    price: { type: Number },
+    color: [
+      {
+        colorName: { type: String },
+        colorLink: { type: String },
+      },
+    ],
+    brand: { type: String },
+    price: { type: Number, default: 0 },
     images: [String],
     specification: [String],
     video: [
       {
-        name: { type: String },
+        videoTitle: { type: String },
         videoLink: { type: String },
-        description: { type: String },
+        videoDescription: { type: String },
       },
     ],
-    desc: { type: String },
+    description: { type: String },
     features: [
       {
         name: { type: String },
