@@ -306,6 +306,23 @@ function NewProduct() {
                               </select>
                             </div>
                             <div className="form-group">
+                              <label htmlFor="sub-category">Sub-Category</label>
+                              <select name="sub-category" id="sub-category">
+                                <option value="category">category</option>
+                              </select>
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="sub-category-items">
+                                Sub-Category items
+                              </label>
+                              <select
+                                name="sub-category-items"
+                                id="sub-category-items"
+                              >
+                                <option value="category">category</option>
+                              </select>
+                            </div>
+                            <div className="form-group">
                               <label htmlFor="brand">Brand</label>
                               <input
                                 type="text"
@@ -442,9 +459,7 @@ function NewProduct() {
                               </div>
                               <div className="text">
                                 <h4>Product Color</h4>
-                                <small>
-                                  Add product image color
-                                </small>
+                                <small>Add product image color</small>
                               </div>
                             </div>
                           </div>
