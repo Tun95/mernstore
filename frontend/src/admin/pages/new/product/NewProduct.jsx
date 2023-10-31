@@ -443,8 +443,7 @@ function NewProduct() {
                               <div className="text">
                                 <h4>Product Color</h4>
                                 <small>
-                                  Add multiple image link of product with
-                                  different color
+                                  Add product image color
                                 </small>
                               </div>
                             </div>

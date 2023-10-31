@@ -83,6 +83,14 @@
         grid-template-columns: repeat(3, 1fr);
         gap: 10px;
         padding: 20px;
+        /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+        @media screen and (max-width: 745px) {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+        @media screen and (max-width: 480px) {
+          grid-template-columns: 1fr;
+        }
       }
       .features_box {
         .features {
@@ -91,6 +99,14 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
+            /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+            @media screen and (max-width: 745px) {
+              grid-template-columns: repeat(2, 1fr);
+            }
+            /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+            @media screen and (max-width: 480px) {
+              grid-template-columns: 1fr;
+            }
             .form-group:nth-child(2) {
               margin-top: 10px;
             }
