@@ -1,8 +1,6 @@
 import React, { useContext, useReducer, useRef, useState } from "react";
 import JoditEditor from "jodit-react";
-import PublishIcon from "@mui/icons-material/Publish";
-import DeleteIcon from "@mui/icons-material/Delete";
-import photo from "../../../assets/photo.jpg";
+import CloseIcon from "@mui/icons-material/Close";
 import { Helmet } from "react-helmet-async";
 import { Context } from "../../../../context/Context";
 import { useNavigate } from "react-router-dom";
@@ -12,6 +10,10 @@ import { toast } from "react-toastify";
 import { getError } from "../../../../components/utilities/util/Utils";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { Uploader } from "uploader";
+import { UploadDropzone } from "react-uploader";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -26,6 +28,7 @@ const reducer = (state, action) => {
       return state;
   }
 };
+
 function NewProduct() {
   const [{ loading, error }, dispatch] = useReducer(reducer, {
     loading: true,
@@ -193,6 +196,20 @@ function NewProduct() {
 
   const addMoreColor = () => {
     setColorData([...colorData, { colorName: "", colorImg: "" }]);
+  };
+
+  //==================
+  //TOGGLE COLOR BOX
+  //==================
+  const [videoData, setVideoData] = useState([
+    { videoTitle: "", videoLink: "", videoDescription: "" }, // Initialize with one empty Color and one sub-Color
+  ]);
+
+  const addMoreVideo = () => {
+    setVideoData([
+      ...videoData,
+      { videoTitle: "", videoLink: "", videoDescription: "" },
+    ]);
   };
   return (
     <>
@@ -426,7 +443,7 @@ function NewProduct() {
                               <div className="text">
                                 <h4>Product Color</h4>
                                 <small>
-                                  Upload multiple image of product with
+                                  Add multiple image link of product with
                                   different color
                                 </small>
                               </div>
@@ -483,82 +500,239 @@ function NewProduct() {
                           </div>
                         )}
                       </div>
-                    </div>
-                    <div className="productFormRight mtb c_flex">
-                      <div className="productUpload light_shadow">
-                        <img
-                          src={image || photo}
-                          alt=""
-                          className="productUploadImg"
-                        />
-                        {/* {image === loadingUpload && <LoadingBox></LoadingBox>} */}
-                        <label htmlFor="file">
-                          <PublishIcon
-                            className="upload-btn"
-                            onChange={uploadFileHandler}
-                          />
-                        </label>
-                        <input
-                          onChange={uploadFileHandler}
-                          type="file"
-                          id="file"
-                          style={{ display: "none" }}
-                        />
-                      </div>
-                      <div className="productUpload light_shadow mtb">
-                        <div className="productUploadImg-delete">
-                          {images.map((x) => (
-                            <div key={x}>
-                              <img
-                                src={x}
-                                alt=""
-                                className="productUploadImg wtdh-imgs small_imgs"
-                              />
-                              <DeleteIcon
-                                onClick={() => deleteFileHandler(x)}
-                                className="deleteImages"
-                              />
-                            </div>
-                          ))}
-                        </div>
-                        <label
-                          htmlFor="files"
-                          className="products-images-upload"
+                      <div className="light_shadow mt product_images">
+                        <div
+                          className={
+                            openBox === 3
+                              ? "header  c_flex"
+                              : "header border c_flex"
+                          }
+                          onClick={() => toggleBox(3)}
                         >
-                          {/* {images.length === 0 && <MessageBox>No Image</MessageBox>} */}
-                          {/* {images && loadingUpload && <LoadingBox></LoadingBox>} */}
-                          <PublishIcon
-                            className="upload-btn images-list-l"
-                            onChange={(e) => uploadFileHandler(e, true)}
-                          />
-                        </label>
-                        <input
-                          style={{ display: "none" }}
-                          type="file"
-                          id="files"
-                          onChange={(e) => uploadFileHandler(e, true)}
-                        />
+                          <div className="left">
+                            <div className="d_flex">
+                              <div className="number l_flex">
+                                <span>04</span>
+                              </div>
+                              <div className="text">
+                                <h4>Product Images</h4>
+                                <small>Upload product images</small>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="right">
+                            {openBox === 3 ? (
+                              <KeyboardArrowUpIcon className="icon" />
+                            ) : (
+                              <KeyboardArrowDownIcon className="icon" />
+                            )}
+                          </div>
+                        </div>
+                        {openBox === 3 && (
+                          <div className="product_info_images">
+                            <div className="product_info_img_box box">
+                              <div className="form_group f_flex">
+                                {images.map((x) => (
+                                  <div key={x} className="drop_zone">
+                                    <img src={x} alt="" className="images" />
+                                    <div className="icon_bg l_flex">
+                                      <CloseIcon
+                                        onClick={() => deleteFileHandler(x)}
+                                        className="icon"
+                                      />
+                                    </div>
+                                  </div>
+                                ))}
+                                <div>
+                                  <label
+                                    htmlFor="files"
+                                    className="upload_box l_flex"
+                                  >
+                                    <div className="inner">
+                                      <div className="icon_btn">
+                                        <CloudUploadIcon className="icon" />
+                                      </div>
+                                      <div className="text">
+                                        <div>
+                                          <p>Upload product images</p>
+                                        </div>
+                                        <div>
+                                          <small>
+                                            recommended: high quality, small
+                                            size image
+                                          </small>
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <input
+                                      style={{ display: "none" }}
+                                      type="file"
+                                      id="files"
+                                      onChange={(e) =>
+                                        uploadFileHandler(e, true)
+                                      }
+                                    />
+                                  </label>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="light_shadow mt product_color ">
+                        <div
+                          className={
+                            openBox === 4
+                              ? "header  c_flex"
+                              : "header border c_flex"
+                          }
+                          onClick={() => toggleBox(4)}
+                        >
+                          <div className="left">
+                            <div className="d_flex">
+                              <div className="number l_flex">
+                                <span>05</span>
+                              </div>
+                              <div className="text">
+                                <h4>Video Reviews</h4>
+                                <small>Add product review videos</small>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="right">
+                            {openBox === 4 ? (
+                              <KeyboardArrowUpIcon className="icon" />
+                            ) : (
+                              <KeyboardArrowDownIcon className="icon" />
+                            )}
+                          </div>
+                        </div>
+                        {openBox === 4 && (
+                          <div className="product_info_video product_info_color">
+                            <div className="product_info_box box">
+                              {videoData.map((video, videoIndex) => (
+                                <div className="form-group" key={videoIndex}>
+                                  <label htmlFor="video">Video</label>
+                                  <span className="video_name">
+                                    <input
+                                      type="text"
+                                      id="video"
+                                      value={video.videoTitle}
+                                      onChange={(e) => {
+                                        const updatedVideoData = [...videoData];
+                                        updatedVideoData[
+                                          videoIndex
+                                        ].videoTitle = e.target.value;
+                                        setVideoData(updatedVideoData);
+                                      }}
+                                      placeholder="title"
+                                    />
+                                  </span>
+                                  <span className="link_img">
+                                    <input
+                                      type="text"
+                                      id="color"
+                                      value={video.videoLink}
+                                      onChange={(e) => {
+                                        const updatedVideoData = [...videoData];
+                                        updatedVideoData[videoIndex].videoLink =
+                                          e.target.value;
+                                        setVideoData(updatedVideoData);
+                                      }}
+                                      placeholder="video link"
+                                    />
+                                  </span>
+                                  <span className="description">
+                                    <textarea
+                                      name="description"
+                                      id="description"
+                                      placeholder="Descritions here..."
+                                      value={video.videoDescription}
+                                      onChange={(e) => {
+                                        const updatedVideoData = [...videoData];
+                                        updatedVideoData[
+                                          videoIndex
+                                        ].videoDescription = e.target.value;
+                                        setVideoData(updatedVideoData);
+                                      }}
+                                    ></textarea>
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                            <div className="add_more_btn">
+                              <span onClick={addMoreVideo}>
+                                Add More Videos
+                              </span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="light_shadow mt product_description ">
+                        <div
+                          className={
+                            openBox === 5
+                              ? "header  c_flex"
+                              : "header border c_flex"
+                          }
+                          onClick={() => toggleBox(5)}
+                        >
+                          <div className="left">
+                            <div className="d_flex">
+                              <div className="number l_flex">
+                                <span>06</span>
+                              </div>
+                              <div className="text">
+                                <h4>Product Description</h4>
+                                <small>
+                                  Provide in detail product description
+                                </small>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="right">
+                            {openBox === 5 ? (
+                              <KeyboardArrowUpIcon className="icon" />
+                            ) : (
+                              <KeyboardArrowDownIcon className="icon" />
+                            )}
+                          </div>
+                        </div>
+                        {openBox === 5 && (
+                          <div className="product_info_desc ">
+                            <div className="box">
+                              <div className="form_group">
+                                <label htmlFor="">Description</label>
+                                <JoditEditor
+                                  className="editor"
+                                  id="desc"
+                                  ref={editor}
+                                  value={desc}
+                                  // config={config}
+                                  tabIndex={1} // tabIndex of textarea
+                                  onBlur={(newContent) => setDesc(newContent)} // preferred to use only this option to update the content for performance reasons
+                                  onChange={(newContent) => {}}
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>
-                  <div className="lower_test">
-                    <label htmlFor="">Description</label>
-                    <JoditEditor
-                      className="editor"
-                      id="desc"
-                      ref={editor}
-                      value={desc}
-                      // config={config}
-                      tabIndex={1} // tabIndex of textarea
-                      onBlur={(newContent) => setDesc(newContent)} // preferred to use only this option to update the content for performance reasons
-                      onChange={(newContent) => {}}
-                    />
-                  </div>
-                  <div className="btn">
-                    <button className="productButton main_btn mtb ">
-                      Cancel
-                    </button>
-                    <button type="submit">Save</button>
+                  <div className="bottom_btn mtb">
+                    <span className="a_flex">
+                      <button
+                        className=" a_flex"
+                        onClick={() => navigate("/admin/products")}
+                      >
+                        <CloseIcon className="icon" /> Cancel
+                      </button>
+                      <button type="submit" className="a_flex">
+                        <DescriptionOutlinedIcon className="icon" /> Save
+                      </button>
+                    </span>
                   </div>
                 </form>
               </div>

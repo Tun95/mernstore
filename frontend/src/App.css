@@ -10,6 +10,8 @@
   --color-bg: #f3f5f9;
   --color-border: #e7e8eb;
   --color-background: #f6f9fc;
+  --color-number-bg: #abacff7e;
+  --color-number-text: #5052ba;
   --color-light-light-gray: #f6f6f6;
   --color-rating: #ffcd4e;
   --color-plan: #fdba3d;
@@ -17,7 +19,7 @@
   --color-hover: #c72b3d;
   --color-youtube: #ff0000;
   --color-green: #075e54;
-  --color-light-green: #128c7e;
+  --color-light-green: #24ab5e;
   --color-blue: #3462fa;
   --color-link-hover: #07c;
   --color-tab: #389efd;
@@ -215,13 +217,7 @@ button:disabled {
 .white-fill {
   fill: white;
 }
-.main_btn {
-  background-color: var(--color-primary);
-  padding: 8px 10px;
-  color: var(--color-white);
-  cursor: pointer;
-  font-weight: 600;
-}
+
 .fa-square-plus {
   color: var(--color-light-green);
   font-size: 35px;
