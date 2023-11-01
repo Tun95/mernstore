@@ -48,6 +48,7 @@ const productSchema = new mongoose.Schema(
       {
         videoTitle: { type: String },
         videoLink: { type: String },
+        videoThumbnail: { type: String },
         videoDescription: { type: String },
       },
     ],

@@ -10,110 +10,31 @@ import Menu from "@mui/material/Menu";
 import EditNoteIcon from "@mui/icons-material/EditNote";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
-import { styled, alpha } from "@mui/material/styles";
-import { ProductReviewModal } from "../../modals/Modals";
+import { ProductReviewModal, VideoModal } from "../../modals/Modals";
 import Description from "./Description";
 import ReviewList from "./ReviewList";
+import v1 from "../../../assets/details/v1.jpg";
 
-const StyledMenu = styled((props) => (
-  <Menu
-    elevation={0}
-    anchorOrigin={{
-      vertical: "bottom",
-      horizontal: "center",
-    }}
-    transformOrigin={{
-      vertical: "top",
-      horizontal: "center",
-    }}
-    {...props}
-  />
-))(({ theme }) => ({
-  "& .MuiPaper-root": {
-    borderRadius: 6,
-    marginTop: theme.spacing(1),
-    minWidth: 100,
-    color:
-      theme.palette.mode === "light"
-        ? "rgb(55, 65, 81)"
-        : theme.palette.grey[300],
-    boxShadow:
-      "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
-    "& .MuiMenu-list": {
-      padding: "4px 0",
-    },
-    "& .MuiMenuItem-root": {
-      margin: "5px 0px",
-      fontSize: "15px",
-      "& .MuiSvgIcon-root": {
-        fontSize: 18,
-        color: theme.palette.text.secondary,
-        marginRight: theme.spacing(1.5),
-      },
-      "&:active": {
-        //  backgroundColor: alpha(
-        //     theme.palette.primary.main,
-        //     theme.palette.action.selectedOpacity
-        //   ),
-      },
-    },
-  },
-}));
-
+//TEXT TRUNCATE
+function truncateText(text, maxWords) {
+  const words = text.split(" ");
+  if (words.length <= maxWords) {
+    return text;
+  }
+  return words.slice(0, maxWords).join(" ") + " ...";
+}
 function ReviewDesc({ userInfo, handleDelete, dispatch }) {
-  // ===Description===//
-  const [description, setDescription] = useState(true);
-  const closeDescription = () => {
-    setDescription(false);
-    document.body.style.overflow = "unset";
-  };
-  const showDescription = () => {
-    setDescription(true);
-  };
-  const DescriptionDetail = () => {
-    showDescription();
-    closeReview();
-    closeFeature();
-  };
+  //============
+  //TOGGLE BOX
+  //============
+  const [openBox, setOpenBox] = useState(0);
 
-  //=== Review ==//
-  const [review, setReview] = useState(false);
-  const closeReview = () => {
-    setReview(false);
-    document.body.style.overflow = "unset";
-  };
-  const showReview = () => {
-    setReview(true);
-  };
-  const ReviewDetail = () => {
-    showReview();
-    closeDescription();
-    closeFeature();
-  };
-
-  // ===Features===//
-  const [feature, setFeature] = useState(false);
-  const closeFeature = () => {
-    setFeature(false);
-    document.body.style.overflow = "unset";
-  };
-  const showFeature = () => {
-    setFeature(true);
-  };
-  const FeatureDetail = () => {
-    showFeature();
-    closeReview();
-    closeDescription();
-  };
-
-  // ==== REVIEW DRAWER ====//
-  const [anchorUsr, setAnchorUsr] = useState(null);
-  const openUsr = Boolean(anchorUsr);
-  const handleClickUsr = (event) => {
-    setAnchorUsr(event.currentTarget);
-  };
-  const handleCloseUsr = () => {
-    setAnchorUsr(null);
+  const toggleBox = (index) => {
+    if (openBox === index) {
+      // Clicking on the currently open box; do nothing
+      return;
+    }
+    setOpenBox(index);
   };
 
   const product = {
@@ -127,6 +48,25 @@ function ReviewDesc({ userInfo, handleDelete, dispatch }) {
       { label: "Screen diagonal", value: "6.1" },
     ],
   };
+
+  const video = [
+    {
+      videoTitle: "The new MacBook Pro | Supercharged for pros | Apple",
+      videoThumbnail: "",
+      videoLink:
+        "https://www.youtube.com/embed/hs1HoLs4SD0?list=TLGGtmam0DIpMrIzMTEwMjAyMw",
+      videoDescription:
+        "The iPhone 14 Pro and iPhone 14 Pro Max are smartphones designed and marketed by Apple Inc. They are the sixteenth generation flagship iPhones, succeeding the iPhone",
+    },
+    {
+      videoTitle: "Introducing the new MacBook Air — Apple",
+      videoThumbnail: v1,
+      videoLink:
+        "https://www.youtube.com/embed/hs1HoLs4SD0?list=TLGGtmam0DIpMrIzMTEwMjAyMw",
+      videoDescription:
+        "The iPhone 14 Pro and iPhone 14 Pro Max are smartphones designed and marketed by Apple Inc. They are the sixteenth generation flagship iPhones, succeeding the iPhone",
+    },
+  ];
   return (
     <>
       <section className="review_section ">
@@ -134,31 +74,40 @@ function ReviewDesc({ userInfo, handleDelete, dispatch }) {
           <div className="rev_style">
             <div className="switch f_flex">
               <span
-                className={description ? "active" : ""}
-                onClick={DescriptionDetail}
+                className={openBox === 0 ? "active" : ""}
+                onClick={() => toggleBox(0)}
               >
                 Description
               </span>
               <span
-                className={review ? "active d_flex" : "d_flex"}
-                onClick={ReviewDetail}
+                className={openBox === 1 ? "active d_flex" : "d_flex"}
+                onClick={() => toggleBox(1)}
               >
                 Reviews
                 <span className="count l_flex">
                   <small>1</small>
                 </span>
               </span>
-              <span className={feature ? "active" : ""} onClick={FeatureDetail}>
+              <span
+                className={openBox === 2 ? "active" : ""}
+                onClick={() => toggleBox(2)}
+              >
                 Features
+              </span>
+              <span
+                className={openBox === 3 ? "active" : ""}
+                onClick={() => toggleBox(3)}
+              >
+                Video gallery
               </span>
             </div>
 
-            {description && (
+            {openBox === 0 && (
               <div className="description mt">
                 <Description />
               </div>
             )}
-            {review && (
+            {openBox === 1 && (
               <>
                 <div className="review mt">
                   <div className="d_flex">
@@ -181,7 +130,7 @@ function ReviewDesc({ userInfo, handleDelete, dispatch }) {
                 </div>
               </>
             )}
-            {feature && (
+            {openBox === 2 && (
               <>
                 <div className="features mt">
                   <ul>
@@ -194,6 +143,25 @@ function ReviewDesc({ userInfo, handleDelete, dispatch }) {
                   </ul>
                 </div>
               </>
+            )}
+            {openBox === 3 && (
+              <div className="video_reviews  mt">
+                {video.map((item, index) => (
+                  <div className="video_list" key={index}>
+                    <div className="thumbnail_box">
+                      <VideoModal item={item} />
+                    </div>
+                    <div className="text">
+                      <div className="name">
+                        <h4>{item.videoTitle}</h4>
+                      </div>
+                      <div className="video_description">
+                        <p>{truncateText(item.videoDescription, 13)}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             )}
           </div>
         </div>

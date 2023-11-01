@@ -24,7 +24,17 @@ import {
 import { Rating } from "@mui/material";
 import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
+import PlayArrowIcon from "@mui/icons-material/PlayArrow";
+import no from "../../assets/details/no.jpg";
 
+//TEXT TRUNCATE
+function truncateText(text, maxWords) {
+  const words = text.split(" ");
+  if (words.length <= maxWords) {
+    return text;
+  }
+  return words.slice(0, maxWords).join(" ") + " ...";
+}
 //MAP MODAL
 export function LocationModal() {
   //GOOGLE MAP
@@ -1085,5 +1095,54 @@ export function CalculateShippingModals() {
         </Box>
       </Modal>
     </>
+  );
+}
+
+//VIDEO REVIEW MODAL
+export function VideoModal({ item }) {
+  //GOOGLE MAP
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
+  return (
+    <span>
+      <span onClick={handleOpen} className="button-text a_flex">
+        <div className="thumbnail_icon">
+          <img
+            src={item.videoThumbnail ? item.videoThumbnail : no}
+            alt={item.videoTitle}
+            className="img"
+          />
+          <div className="icon_bg l_flex">
+            <PlayArrowIcon className="icon" />
+          </div>
+        </div>
+      </span>
+      <Modal
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="customer_location video_modal">
+          <div className="map_header c_flex">
+            <h1>{truncateText(item.videoTitle, 9)}</h1>
+            <CloseIcon onClick={handleClose} className="map_icon" />
+          </div>
+          <div className="video">
+            <iframe
+              width="900"
+              height="600"
+              src={item.videoLink}
+              title={item.videoTitle}
+              frameborder="0"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen
+            ></iframe>
+          </div>
+        </Box>
+      </Modal>
+    </span>
   );
 }
