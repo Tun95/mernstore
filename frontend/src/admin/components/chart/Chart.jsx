@@ -12,7 +12,7 @@ import {
 
 function Chart({ aspect, title, data, dataKey, CustomTooltip }) {
   return (
-    <div className="chart">
+    <div className="chart__box ">
       <div className="title">{title}</div>
       <ResponsiveContainer width="100%" aspect={aspect}>
         <AreaChart

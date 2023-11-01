@@ -60,7 +60,6 @@
     "react-stripe-checkout": "^2.6.3",
     "react-time-ago": "^7.2.1",
     "react-toastify": "^9.1.3",
-    "react-uploader": "^3.43.0",
     "react-web-share": "^2.0.2",
     "recharts": "^2.6.2",
     "sass": "^1.62.1",
@@ -68,7 +67,6 @@
     "socket.io-client": "^4.7.2",
     "swiper": "^11.0.2",
     "typewriter-effect": "^2.20.1",
-    "uploader": "^3.48.3",
     "web-vitals": "^2.1.4",
     "yup": "^1.2.0"
   },
