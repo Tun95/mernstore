@@ -50,7 +50,6 @@ function Withdrawal() {
     {
       loading,
       error,
-      loadingUpdate,
       successUpdate,
       successDelete,
       withdrawalRequests,
