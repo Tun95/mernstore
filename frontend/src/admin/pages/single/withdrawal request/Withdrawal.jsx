@@ -147,21 +147,23 @@ function Withdrawal() {
 
   console.log(withdrawalRequests);
   return (
-    <div className="withdrawal">
+    <div className="withdrawal admin_page_all page_background admin_page_screen">
       <Helmet>
         <title>Withdrawal Requests</title>
       </Helmet>
-      <div className="container mt mb">
-        <div className="box_shadow">
+      <div className="container ">
+        <div className="productTitleContainer">
+          <h3 className="productTitle light_shadow uppercase">
+            Withdrawal Requests
+          </h3>
+        </div>
+        <div className="light_shadow withdrawal_box">
           {loading ? (
             <LoadingBox></LoadingBox>
           ) : error ? (
             <MessageBox variant="danger">{error}</MessageBox>
           ) : (
             <>
-              <span>
-                <h2>Withdrawal Requests</h2>
-              </span>
               {withdrawalRequests?.length > 0 ? (
                 withdrawalRequests.map((user) => (
                   <div key={user.userId} className="withdrawal-card">

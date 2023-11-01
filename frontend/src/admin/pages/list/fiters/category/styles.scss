@@ -33,6 +33,7 @@
   }
   h2 {
     font-size: 16px;
+    color: var(--color-gray);
   }
   .img {
     img {
@@ -50,7 +51,6 @@
   .datatable {
     margin-top: 0;
     padding: 0px;
-    box-shadow: var(--light-shadow);
     .datagrid {
       height: 400px;
     }

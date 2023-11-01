@@ -87,7 +87,7 @@ function OrderHistory() {
   console.log(orders);
   return (
     <div className="order-table">
-      <h2>Order History</h2>
+      <h3>Order History</h3>
       {loading ? (
         <LoadingBox></LoadingBox>
       ) : error ? (

@@ -276,15 +276,15 @@ function UserList() {
   ];
 
   return (
-    <>
+    <div className="admin_page_all page_background admin_page_screen">
       <Helmet>
         <title>All Users</title>
       </Helmet>
       <div className="container">
-        <div className="datatable mtb">
-          <span className="c_flex">
-            <h2>All Users</h2>
-          </span>
+        <div className="productTitleContainer">
+          <h3 className="productTitle light_shadow uppercase">All Users</h3>
+        </div>
+        <div className="datatable ">
           {loading ? (
             <LoadingBox></LoadingBox>
           ) : error ? (
@@ -302,7 +302,7 @@ function UserList() {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

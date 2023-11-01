@@ -7,6 +7,7 @@ import { request } from "../../../../base url/BaseUrl";
 import { toast } from "react-toastify";
 import { getError } from "../../../../components/utilities/util/Utils";
 import PublishIcon from "@mui/icons-material/Publish";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import "./styles.scss";
 
 const initialState = {
@@ -157,7 +158,7 @@ function Settings() {
   };
 
   return (
-    <div className="main_settings new_settings">
+    <div className="main_settings new_settings ">
       {state.loading ? (
         <LoadingBox></LoadingBox>
       ) : state.error ? (
@@ -463,13 +464,19 @@ function Settings() {
             </div>
           </form>
 
-          <button
-            className="btn"
-            onClick={handleUpdate}
-            disabled={state.loadingUpdate}
-          >
-            {state.loadingUpdate ? "Updating..." : "Update all"}
-          </button>
+          <div className="bottom_btn mtb">
+            <span className="a_flex">
+              <button
+                onClick={handleUpdate}
+                disabled={state.loadingUpdate}
+                type="submit"
+                className="a_flex"
+              >
+                <DescriptionOutlinedIcon className="icon" />{" "}
+                {state.loadingUpdate ? "Saving..." : "Save"}
+              </button>
+            </span>
+          </div>
         </>
       )}
     </div>

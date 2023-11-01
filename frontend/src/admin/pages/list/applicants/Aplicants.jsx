@@ -316,7 +316,7 @@ function Applicants() {
       <div className="applicants">
         <div className="datatable mtb">
           <span className="c_flex">
-            <h2>All Applicants</h2>
+            <h3>All Applicants</h3>
           </span>
           {loading ? (
             <LoadingBox></LoadingBox>

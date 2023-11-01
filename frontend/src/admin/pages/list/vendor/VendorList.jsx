@@ -258,15 +258,15 @@ function VendorList() {
   ];
 
   return (
-    <>
+    <div className="admin_page_all page_background admin_page_screen">
       <Helmet>
         <title>All Vendors</title>
       </Helmet>
       <div className="container">
-        <div className="datatable mtb">
-          <span className="c_flex">
-            <h2>All Vendors</h2>
-          </span>
+        <div className="productTitleContainer">
+          <h3 className="productTitle light_shadow uppercase">All Vendors</h3>
+        </div>
+        <div className="datatable ">
           {loading ? (
             <LoadingBox></LoadingBox>
           ) : error ? (
@@ -284,7 +284,7 @@ function VendorList() {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

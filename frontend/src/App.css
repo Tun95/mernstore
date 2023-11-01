@@ -36,7 +36,7 @@
   --color-filter: #e6e6e6;
   --transition: all 400ms ease;
   --box-shadow: 0 0.1rem 2rem rgba(30, 30, 30, 0.1);
-  --light-shadow: rgb(3 0 71 / 5%) 0px 1px 3px;
+  --light-shadow: rgb(3 0 71 / 9%) 0px 1px 3px;
   --border-sty: 1px solid #ebebeb;
   --container-width-lg: 85%;
   --container-width-md: 98%;
@@ -81,7 +81,7 @@ body {
   margin-bottom: 20px;
 }
 .light_shadow {
-  box-shadow: rgb(3 0 71 / 9%) 0px 1px 3px;
+  box-shadow: var(--light-shadow);
   border-radius: 10px;
 }
 .light_header {

@@ -112,125 +112,132 @@ function OrderList(props) {
   };
   console.log(orders);
   return (
-    <div className="container">
-      <div className="order-table order_table">
-        <h2>All Orders</h2>{" "}
-        {loading ? (
-          <LoadingBox></LoadingBox>
-        ) : error ? (
-          <MessageBox variant="danger">{error}</MessageBox>
-        ) : (
-          <>
-            <TableContainer component={Paper} className="table">
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
-                <TableHead>
-                  <TableRow>
-                    <TableCell className="tableCell">Tracking ID</TableCell>
-                    <TableCell className="tableCell">User</TableCell>
-                    <TableCell className="tableCell">Date</TableCell>
-                    <TableCell className="tableCell">Total</TableCell>
-                    <TableCell className="tableCell">Paid</TableCell>
-                    <TableCell className="tableCell">Delivery Status</TableCell>
-                    <TableCell className="tableCell">Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {orders?.length === 0 && (
-                    <div className="product_not">
-                      <span className="product-not">
-                        <MessageBox>No Orders Found </MessageBox>
-                      </span>
-                    </div>
-                  )}
-                  {orders?.map((order, index) => (
-                    <TableRow key={index}>
+    <div className="admin_page_all page_background admin_page_screen">
+      <div className="container">
+    
+        <div className="productTitleContainer">
+          <h3 className="productTitle light_shadow uppercase">All Orders</h3>
+        </div>
+        <div className="order-table order_table">
+          {loading ? (
+            <LoadingBox></LoadingBox>
+          ) : error ? (
+            <MessageBox variant="danger">{error}</MessageBox>
+          ) : (
+            <>
+              <TableContainer component={Paper} className="table">
+                <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                  <TableHead>
+                    <TableRow>
+                      <TableCell className="tableCell">Tracking ID</TableCell>
+                      <TableCell className="tableCell">User</TableCell>
+                      <TableCell className="tableCell">Date</TableCell>
+                      <TableCell className="tableCell">Total</TableCell>
+                      <TableCell className="tableCell">Paid</TableCell>
                       <TableCell className="tableCell">
-                        {order.trackingId}
+                        Delivery Status
                       </TableCell>
-                      <TableCell className="tableCell">
-                        {order.user
-                          ? order.user.firstName && order.user.lastName
-                            ? `${order.user.firstName} ${order.user.lastName}`
-                            : "DELETED USER"
-                          : "DELETED USER"}
-                      </TableCell>
-                      <TableCell className="tableCell">
-                        <div className="cellWrapper">
-                          <ReactTimeAgo
-                            date={Date.parse(order.createdAt)}
-                            locale="en-US"
-                          />
-                        </div>
-                      </TableCell>
-                      <TableCell className="tableCell">
-                        <div className="price">
-                          {convertCurrency(order.grandTotal?.toFixed(2))}
-                        </div>
-                      </TableCell>
-                      <TableCell className="tableCell">
-                        {order.paymentMethod === "Cash on Delivery" ? (
-                          <span className="with_cash">With Cash</span>
-                        ) : order.paymentMethod !== "Cash on Delivery" &&
-                          order.isPaid ? (
-                          <div className="paidAt">
-                            {formatDate(order.paidAt)}
-                          </div>
-                        ) : (
-                          <div className="negate">No</div>
-                        )}
-                      </TableCell>
-                      <TableCell className="tableCell tableCellPrice">
-                        {order.isDelivered ? (
-                          <div className="paidAt">
-                            {formatDate(order.deliveredAt)}
-                          </div>
-                        ) : order.isPaid ? (
-                          <div className="in_progress">In Progress</div>
-                        ) : (
-                          <div className="negate">No</div>
-                        )}
-                      </TableCell>
-                      <TableCell className="tableCell">
-                        <button
-                          className="tableBtn"
-                          onClick={() => {
-                            navigate(`/order-details/${order._id}`);
-                          }}
-                        >
-                          Details
-                        </button>
-                        <button
-                          className="deleteButton"
-                          onClick={() => deleteHandler(order)}
-                        >
-                          Delete
-                        </button>
-                      </TableCell>
+                      <TableCell className="tableCell">Actions</TableCell>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <div className="pagination p_flex">
-              <Pagination
-                page={page}
-                count={pages}
-                renderItem={(item) => (
-                  <PaginationItem
-                    className={`${
-                      item.page !== page
-                        ? "paginationItemStyle"
-                        : "paginationItemStyle active"
-                    }`}
-                    component={Link}
-                    to={`/admin/orders?page=${item.page}`}
-                    {...item}
-                  />
-                )}
-              />
-            </div>
-          </>
-        )}
+                  </TableHead>
+                  <TableBody>
+                    {orders?.length === 0 && (
+                      <div className="product_not">
+                        <span className="product-not">
+                          <MessageBox>No Orders Found </MessageBox>
+                        </span>
+                      </div>
+                    )}
+                    {orders?.map((order, index) => (
+                      <TableRow key={index}>
+                        <TableCell className="tableCell">
+                          {order.trackingId}
+                        </TableCell>
+                        <TableCell className="tableCell">
+                          {order.user
+                            ? order.user.firstName && order.user.lastName
+                              ? `${order.user.firstName} ${order.user.lastName}`
+                              : "DELETED USER"
+                            : "DELETED USER"}
+                        </TableCell>
+                        <TableCell className="tableCell">
+                          <div className="cellWrapper">
+                            <ReactTimeAgo
+                              date={Date.parse(order.createdAt)}
+                              locale="en-US"
+                            />
+                          </div>
+                        </TableCell>
+                        <TableCell className="tableCell">
+                          <div className="price">
+                            {convertCurrency(order.grandTotal?.toFixed(2))}
+                          </div>
+                        </TableCell>
+                        <TableCell className="tableCell">
+                          {order.paymentMethod === "Cash on Delivery" ? (
+                            <span className="with_cash">With Cash</span>
+                          ) : order.paymentMethod !== "Cash on Delivery" &&
+                            order.isPaid ? (
+                            <div className="paidAt">
+                              {formatDate(order.paidAt)}
+                            </div>
+                          ) : (
+                            <div className="negate">No</div>
+                          )}
+                        </TableCell>
+                        <TableCell className="tableCell tableCellPrice">
+                          {order.isDelivered ? (
+                            <div className="paidAt">
+                              {formatDate(order.deliveredAt)}
+                            </div>
+                          ) : order.isPaid ? (
+                            <div className="in_progress">In Progress</div>
+                          ) : (
+                            <div className="negate">No</div>
+                          )}
+                        </TableCell>
+                        <TableCell className="tableCell">
+                          <button
+                            className="tableBtn"
+                            onClick={() => {
+                              navigate(`/order-details/${order._id}`);
+                            }}
+                          >
+                            Details
+                          </button>
+                          <button
+                            className="deleteButton"
+                            onClick={() => deleteHandler(order)}
+                          >
+                            Delete
+                          </button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <div className="pagination p_flex">
+                <Pagination
+                  page={page}
+                  count={pages}
+                  renderItem={(item) => (
+                    <PaginationItem
+                      className={`${
+                        item.page !== page
+                          ? "paginationItemStyle"
+                          : "paginationItemStyle active"
+                      }`}
+                      component={Link}
+                      to={`/admin/orders?page=${item.page}`}
+                      {...item}
+                    />
+                  )}
+                />
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );

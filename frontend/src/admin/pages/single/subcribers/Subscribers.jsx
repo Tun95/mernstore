@@ -194,7 +194,7 @@ function Subscribers() {
         <>
           <div className="light_shadow">
             <div className="list">
-              <h2 className="mb">Subscribers</h2>
+              <h3 className="mb">Subscribers</h3>
               <DataGrid
                 className="datagrid"
                 rows={subscribers}

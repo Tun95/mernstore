@@ -13,6 +13,7 @@ import { request } from "../../../../base url/BaseUrl";
 import { toast } from "react-toastify";
 import { getError } from "../../../../components/utilities/util/Utils";
 import JoditEditor from "jodit-react";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 
 const initialState = {
   loading: false,
@@ -132,13 +133,19 @@ function Careers() {
             </div>
           </form>
 
-          <button
-            className="btn"
-            onClick={handleUpdate}
-            disabled={state.loadingUpdate}
-          >
-            {state.loadingUpdate ? "Updating..." : "Update"}
-          </button>
+          <div className="bottom_btn mtb">
+            <span className="a_flex">
+              <button
+                onClick={handleUpdate}
+                disabled={state.loadingUpdate}
+                type="submit"
+                className="a_flex"
+              >
+                <DescriptionOutlinedIcon className="icon" />{" "}
+                {state.loadingUpdate ? "Saving..." : "Save"}
+              </button>
+            </span>
+          </div>
         </>
       )}
     </div>

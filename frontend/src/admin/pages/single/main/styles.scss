@@ -73,19 +73,10 @@
         margin-right: 20px;
       }
     }
-
-    .submit_btn button {
-      width: 45%;
-      background-color: var(--color-primary);
-      color: var(--color-white);
-      font-size: 20px;
-      font-weight: 600;
-      padding: 8px;
-      border: none;
-      outline: none;
-      cursor: pointer;
-      margin-top: 20px;
-      border-radius: 10px;
+  }
+  .bottom_btn {
+    button {
+      background-color: var(--color-light-green) !important;
     }
   }
   @media screen and (max-width: 960px) {

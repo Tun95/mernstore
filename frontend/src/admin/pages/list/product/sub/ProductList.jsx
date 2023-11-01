@@ -193,14 +193,17 @@ function ProductList({ currencySign, webname }) {
   ];
   console.log(products);
   return (
-    <>
+    <div className="admin_page_all page_background admin_page_screen">
       <Helmet>
         <title>All Products</title>
       </Helmet>
-      <div className="container">
-        <div className="datatable mtb">
+      <div className="container ">
+        <div className="productTitleContainer">
+          <h3 className="productTitle light_shadow uppercase">All Products</h3>
+        </div>
+        <div className="datatable">
           <span className="c_flex">
-            <h2>All Products</h2>
+            <span></span>
             <i
               onClick={() => {
                 navigate(`/admin/product/new`);
@@ -225,7 +228,7 @@ function ProductList({ currencySign, webname }) {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 

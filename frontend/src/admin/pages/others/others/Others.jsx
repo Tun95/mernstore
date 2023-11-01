@@ -85,14 +85,16 @@ function OtherScreen() {
   };
 
   return (
-    <div className="settings mtb">
+    <div className="settings admin_page_all page_background">
       <Helmet>
         <title>All Settings</title>
       </Helmet>
       <div className="container">
-        <div className="box_shadow">
+        <div className="productTitleContainer">
+          <h3 className="productTitle light_shadow uppercase">Others & Settings</h3>
+        </div>
+        <div className="light_shadow">
           <div className="tab">
-            {" "}
             <Box>
               <Box
                 sx={{
