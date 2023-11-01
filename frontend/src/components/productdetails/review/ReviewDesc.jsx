@@ -23,6 +23,7 @@ function truncateText(text, maxWords) {
   }
   return words.slice(0, maxWords).join(" ") + " ...";
 }
+
 function ReviewDesc({ userInfo, handleDelete, dispatch }) {
   //============
   //TOGGLE BOX

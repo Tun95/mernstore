@@ -756,18 +756,19 @@
       .switch {
         gap: 20px;
         border-bottom: 1px solid var(--color-border);
+
         span {
+          white-space: nowrap;
           cursor: pointer;
           .count {
             margin-left: 5px;
             margin-bottom: -1px;
             background-color: var(--color-tab);
             padding: 0px 5px;
-            height: 15px;
+            height: 16px;
             border-radius: 20px;
             color: var(--color-white);
-            position: relative;
-            top: 5px;
+
             small {
               margin-top: 1px;
             }
@@ -784,6 +785,10 @@
             transition: var(--transition);
             border-bottom: 2px solid var(--color-primary);
           }
+        }
+        overflow-x: scroll;
+        &::-webkit-scrollbar {
+          display: none;
         }
       }
       .review {
