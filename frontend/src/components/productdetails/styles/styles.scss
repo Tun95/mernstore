@@ -764,11 +764,12 @@
             margin-left: 5px;
             margin-bottom: -1px;
             background-color: var(--color-tab);
-            padding: 0px 5px;
+            padding: 0px 6px;
             height: 16px;
             border-radius: 20px;
             color: var(--color-white);
-
+            position: relative;
+            top: 5px;
             small {
               margin-top: 1px;
             }

@@ -1132,13 +1132,15 @@ export function VideoModal({ item }) {
           </div>
           <div className="video">
             <iframe
-              width="900"
+              width="100%"
               height="600"
               src={item.videoLink}
               title={item.videoTitle}
               frameborder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowfullscreen
+              allow="autoplay; accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+              allowfullscreen="1"
+              data-frameborder="0"
+              data-allowfullscreen="1"
             ></iframe>
           </div>
         </Box>
