@@ -4,7 +4,6 @@ import {
   AreaChart,
   Area,
   XAxis,
-  YAxis,
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
@@ -12,7 +11,7 @@ import {
 
 function Chart({ aspect, title, data, dataKey, CustomTooltip }) {
   return (
-    <div className="chart__box ">
+    <div className="chart__box light_shadow">
       <div className="title">{title}</div>
       <ResponsiveContainer width="100%" aspect={aspect}>
         <AreaChart

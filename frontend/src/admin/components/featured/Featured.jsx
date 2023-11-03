@@ -7,7 +7,7 @@ import { PieChart, Pie, Legend, Tooltip, ResponsiveContainer } from "recharts";
 
 function Featured({ TotalSales, salesStats, CustomTooltip }) {
   return (
-    <div className="featured">
+    <div className="featured light_shadow">
       <div className="ftop">
         <h1 className="title">Total Revenue</h1>
         <MoreVertOutlinedIcon fontSize="small" />

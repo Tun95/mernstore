@@ -91,7 +91,9 @@ function OtherScreen() {
       </Helmet>
       <div className="container">
         <div className="productTitleContainer">
-          <h3 className="productTitle light_shadow uppercase">Others & Settings</h3>
+          <h3 className="productTitle light_shadow uppercase">
+            Others & Settings
+          </h3>
         </div>
         <div className="light_shadow">
           <div className="tab">
@@ -136,25 +138,21 @@ function OtherScreen() {
                     label="Home"
                     {...a11yProps(1)}
                   />
+
                   <Tab
                     className={value === 2 ? "activeTab" : "tab_sub"}
-                    label="Filters"
+                    label="Subscribers"
                     {...a11yProps(2)}
                   />
                   <Tab
                     className={value === 3 ? "activeTab" : "tab_sub"}
-                    label="Subscribers"
+                    label="Applicants"
                     {...a11yProps(3)}
                   />
                   <Tab
                     className={value === 4 ? "activeTab" : "tab_sub"}
-                    label="Applicants"
-                    {...a11yProps(4)}
-                  />
-                  <Tab
-                    className={value === 5 ? "activeTab" : "tab_sub"}
                     label="Updates"
-                    {...a11yProps(5)}
+                    {...a11yProps(4)}
                   />
                 </Tabs>
               </Box>
@@ -165,15 +163,12 @@ function OtherScreen() {
                 <Home />
               </TabPanel>
               <TabPanel value={value} index={2}>
-                <Filters />
-              </TabPanel>
-              <TabPanel value={value} index={3}>
                 <Subscribers />
               </TabPanel>
-              <TabPanel value={value} index={4}>
+              <TabPanel value={value} index={3}>
                 <Applicants />
               </TabPanel>
-              <TabPanel value={value} index={5}>
+              <TabPanel value={value} index={4}>
                 <Updates />
               </TabPanel>
             </Box>

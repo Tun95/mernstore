@@ -11,7 +11,6 @@ const subCategorySchema = new mongoose.Schema({
 });
 
 const categorySchema = new mongoose.Schema({
-  id: Number,
   icon: String,
   background: String,
   img: String,

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const colorSchema = new mongoose.Schema(
   {
-    color: {
+    colorName: {
       type: String,
       required: true,
     },

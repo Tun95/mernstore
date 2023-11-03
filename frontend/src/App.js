@@ -37,23 +37,9 @@ import TermScreen from "./screens/aboutscreen/termscreen/TermScreen";
 import ScrollToTop from "./components/utilities/scroll to top/ScrollToTop";
 import { Context } from "./context/Context";
 
-import {
-  Brand,
-  Category,
-  Color,
-  Price,
-  Size,
-} from "./admin/pages/new/filters/CreateFilters";
 import ProtectedRoute from "./components/utilities/protectedRoute/ProtectedRoute";
 import AdminRoute from "./components/utilities/protectedRoute/AdminRoute";
 
-import {
-  BrandUpdate,
-  CategoryUpdate,
-  ColorUpdate,
-  PriceUpdate,
-  SizeUpdate,
-} from "./admin/pages/edit/filters/FiterUpdate";
 import { BannerUpdate } from "./admin/pages/edit/banner/BannerUpdate";
 import { NewBanner } from "./admin/pages/new/banner/NewBanner";
 import OtherScreen from "./admin/pages/others/others/Others";
@@ -95,6 +81,7 @@ import VendorProductScreen from "./seller/pages/single/vendor/VendorScreen";
 import PromotionListScreen from "./screens/promotionscreen/promotionlist/PromotionListScreen";
 import PromotionDetailScreen from "./screens/promotionscreen/promotiondetails/PromotionDetailScreen";
 import CheckoutScreen from "./screens/checkoutscreen/CheckoutScreen";
+import Filters from "./admin/pages/single/filters/Filters";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -386,86 +373,13 @@ function App() {
 
             {/* FILTERS */}
             <Route
-              path="/admin/new-category"
+              path="/admin/filters"
               element={
                 <AdminRoute>
-                  <Category />
+                  <Filters />
                 </AdminRoute>
               }
             ></Route>
-            <Route
-              path="/admin/new-brand"
-              element={
-                <AdminRoute>
-                  <Brand />
-                </AdminRoute>
-              }
-            ></Route>
-            <Route
-              path="/admin/new-size"
-              element={
-                <AdminRoute>
-                  <Size />
-                </AdminRoute>
-              }
-            ></Route>
-            <Route
-              path="/admin/new-color"
-              element={
-                <AdminRoute>
-                  <Color />
-                </AdminRoute>
-              }
-            ></Route>
-            <Route
-              path="/admin/new-price"
-              element={
-                <AdminRoute>
-                  <Price />
-                </AdminRoute>
-              }
-            ></Route>
-            <Route
-              path="/admin/category/:id"
-              element={
-                <AdminRoute>
-                  <CategoryUpdate />
-                </AdminRoute>
-              }
-            ></Route>
-            <Route
-              path="/admin/brand/:id"
-              element={
-                <AdminRoute>
-                  <BrandUpdate />
-                </AdminRoute>
-              }
-            ></Route>
-            <Route
-              path="/admin/size/:id"
-              element={
-                <AdminRoute>
-                  <SizeUpdate />
-                </AdminRoute>
-              }
-            ></Route>
-            <Route
-              path="/admin/price/:id"
-              element={
-                <AdminRoute>
-                  <PriceUpdate />
-                </AdminRoute>
-              }
-            ></Route>
-            <Route
-              path="/admin/color/:id"
-              element={
-                <AdminRoute>
-                  <ColorUpdate />
-                </AdminRoute>
-              }
-            ></Route>
-
             {/* BANNER */}
             <Route
               path="/admin/new-banner"

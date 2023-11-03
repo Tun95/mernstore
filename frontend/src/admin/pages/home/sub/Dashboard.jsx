@@ -151,7 +151,7 @@ function Dashboard() {
   // console.log(summary);
   console.log(summary);
   return (
-    <>
+    <div className="admin_page_all page_background admin_page_screen">
       <Helmet>
         <title>Dashboard</title>
       </Helmet>
@@ -191,7 +191,7 @@ function Dashboard() {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

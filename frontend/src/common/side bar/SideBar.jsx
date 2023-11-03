@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import "./style.scss";
 import Drawer from "@mui/material/Drawer";
-import Button from "@mui/material/Button";
 import Divider from "@mui/material/Divider";
 
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -29,6 +28,7 @@ import { LocationModal, LoginModals } from "../../components/modals/Modals";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
 import data from "../../components/menus/data";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 
 const StyledDivider = styled(Divider)(({ theme, darkMode }) => ({
   backgroundColor: darkMode ? "#ffffff" : "", // Change colors accordingly
@@ -41,7 +41,6 @@ function SideBar() {
     state: states,
     dispatch: ctxDispatch,
     darkMode,
-    toggle,
     currencies,
     toCurrencies,
     setToCurrencies,
@@ -481,6 +480,12 @@ function SideBar() {
                             <AccountBalanceWalletIcon className="icon" />
                           </Link>
                         </li>{" "}
+                        <li>
+                          <Link to="/admin/filters" className="c_flex">
+                            <span>Filters</span>
+                            <FilterAltOutlinedIcon className="icon" />
+                          </Link>
+                        </li>
                         <li>
                           <Link to="/admin/settings" className="c_flex">
                             <span> Settings</span>
