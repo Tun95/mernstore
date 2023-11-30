@@ -6,7 +6,7 @@ import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
 import AddchartIcon from "@mui/icons-material/Addchart";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
-import black from "../../..//assets/bestsellers/black.webp";
+import black from "../../../assets/bestsellers/black.webp";
 import { Tooltip } from "antd";
 import LocalActivityOutlinedIcon from "@mui/icons-material/LocalActivityOutlined";
 import YouTubeIcon from "@mui/icons-material/YouTube";

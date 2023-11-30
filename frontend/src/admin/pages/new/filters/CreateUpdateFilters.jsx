@@ -11,7 +11,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import { SketchPicker } from "react-color";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -513,35 +512,6 @@ export function Color({ openBox, toggleBox }) {
     }
   };
 
-  //===========
-  //IMAGE UPLOAD
-  //===========
-  const uploadFileHandler = async (e, forImages) => {
-    const file = e.target.files[0];
-    const bodyFormData = new FormData();
-    bodyFormData.append("file", file);
-    try {
-      dispatch({ type: "UPLOAD_REQUEST" });
-      const { data } = await axios.post(`${request}/api/upload`, bodyFormData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          authorization: `Bearer ${userInfo.token}`,
-        },
-      });
-      dispatch({ type: "UPLOAD_SUCCESS" });
-      setColor(data.secure_url);
-      toast.success(
-        "Color image uploaded successfully. Click update to apply it",
-        {
-          position: "bottom-center",
-        }
-      );
-    } catch (err) {
-      toast.error(getError(err), { position: "bottom-center" });
-      dispatch({ type: "UPLOAD_FAIL" });
-    }
-  };
-
   //==================
   //TOGGLE COLOR BOX
   //==================
@@ -551,6 +521,12 @@ export function Color({ openBox, toggleBox }) {
 
   const addMoreColor = () => {
     setColorData([...colorData, { colorName: "", hexCode: "" }]);
+  };
+
+  const removeColor = (index) => {
+    const updatedColorData = [...colorData];
+    updatedColorData.splice(index, 1);
+    setColorData(updatedColorData);
   };
 
   return (
@@ -621,9 +597,18 @@ export function Color({ openBox, toggleBox }) {
                                 placeholder="color hex code e.g #ffffff"
                               />
                             </span>
-                            <span>
-                              <SketchPicker />
-                            </span>
+                            {colorIndex === 0 ? (
+                              ""
+                            ) : (
+                              <div className="remove_btn">
+                                <span
+                                  className="a_flex"
+                                  onClick={() => removeColor(colorIndex)}
+                                >
+                                  <CloseIcon className="icon" /> Remove Color
+                                </span>
+                              </div>
+                            )}
                           </div>
                         ))}
                       </div>
