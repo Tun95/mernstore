@@ -4,34 +4,51 @@ import Category from "../models/category.js";
 
 const categoryRoutes = express.Router();
 
-//====================
-// Create a new category
-//====================
+//==================
+// CREATE category
+//==================
 categoryRoutes.post(
   "/create",
   expressAsyncHandler(async (req, res) => {
+    const { categories } = req.body;
+    const newCategory = new Category({ categories });
+    const createdCategory = await newCategory.save();
+    res.status(201).json(createdCategory);
+  })
+);
+
+//=========================
+// FETCH all categories
+//=========================
+categoryRoutes.get(
+  "/",
+  expressAsyncHandler(async (_, res) => {
     try {
-      const categoryData = req.body;
-      const newCategory = new Category(categoryData);
-      const createdCategory = await newCategory.save();
-      res.status(201).json(createdCategory);
+      const allCategories = await Category.find();
+      res.json(allCategories);
     } catch (error) {
-      res.status(500).json({ message: "Error creating category" });
+      console.error("Error fetching categories", error);
+      res.status(500).json({ message: "Error fetching categories" });
     }
   })
 );
 
-//================
-// Get all filters
-//================
+//=========================
+// FETCH category by ID
+//=========================
 categoryRoutes.get(
-  "/",
+  "/fetch/:id",
   expressAsyncHandler(async (req, res) => {
     try {
-      const categories = await Category.find({});
-      res.json(categories);
+      const category = await Category.findById(req.params.id);
+      if (category) {
+        res.json(category);
+      } else {
+        res.status(404).json({ message: "Category not found" });
+      }
     } catch (error) {
-      res.status(500).json({ message: "Error fetching category" });
+      console.error("Error fetching category by ID", error);
+      res.status(500).json({ message: "Error fetching category by ID" });
     }
   })
 );
@@ -42,128 +59,156 @@ categoryRoutes.get(
 categoryRoutes.get(
   "/alphabetic",
   expressAsyncHandler(async (req, res) => {
-    const mysort = { category: 1 };
+    const mysort = { "categories.name": 1 }; // Sorting by category name
     try {
-      const categories = await Category.find({}).sort(mysort).populate("user");
+      const categories = await Category.find({}).sort(mysort);
       res.send(categories);
     } catch (error) {
+      console.error("Error fetching category", error); // Log the error for debugging
       res.status(500).json({ message: "Error fetching category" });
     }
   })
 );
 
-//=======================
-// Add items by ID
-//=======================
-categoryRoutes.patch(
-  "/update/:id",
-  expressAsyncHandler(async (req, res) => {
-    try {
-      const categoryId = req.params.id;
-      const { path, data } = req.body;
-
-      // Find the category by ID
-      const category = await Category.findById(categoryId);
-
-      if (!category) {
-        return res.status(404).json({ message: "Category not found" });
-      }
-
-      // Use a dynamic function to update the specific element based on the path
-      const updateElement = (object, pathArray, newData) => {
-        if (pathArray.length === 0) {
-          object.push(...newData); // If the path is empty, add data to the current element
-        } else {
-          const [currentPath, ...remainingPath] = pathArray;
-          const currentElement = object[currentPath];
-          updateElement(currentElement, remainingPath, newData);
-        }
-      };
-
-      const pathArray = path.split(".").map((item) => {
-        if (!isNaN(item)) {
-          return parseInt(item, 10);
-        }
-        return item;
-      });
-
-      updateElement(category, pathArray, data);
-
-      // Save the updated category
-      const updatedCategory = await category.save();
-
-      res.json(updatedCategory);
-    } catch (error) {
-      res.status(500).json({ message: "Error updating category" });
-    }
-  })
-);
-
-//===========================
-// Update the entire category
-//===========================
+//=========================
+// UPDATE all categories
+//=========================
 categoryRoutes.put(
   "/update/:id",
   expressAsyncHandler(async (req, res) => {
+    const { categories } = req.body;
+    const updatedCategory = await Category.findByIdAndUpdate(
+      req.params.categoryId,
+      { categories },
+      { new: true }
+    );
+    res.json(updatedCategory);
+  })
+);
+
+//=========================
+// UPDATE a specific subCategory
+//=========================
+categoryRoutes.put(
+  "/updateSubCategory/:categoryId/:subCategoryId",
+  expressAsyncHandler(async (req, res) => {
+    const { name, img } = req.body;
     try {
-      const categoryId = req.params.id;
-      const updatedCategoryData = req.body;
-
-      const updatedCategory = await Category.findByIdAndUpdate(
-        categoryId,
-        updatedCategoryData,
-        { new: true }
+      const updatedCategory = await Category.findOneAndUpdate(
+        {
+          _id: req.params.categoryId,
+          "categories.subCategories._id": req.params.subCategoryId,
+        },
+        {
+          $set: {
+            "categories.$.subCategories.$[subCategory].name": name,
+            "categories.$.subCategories.$[subCategory].img": img,
+          },
+        },
+        {
+          arrayFilters: [{ "subCategory._id": req.params.subCategoryId }],
+          new: true,
+        }
       );
-
-      if (!updatedCategory) {
-        return res.status(404).json({ message: "Category not found" });
-      }
-
       res.json(updatedCategory);
     } catch (error) {
-      console.error("Error updating category", error);
-      res.status(500).json({ message: "Error updating category" });
+      console.error("Error updating subCategory", error);
+      res.status(500).json({ message: "Error updating subCategory" });
     }
   })
 );
 
-//====================
-// Get a Category by ID
-//====================
-categoryRoutes.get(
-  "/:id",
+//=========================
+// UPDATE a specific subItem
+//=========================
+categoryRoutes.put(
+  "/updateSubItem/:categoryId/:subCategoryId/:subItemId",
   expressAsyncHandler(async (req, res) => {
+    const { name } = req.body;
     try {
-      const categoryId = req.params.id;
-      const category = await Category.findById(categoryId);
-      if (category) {
-        res.json(category);
-      } else {
-        res.status(404).json({ message: "Category not found" });
-      }
+      const updatedCategory = await Category.findOneAndUpdate(
+        {
+          _id: req.params.categoryId,
+          "categories.subCategories._id": req.params.subCategoryId,
+          "categories.subCategories.subItems._id": req.params.subItemId,
+        },
+        {
+          $set: {
+            "categories.$[category].subCategories.$[subCategory].subItems.$[subItem].name":
+              name,
+          },
+        },
+        {
+          arrayFilters: [
+            { "category.subCategories": { $exists: true } },
+            { "subCategory.subItems": { $exists: true } },
+            { "subItem._id": req.params.subItemId },
+          ],
+          new: true,
+        }
+      );
+      res.json(updatedCategory);
     } catch (error) {
-      res.status(500).json({ message: "Error fetching category" });
+      console.error("Error updating subItem", error);
+      res.status(500).json({ message: "Error updating subItem" });
     }
   })
 );
 
-//======================
-// Delete a Category by ID
-//======================
+//==================
+// REMOVE category
+//==================
 categoryRoutes.delete(
-  "/delete/:id",
+  "/removeCategory/:categoryId",
   expressAsyncHandler(async (req, res) => {
-    try {
-      const categoryId = req.params.id;
-      const deletedCategory = await Category.findByIdAndDelete(categoryId);
-      if (deletedCategory) {
-        res.json({ message: "Category deleted" });
-      } else {
-        res.status(404).json({ message: "Category not found" });
+    await Category.findByIdAndRemove(req.params.categoryId);
+    res.json({ message: "Category removed" });
+  })
+);
+
+//====================
+// REMOVE subcategory
+//====================
+categoryRoutes.delete(
+  "/removeSubCategory/:categoryId/:subCategoryId",
+  expressAsyncHandler(async (req, res) => {
+    const updatedCategory = await Category.findByIdAndUpdate(
+      req.params.categoryId,
+      {
+        $pull: {
+          "categories.subCategories": { _id: req.params.subCategoryId },
+        },
+      },
+      { new: true }
+    );
+    res.json(updatedCategory);
+  })
+);
+
+//=================
+// REMOVE subitem
+//=================
+categoryRoutes.delete(
+  "/removeSubItem/:categoryId/:subCategoryId/:subItemId",
+  expressAsyncHandler(async (req, res) => {
+    const updatedCategory = await Category.findByIdAndUpdate(
+      req.params.categoryId,
+      {
+        $pull: {
+          "categories.$[category].subCategories.$[subCategory].subItems": {
+            _id: req.params.subItemId,
+          },
+        },
+      },
+      {
+        arrayFilters: [
+          { "category.subCategories": { $exists: true } },
+          { "subCategory.subItems": { $exists: true } },
+        ],
+        new: true,
       }
-    } catch (error) {
-      res.status(500).json({ message: "Error deleting category" });
-    }
+    );
+    res.json(updatedCategory);
   })
 );
 

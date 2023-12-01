@@ -153,7 +153,7 @@ function App() {
     <div className={darkMode ? "app dark" : "app"}>
       <Router>
         {/* <LoadingOverlayComponent center> */}
-        <ToastContainer />
+        <ToastContainer position="bottom-center" />
         <ScrollToTop />
         <Header />
         <div className="overflow">

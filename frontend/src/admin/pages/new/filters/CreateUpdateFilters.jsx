@@ -25,45 +25,7 @@ const reducer = (state, action) => {
   }
 };
 export function Category({ openBox, toggleBox }) {
-  const [category, setCategory] = useState("");
-  const [categoryImg, setCategoryImg] = useState("");
-
-  const { state } = useContext(Context);
-  const { userInfo } = state;
-  const navigate = useNavigate();
-  const [{ loading, error }, dispatch] = useReducer(reducer, {
-    loading: true,
-    error: "",
-  });
-
-  //======
-  //CREATE
-  //======
-  const createHandler = async (e) => {
-    e.preventDefault();
-    if (!category) {
-      toast.error("Category input box is empty", { position: "bottom-center" });
-    } else {
-      try {
-        dispatch({ type: "CREATE_REQUEST" });
-        const { data } = await axios.post(
-          `${request}/api/category`,
-          { category, categoryImg },
-          {
-            headers: { Authorization: `Bearer ${userInfo.token}` },
-          }
-        );
-        dispatch({ type: "CREATE_SUCCESS", payload: data });
-        toast.success("Created successfully", {
-          position: "bottom-center",
-        });
-        navigate(`/admin/settings`);
-      } catch (err) {
-        dispatch({ type: "CREATE_FAIL" });
-        toast.error(getError(err), { position: "bottom-center" });
-      }
-    }
-  };
+  
   const [categoryData, setCategoryData] = useState({
     categories: [
       {
