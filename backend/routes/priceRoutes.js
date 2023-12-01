@@ -2,70 +2,56 @@ import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import Price from "../models/price.js";
 
-import { isAdmin, isAuth } from "../utils.js";
-
 const priceRoutes = express.Router();
 
-// Centralized error handler middleware
-const errorHandler = (res, error) => {
-  console.error(error); // Log the error for debugging purposes
-  res.status(500).json({ message: "An error occurred" });
-};
+// =========
+// FETCH
+// =========
+priceRoutes.get(
+  "/",
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const prices = await Price.find({});
+      res.status(200).json(prices);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Failed to fetch prices", error: error.message });
+    }
+  })
+);
 
-//create
+// =========
+// CREATE
+// =========
 priceRoutes.post(
   "/",
-  isAuth,
-  isAdmin,
   expressAsyncHandler(async (req, res) => {
     try {
-      const price = await Price.create({
-        price: req.body.price,
-        priceSpan: req.body.priceSpan,
-        user: req.user._id,
+      const { minValue, maxValue } = req.body;
+
+      const newPrice = new Price({
+        minValue,
+        maxValue,
       });
-      res.send(price);
+
+      const savedPrice = await newPrice.save();
+
+      res.status(201).json(savedPrice);
     } catch (error) {
-      errorHandler(res, error);
+      res
+        .status(500)
+        .json({ message: "Failed to create price", error: error.message });
     }
   })
 );
 
-//Fetch all
-priceRoutes.get(
-  "/",
-  expressAsyncHandler(async (req, res) => {
-    const mysort = { price: 1 };
-    try {
-      const prices = await Price.find({}).sort(mysort).populate("user");
-      res.send(prices);
-    } catch (error) {
-      errorHandler(res, error);
-    }
-  })
-);
+// =======
+// UPDATE
+// =======
 
-//Fetch single
-priceRoutes.get(
-  "/:id",
-  isAuth,
-  isAdmin,
-  expressAsyncHandler(async (req, res) => {
-    const { id } = req.params;
-    try {
-      const price = await Price.findById(id);
-      res.send(price);
-    } catch (error) {
-      errorHandler(res, error);
-    }
-  })
-);
-
-//Update
 priceRoutes.put(
   "/:id",
-  isAuth,
-  isAdmin,
   expressAsyncHandler(async (req, res) => {
     const { id } = req.params;
     try {
@@ -76,25 +62,15 @@ priceRoutes.put(
         },
         { new: true }
       );
-      res.send(price);
+      if (!price) {
+        res.status(404).json({ message: "Price not found" });
+        return;
+      }
+      res.json(price);
     } catch (error) {
-      errorHandler(res, error);
-    }
-  })
-);
-
-//Delete single
-priceRoutes.delete(
-  "/:id",
-  isAuth,
-  isAdmin,
-  expressAsyncHandler(async (req, res) => {
-    const { id } = req.params;
-    try {
-      const price = await Price.findByIdAndDelete(id);
-      res.send(price);
-    } catch (error) {
-      errorHandler(res, error);
+      res
+        .status(500)
+        .json({ message: "Failed to update price", error: error.message });
     }
   })
 );

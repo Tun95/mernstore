@@ -2,19 +2,20 @@ import mongoose from "mongoose";
 
 const colorSchema = new mongoose.Schema(
   {
-    colorName: {
-      type: String,
-      required: true,
-    },
-    hexCode: {
-      type: String,
-      required: true,
-    },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
+    colors: [
+      {
+        colorName: {
+          type: String,
+        },
+        hexCode: {
+          type: String,
+        },
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+      },
+    ],
   },
   { timestamps: true }
 );

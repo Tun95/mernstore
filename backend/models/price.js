@@ -2,18 +2,13 @@ import mongoose from "mongoose";
 
 const priceSchema = new mongoose.Schema(
   {
-    price: {
+    minValue: {
       type: String,
-      required: true,
+      default: 0,
     },
-    priceSpan: {
+    maxValue: {
       type: String,
-      required: true,
-    },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
+      default: 100,
     },
   },
   { timestamps: true }

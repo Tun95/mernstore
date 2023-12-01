@@ -42,11 +42,11 @@
   }
 
   button[type="submit"] {
-    background-color: #007bff;
+   background-color: var(--color-blue);
   }
 
   button[type="button"] {
-    background-color: #dc3545;
+     background-color: var(--color-youtube);
   }
 
   /* Styling for the list of wrappers */

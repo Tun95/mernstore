@@ -2,103 +2,133 @@ import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import Color from "../models/color.js";
 
-import { isAdmin, isAuth } from "../utils.js";
+const colorRouter = express.Router();
 
-const colorRoutes = express.Router();
-
-// Centralized error handler middleware
-const errorHandler = (res, error) => {
-  console.error(error); // Log the error for debugging purposes
-  res.status(500).json({ message: "An error occurred" });
-};
-
-//======
-//create
-//======
-colorRoutes.post(
+//=====================
+// Create a new color
+//=====================
+colorRouter.post(
   "/",
-  isAuth,
-  isAdmin,
   expressAsyncHandler(async (req, res) => {
     try {
-      const color = await Color.create({
-        ...req.body,
-        user: req.user._id,
+      const { colors } = req.body;
+
+      const newColor = new Color({
+        colors,
       });
-      res.send(color);
+
+      const savedColor = await newColor.save();
+
+      res.status(201).json(savedColor);
     } catch (error) {
-      errorHandler(res, error);
+      res
+        .status(500)
+        .json({ message: "Failed to create color", error: error.message });
     }
   })
 );
 
-//=========
-//Fetch all
-//=========
-colorRoutes.get(
+//=================
+// Get all colors
+//=================
+colorRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
     try {
-      const colors = await Color.find({}).populate("user").sort("-createdAt");
-      res.send(colors);
+      // Fetch all colors from the database
+      const colors = await Color.find();
+
+      res.status(200).json(colors);
     } catch (error) {
-      errorHandler(res, error);
+      res
+        .status(500)
+        .json({ message: "Failed to fetch colors", error: error.message });
     }
   })
 );
 
-//Fetch single
-colorRoutes.get(
+//========================
+// Get a specific color
+//========================
+colorRouter.get(
   "/:id",
-  isAuth,
-  isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const { id } = req.params;
     try {
-      const color = await Color.findById(id);
-      res.send(color);
+      const colorId = req.params.id;
+
+      // Find the color by ID in the database
+      const color = await Color.findById(colorId);
+
+      if (!color) {
+        return res.status(404).json({ message: "Color not found" });
+      }
+
+      res.status(200).json(color);
     } catch (error) {
-      errorHandler(res, error);
+      res
+        .status(500)
+        .json({ message: "Failed to fetch color", error: error.message });
     }
   })
 );
 
-//Update
-colorRoutes.put(
+//================================
+// Update a specific color by ID
+//================================
+colorRouter.put(
   "/:id",
-  isAuth,
-  isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const { id } = req.params;
     try {
-      const color = await Color.findByIdAndUpdate(
-        id,
-        {
-          ...req.body,
-        },
-        { new: true }
-      );
-      res.send(color);
+      const { colorName, hexCode } = req.body;
+      const colorId = req.params.id;
+
+      // Find the color by ID in the database
+      const color = await Color.findById(colorId);
+
+      if (!color) {
+        return res.status(404).json({ message: "Color not found" });
+      }
+
+      // Update the color fields
+      color.colors[0].colorName = colorName;
+      color.colors[0].hexCode = hexCode;
+
+      // Save the updated color to the database
+      const updatedColor = await color.save();
+
+      res.status(200).json(updatedColor);
     } catch (error) {
-      errorHandler(res, error);
+      res
+        .status(500)
+        .json({ message: "Failed to update color", error: error.message });
     }
   })
 );
 
-//Delete single
-colorRoutes.delete(
+//================================
+// Delete a specific color by ID
+//================================
+colorRouter.delete(
   "/:id",
-  isAuth,
-  isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const { id } = req.params;
     try {
-      const color = await Color.findByIdAndDelete(id);
-      res.send(color);
+      const colorId = req.params.id;
+
+      // Delete the colorData document from the database
+      const result = await Color.deleteOne({ _id: colorId });
+
+      if (result.deletedCount === 0) {
+        return res.status(404).json({ message: "Color not found" });
+      }
+
+      res.status(200).json({ message: "Color deleted successfully" });
     } catch (error) {
-      errorHandler(res, error);
+      res
+        .status(500)
+        .json({ message: "Failed to delete color", error: error.message });
     }
   })
 );
 
-export default colorRoutes;
+
+export default colorRouter;
