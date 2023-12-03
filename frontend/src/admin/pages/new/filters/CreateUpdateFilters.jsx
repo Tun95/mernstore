@@ -768,7 +768,7 @@ export function SubItem({ openBox, toggleBox }) {
   const deleteSubItem = async (subItemId) => {
     try {
       await axios.delete(
-        `${request}/api/category/${formData.selectedCategory}/${formData.selectedSubCategory}/delete-subitem/${subItemId}`
+        `${request}/api/category/${formData.selectedCategory}/${formData.selectedSubCategory}/${subItemId}`
       );
       setData((prevData) => ({
         ...prevData,
@@ -813,7 +813,7 @@ export function SubItem({ openBox, toggleBox }) {
       return;
     }
 
-    const url = `${request}/api/category/${formData.selectedCategory}/${formData.selectedSubCategory}/update-subitem/${subItemId}`;
+    const url = `${request}/api/category/${formData.selectedCategory}/${formData.selectedSubCategory}/${subItemId}`;
     console.log("Update URL:", url);
 
     try {
