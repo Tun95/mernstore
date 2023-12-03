@@ -29,6 +29,8 @@ import EqualizerIcon from "@mui/icons-material/Equalizer";
 import data from "../../components/menus/data";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
+import ViewCarouselIcon from "@mui/icons-material/ViewCarousel";
+import MediationIcon from "@mui/icons-material/Mediation";
 
 const StyledDivider = styled(Divider)(({ theme, darkMode }) => ({
   backgroundColor: darkMode ? "#ffffff" : "", // Change colors accordingly
@@ -484,6 +486,18 @@ function SideBar() {
                           <Link to="/admin/filters" className="c_flex">
                             <span>Filters</span>
                             <FilterAltOutlinedIcon className="icon" />
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to="/admin/promotions" className="c_flex">
+                            <span>Promotion</span>
+                            <MediationIcon className="icon" />
+                          </Link>
+                        </li>
+                        <li>
+                          <Link to="/admin/banners" className="c_flex">
+                            <span>Banners</span>
+                            <ViewCarouselIcon className="icon" />
                           </Link>
                         </li>
                         <li>

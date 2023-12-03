@@ -40,8 +40,6 @@ import { Context } from "./context/Context";
 import ProtectedRoute from "./components/utilities/protectedRoute/ProtectedRoute";
 import AdminRoute from "./components/utilities/protectedRoute/AdminRoute";
 
-import { BannerUpdate } from "./admin/pages/edit/banner/BannerUpdate";
-import { NewBanner } from "./admin/pages/new/banner/NewBanner";
 import OtherScreen from "./admin/pages/others/others/Others";
 import PasswordEmailResetScreen from "./screens/formscreens/passemailcreen/PasswordEmailResetScreen";
 import PasswordResetFormScreen from "./screens/formscreens/passresetformscreen/PasswordResetFormScreen";
@@ -82,6 +80,7 @@ import PromotionListScreen from "./screens/promotionscreen/promotionlist/Promoti
 import PromotionDetailScreen from "./screens/promotionscreen/promotiondetails/PromotionDetailScreen";
 import CheckoutScreen from "./screens/checkoutscreen/CheckoutScreen";
 import Filters from "./admin/pages/single/filters/Filters";
+import { Banner } from "./admin/pages/new/banner/Banner";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -380,23 +379,18 @@ function App() {
                 </AdminRoute>
               }
             ></Route>
+
             {/* BANNER */}
             <Route
-              path="/admin/new-banner"
+              path="/admin/banners"
               element={
                 <AdminRoute>
-                  <NewBanner />
+                  <Banner />
                 </AdminRoute>
               }
             ></Route>
-            <Route
-              path="/admin/banner/:id"
-              element={
-                <AdminRoute>
-                  <BannerUpdate />
-                </AdminRoute>
-              }
-            ></Route>
+            {/* BANNER */}
+
             <Route
               path="/admin/settings"
               element={

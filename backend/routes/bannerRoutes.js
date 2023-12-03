@@ -2,101 +2,148 @@ import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import Banner from "../models/banner.js";
 
-import { isAdmin, isAuth } from "../utils.js";
+const bannerRouter = express.Router();
 
-const bannerRoutes = express.Router();
-
-// Centralized error handler middleware
-const errorHandler = (res, error) => {
-  console.error(error); // Log the error for debugging purposes
-  res.status(500).json({ message: "An error occurred" });
-};
-
-//======
-//create
-//======
-bannerRoutes.post(
+//====================
+// Create a new banner
+//====================
+bannerRouter.post(
   "/",
-  isAuth,
-  isAdmin,
   expressAsyncHandler(async (req, res) => {
     try {
-      const banner = await Banner.create({
-        ...req.body,
-        user: req.user._id,
+      const { banners } = req.body;
+
+      const newBanner = new Banner({
+        banners,
       });
-      res.send(banner);
+
+      const savedBanner = await newBanner.save();
+
+      res.status(201).json(savedBanner);
     } catch (error) {
-      errorHandler(res, error);
+      res
+        .status(500)
+        .json({ message: "Failed to create banner", error: error.message });
     }
   })
 );
 
-//Fetch all
-bannerRoutes.get(
+//====================
+// Get all banners
+//====================
+bannerRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
     try {
-      const banners = await Banner.find({}).populate("user").sort("-createdAt");
-      res.send(banners);
+      // Fetch all banners from the database
+      const banners = await Banner.find();
+
+      res.status(200).json(banners);
     } catch (error) {
-      errorHandler(res, error);
+      res
+        .status(500)
+        .json({ message: "Failed to fetch banners", error: error.message });
     }
   })
 );
 
-//Fetch single
-bannerRoutes.get(
+//====================
+// Get a specific banner by ID
+//====================
+bannerRouter.get(
   "/:id",
-  isAuth,
-  isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const { id } = req.params;
     try {
-      const banner = await Banner.findById(id);
-      res.send(banner);
+      const bannerId = req.params.id;
+
+      // Find the banner by ID in the database
+      const banner = await Banner.findById(bannerId);
+
+      if (!banner) {
+        return res.status(404).json({ message: "Banner not found" });
+      }
+
+      res.status(200).json(banner);
     } catch (error) {
-      errorHandler(res, error);
+      res
+        .status(500)
+        .json({ message: "Failed to fetch banner", error: error.message });
     }
   })
 );
 
-//Update
-bannerRoutes.put(
+//====================
+// Update a specific banner by ID
+//====================
+bannerRouter.put(
   "/:id",
-  isAuth,
-  isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const { id } = req.params;
     try {
-      const banner = await Banner.findByIdAndUpdate(
-        id,
-        {
-          ...req.body,
-        },
-        { new: true }
-      );
-      res.send(banner);
+      const {
+        title,
+        description,
+        img,
+        imgBackground,
+        videoBackground,
+        buttonText,
+        color,
+        pColor,
+        user,
+      } = req.body;
+      const bannerId = req.params.id;
+
+      // Find the banner by ID in the database
+      const banner = await Banner.findById(bannerId);
+
+      if (!banner) {
+        return res.status(404).json({ message: "Banner not found" });
+      }
+
+      // Update the banner fields
+      banner.banners[0].title = title;
+      banner.banners[0].description = description;
+      banner.banners[0].img = img;
+      banner.banners[0].imgBackground = imgBackground;
+      banner.banners[0].videoBackground = videoBackground;
+      banner.banners[0].buttonText = buttonText;
+      banner.banners[0].color = color;
+      banner.banners[0].pColor = pColor;
+
+      // Save the updated banner to the database
+      const updatedBanner = await banner.save();
+
+      res.status(200).json(updatedBanner);
     } catch (error) {
-      errorHandler(res, error);
+      res
+        .status(500)
+        .json({ message: "Failed to update banner", error: error.message });
     }
   })
 );
 
-//Delete single
-bannerRoutes.delete(
+//====================
+// Delete a specific banner by ID
+//====================
+bannerRouter.delete(
   "/:id",
-  isAuth,
-  isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const { id } = req.params;
     try {
-      const banner = await Banner.findByIdAndDelete(id);
-      res.send(banner);
+      const bannerId = req.params.id;
+
+      // Delete the banner document from the database
+      const result = await Banner.deleteOne({ _id: bannerId });
+
+      if (result.deletedCount === 0) {
+        return res.status(404).json({ message: "Banner not found" });
+      }
+
+      res.status(200).json({ message: "Banner deleted successfully" });
     } catch (error) {
-      errorHandler(res, error);
+      res
+        .status(500)
+        .json({ message: "Failed to delete banner", error: error.message });
     }
   })
 );
 
-export default bannerRoutes;
+export default bannerRouter;

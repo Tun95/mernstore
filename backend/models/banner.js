@@ -2,26 +2,43 @@ import mongoose from "mongoose";
 
 const bannerSchema = new mongoose.Schema(
   {
-    title: {
-      type: String,
-      default: "Your Banner Title",
-    },
-    background: {
-      type: String,
-      default: "banner image",
-    },
-    category: {
-      type: String,
-    },
-    descriptions: {
-      type: String,
-      default: "Banner descriptions",
-    },
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-     
-    },
+    banners: [
+      {
+        title: {
+          type: String,
+          default: "Your Banner Title",
+        },
+        description: {
+          type: String,
+          default: "banner description",
+        },
+        img: {
+          type: String,
+          default: "banner image",
+        },
+        imgBackground: {
+          type: String,
+          default: "image background",
+        },
+        videoBackground: {
+          type: String,
+          default: "image background",
+        },
+        buttonText: {
+          type: String,
+        },
+        color: {
+          type: String,
+        },
+        pColor: {
+          type: String,
+        },
+        user: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "User",
+        },
+      },
+    ],
   },
   {
     timestamps: true,

@@ -24,33 +24,6 @@ const promotionSchema = new mongoose.Schema(
   }
 );
 
-// Create a method to update the countdown timer
-promotionSchema.methods.updateCountDownTimer = function () {
-  if (
-    this.countDownTimer.days === 0 &&
-    this.countDownTimer.hours === 0 &&
-    this.countDownTimer.minutes === 0 &&
-    this.countDownTimer.seconds === 0
-  ) {
-    return;
-  }
-
-  if (this.countDownTimer.seconds > 0) {
-    this.countDownTimer.seconds--;
-  } else if (this.countDownTimer.minutes > 0) {
-    this.countDownTimer.minutes--;
-    this.countDownTimer.seconds = 59;
-  } else if (this.countDownTimer.hours > 0) {
-    this.countDownTimer.hours--;
-    this.countDownTimer.minutes = 59;
-    this.countDownTimer.seconds = 59;
-  } else if (this.countDownTimer.days > 0) {
-    this.countDownTimer.days--;
-    this.countDownTimer.hours = 23;
-    this.countDownTimer.minutes = 59;
-    this.countDownTimer.seconds = 59;
-  }
-};
 
 // Pre-save middleware to generate slug from title
 promotionSchema.pre("save", function (next) {
