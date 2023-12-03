@@ -1,13 +1,9 @@
 import axios from "axios";
-import React, { useContext, useEffect, useReducer } from "react";
+import React, { useEffect } from "react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import "./styles.scss";
-import { Context } from "../../../../context/Context";
-import { getError } from "../../../../components/utilities/util/Utils";
 import { request } from "../../../../base url/BaseUrl";
-import CloseIcon from "@mui/icons-material/Close";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
@@ -677,6 +673,205 @@ export function SubCategory({ openBox, toggleBox }) {
 }
 
 export function SubItem({ openBox, toggleBox }) {
+  const [data, setData] = useState({
+    categories: [],
+    subCategories: [],
+  });
+
+  const [formData, setFormData] = useState({
+    name: "",
+    selectedCategory: "",
+    selectedSubCategory: "",
+    editingSubItemId: "",
+    editFormData: {
+      name: "",
+    },
+  });
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    try {
+      const response = await axios.get(`${request}/api/category`);
+      setData({
+        categories: response.data,
+        subCategories: response.data.flatMap(
+          (category) => category.categories[0].subCategories
+        ),
+      });
+    } catch (error) {
+      toast.error("Error fetching data:", error);
+    }
+  };
+
+  const handleInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const handleEditInputChange = (event) => {
+    const { name, value } = event.target;
+    setFormData((prevData) => ({
+      ...prevData,
+      editFormData: {
+        ...prevData.editFormData,
+        [name]: value,
+      },
+    }));
+  };
+
+  const addSubItem = async (e) => {
+    e.preventDefault();
+    if (
+      !formData.name ||
+      !formData.selectedCategory ||
+      !formData.selectedSubCategory
+    ) {
+      toast.error("Subitem name, category, and subcategory cannot be empty");
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${request}/api/category/${formData.selectedCategory}/${formData.selectedSubCategory}/create-subitem`,
+        {
+          name: formData.name,
+        }
+      );
+      setData((prevData) => ({
+        ...prevData,
+        subCategories: prevData.subCategories.map((subCategory) => {
+          if (subCategory._id === formData.selectedSubCategory) {
+            subCategory.subItems.push(response.data);
+          }
+          return subCategory;
+        }),
+      }));
+      toast.success("Subitem added successfully");
+      setFormData({
+        name: "",
+        selectedCategory: "",
+        selectedSubCategory: "",
+      });
+      fetchData();
+    } catch (error) {
+      console.error("Failed to add subitem:", error);
+      toast.error("Failed to add subitem");
+    }
+  };
+
+  const deleteSubItem = async (subItemId) => {
+    try {
+      await axios.delete(
+        `${request}/api/category/${formData.selectedCategory}/${formData.selectedSubCategory}/delete-subitem/${subItemId}`
+      );
+      setData((prevData) => ({
+        ...prevData,
+        subCategories: prevData.subCategories.map((subCategory) => {
+          if (subCategory._id === formData.selectedSubCategory) {
+            subCategory.subItems = subCategory.subItems.filter(
+              (subItem) => subItem._id !== subItemId
+            );
+          }
+          return subCategory;
+        }),
+      }));
+      toast.success("Subitem deleted successfully");
+      fetchData();
+    } catch (error) {
+      toast.error("Failed to delete subitem:", error);
+    }
+  };
+
+  const editSubItem = (subItemId) => {
+    const subItemToEdit = data.subCategories
+      .find((subCategory) => subCategory._id === formData.selectedSubCategory)
+      .subItems.find((subItem) => subItem._id === subItemId);
+
+    if (subItemToEdit) {
+      setFormData((prevData) => ({
+        ...prevData,
+        editingSubItemId: subItemId,
+        editFormData: {
+          name: subItemToEdit.name,
+        },
+      }));
+    } else {
+      console.error(`Subitem with ID ${subItemId} not found.`);
+      console.log("Current subItems:", data.subCategories);
+    }
+  };
+
+  const updateSubItem = async (subItemId) => {
+    if (!formData.editFormData.name) {
+      toast.error("Subitem name cannot be empty");
+      return;
+    }
+
+    const url = `${request}/api/category/${formData.selectedCategory}/${formData.selectedSubCategory}/update-subitem/${subItemId}`;
+    console.log("Update URL:", url);
+
+    try {
+      const response = await axios.put(url, {
+        name: formData.editFormData.name,
+      });
+
+      console.log("Update response:", response.data);
+
+      setData((prevData) => ({
+        ...prevData,
+        subCategories: prevData.subCategories.map((subCategory) => {
+          if (subCategory._id === formData.selectedSubCategory) {
+            subCategory.subItems = subCategory.subItems.map((subItem) =>
+              subItem._id === subItemId ? response.data : subItem
+            );
+          }
+          return subCategory;
+        }),
+      }));
+
+      toast.success("Subitem updated successfully");
+      setFormData({
+        ...formData,
+        editingSubItemId: "",
+        editFormData: {
+          name: "",
+        },
+      });
+      fetchData();
+    } catch (error) {
+      console.error("Failed to update subitem:", error);
+      toast.error("Failed to update subitem");
+    }
+  };
+
+  // Filter subcategories based on selected category
+  const filteredSubCategories =
+    data.categories.find(
+      (category) => category._id === formData.selectedCategory
+    )?.categories[0].subCategories || [];
+
+  // Filter subitems based on selected subcategory
+  const filteredSubItems =
+    data.subCategories.find(
+      (subCategory) => subCategory._id === formData.selectedSubCategory
+    )?.subItems || [];
+
+  const cancelUpdate = () => {
+    setFormData({
+      ...formData,
+      editingSubItemId: "",
+      editFormData: {
+        name: "",
+      },
+    });
+  };
+
   return (
     <>
       <div className="productBottom mtb">
@@ -685,7 +880,7 @@ export function SubItem({ openBox, toggleBox }) {
             <div className="features_box mt light_shadow">
               <div
                 className={
-                  openBox === 2 ? "header  c_flex" : "header border c_flex"
+                  openBox === 2 ? "header c_flex" : "header border c_flex"
                 }
                 onClick={() => toggleBox(2)}
               >
@@ -708,7 +903,128 @@ export function SubItem({ openBox, toggleBox }) {
                   )}
                 </div>
               </div>
-              {openBox === 2 && <></>}
+              {openBox === 2 && (
+                <>
+                  <div className="product_info_color">
+                    <div className="product_info_box">
+                      <form onSubmit={addSubItem} className="form_input">
+                        <div className="form-group">
+                          <label htmlFor="subcategory">Subitem</label>
+                          <input
+                            type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleInputChange}
+                            placeholder="Subitem Name"
+                          />
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="selectedCategory">
+                            Select Category
+                          </label>
+                          <select
+                            name="selectedCategory"
+                            value={formData.selectedCategory}
+                            onChange={handleInputChange}
+                          >
+                            <option value="" disabled>
+                              Select Category
+                            </option>
+                            {data.categories.map((category) => (
+                              <option key={category._id} value={category._id}>
+                                {category.categories[0].name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="form-group">
+                          <label htmlFor="selectedSubCategory">
+                            Select Subcategory
+                          </label>
+                          <select
+                            name="selectedSubCategory"
+                            value={formData.selectedSubCategory}
+                            onChange={handleInputChange}
+                          >
+                            <option value="" disabled>
+                              Select Subcategory
+                            </option>
+                            {filteredSubCategories.map((subCategory) => (
+                              <option
+                                key={subCategory._id}
+                                value={subCategory._id}
+                              >
+                                {subCategory.name}
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                        <div className="a_flex">
+                          <button type="submit">Add Subitem</button>
+                        </div>
+                      </form>
+                      <ul className="color_list home_wrappers">
+                        {filteredSubItems.map((subItem) => (
+                          <li key={subItem._id} className="mb">
+                            {formData.editingSubItemId === subItem._id ? (
+                              <div className="edit-form">
+                                <div className="form-group">
+                                  <label htmlFor="subitem">Subitem</label>
+                                  <input
+                                    type="text"
+                                    name="name"
+                                    value={formData.editFormData.name}
+                                    onChange={handleEditInputChange}
+                                    placeholder="Subitem Name"
+                                  />
+                                </div>
+                                <div className="a_flex">
+                                  <button
+                                    type="submit"
+                                    onClick={() => updateSubItem(subItem._id)}
+                                  >
+                                    Update
+                                  </button>
+                                  &#160; &#160;
+                                  <button
+                                    type="button"
+                                    onClick={() => cancelUpdate()}
+                                  >
+                                    Cancel
+                                  </button>
+                                </div>
+                              </div>
+                            ) : (
+                              <>
+                                <div>
+                                  <div>
+                                    <strong>Subitem Name: </strong>
+                                    <span>{subItem.name}</span>
+                                  </div>
+                                </div>
+                                <span className="d_flex">
+                                  <button
+                                    type="submit"
+                                    onClick={() => editSubItem(subItem._id)}
+                                  >
+                                    Edit
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => deleteSubItem(subItem._id)}
+                                  >
+                                    Delete
+                                  </button>
+                                </span>
+                              </>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
