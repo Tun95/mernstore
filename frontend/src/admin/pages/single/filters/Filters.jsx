@@ -1,7 +1,13 @@
 import React, { useState } from "react";
 
 import { Helmet } from "react-helmet-async";
-import { Category, Color, Price } from "../../new/filters/CreateUpdateFilters";
+import {
+  Category,
+  Color,
+  Price,
+  SubCategory,
+  SubItem,
+} from "../../new/filters/CreateUpdateFilters";
 
 function Filters() {
   //============
@@ -30,6 +36,8 @@ function Filters() {
           </div>
           <span>
             <Category openBox={openBox} toggleBox={toggleBox} />
+            <SubCategory openBox={openBox} toggleBox={toggleBox} />
+            <SubItem openBox={openBox} toggleBox={toggleBox} />
             <Color openBox={openBox} toggleBox={toggleBox} />
             <Price openBox={openBox} toggleBox={toggleBox} />
           </span>

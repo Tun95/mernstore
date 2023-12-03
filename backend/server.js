@@ -91,7 +91,9 @@ app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
 app.use("/api/wishes", wishRouter);
 app.use("/api/orders", orderRouter);
+
 app.use("/api/category", categoryRoutes);
+
 app.use("/api/brand", brandRoutes);
 app.use("/api/size", sizeRoutes);
 app.use("/api/color", colorRoutes);
@@ -106,7 +108,6 @@ app.use("/api/apply", applicationRoutes);
 app.use("/api/showroom", showRoutes);
 app.use("/api/wrappers", wrapperRouter);
 app.use("/api/updates", updateRouter);
-
 
 const _dirname = path.resolve();
 app.use(express.static(path.join(_dirname, "/frontend/build")));

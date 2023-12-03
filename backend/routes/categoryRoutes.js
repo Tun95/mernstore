@@ -2,214 +2,285 @@ import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import Category from "../models/category.js";
 
-const categoryRoutes = express.Router();
+const categoryRouter = express.Router();
 
-//==================
-// CREATE category
-//==================
-categoryRoutes.post(
-  "/create",
+//========================
+// Create a new category
+//========================
+categoryRouter.post(
+  "/create-category",
   expressAsyncHandler(async (req, res) => {
-    const { categories } = req.body;
-    const newCategory = new Category({ categories });
+    const { icon, background, img, name, description } = req.body;
+    const newCategory = new Category({
+      categories: [
+        { icon, background, img, name, description, subCategories: [] },
+      ],
+    });
     const createdCategory = await newCategory.save();
     res.status(201).json(createdCategory);
   })
 );
 
-//=========================
-// FETCH all categories
-//=========================
-categoryRoutes.get(
-  "/",
-  expressAsyncHandler(async (_, res) => {
-    try {
-      const allCategories = await Category.find();
-      res.json(allCategories);
-    } catch (error) {
-      console.error("Error fetching categories", error);
-      res.status(500).json({ message: "Error fetching categories" });
-    }
-  })
-);
-
-//=========================
-// FETCH category by ID
-//=========================
-categoryRoutes.get(
-  "/fetch/:id",
+//======================================
+// Create a new subcategory under a chosen category
+//======================================
+categoryRouter.post(
+  "/:categoryId/create-subcategory",
   expressAsyncHandler(async (req, res) => {
-    try {
-      const category = await Category.findById(req.params.id);
-      if (category) {
-        res.json(category);
-      } else {
-        res.status(404).json({ message: "Category not found" });
-      }
-    } catch (error) {
-      console.error("Error fetching category by ID", error);
-      res.status(500).json({ message: "Error fetching category by ID" });
-    }
-  })
-);
-
-//=========================
-//FETCH ALL ALPHA. CATEGORY
-//=========================
-categoryRoutes.get(
-  "/alphabetic",
-  expressAsyncHandler(async (req, res) => {
-    const mysort = { "categories.name": 1 }; // Sorting by category name
-    try {
-      const categories = await Category.find({}).sort(mysort);
-      res.send(categories);
-    } catch (error) {
-      console.error("Error fetching category", error); // Log the error for debugging
-      res.status(500).json({ message: "Error fetching category" });
-    }
-  })
-);
-
-//=========================
-// UPDATE all categories
-//=========================
-categoryRoutes.put(
-  "/update/:id",
-  expressAsyncHandler(async (req, res) => {
-    const { categories } = req.body;
-    const updatedCategory = await Category.findByIdAndUpdate(
-      req.params.categoryId,
-      { categories },
-      { new: true }
-    );
-    res.json(updatedCategory);
-  })
-);
-
-//=========================
-// UPDATE a specific subCategory
-//=========================
-categoryRoutes.put(
-  "/updateSubCategory/:categoryId/:subCategoryId",
-  expressAsyncHandler(async (req, res) => {
+    const categoryId = req.params.categoryId;
     const { name, img } = req.body;
-    try {
-      const updatedCategory = await Category.findOneAndUpdate(
-        {
-          _id: req.params.categoryId,
-          "categories.subCategories._id": req.params.subCategoryId,
-        },
-        {
-          $set: {
-            "categories.$.subCategories.$[subCategory].name": name,
-            "categories.$.subCategories.$[subCategory].img": img,
-          },
-        },
-        {
-          arrayFilters: [{ "subCategory._id": req.params.subCategoryId }],
-          new: true,
-        }
-      );
-      res.json(updatedCategory);
-    } catch (error) {
-      console.error("Error updating subCategory", error);
-      res.status(500).json({ message: "Error updating subCategory" });
+
+    const category = await Category.findById(categoryId);
+
+    if (category) {
+      const newSubCategory = {
+        name,
+        img,
+        subItems: [],
+      };
+
+      category.categories[0].subCategories.push(newSubCategory);
+      const updatedCategory = await category.save();
+      res.status(201).json(updatedCategory);
+    } else {
+      res.status(404).json({ message: "Category not found" });
     }
   })
 );
 
-//=========================
-// UPDATE a specific subItem
-//=========================
-categoryRoutes.put(
-  "/updateSubItem/:categoryId/:subCategoryId/:subItemId",
+//======================================
+// Create a new subitem under a chosen category and subcategory
+//======================================
+categoryRouter.post(
+  "/:categoryId/:subCategoryId/create-subitem",
   expressAsyncHandler(async (req, res) => {
+    const categoryId = req.params.categoryId;
+    const subCategoryId = req.params.subCategoryId;
     const { name } = req.body;
-    try {
-      const updatedCategory = await Category.findOneAndUpdate(
-        {
-          _id: req.params.categoryId,
-          "categories.subCategories._id": req.params.subCategoryId,
-          "categories.subCategories.subItems._id": req.params.subItemId,
-        },
-        {
-          $set: {
-            "categories.$[category].subCategories.$[subCategory].subItems.$[subItem].name":
-              name,
-          },
-        },
-        {
-          arrayFilters: [
-            { "category.subCategories": { $exists: true } },
-            { "subCategory.subItems": { $exists: true } },
-            { "subItem._id": req.params.subItemId },
-          ],
-          new: true,
-        }
+
+    const category = await Category.findById(categoryId);
+
+    if (category) {
+      const subCategory = category.categories[0].subCategories.find(
+        (subCat) => subCat._id.toString() === subCategoryId
       );
-      res.json(updatedCategory);
-    } catch (error) {
-      console.error("Error updating subItem", error);
-      res.status(500).json({ message: "Error updating subItem" });
+
+      if (subCategory) {
+        const newSubItem = { name };
+        subCategory.subItems.push(newSubItem);
+
+        const updatedCategory = await category.save();
+        res.status(201).json(updatedCategory);
+      } else {
+        res.status(404).json({ message: "Subcategory not found" });
+      }
+    } else {
+      res.status(404).json({ message: "Category not found" });
     }
   })
 );
 
-//==================
-// REMOVE category
-//==================
-categoryRoutes.delete(
-  "/removeCategory/:categoryId",
+//====================
+// Update a category
+//====================
+categoryRouter.put(
+  "/update-category/:categoryId",
   expressAsyncHandler(async (req, res) => {
-    await Category.findByIdAndRemove(req.params.categoryId);
-    res.json({ message: "Category removed" });
+    const categoryId = req.params.categoryId;
+    const { icon, background, img, name, description } = req.body;
+
+    const category = await Category.findById(categoryId);
+
+    if (category) {
+      category.categories[0].icon = icon;
+      category.categories[0].background = background;
+      category.categories[0].img = img;
+      category.categories[0].name = name;
+      category.categories[0].description = description;
+
+      const updatedCategory = await category.save();
+      res.status(200).json(updatedCategory);
+    } else {
+      res.status(404).json({ message: "Category not found" });
+    }
   })
 );
 
-//====================
-// REMOVE subcategory
-//====================
-categoryRoutes.delete(
-  "/removeSubCategory/:categoryId/:subCategoryId",
+//======================================
+// Update a subcategory under a chosen category
+//======================================
+categoryRouter.put(
+  "/:categoryId/update-subcategory/:subCategoryId",
   expressAsyncHandler(async (req, res) => {
-    const updatedCategory = await Category.findByIdAndUpdate(
-      req.params.categoryId,
-      {
-        $pull: {
-          "categories.subCategories": { _id: req.params.subCategoryId },
-        },
-      },
-      { new: true }
-    );
-    res.json(updatedCategory);
-  })
-);
+    const categoryId = req.params.categoryId;
+    const subCategoryId = req.params.subCategoryId;
+    const { name, img } = req.body;
 
-//=================
-// REMOVE subitem
-//=================
-categoryRoutes.delete(
-  "/removeSubItem/:categoryId/:subCategoryId/:subItemId",
-  expressAsyncHandler(async (req, res) => {
-    const updatedCategory = await Category.findByIdAndUpdate(
-      req.params.categoryId,
-      {
-        $pull: {
-          "categories.$[category].subCategories.$[subCategory].subItems": {
-            _id: req.params.subItemId,
-          },
-        },
-      },
-      {
-        arrayFilters: [
-          { "category.subCategories": { $exists: true } },
-          { "subCategory.subItems": { $exists: true } },
-        ],
-        new: true,
+    const category = await Category.findById(categoryId);
+
+    if (category) {
+      const subCategory = category.categories[0].subCategories.find(
+        (subCat) => subCat._id.toString() === subCategoryId
+      );
+
+      if (subCategory) {
+        subCategory.name = name;
+        subCategory.img = img;
+
+        const updatedCategory = await category.save();
+        res.status(200).json(updatedCategory);
+      } else {
+        res.status(404).json({ message: "Subcategory not found" });
       }
-    );
-    res.json(updatedCategory);
+    } else {
+      res.status(404).json({ message: "Category not found" });
+    }
   })
 );
 
-export default categoryRoutes;
+//======================================
+// Update a subitem under a chosen category and subcategory
+//======================================
+categoryRouter.put(
+  "/:categoryId/:subCategoryId/:subItemId",
+  expressAsyncHandler(async (req, res) => {
+    const categoryId = req.params.categoryId;
+    const subCategoryId = req.params.subCategoryId;
+    const subItemId = req.params.subItemId;
+    const { name } = req.body;
+
+    const category = await Category.findById(categoryId);
+
+    if (category) {
+      const subCategory = category.categories[0].subCategories.find(
+        (subCat) => subCat._id.toString() === subCategoryId
+      );
+
+      if (subCategory) {
+        const subItem = subCategory.subItems.find(
+          (item) => item._id.toString() === subItemId
+        );
+
+        if (subItem) {
+          subItem.name = name;
+          const updatedCategory = await category.save();
+          res.status(200).json(updatedCategory);
+        } else {
+          res.status(404).json({ message: "Subitem not found" });
+        }
+      } else {
+        res.status(404).json({ message: "Subcategory not found" });
+      }
+    } else {
+      res.status(404).json({ message: "Category not found" });
+    }
+  })
+);
+
+//====================
+// Delete a category
+//====================
+categoryRouter.delete(
+  "/delete-category/:categoryId",
+  expressAsyncHandler(async (req, res) => {
+    const categoryId = req.params.categoryId;
+
+    const deletedCategory = await Category.findByIdAndDelete(categoryId);
+
+    if (deletedCategory) {
+      res.status(200).json({ message: "Category deleted successfully" });
+    } else {
+      res.status(404).json({ message: "Category not found" });
+    }
+  })
+);
+
+//======================================
+// Delete a subcategory under a chosen category
+//======================================
+categoryRouter.delete(
+  "/:categoryId/delete-subcategory/:subCategoryId",
+  expressAsyncHandler(async (req, res) => {
+    const categoryId = req.params.categoryId;
+    const subCategoryId = req.params.subCategoryId;
+
+    const category = await Category.findById(categoryId);
+
+    if (category) {
+      const subCategoryIndex = category.categories[0].subCategories.findIndex(
+        (subCat) => subCat._id.toString() === subCategoryId
+      );
+
+      if (subCategoryIndex !== -1) {
+        category.categories[0].subCategories.splice(subCategoryIndex, 1);
+
+        const updatedCategory = await category.save();
+        res.status(200).json(updatedCategory);
+      } else {
+        res.status(404).json({ message: "Subcategory not found" });
+      }
+    } else {
+      res.status(404).json({ message: "Category not found" });
+    }
+  })
+);
+
+//======================================
+// Delete a subitem under a chosen category and subcategory
+//======================================
+categoryRouter.delete(
+  "/:categoryId/:subCategoryId/:subItemId",
+  expressAsyncHandler(async (req, res) => {
+    const categoryId = req.params.categoryId;
+    const subCategoryId = req.params.subCategoryId;
+    const subItemId = req.params.subItemId;
+
+    const category = await Category.findById(categoryId);
+
+    if (category) {
+      const subCategoryIndex = category.categories[0].subCategories.findIndex(
+        (subCat) => subCat._id.toString() === subCategoryId
+      );
+
+      if (subCategoryIndex !== -1) {
+        const subItemIndex = category.categories[0].subCategories[
+          subCategoryIndex
+        ].subItems.findIndex((item) => item._id.toString() === subItemId);
+
+        if (subItemIndex !== -1) {
+          category.categories[0].subCategories[
+            subCategoryIndex
+          ].subItems.splice(subItemIndex, 1);
+
+          const updatedCategory = await category.save();
+          res.status(200).json(updatedCategory);
+        } else {
+          res.status(404).json({ message: "Subitem not found" });
+        }
+      } else {
+        res.status(404).json({ message: "Subcategory not found" });
+      }
+    } else {
+      res.status(404).json({ message: "Category not found" });
+    }
+  })
+);
+
+//=======================
+// Fetch all categories
+//=======================
+categoryRouter.get(
+  "/",
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const allCategories = await Category.find({});
+      res.status(200).json(allCategories);
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Internal Server Error", error: error.message });
+    }
+  })
+);
+
+export default categoryRouter;

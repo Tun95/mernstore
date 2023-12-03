@@ -29,7 +29,9 @@
       .link_img {
         margin-top: 10px;
       }
-      .color_list {
+      .color_list strong,
+      span {
+        font-size: 14px;
       }
     }
   }
