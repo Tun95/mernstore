@@ -145,6 +145,10 @@
               }
               .sub_category_list {
                 z-index: 8;
+                width: fit-content !important;
+                a {
+                  width: fit-content !important;
+                }
                 .sub_img {
                   img {
                     width: 100px;

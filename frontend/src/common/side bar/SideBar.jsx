@@ -37,7 +37,10 @@ const StyledDivider = styled(Divider)(({ theme, darkMode }) => ({
 }));
 
 function SideBar() {
-  const { categories } = data;
+  // const { categories } = data;
+
+  const { state: cState } = useContext(Context);
+  const { categories } = cState;
 
   const {
     state: states,
@@ -262,33 +265,44 @@ function SideBar() {
                 </div>
               </div>
               <div className="category_btn">
-                {categories.map((item, index) => (
+                {categories?.slice(0, 6).map((categoryGroup, groupIndex) => (
                   <div className="list" key={index}>
                     <ul>
-                      <li className="category">
-                        <Link
-                          to="/store"
-                          className="main_list "
-                          onClick={toggleDrawer(anchor, false)}
-                        >
-                          <div className="c_flex">
-                            <div className="img">
-                              <img src={item.icon} alt={item.name} />
-                            </div>
-                            <div className="name_desc">
-                              <span className="name">
-                                <h4>{item.name}</h4>
-                              </span>
-                              <span className="description">
-                                <p>{item.description}</p>
-                              </span>
-                            </div>
-                            <div className="icon_box">
-                              <KeyboardArrowRightIcon className="icon" />
-                            </div>
-                          </div>
-                        </Link>
-                      </li>
+                      {Array.isArray(categoryGroup.categories) ? (
+                        categoryGroup.categories.map((category, index) => (
+                          <li className="category" key={index}>
+                            <Link
+                              to="/store"
+                              className="main_list "
+                              onClick={toggleDrawer(anchor, false)}
+                            >
+                              <div className="c_flex">
+                                <div className="img">
+                                  <img
+                                    src={category.icon}
+                                    alt={category.name}
+                                  />
+                                </div>
+                                <div className="name_desc">
+                                  <span className="name">
+                                    <h4>{category.name}</h4>
+                                  </span>
+                                  <span className="description">
+                                    <p>{category.description}</p>
+                                  </span>
+                                </div>
+                                <div className="icon_box">
+                                  <KeyboardArrowRightIcon className="icon" />
+                                </div>
+                              </div>
+                            </Link>
+                          </li>
+                        ))
+                      ) : (
+                        <li className="category" key={groupIndex}>
+                          {/* Render your single category code here */}
+                        </li>
+                      )}
                     </ul>
                   </div>
                 ))}

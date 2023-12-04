@@ -174,7 +174,7 @@ function reducer(state, action) {
 
 export function ContextProvider(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { settings, userInfo } = state;
+  const { settings, userInfo, categories } = state;
   //==============
   //FETCH SETTINGS HANDLER
   //==============
@@ -198,7 +198,7 @@ export function ContextProvider(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get(`${request}/api/category/alphabetic`);
+        const { data } = await axios.get(`${request}/api/category`);
         dispatch({ type: "FETCH_CATEGORY_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_CATEGORY_FAIL", payload: getError(err) });
@@ -206,6 +206,7 @@ export function ContextProvider(props) {
     };
     fetchData();
   }, []);
+ 
 
   //==============
   //FETCH ALL SIZE

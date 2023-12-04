@@ -445,8 +445,8 @@ export function SubCategory({ openBox, toggleBox }) {
   };
 
   const updateSubCategory = async (subCategoryId) => {
-    if (!formData.editFormData.name || !formData.editFormData.img) {
-      toast.error("Subcategory name and image cannot be empty");
+    if (!formData.editFormData.name) {
+      toast.error("Subcategory name cannot be empty");
       return;
     }
 

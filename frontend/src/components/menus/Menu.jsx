@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import SearchIcon from "@mui/icons-material/Search";
 import Drawer from "@mui/material/Drawer";
 import "./styles.scss";
@@ -19,9 +19,15 @@ import Menu from "@mui/material/Menu";
 import { Box, Divider } from "@mui/material";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import data from "./data";
+import { Context } from "../../context/Context";
 
 export function CategoryMenu() {
-  const { categories } = data;
+  // const { categories } = data;
+
+  const { state } = useContext(Context);
+  const { categories } = state;
+
+  console.log("MAP CATEGORY:", categories);
 
   //CONTACT MENU
   const [anchorEle, setAnchorEle] = React.useState(null);
@@ -102,70 +108,86 @@ export function CategoryMenu() {
             <div className="category_drop_menu">
               <div className="cat_border">
                 <div className="border">
-                  {categories.map((item, index) => (
-                    <div className="list" key={index}>
+                  {categories?.slice(0, 7).map((categoryGroup, groupIndex) => (
+                    <div className="list" key={groupIndex}>
                       <ul>
-                        <li className="category">
-                          <Link
-                            to="/store"
-                            className="main_list "
-                            onClick={handleCloseNav}
-                          >
-                            <div className="c_flex">
-                              <div className="img">
-                                <img src={item.icon} alt={item.name} />
+                        {Array.isArray(categoryGroup.categories) ? (
+                          categoryGroup.categories.map((category, index) => (
+                            <li className="category" key={index}>
+                              <Link
+                                to="/store"
+                                className="main_list"
+                                onClick={handleCloseNav}
+                              >
+                                <div className="c_flex">
+                                  <div className="img">
+                                    <img
+                                      src={category.icon}
+                                      alt={category.name}
+                                    />
+                                  </div>
+                                  <div className="name_desc">
+                                    <span className="name">
+                                      <h4>{category.name}</h4>
+                                    </span>
+                                    <span className="description">
+                                      <p>{category.description}</p>
+                                    </span>
+                                  </div>
+                                  <div className="icon_box">
+                                    <KeyboardArrowRightIcon className="icon" />
+                                  </div>
+                                </div>
+                              </Link>
+                              <div className="sub_list">
+                                <ul className="sub_category">
+                                  <img
+                                    className="background_img"
+                                    src={category.background}
+                                    alt=""
+                                  />
+                                  {category.subCategories.map(
+                                    (subCategory, subIndex) => (
+                                      <li
+                                        key={subIndex}
+                                        className="sub_category_list"
+                                      >
+                                        <Link to="">
+                                          <div className="sub_img">
+                                            <div className="img">
+                                              <img
+                                                src={subCategory.img}
+                                                alt=""
+                                              />
+                                            </div>
+                                          </div>
+                                          <div className="name">
+                                            <h4>{subCategory.name}</h4>
+                                          </div>
+                                        </Link>
+                                        <ul>
+                                          {subCategory.subItems.map(
+                                            (subItem, subItemIndex) => (
+                                              <li key={subItemIndex}>
+                                                <Link to="">
+                                                  {subItem.name}
+                                                </Link>
+                                              </li>
+                                            )
+                                          )}
+                                        </ul>
+                                      </li>
+                                    )
+                                  )}
+                                </ul>
                               </div>
-                              <div className="name_desc">
-                                <span className="name">
-                                  <h4>{item.name}</h4>
-                                </span>
-                                <span className="description">
-                                  <p>{item.description}</p>
-                                </span>
-                              </div>
-                              <div className="icon_box">
-                                <KeyboardArrowRightIcon className="icon" />
-                              </div>
-                            </div>
-                          </Link>
-                          <div className="sub_list">
-                            <ul className="sub_category ">
-                              <img
-                                className="background_img"
-                                src={item.background}
-                                alt=""
-                              />
-                              {item.subCategories.map(
-                                (subCategory, subIndex) => (
-                                  <li
-                                    key={subIndex}
-                                    className="sub_category_list"
-                                  >
-                                    <Link to="">
-                                      <div className="sub_img">
-                                        <div className="img">
-                                          <img src={subCategory.img} alt="" />
-                                        </div>
-                                      </div>
-                                      <div className="name">
-                                        <h4>{subCategory.name}</h4>
-                                      </div>{" "}
-                                    </Link>
-                                    <ul>
-                                      {subCategory.subItems.map(
-                                        (subItem, subItemIndex) => (
-                                          <li key={subItemIndex}>
-                                            <Link to="">{subItem}</Link>
-                                          </li>
-                                        )
-                                      )}
-                                    </ul>
-                                  </li>
-                                )
-                              )}
-                            </ul>
-                          </div>
-                        </li>
+                            </li>
+                          ))
+                        ) : (
+                          <li className="category" key={groupIndex}>
+                            {/* Render your single category code here */}
+                          </li>
+                        )}
                       </ul>
                     </div>
                   ))}
