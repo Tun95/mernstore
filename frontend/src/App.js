@@ -81,6 +81,7 @@ import PromotionDetailScreen from "./screens/promotionscreen/promotiondetails/Pr
 import CheckoutScreen from "./screens/checkoutscreen/CheckoutScreen";
 import Filters from "./admin/pages/single/filters/Filters";
 import { Banner } from "./admin/pages/new/banner/Banner";
+import { Promotion } from "./admin/pages/new/promotion/Promotion";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -390,6 +391,17 @@ function App() {
               }
             ></Route>
             {/* BANNER */}
+
+            {/* PROMOTION */}
+            <Route
+              path="/admin/promotions"
+              element={
+                <AdminRoute>
+                  <Promotion />
+                </AdminRoute>
+              }
+            ></Route>
+            {/* PROMOTION */}
 
             <Route
               path="/admin/settings"

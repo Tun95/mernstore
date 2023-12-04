@@ -22,7 +22,9 @@ promotionRouter.use((req, res, next) => {
   next();
 });
 
+//=======================
 // Create a new promotion
+//=======================
 promotionRouter.post(
   "/",
   expressAsyncHandler(async (req, res) => {
@@ -36,7 +38,9 @@ promotionRouter.post(
   })
 );
 
+//=======================
 // Fetch all promotions
+//=======================
 promotionRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
@@ -45,7 +49,9 @@ promotionRouter.get(
   })
 );
 
+//=======================
 // Fetch promotion by ID
+//=======================
 promotionRouter.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
@@ -58,7 +64,9 @@ promotionRouter.get(
   })
 );
 
+//=======================
 // Fetch promotion by slug
+//=======================
 promotionRouter.get(
   "/slug/:slug",
   expressAsyncHandler(async (req, res) => {
@@ -73,16 +81,17 @@ promotionRouter.get(
   })
 );
 
+//=======================
 // Update promotion
+//=======================
 promotionRouter.put(
   "/:id",
   expressAsyncHandler(async (req, res) => {
     const promotion = await Promotion.findById(req.params.id);
     if (promotion) {
-      promotion.title = req.body.title || promotion.title;
-      promotion.expirationDate =
-        req.body.expirationDate || promotion.expirationDate;
-      // Update other fields as needed
+      // Update all fields from the request body
+      Object.assign(promotion, req.body);
+
       const updatedPromotion = await promotion.save();
 
       // Broadcast the updated promotion to connected clients
@@ -95,7 +104,9 @@ promotionRouter.put(
   })
 );
 
+//=======================
 // Set expiration date for a promotion
+//=======================
 promotionRouter.post(
   "/set-expiration/:id",
   expressAsyncHandler(async (req, res) => {
@@ -115,18 +126,29 @@ promotionRouter.post(
   })
 );
 
+//=======================
 // Delete promotion
+//=======================
 promotionRouter.delete(
   "/:id",
   expressAsyncHandler(async (req, res) => {
-    const promotion = await Promotion.findById(req.params.id);
-    if (promotion) {
-      await promotion.remove();
+    try {
+      const promotionId = req.params.id;
+
+      // Delete the promotion document from the database
+      const result = await Promotion.deleteOne({ _id: promotionId });
+
+      if (result.deletedCount === 0) {
+        return res.status(404).json({ message: "Promotion not found" });
+      }
+
       // Broadcast the deletion to connected clients
       io.emit("promotionUpdate", { promotion: null });
-      res.send({ message: "Promotion deleted" });
-    } else {
-      res.status(404).send({ message: "Promotion not found" });
+
+      res.status(200).json({ message: "Promotion deleted successfully" });
+    } catch (error) {
+      console.error("Error deleting promotion:", error);
+      res.status(500).json({ message: "Internal Server Error" });
     }
   })
 );

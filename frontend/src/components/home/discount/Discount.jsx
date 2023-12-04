@@ -194,7 +194,7 @@ function Discount() {
       <div className="container">
         <div className="content box_shadow d_flex">
           <div className="left">
-            {promotions?.map((promotion, index) => (
+            {promotions[0]?.map((promotion, index) => (
               <div key={index} className="main_content">
                 <div className="header">
                   <h2>{promotion.title}</h2>
