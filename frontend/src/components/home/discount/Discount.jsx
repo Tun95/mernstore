@@ -60,14 +60,15 @@ function Discount() {
       countdown: { days: 0, hours: 0, minutes: 0, seconds: 0 },
     }
   );
-
   useEffect(() => {
     const socket = io("http://localhost:5000"); // Update with your server URL
 
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
-        const { data } = await axios.get(`${request}/api/promotions`);
+        const { data } = await axios.get(
+          `${request}/api/promotions/checked-promotions`
+        );
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -76,12 +77,24 @@ function Discount() {
 
     const fetchInitialPromotionData = async () => {
       try {
-        const response = await fetch(`${request}/api/promotion`);
-        const { expirationDate } = await response.json();
-        const countdownTime = new Date(expirationDate).getTime();
+        const response = await fetch(
+          `${request}/api/promotions/checked-promotions`
+        );
+        const checkedPromotions = await response.json();
 
-        // Start the countdown
-        startCountdown(countdownTime);
+        // Assuming you want to use the first checked promotion for countdown
+        if (checkedPromotions.length > 0) {
+          const expirationDate = checkedPromotions[0].expirationDate;
+          console.log("Expiration Date:", expirationDate);
+
+          const countdownTime = new Date(expirationDate).getTime();
+          console.log("Initial countdownTime:", countdownTime);
+
+          // Start the countdown
+          startCountdown(countdownTime);
+        } else {
+          console.error("No checked promotions found");
+        }
       } catch (error) {
         console.error("Error fetching initial promotion data:", error);
       }
@@ -93,7 +106,7 @@ function Discount() {
     // Listen for real-time updates
     socket.on("promotionUpdate", ({ promotion }) => {
       if (promotion) {
-        const countdownTime = new Date(promotion.expirationDate).getTime();
+        const countdownTime = new Date(promotion[0].expirationDate).getTime();
         startCountdown(countdownTime);
       }
     });
@@ -115,6 +128,14 @@ function Discount() {
       const now = new Date().getTime();
       const distance = targetTime - now;
 
+      console.log("now:", now);
+      console.log("targetTime:", targetTime);
+      console.log("distance:", distance);
+
+      if (isNaN(now) || isNaN(targetTime) || isNaN(distance)) {
+        console.error("Invalid date or distance calculation.");
+      }
+
       if (distance <= 0) {
         // If the countdown has expired, stop the interval
         clearInterval(intervalId);
@@ -129,6 +150,11 @@ function Discount() {
         );
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        console.log("days:", days);
+        console.log("hours:", hours);
+        console.log("minutes:", minutes);
+        console.log("seconds:", seconds);
 
         dispatch({
           type: "UPDATE_COUNTDOWN",
@@ -194,7 +220,7 @@ function Discount() {
       <div className="container">
         <div className="content box_shadow d_flex">
           <div className="left">
-            {promotions[0]?.map((promotion, index) => (
+            {promotions?.map((promotion, index) => (
               <div key={index} className="main_content">
                 <div className="header">
                   <h2>{promotion.title}</h2>

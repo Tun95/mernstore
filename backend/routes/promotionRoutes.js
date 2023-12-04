@@ -28,13 +28,19 @@ promotionRouter.use((req, res, next) => {
 promotionRouter.post(
   "/",
   expressAsyncHandler(async (req, res) => {
-    const promotion = new Promotion(req.body);
-    const createdPromotion = await promotion.save();
+    try {
+      const promotionData = req.body;
+      const promotion = new Promotion({ ...promotionData, isChecked: false });
+      const createdPromotion = await promotion.save();
 
-    // Broadcast the created promotion to connected clients
-    io.emit("promotionUpdate", { promotion: createdPromotion });
+      // Broadcast the created promotion to connected clients
+      io.emit("promotionUpdate", { promotion: createdPromotion });
 
-    res.status(201).send(createdPromotion);
+      res.status(201).send(createdPromotion);
+    } catch (error) {
+      console.error("Error creating promotion:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
   })
 );
 
@@ -44,8 +50,29 @@ promotionRouter.post(
 promotionRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
-    const promotions = await Promotion.find({});
-    res.send(promotions);
+    try {
+      const promotions = await Promotion.find({});
+      res.send(promotions);
+    } catch (error) {
+      console.error("Error fetching promotions:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  })
+);
+
+//=======================
+// Fetch checked promotions
+//=======================
+promotionRouter.get(
+  "/checked-promotions",
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const checkedPromotions = await Promotion.find({ isChecked: true });
+      res.send(checkedPromotions);
+    } catch (error) {
+      console.error("Error fetching checked promotions:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
   })
 );
 
@@ -55,11 +82,16 @@ promotionRouter.get(
 promotionRouter.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
-    const promotion = await Promotion.findById(req.params.id);
-    if (promotion) {
-      res.send(promotion);
-    } else {
-      res.status(404).send({ message: "Promotion not found" });
+    try {
+      const promotion = await Promotion.findById(req.params.id);
+      if (promotion) {
+        res.send(promotion);
+      } else {
+        res.status(404).send({ message: "Promotion not found" });
+      }
+    } catch (error) {
+      console.error("Error fetching promotion by ID:", error);
+      res.status(500).json({ message: "Internal Server Error" });
     }
   })
 );
@@ -70,13 +102,18 @@ promotionRouter.get(
 promotionRouter.get(
   "/slug/:slug",
   expressAsyncHandler(async (req, res) => {
-    const promotion = await Promotion.findOne({
-      slug: req.params.slug,
-    });
-    if (promotion) {
-      res.send(promotion);
-    } else {
-      res.status(404).send({ message: "Promotion not found" });
+    try {
+      const promotion = await Promotion.findOne({
+        slug: req.params.slug,
+      });
+      if (promotion) {
+        res.send(promotion);
+      } else {
+        res.status(404).send({ message: "Promotion not found" });
+      }
+    } catch (error) {
+      console.error("Error fetching promotion by slug:", error);
+      res.status(500).json({ message: "Internal Server Error" });
     }
   })
 );
@@ -87,19 +124,24 @@ promotionRouter.get(
 promotionRouter.put(
   "/:id",
   expressAsyncHandler(async (req, res) => {
-    const promotion = await Promotion.findById(req.params.id);
-    if (promotion) {
-      // Update all fields from the request body
-      Object.assign(promotion, req.body);
+    try {
+      const promotion = await Promotion.findById(req.params.id);
+      if (promotion) {
+        // Update all fields from the request body
+        Object.assign(promotion, req.body);
 
-      const updatedPromotion = await promotion.save();
+        const updatedPromotion = await promotion.save();
 
-      // Broadcast the updated promotion to connected clients
-      io.emit("promotionUpdate", { promotion: updatedPromotion });
+        // Broadcast the updated promotion to connected clients
+        io.emit("promotionUpdate", { promotion: updatedPromotion });
 
-      res.send(updatedPromotion);
-    } else {
-      res.status(404).send({ message: "Promotion not found" });
+        res.send(updatedPromotion);
+      } else {
+        res.status(404).send({ message: "Promotion not found" });
+      }
+    } catch (error) {
+      console.error("Error updating promotion:", error);
+      res.status(500).json({ message: "Internal Server Error" });
     }
   })
 );
@@ -110,18 +152,23 @@ promotionRouter.put(
 promotionRouter.post(
   "/set-expiration/:id",
   expressAsyncHandler(async (req, res) => {
-    const promotion = await Promotion.findById(req.params.id);
-    if (promotion) {
-      promotion.expirationDate =
-        req.body.expirationDate || promotion.expirationDate;
-      const updatedPromotion = await promotion.save();
+    try {
+      const promotion = await Promotion.findById(req.params.id);
+      if (promotion) {
+        promotion.expirationDate =
+          req.body.expirationDate || promotion.expirationDate;
+        const updatedPromotion = await promotion.save();
 
-      // Broadcast the updated promotion to connected clients
-      io.emit("promotionUpdate", { promotion: updatedPromotion });
+        // Broadcast the updated promotion to connected clients
+        io.emit("promotionUpdate", { promotion: updatedPromotion });
 
-      res.send(updatedPromotion);
-    } else {
-      res.status(404).send({ message: "Promotion not found" });
+        res.send(updatedPromotion);
+      } else {
+        res.status(404).send({ message: "Promotion not found" });
+      }
+    } catch (error) {
+      console.error("Error setting expiration date:", error);
+      res.status(500).json({ message: "Internal Server Error" });
     }
   })
 );

@@ -46,7 +46,6 @@ export function Promotion() {
       return;
     }
     try {
-      console.log("Request Payload:", formData);
       const response = await axios.post(`${request}/api/promotions`, formData, {
         headers: {
           "Content-Type": "application/json",
@@ -141,6 +140,49 @@ export function Promotion() {
     });
   };
 
+  const handleCheckChange = async (promotionId) => {
+    // Fetch existing checked promotion before updating the state
+    const existingCheckedPromotion = promotions.find(
+      (promotion) => promotion.isChecked
+    );
+
+    // If there's already a checked promotion, show an error
+    if (
+      existingCheckedPromotion &&
+      existingCheckedPromotion._id !== promotionId
+    ) {
+      toast.error("Only one promotion can be checked at a time");
+      return;
+    }
+
+    // Update the state with the new checked status
+    const updatedPromotions = promotions.map((promotion) =>
+      promotion._id === promotionId
+        ? { ...promotion, isChecked: !promotion.isChecked }
+        : { ...promotion, isChecked: false }
+    );
+
+    try {
+      // Find the updated promotion
+      const updatedPromotion = updatedPromotions.find(
+        (p) => p._id === promotionId
+      );
+
+      if (updatedPromotion) {
+        // Update the promotion in the database
+        await axios.put(`${request}/api/promotions/${promotionId}`, {
+          isChecked: updatedPromotion.isChecked,
+        });
+
+        // Update the state with the new checked status
+        setPromotions(updatedPromotions);
+      }
+    } catch (error) {
+      console.error("Error updating isChecked:", error);
+      toast.error("Failed to update isChecked");
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     updateOrAddPromotion();
@@ -220,7 +262,6 @@ export function Promotion() {
                             </span>
                             <span>
                               <label htmlFor="image">Image URL</label>
-
                               <input
                                 type="text"
                                 name="image"
@@ -231,7 +272,6 @@ export function Promotion() {
                             </span>
                             <span>
                               <label htmlFor="description">Description</label>
-
                               <input
                                 type="text"
                                 name="description"
@@ -296,6 +336,18 @@ export function Promotion() {
                                 <div>
                                   <strong>Expiration Date: </strong>
                                   <span>{promotion.expirationDate}</span>
+                                </div>
+                                <div>
+                                  <label className="a_flex">
+                                    <input
+                                      type="checkbox"
+                                      checked={promotion.isChecked || false}
+                                      onChange={() =>
+                                        handleCheckChange(promotion._id)
+                                      }
+                                    />
+                                    <strong> Is Checked</strong>
+                                  </label>
                                 </div>
                               </div>
                               <span className="d_flex">

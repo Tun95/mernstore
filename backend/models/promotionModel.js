@@ -8,6 +8,7 @@ const promotionSchema = new mongoose.Schema(
     image: { type: String },
     description: { type: String, default: "Default Description" },
     expirationDate: Date,
+    isChecked: { type: Boolean, default: false },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",

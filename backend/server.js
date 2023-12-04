@@ -123,19 +123,17 @@ app.use((err, req, res, next) => {
 const server = createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
-
 // WebSocket setup
-io.on("connection", (socket) => {
+io.on("connection", async (socket) => {
   console.log("A user connected");
   // Handle events related to promotions here
   // Example: Broadcast the initial promotion data when a user connects
-  Promotion.findOne()
-    .then((promotion) => {
-      socket.emit("promotionUpdate", { promotion });
-    })
-    .catch((error) => {
-      console.error("Error fetching initial promotion data:", error);
-    });
+  try {
+    const checkedPromotions = await Promotion.find({ isChecked: true });
+    socket.emit("promotionUpdate", { promotion: checkedPromotions });
+  } catch (error) {
+    console.error("Error fetching initial promotion data:", error);
+  }
 });
 
 const port = process.env.PORT || 5000;
