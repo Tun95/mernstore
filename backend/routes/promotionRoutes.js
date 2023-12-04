@@ -1,147 +1,132 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
+import http from "http";
+import { Server } from "socket.io";
 import Promotion from "../models/promotionModel.js";
 
 const promotionRouter = express.Router();
 
-//========================================
-// Route to create a new promotion
-//========================================
+// Create a Socket.IO server
+const server = http.createServer(); // Use 'http' module to create a server
+const io = new Server(server);
+
+// Socket.IO connection handling
+io.on("connection", (socket) => {
+  console.log("A user connected");
+  // Handle events related to countdown timer here
+});
+
+// Middleware to broadcast promotion updates to connected clients
+promotionRouter.use((req, res, next) => {
+  req.io = io;
+  next();
+});
+
+// Create a new promotion
 promotionRouter.post(
   "/",
   expressAsyncHandler(async (req, res) => {
-    try {
-      const { title, image, description, countDownTimer, user } = req.body;
-      const promotion = new Promotion({
-        title,
-        image,
-        description,
-        countDownTimer,
-        user,
-      });
-      const createdPromotion = await promotion.save();
-      res.status(201).json(createdPromotion);
-    } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Promotion creation failed", error: error.message });
-    }
+    const promotion = new Promotion(req.body);
+    const createdPromotion = await promotion.save();
+
+    // Broadcast the created promotion to connected clients
+    io.emit("promotionUpdate", { promotion: createdPromotion });
+
+    res.status(201).send(createdPromotion);
   })
 );
 
-//===============================
-// Route to fetch all promotions
-//===============================
+// Fetch all promotions
 promotionRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
-    try {
-      const promotions = await Promotion.find({});
-      res.json(promotions);
-    } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Failed to fetch promotions", error: error.message });
-    }
+    const promotions = await Promotion.find({});
+    res.send(promotions);
   })
 );
 
-//========================================
-// Route to update an existing promotion by ID
-//========================================
-promotionRouter.put(
+// Fetch promotion by ID
+promotionRouter.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
-    try {
-      const promotionId = req.params.id;
-      const { title, image, description, countDownTimer, user } = req.body;
-      const promotion = await Promotion.findById(promotionId);
-
-      if (promotion) {
-        promotion.title = title || promotion.title;
-        promotion.image = image || promotion.image;
-        promotion.description = description || promotion.description;
-        promotion.countDownTimer = countDownTimer || promotion.countDownTimer;
-        promotion.user = user || promotion.user;
-
-        const updatedPromotion = await promotion.save();
-        res.json(updatedPromotion);
-      } else {
-        res.status(404).json({ message: "Promotion not found" });
-      }
-    } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Promotion update failed", error: error.message });
+    const promotion = await Promotion.findById(req.params.id);
+    if (promotion) {
+      res.send(promotion);
+    } else {
+      res.status(404).send({ message: "Promotion not found" });
     }
   })
 );
 
-//========================================
-// Route to fetch a single promotion by slug
-//========================================
+// Fetch promotion by slug
 promotionRouter.get(
   "/slug/:slug",
   expressAsyncHandler(async (req, res) => {
-    try {
-      const slug = req.params.slug;
-      const promotion = await Promotion.findOne({ slug });
-      if (promotion) {
-        res.json(promotion);
-      } else {
-        res.status(404).json({ message: "Promotion not found" });
-      }
-    } catch (error) {
-      res.status(500).json({
-        message: "Failed to fetch promotion by slug",
-        error: error.message,
-      });
+    const promotion = await Promotion.findOne({
+      slug: req.params.slug,
+    });
+    if (promotion) {
+      res.send(promotion);
+    } else {
+      res.status(404).send({ message: "Promotion not found" });
     }
   })
 );
 
-//========================================
-// Route to fetch a single promotion by ID
-//========================================
-promotionRouter.get(
+// Update promotion
+promotionRouter.put(
   "/:id",
   expressAsyncHandler(async (req, res) => {
-    try {
-      const promotionId = req.params.id;
-      const promotion = await Promotion.findById(promotionId);
-      if (promotion) {
-        res.json(promotion);
-      } else {
-        res.status(404).json({ message: "Promotion not found" });
-      }
-    } catch (error) {
-      res.status(500).json({
-        message: "Failed to fetch promotion by ID",
-        error: error.message,
-      });
+    const promotion = await Promotion.findById(req.params.id);
+    if (promotion) {
+      promotion.title = req.body.title || promotion.title;
+      promotion.expirationDate =
+        req.body.expirationDate || promotion.expirationDate;
+      // Update other fields as needed
+      const updatedPromotion = await promotion.save();
+
+      // Broadcast the updated promotion to connected clients
+      io.emit("promotionUpdate", { promotion: updatedPromotion });
+
+      res.send(updatedPromotion);
+    } else {
+      res.status(404).send({ message: "Promotion not found" });
     }
   })
 );
 
-//========================================
-// Route to delete a promotion by ID
-//========================================
+// Set expiration date for a promotion
+promotionRouter.post(
+  "/set-expiration/:id",
+  expressAsyncHandler(async (req, res) => {
+    const promotion = await Promotion.findById(req.params.id);
+    if (promotion) {
+      promotion.expirationDate =
+        req.body.expirationDate || promotion.expirationDate;
+      const updatedPromotion = await promotion.save();
+
+      // Broadcast the updated promotion to connected clients
+      io.emit("promotionUpdate", { promotion: updatedPromotion });
+
+      res.send(updatedPromotion);
+    } else {
+      res.status(404).send({ message: "Promotion not found" });
+    }
+  })
+);
+
+// Delete promotion
 promotionRouter.delete(
   "/:id",
   expressAsyncHandler(async (req, res) => {
-    try {
-      const promotionId = req.params.id;
-      const promotion = await Promotion.findById(promotionId);
-      if (promotion) {
-        await promotion.remove();
-        res.json({ message: "Promotion deleted" });
-      } else {
-        res.status(404).json({ message: "Promotion not found" });
-      }
-    } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Promotion deletion failed", error: error.message });
+    const promotion = await Promotion.findById(req.params.id);
+    if (promotion) {
+      await promotion.remove();
+      // Broadcast the deletion to connected clients
+      io.emit("promotionUpdate", { promotion: null });
+      res.send({ message: "Promotion deleted" });
+    } else {
+      res.status(404).send({ message: "Promotion not found" });
     }
   })
 );

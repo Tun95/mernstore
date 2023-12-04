@@ -3,15 +3,11 @@ import mongoose from "mongoose";
 const promotionSchema = new mongoose.Schema(
   {
     title: { type: String, default: "Default Title" },
+    subTitle: { type: String, default: "Default Title" },
     slug: { type: String, default: "default-slug" },
     image: { type: String },
     description: { type: String, default: "Default Description" },
-    countDownTimer: {
-      days: { type: Number, default: 0 },
-      hours: { type: Number, default: 0 },
-      minutes: { type: Number, default: 0 },
-      seconds: { type: Number, default: 0 },
-    },
+    expirationDate: Date,
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -24,14 +20,33 @@ const promotionSchema = new mongoose.Schema(
   }
 );
 
-
 // Pre-save middleware to generate slug from title
-promotionSchema.pre("save", function (next) {
+promotionSchema.pre("save", async function (next) {
   if (this.isModified("title") || !this.slug) {
-    this.slug = this.title
+    let title = this.title || "Default Title"; // Use a default title if it's missing or undefined
+    let baseSlug = title
       .toLowerCase()
       .replace(/ /g, "-")
       .replace(/[^\w-]+/g, "");
+
+    // Check for duplicate slugs
+    const existingPromotion = await this.constructor.findOne({
+      slug: baseSlug,
+    });
+
+    if (existingPromotion) {
+      let counter = 1;
+      while (
+        await this.constructor.findOne({
+          slug: `${baseSlug}-${counter}`,
+        })
+      ) {
+        counter++;
+      }
+      this.slug = `${baseSlug}-${counter}`;
+    } else {
+      this.slug = baseSlug;
+    }
   }
   next();
 });

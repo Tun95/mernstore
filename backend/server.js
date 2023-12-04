@@ -27,6 +27,7 @@ import showRoutes from "./routes/showroomRoutes.js";
 import wrapperRouter from "./routes/wrapperRoutes.js";
 import updateRouter from "./routes/updateRoutes.js";
 import promotionRouter from "./routes/promotionRoutes.js";
+import Promotion from "./models/promotionModel.js";
 
 dotenv.config();
 
@@ -120,36 +121,22 @@ app.use((err, req, res, next) => {
 });
 
 const server = createServer(app);
-// const io = new Server(server, { cors: { origin: "*" } });
+const io = new Server(server, { cors: { origin: "*" } });
 
-// // Handle the connection event
-// io.on("connection", (socket) => {
-//   console.log("A client connected");
 
-//   // Handle the promotion countdown timer updates
-//  socket.on("updateCountdownTimer", async () => {
-//    try {
-//      // Query promotions with countdown timers
-//      const promotions = await Promotion.find({
-//        "countDownTimer.seconds": { $gt: 0 },
-//      });
-
-//      // Update the countdown timers
-//      promotions.forEach((promotion) => {
-//        promotion.updateCountDownTimer();
-//        promotion.save();
-//      });
-
-//      // Emit updated promotions with countdown timers to clients
-//      io.emit("countdownTimerUpdate", promotions);
-
-//      console.log(promotions);
-//    } catch (error) {
-//      console.error("Error while updating countdown timers:", error);
-//    }
-//  });
-
-// });
+// WebSocket setup
+io.on("connection", (socket) => {
+  console.log("A user connected");
+  // Handle events related to promotions here
+  // Example: Broadcast the initial promotion data when a user connects
+  Promotion.findOne()
+    .then((promotion) => {
+      socket.emit("promotionUpdate", { promotion });
+    })
+    .catch((error) => {
+      console.error("Error fetching initial promotion data:", error);
+    });
+});
 
 const port = process.env.PORT || 5000;
 server.listen(port, () => {

@@ -9,6 +9,7 @@ import "./styles.scss";
 import { request } from "../../../base url/BaseUrl";
 import axios from "axios";
 import { getError } from "../../utilities/util/Utils";
+import io from "socket.io-client";
 
 const NextArrow = (props) => {
   const { onClick } = props;
@@ -40,7 +41,8 @@ const reducer = (state, action) => {
       return { ...state, loading: false, promotions: action.payload };
     case "FETCH_FAIL":
       return { ...state, loading: false, errors: action.payload };
-
+    case "UPDATE_COUNTDOWN":
+      return { ...state, countdown: action.payload };
     default:
       return state;
   }
@@ -49,16 +51,19 @@ function Discount() {
   const { products } = data;
 
   const navigate = useNavigate();
-  const [{ loading, error, promotions }, dispatch] = useReducer(reducer, {
-    loading: true,
-    error: "",
-    banners: [],
-  });
+  const [{ loading, error, promotions, countdown }, dispatch] = useReducer(
+    reducer,
+    {
+      loading: true,
+      error: "",
+      promotions: [],
+      countdown: { days: 0, hours: 0, minutes: 0, seconds: 0 },
+    }
+  );
 
-  //===============
-  //FETCH ALL BANNERS
-  //===============
   useEffect(() => {
+    const socket = io("http://localhost:5000"); // Update with your server URL
+
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
@@ -69,9 +74,75 @@ function Discount() {
       }
     };
 
+    const fetchInitialPromotionData = async () => {
+      try {
+        const response = await fetch(`${request}/api/promotion`);
+        const { expirationDate } = await response.json();
+        const countdownTime = new Date(expirationDate).getTime();
+
+        // Start the countdown
+        startCountdown(countdownTime);
+      } catch (error) {
+        console.error("Error fetching initial promotion data:", error);
+      }
+    };
+
     fetchData();
+    fetchInitialPromotionData();
+
+    // Listen for real-time updates
+    socket.on("promotionUpdate", ({ promotion }) => {
+      if (promotion) {
+        const countdownTime = new Date(promotion.expirationDate).getTime();
+        startCountdown(countdownTime);
+      }
+    });
+
+    return () => {
+      socket.disconnect();
+      // Clear the interval when the component is unmounted
+      clearInterval(intervalId);
+    };
   }, []);
-  console.log(promotions);
+
+  let intervalId;
+
+  const startCountdown = (targetTime) => {
+    // Clear any existing interval to prevent multiple intervals running simultaneously
+    clearInterval(intervalId);
+
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const distance = targetTime - now;
+
+      if (distance <= 0) {
+        // If the countdown has expired, stop the interval
+        clearInterval(intervalId);
+        dispatch({
+          type: "UPDATE_COUNTDOWN",
+          payload: { days: 0, hours: 0, minutes: 0, seconds: 0 },
+        });
+      } else {
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)
+        );
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        dispatch({
+          type: "UPDATE_COUNTDOWN",
+          payload: { days, hours, minutes, seconds },
+        });
+      }
+    };
+
+    // Call updateCountdown immediately to set the initial state
+    updateCountdown();
+
+    // Set up an interval to call updateCountdown every second
+    intervalId = setInterval(updateCountdown, 1000);
+  };
 
   //===========
   //REACT SLICK
@@ -139,21 +210,19 @@ function Discount() {
                     <span>
                       <ul>
                         <li>
-                          <span>{promotion.countDownTimer?.days}</span>
+                          <span>{countdown.days}</span>
                           <small>days</small>
                         </li>
                         <li>
-                          <span>{promotion.countDownTimer?.hours}</span>
+                          <span>{countdown.hours}</span>
                           <small>hours</small>
                         </li>
                         <li>
-                          <span>{promotion.countDownTimer?.minutes}</span>
+                          <span>{countdown.minutes}</span>
                           <small>minutes</small>
                         </li>
                         <li>
-                          <span className="seconds">
-                            {promotion.countDownTimer?.seconds}
-                          </span>
+                          <span className="seconds">{countdown.seconds}</span>
                           <small>seconds</small>
                         </li>
                       </ul>
