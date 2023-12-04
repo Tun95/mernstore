@@ -61,7 +61,7 @@ function Discount() {
     }
   );
   useEffect(() => {
-    const socket = io("http://localhost:5000"); // Update with your server URL
+    const socket = io(request); // Update with your server URL
 
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
