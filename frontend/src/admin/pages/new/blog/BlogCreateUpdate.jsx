@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
 import JoditEditor from "jodit-react";
 import parse from "html-react-parser";
 import "./styles.scss";
-import { truncateText } from "../../../../components/store/StoreItems";
 
 //===========
 // PAGINATION
@@ -27,6 +26,8 @@ const itemRender = (_, type, originalElement) => {
 
 export function BlogCreateUpdate() {
   const [blogs, setBlogs] = useState([]);
+  const [totalPages, setTotalPages] = useState(5);
+  const [currentPage, setCurrentPage] = useState(1);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -38,10 +39,13 @@ export function BlogCreateUpdate() {
     fetchBlogs();
   }, []);
 
-  const fetchBlogs = async () => {
+  const fetchBlogs = async (page = 1) => {
     try {
-      const response = await axios.get(`${request}/api/blog`);
-      setBlogs(response.data.blogs);
+      const response = await axios.get(`${request}/api/blog?page=${page}`);
+      const { blogs, totalPages, currentPage } = response.data;
+      setBlogs(blogs);
+      setTotalPages(totalPages);
+      setCurrentPage(currentPage);
     } catch (error) {
       toast.error("Failed to fetch blogs");
     }
@@ -160,7 +164,6 @@ export function BlogCreateUpdate() {
       description: "",
       image: "",
       comments: [],
-
       _id: "",
     });
   };
@@ -171,11 +174,17 @@ export function BlogCreateUpdate() {
       description: "",
       image: "",
       comments: [],
-
       _id: "",
     });
   };
 
+  //============
+
+  const handlePageChange = (page) => {
+    fetchBlogs(page);
+  };
+
+  console.log(blogs);
   return (
     <>
       <Helmet>
@@ -273,17 +282,6 @@ export function BlogCreateUpdate() {
                                   <strong>Image: </strong>
                                   <span>{blog.image}</span>
                                 </div>{" "}
-                                <div>
-                                  <strong>Description: </strong>
-                                  <span>
-                                    {parse(
-                                      `<p>${truncateText(
-                                        blog.description,
-                                        15
-                                      )}</p>`
-                                    )}
-                                  </span>
-                                </div>
                               </div>
                               <span className="d_flex">
                                 <button
@@ -302,9 +300,15 @@ export function BlogCreateUpdate() {
                             </li>
                           ))}
                         </ul>
-                        <span className="ant_pagination l_flex mt">
-                          <Pagination total={500} itemRender={itemRender} />
-                        </span>
+                        <div className="ant_pagination l_flex mt">
+                          <Pagination
+                            total={totalPages * 5} // Assuming 5 items per page
+                            itemRender={itemRender}
+                            current={currentPage}
+                            pageSize={5} // Number of items per page
+                            onChange={(page) => handlePageChange(page)}
+                          />
+                        </div>
                       </div>
                     </div>
                   </>
