@@ -14,7 +14,7 @@ import YouTubeIcon from "@mui/icons-material/YouTube";
 const label = { inputProps: { "aria-label": "Checkbox demo" } };
 
 //TEXT TRUNCATE
-function truncateText(text, maxWords) {
+export function truncateText(text, maxWords) {
   const words = text.split(" ");
   if (words.length <= maxWords) {
     return text;

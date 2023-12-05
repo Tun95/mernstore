@@ -18,11 +18,9 @@ import Tooltip from "@mui/material/Tooltip";
 import Menu from "@mui/material/Menu";
 import { Box, Divider } from "@mui/material";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
-import data from "./data";
 import { Context } from "../../context/Context";
 
 export function CategoryMenu() {
-  // const { categories } = data;
 
   const { state } = useContext(Context);
   const { categories } = state;

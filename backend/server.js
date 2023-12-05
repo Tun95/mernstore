@@ -28,6 +28,7 @@ import wrapperRouter from "./routes/wrapperRoutes.js";
 import updateRouter from "./routes/updateRoutes.js";
 import promotionRouter from "./routes/promotionRoutes.js";
 import Promotion from "./models/promotionModel.js";
+import blogRouter from "./routes/blogRoutes.js";
 
 dotenv.config();
 
@@ -109,6 +110,9 @@ app.use("/api/apply", applicationRoutes);
 app.use("/api/showroom", showRoutes);
 app.use("/api/wrappers", wrapperRouter);
 app.use("/api/updates", updateRouter);
+
+app.use("/api/blog", blogRouter);
+
 
 const _dirname = path.resolve();
 app.use(express.static(path.join(_dirname, "/frontend/build")));

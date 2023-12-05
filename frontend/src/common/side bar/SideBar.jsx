@@ -26,19 +26,17 @@ import CloseIcon from "@mui/icons-material/Close";
 import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import { LocationModal, LoginModals } from "../../components/modals/Modals";
 import EqualizerIcon from "@mui/icons-material/Equalizer";
-import data from "../../components/menus/data";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import FilterAltOutlinedIcon from "@mui/icons-material/FilterAltOutlined";
 import ViewCarouselIcon from "@mui/icons-material/ViewCarousel";
 import MediationIcon from "@mui/icons-material/Mediation";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
 const StyledDivider = styled(Divider)(({ theme, darkMode }) => ({
   backgroundColor: darkMode ? "#ffffff" : "", // Change colors accordingly
 }));
 
 function SideBar() {
-  // const { categories } = data;
-
   const { state: cState } = useContext(Context);
   const { categories } = cState;
 
@@ -268,7 +266,7 @@ function SideBar() {
                 {categories?.slice(0, 6).map((categoryGroup, groupIndex) => (
                   <div className="list" key={index}>
                     <ul>
-                      {Array.isArray(categoryGroup.categories) ? (
+                      {Array.isArray(categoryGroup.categories) &&
                         categoryGroup.categories.map((category, index) => (
                           <li className="category" key={index}>
                             <Link
@@ -297,12 +295,7 @@ function SideBar() {
                               </div>
                             </Link>
                           </li>
-                        ))
-                      ) : (
-                        <li className="category" key={groupIndex}>
-                          {/* Render your single category code here */}
-                        </li>
-                      )}
+                        ))}
                     </ul>
                   </div>
                 ))}
@@ -467,6 +460,12 @@ function SideBar() {
                           <Link className="c_flex" to="/admin/products">
                             <span>Products</span>
                             <Inventory2Icon className="icon" />
+                          </Link>
+                        </li>
+                        <li className="c_flex">
+                          <Link className="c_flex" to="/admin/blog">
+                            <span>Blogs</span>
+                            <LibraryBooksIcon className="icon" />
                           </Link>
                         </li>
                         <li className="c_flex">

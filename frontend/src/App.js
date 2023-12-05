@@ -82,6 +82,7 @@ import CheckoutScreen from "./screens/checkoutscreen/CheckoutScreen";
 import Filters from "./admin/pages/single/filters/Filters";
 import { Banner } from "./admin/pages/new/banner/Banner";
 import { Promotion } from "./admin/pages/new/promotion/Promotion";
+import { BlogCreateUpdate } from "./admin/pages/new/blog/BlogCreateUpdate";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -402,6 +403,17 @@ function App() {
               }
             ></Route>
             {/* PROMOTION */}
+
+            {/* ADMIN BLOG */}
+            <Route
+              path="/admin/blog"
+              element={
+                <AdminRoute>
+                  <BlogCreateUpdate />
+                </AdminRoute>
+              }
+            ></Route>
+            {/* ADMIN BLOG */}
 
             <Route
               path="/admin/settings"

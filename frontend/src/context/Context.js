@@ -3,7 +3,6 @@ import { createContext, useEffect, useReducer, useState } from "react";
 import { getError } from "../components/utilities/util/Utils";
 import { request } from "../base url/BaseUrl";
 import currencyToSymbolMap from "currency-symbol-map/map";
-import { toast } from "react-toastify";
 
 export const Context = createContext();
 
@@ -174,7 +173,7 @@ function reducer(state, action) {
 
 export function ContextProvider(props) {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { settings, userInfo, categories } = state;
+  const { settings } = state;
   //==============
   //FETCH SETTINGS HANDLER
   //==============

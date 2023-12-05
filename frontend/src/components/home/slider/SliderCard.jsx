@@ -8,7 +8,6 @@ function SliderCard() {
   const { state } = useContext(Context);
   const { banners } = state;
 
-  console.log("MAP BANNERS:", banners);
 
   const settings = {
     dots: true,
