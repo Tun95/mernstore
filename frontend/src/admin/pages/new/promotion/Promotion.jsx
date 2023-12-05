@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
@@ -7,8 +7,12 @@ import { Context } from "../../../../context/Context";
 import { request } from "../../../../base url/BaseUrl";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import "./styles.scss";
+import { getError } from "../../../../components/utilities/util/Utils";
 
 export function Promotion() {
+  const { state } = useContext(Context);
+  const { userInfo } = state;
+
   const [promotions, setPromotions] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
@@ -49,12 +53,13 @@ export function Promotion() {
       const response = await axios.post(`${request}/api/promotions`, formData, {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
         },
       });
       setPromotions((prevPromotions) => [...prevPromotions, response.data]);
       toast.success("Promotion added successfully");
     } catch (error) {
-      toast.error("Failed to add promotion");
+      toast.error(getError(error));
     }
   };
 
@@ -94,7 +99,9 @@ export function Promotion() {
     // If the user confirms, proceed with deletion
     if (shouldDelete) {
       try {
-        await axios.delete(`${request}/api/promotions/${id}`);
+        await axios.delete(`${request}/api/promotions/${id}`, {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        });
 
         // Update state by filtering out the deleted promotion
         setPromotions((prevPromotions) =>
@@ -103,7 +110,7 @@ export function Promotion() {
 
         toast.success("Promotion deleted successfully");
       } catch (error) {
-        toast.error("Failed to delete promotion");
+        toast.error(getError(error));
       }
     }
   };
@@ -112,11 +119,14 @@ export function Promotion() {
     try {
       const response = await axios.put(
         `${request}/api/promotions/${id}`,
-        updatedData
+        updatedData,
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
       );
       return response.data;
     } catch (error) {
-      throw error;
+      toast.error(getError(error));
     }
   };
 
@@ -180,16 +190,22 @@ export function Promotion() {
 
       if (updatedPromotion) {
         // Update the promotion in the database
-        await axios.put(`${request}/api/promotions/${promotionId}`, {
-          isChecked: updatedPromotion.isChecked,
-        });
+        await axios.put(
+          `${request}/api/promotions/${promotionId}`,
+          {
+            isChecked: updatedPromotion.isChecked,
+          },
+          {
+            headers: { Authorization: `Bearer ${userInfo.token}` },
+          }
+        );
 
         // Update the state with the new checked status
         setPromotions(updatedPromotions);
       }
     } catch (error) {
       console.error("Error updating isChecked:", error);
-      toast.error("Failed to update isChecked");
+      toast.error(getError(error));
     }
   };
 

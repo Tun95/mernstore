@@ -9,6 +9,10 @@
       justify-content: space-between;
       gap: 20px;
       position: relative;
+      width: 100%;
+      .full_width {
+        width: 100%;
+      }
       .scroll_box {
         position: relative;
         .recent_post {

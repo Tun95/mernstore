@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
@@ -8,8 +8,9 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Pagination } from "antd";
 import { Link } from "react-router-dom";
 import JoditEditor from "jodit-react";
-import parse from "html-react-parser";
 import "./styles.scss";
+import { Context } from "../../../../context/Context";
+import { getError } from "../../../../components/utilities/util/Utils";
 
 //===========
 // PAGINATION
@@ -25,6 +26,9 @@ const itemRender = (_, type, originalElement) => {
 };
 
 export function BlogCreateUpdate() {
+  const { state } = useContext(Context);
+  const { userInfo } = state;
+
   const [blogs, setBlogs] = useState([]);
   const [totalPages, setTotalPages] = useState(5);
   const [currentPage, setCurrentPage] = useState(1);
@@ -47,7 +51,7 @@ export function BlogCreateUpdate() {
       setTotalPages(totalPages);
       setCurrentPage(currentPage);
     } catch (error) {
-      toast.error("Failed to fetch blogs");
+      toast.error(getError(error));
     }
   };
 
@@ -65,11 +69,17 @@ export function BlogCreateUpdate() {
       return;
     }
     try {
-      const response = await axios.post(`${request}/api/blog/create`, formData);
+      const response = await axios.post(
+        `${request}/api/blog/create`,
+        formData,
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
       setBlogs((prevBlogs) => [...prevBlogs, response.data]);
       toast.success("Blog added successfully");
     } catch (error) {
-      toast.error("Failed to add blog");
+      toast.error(getError(error));
     }
   };
 
@@ -108,11 +118,13 @@ export function BlogCreateUpdate() {
     // If the user confirms, proceed with deletion
     if (shouldDelete) {
       try {
-        await axios.delete(`${request}/api/blog/delete/${id}`);
+        await axios.delete(`${request}/api/blog/delete/${id}`, {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        });
         setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== id));
         toast.success("Blog deleted successfully");
       } catch (error) {
-        toast.error("Failed to delete blog");
+        toast.error(getError(error));
       }
     }
   };
@@ -121,7 +133,10 @@ export function BlogCreateUpdate() {
     try {
       const response = await axios.put(
         `${request}/api/blog/update/${id}`,
-        updatedData
+        updatedData,
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
       );
       return response.data;
     } catch (error) {
@@ -179,9 +194,13 @@ export function BlogCreateUpdate() {
   };
 
   //============
+  const paginationRef = useRef(null);
 
   const handlePageChange = (page) => {
     fetchBlogs(page);
+    if (paginationRef.current) {
+      paginationRef.current.scrollIntoView({ behavior: "smooth" });
+    }
   };
 
   console.log(blogs);
@@ -220,7 +239,7 @@ export function BlogCreateUpdate() {
 
                   <>
                     <div className="product_info_color ">
-                      <div className="product_info_box ">
+                      <div ref={paginationRef} className="product_info_box ">
                         <form onSubmit={handleSubmit} className="form_input">
                           <div className="form-group">
                             <label htmlFor="title">Title</label>

@@ -10,7 +10,7 @@ function Comments() {
         </div>
         <div className="list">
           <div className="no_post l_flex">
-            <h3>No post found</h3>
+            <h3>No comment found</h3>
           </div>
         </div>
         <div className="btn">

@@ -113,7 +113,8 @@
     position: relative;
     bottom: 10px;
     .no_post {
-      padding: 60px 0px;
+      height: 150px;
+      margin: 20px 0px;
       h3 {
         font-size: 16px;
         color: var(--color-light-gray);
@@ -129,6 +130,7 @@
       color: var(--color-white);
       border-radius: 20px;
       font-size: 16px;
+      cursor: pointer;
     }
   }
 }

@@ -10,12 +10,20 @@ function truncateText(text, maxWords) {
   return words.slice(0, maxWords).join(" ") + " ...";
 }
 
-function BlogCards({ index, post }) {
+export function formatDate(dateString) {
+  const options = { day: "numeric", month: "numeric", year: "numeric" };
+  const formattedDate = new Intl.DateTimeFormat("en-GB", options).format(
+    new Date(dateString)
+  );
+  return formattedDate;
+}
+
+function BlogCards({ index, blog }) {
   //==============
   // TEXT TRUNCATE
   //==============
-  const [truncatedName, setTruncatedName] = useState(
-    truncateText(post.name, 9)
+  const [truncatedTitle, setTruncatedTitle] = useState(
+    truncateText(blog.title, 9)
   );
 
   useEffect(() => {
@@ -23,13 +31,13 @@ function BlogCards({ index, post }) {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
       if (screenWidth >= 1200) {
-        setTruncatedName(truncateText(post.name, 9)); // Adjust the number of words for larger screens
+        setTruncatedTitle(truncateText(blog.title, 9)); // Adjust the number of words for larger screens
       } else if (screenWidth >= 992) {
-        setTruncatedName(truncateText(post.name, 7)); // Adjust the number of words for medium screens
+        setTruncatedTitle(truncateText(blog.title, 7)); // Adjust the number of words for medium screens
       } else if (screenWidth >= 320) {
-        setTruncatedName(truncateText(post.name, 7)); // Adjust the number of words for medium screens
+        setTruncatedTitle(truncateText(blog.title, 7)); // Adjust the number of words for medium screens
       } else {
-        setTruncatedName(truncateText(post.name, 8)); // Default truncation for smaller screens
+        setTruncatedTitle(truncateText(blog.title, 8)); // Default truncation for smaller screens
       }
     };
 
@@ -37,22 +45,22 @@ function BlogCards({ index, post }) {
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [post.name]);
+  }, [blog.title]);
   return (
     <div className={`blog_card ${index === 0 ? "first" : ""}`} key={index}>
       <div className="cards">
         <div className="img_date">
           <div className="img">
-            <Link to="/blog-detail">
-              <img src={post.img} alt={post.name} />
+            <Link to={`/blog-detail/${blog.slug}`}>
+              <img src={blog.image} alt={blog.title} />
             </Link>
           </div>
           <div className="date">
-            <span>{post.date}</span>
+            <span>{formatDate(blog.createdAt)}</span>
           </div>
         </div>
         <div className="name">
-          <Link to="/blog-detail">{truncatedName}</Link>
+          <Link to={`/blog-detail/${blog.slug}`}>{truncatedTitle}</Link>
         </div>
       </div>
     </div>

@@ -1,12 +1,16 @@
 import axios from "axios";
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
 import { request } from "../../../../base url/BaseUrl";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { Context } from "../../../../context/Context";
 
 export function Banner() {
+  const { state } = useContext(Context);
+  const { userInfo } = state;
+
   const [banners, setBanners] = useState([]);
   const [formData, setFormData] = useState({
     title: "",
@@ -46,20 +50,26 @@ export function Banner() {
       return;
     }
     try {
-      const response = await axios.post(`${request}/api/banner`, {
-        banners: [
-          {
-            title: formData.title,
-            description: formData.description,
-            img: formData.img,
-            imgBackground: formData.imgBackground,
-            videoBackground: formData.videoBackground,
-            buttonText: formData.buttonText,
-            color: formData.color,
-            pColor: formData.pColor,
-          },
-        ],
-      });
+      const response = await axios.post(
+        `${request}/api/banner`,
+        {
+          banners: [
+            {
+              title: formData.title,
+              description: formData.description,
+              img: formData.img,
+              imgBackground: formData.imgBackground,
+              videoBackground: formData.videoBackground,
+              buttonText: formData.buttonText,
+              color: formData.color,
+              pColor: formData.pColor,
+            },
+          ],
+        },
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
       setBanners((prevBanners) => [...prevBanners, response.data]);
       toast.success("Banner added successfully");
     } catch (error) {
@@ -106,7 +116,9 @@ export function Banner() {
     // If the user confirms, proceed with deletion
     if (shouldDelete) {
       try {
-        await axios.delete(`${request}/api/banner/${id}`);
+        await axios.delete(`${request}/api/banner/${id}`, {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        });
         setBanners((prevBanners) =>
           prevBanners.filter((banner) => banner._id !== id)
         );
@@ -121,7 +133,10 @@ export function Banner() {
     try {
       const response = await axios.put(
         `${request}/api/banner/${id}`,
-        updatedData
+        updatedData,
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
       );
       return response.data;
     } catch (error) {

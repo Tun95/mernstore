@@ -1,12 +1,49 @@
-import React from "react";
+import React, { useEffect, useReducer } from "react";
 import "./styles.scss";
 import BlogCards from "./BlogCards";
-import data from "./data";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { request } from "../../../base url/BaseUrl";
 
+function reducer(state, action) {
+  switch (action.type) {
+    case "FETCH_REQUEST":
+      return { ...state, loading: true };
+    case "FETCH_SUCCESS":
+      return { ...state, loading: false, blogs: action.payload };
+    case "FETCH_FAIL":
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+}
 function Blog() {
-  const { posts } = data;
+  const [{ blogs }, dispatch] = useReducer(reducer, {
+    blogs: [],
+    loading: true,
+    error: "",
+  });
+
   const navigate = useNavigate();
+
+  //==============
+  //FETCH PRODUCTS
+  //==============
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const { data } = await axios.get(`${request}/api/blog/blog-list`);
+        dispatch({
+          type: "FETCH_SUCCESS",
+          payload: data,
+        });
+      } catch (err) {
+        dispatch({ type: "FETCH_FAIL" });
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="blog_section">
@@ -18,10 +55,11 @@ function Blog() {
             </div>
           </div>
           <div className="blog_list">
-            {posts.map((post, index) => (
-              <BlogCards index={index} post={post} key={index} />
+            {blogs.map((blog, index) => (
+              <BlogCards index={index} blog={blog} key={index} />
             ))}
           </div>
+
           <div className="btn">
             <button onClick={() => navigate("/blog")}>All blog articles</button>
           </div>

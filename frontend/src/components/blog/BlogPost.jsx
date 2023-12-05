@@ -1,55 +1,100 @@
 import React from "react";
 import "./styles.scss";
 import { Link } from "react-router-dom";
-import img from "../../assets/blog/blog1.webp";
 import EventOutlinedIcon from "@mui/icons-material/EventOutlined";
-import Comments from "./Comments";
+import { Pagination } from "antd";
+import Truncate from "react-truncate-html";
+import { useRef } from "react";
 
-function BlogPost() {
+//===========
+// PAGINATION
+//===========
+const itemRender = (_, type, originalElement) => {
+  if (type === "prev") {
+    return <Link to="">Previous</Link>;
+  }
+  if (type === "next") {
+    return <Link to="">Next</Link>;
+  }
+  return originalElement;
+};
+
+//===========
+// DATE FORMAT
+//===========
+export function formatDate(dateString) {
+  const options = { month: "long", day: "numeric", year: "numeric" };
+  const formattedDate = new Date(dateString).toLocaleDateString(
+    "en-US",
+    options
+  );
+  return formattedDate;
+}
+
+function BlogPost({
+  blogs,
+  loading,
+  error,
+  dispatch,
+  currentPage,
+  totalPages,
+}) {
+  const headerRef = useRef(null);
+  const handlePageChange = (page) => {
+    if (headerRef.current) {
+      headerRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+    dispatch({ type: "SET_CURRENT_PAGE", payload: page });
+  };
+
   return (
     <div className="blog_post">
       <div className="content">
-        <div className="header">
+        <div className="header" ref={headerRef}>
           <h1>Blog</h1>
         </div>
-        <div className="list f_flex">
-          <div className="img">
-            <Link to="/blog-detail">
-              <img src={img} alt="" />
-            </Link>
-          </div>
-          <div className="left">
-            <div className="title">
-              <h2>
-                <Link to="/blog-detail">
-                  For those who love sound quality we have awesome Pioneer
-                  speakers! (Demo)
-                </Link>
-              </h2>
+        {loading && <p>Loading...</p>}
+        {error && <p>Error fetching data</p>}
+        {blogs?.map((blog, index) => (
+          <div className="list f_flex" key={index}>
+            <div className="img">
+              <Link to={`/blog-detail/${blog.slug}`}>
+                <img src={blog.image} alt={blog.title} />
+              </Link>
             </div>
-            <div className="date ">
-              <span className="a_flex">
-                <EventOutlinedIcon className="icon" />
-                <span>October 3, 2023</span>
-              </span>
-            </div>
-            <div className="description">
-              <p>
-                Demo article title h2 But I must explain to you how all this
-                mistaken idea of denouncing pleasure and praising pain was born
-                and I will give you a complete account of the system, and
-                expound the actual teachings of the great explorer of the truth,
-                the master-builder of human happiness. No one rejects, dislikes,
-                or avoids pleasure itself, because it is...
-              </p>
-            </div>
-            <div className="link">
-              <Link to="/blog-detail">Read more</Link>
+            <div className="left">
+              <div className="title">
+                <h2>
+                  <Link to={`/blog-detail/${blog.slug}`}>{blog.title}</Link>
+                </h2>
+              </div>
+              <div className="date ">
+                <span className="a_flex">
+                  <EventOutlinedIcon className="icon" />
+                  <span>{formatDate(blog.createdAt)}</span>
+                </span>
+              </div>
+              <div className="description">
+                <Truncate
+                  lines={8}
+                  dangerouslySetInnerHTML={{ __html: blog.description }}
+                />
+              </div>
+
+              <div className="link">
+                <Link to={`/blog-detail/${blog.slug}`}>Read more</Link>
+              </div>
             </div>
           </div>
-        </div>
-        <div>
-          <Comments />
+        ))}
+        <div className="ant_pagination l_flex mt">
+          <Pagination
+            total={totalPages * 5}
+            itemRender={itemRender}
+            current={currentPage}
+            pageSize={5}
+            onChange={handlePageChange}
+          />
         </div>
       </div>
     </div>

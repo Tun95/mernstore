@@ -30,6 +30,12 @@ const blogSchema = mongoose.Schema(
       default: "blog image",
     },
     comments: [commentSchema],
+
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   {
     timestamps: true,

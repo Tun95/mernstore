@@ -195,7 +195,10 @@ function App() {
 
             {/* BLOG */}
             <Route path="/blog" element={<BlogPostListScreen />}></Route>
-            <Route path="/blog-detail" element={<BlogDetailScreen />}></Route>
+            <Route
+              path="/blog-detail/:slug"
+              element={<BlogDetailScreen />}
+            ></Route>
             {/* BLOG */}
 
             {/* PROMOTION */}

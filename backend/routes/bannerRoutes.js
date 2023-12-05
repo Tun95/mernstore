@@ -1,6 +1,7 @@
 import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import Banner from "../models/banner.js";
+import { isAuth, isAdmin } from "../utils.js";
 
 const bannerRouter = express.Router();
 
@@ -9,6 +10,8 @@ const bannerRouter = express.Router();
 //====================
 bannerRouter.post(
   "/",
+  isAuth,
+  isAdmin,
   expressAsyncHandler(async (req, res) => {
     try {
       const { banners } = req.body;
@@ -16,6 +19,9 @@ bannerRouter.post(
       const newBanner = new Banner({
         banners,
       });
+
+      // Set the user ID for the banner
+      newBanner.banners[0].user = req.user._id;
 
       const savedBanner = await newBanner.save();
 
@@ -29,14 +35,14 @@ bannerRouter.post(
 );
 
 //====================
-// Get all banners
+// Get all banners (sorted by latest)
 //====================
 bannerRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
     try {
-      // Fetch all banners from the database
-      const banners = await Banner.find();
+      // Fetch all banners from the database, sorted by the latest
+      const banners = await Banner.find().sort({ createdAt: -1 });
 
       res.status(200).json(banners);
     } catch (error) {
@@ -77,6 +83,8 @@ bannerRouter.get(
 //====================
 bannerRouter.put(
   "/:id",
+  isAuth,
+  isAdmin,
   expressAsyncHandler(async (req, res) => {
     try {
       const {
@@ -126,9 +134,23 @@ bannerRouter.put(
 //====================
 bannerRouter.delete(
   "/:id",
+  isAuth,
+  isAdmin,
   expressAsyncHandler(async (req, res) => {
     try {
       const bannerId = req.params.id;
+
+      // Find the banner by ID in the database
+      const banner = await Banner.findById(bannerId);
+
+      if (!banner) {
+        return res.status(404).json({ message: "Banner not found" });
+      }
+
+      // Check if the user making the request is the owner of the banner
+      if (banner.banners[0].user.toString() !== req.user._id.toString()) {
+        return res.status(403).json({ message: "Unauthorized" });
+      }
 
       // Delete the banner document from the database
       const result = await Banner.deleteOne({ _id: bannerId });

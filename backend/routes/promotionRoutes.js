@@ -3,6 +3,7 @@ import expressAsyncHandler from "express-async-handler";
 import http from "http";
 import { Server } from "socket.io";
 import Promotion from "../models/promotionModel.js";
+import { isAuth, isAdmin } from "../utils.js";
 
 const promotionRouter = express.Router();
 
@@ -27,10 +28,19 @@ promotionRouter.use((req, res, next) => {
 //=======================
 promotionRouter.post(
   "/",
+  isAuth,
+  isAdmin,
   expressAsyncHandler(async (req, res) => {
     try {
       const promotionData = req.body;
-      const promotion = new Promotion({ ...promotionData, isChecked: false });
+
+      // Associate the user ID with the promotion
+      promotionData.user = req.user._id;
+
+      const promotion = new Promotion({
+        ...promotionData,
+        isChecked: false,
+      });
       const createdPromotion = await promotion.save();
 
       // Broadcast the created promotion to connected clients
@@ -45,13 +55,16 @@ promotionRouter.post(
 );
 
 //=======================
-// Fetch all promotions
+// Fetch all promotions sorted by latest
 //=======================
 promotionRouter.get(
   "/",
   expressAsyncHandler(async (req, res) => {
     try {
-      const promotions = await Promotion.find({});
+      const promotions = await Promotion.find({})
+        .sort({ createdAt: -1 }) // Sort by createdAt in descending order
+        .exec();
+
       res.send(promotions);
     } catch (error) {
       console.error("Error fetching promotions:", error);
@@ -123,6 +136,8 @@ promotionRouter.get(
 //=======================
 promotionRouter.put(
   "/:id",
+  isAuth,
+  isAdmin,
   expressAsyncHandler(async (req, res) => {
     try {
       const promotion = await Promotion.findById(req.params.id);
@@ -151,6 +166,8 @@ promotionRouter.put(
 //=======================
 promotionRouter.post(
   "/set-expiration/:id",
+  isAuth,
+  isAdmin,
   expressAsyncHandler(async (req, res) => {
     try {
       const promotion = await Promotion.findById(req.params.id);
@@ -178,6 +195,8 @@ promotionRouter.post(
 //=======================
 promotionRouter.delete(
   "/:id",
+  isAuth,
+  isAdmin,
   expressAsyncHandler(async (req, res) => {
     try {
       const promotionId = req.params.id;

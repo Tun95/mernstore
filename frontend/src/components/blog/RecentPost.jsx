@@ -2,7 +2,7 @@ import React from "react";
 import "./styles.scss";
 import { Link } from "react-router-dom";
 
-function RecentPost() {
+function RecentPost({ recentPosts }) {
   return (
     <div className="recent_post">
       <div className="content">
@@ -10,26 +10,13 @@ function RecentPost() {
           <h3>RECENT POSTS</h3>
         </div>
         <div className="list">
-          <ul>
-            <li>
-              <Link>
-                For those who love sound quality we have awesome Pioneer
-                speakers! (Demo)
-              </Link>
-            </li>
-            <li>
-              <Link>
-                For those who love sound quality we have awesome Pioneer
-                speakers! (Demo)
-              </Link>
-            </li>
-            <li>
-              <Link>
-                For those who love sound quality we have awesome Pioneer
-                speakers! (Demo)
-              </Link>
-            </li>
-          </ul>
+          {recentPosts.map((recent, index) => (
+            <ul key={index}>
+              <li>
+                <Link to={`/blog-detail/${recent.slug}`}>{recent.title}</Link>
+              </li>
+            </ul>
+          ))}
         </div>
       </div>
     </div>
