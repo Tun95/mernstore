@@ -109,7 +109,7 @@ function BlogDetailScreen() {
   return (
     <div className="blog_list_screen blog_details_screen">
       <Helmet>
-        <title>Blog details</title>
+        <title>{`Blog details :: ${blog?.title}`}</title>
       </Helmet>
       <div className="container">
         <div className="quick_link ">
