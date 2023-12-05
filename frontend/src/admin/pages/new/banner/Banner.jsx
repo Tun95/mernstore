@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
@@ -68,7 +68,9 @@ export function Banner() {
     }
   };
 
+  const headerRef = useRef(null);
   const editBanner = (id) => {
+    headerRef.current.scrollIntoView({ behavior: "smooth" });
     setFormData((prevData) => ({
       ...prevData,
       _id: id,
@@ -97,14 +99,22 @@ export function Banner() {
   };
 
   const deleteBanner = async (id) => {
-    try {
-      await axios.delete(`${request}/api/banner/${id}`);
-      setBanners((prevBanners) =>
-        prevBanners.filter((banner) => banner._id !== id)
-      );
-      toast.success("Banner deleted successfully");
-    } catch (error) {
-      toast.error("Failed to delete banner");
+    // Show confirmation dialog
+    const shouldDelete = window.confirm(
+      "Are you sure you want to delete this banner?"
+    );
+
+    // If the user confirms, proceed with deletion
+    if (shouldDelete) {
+      try {
+        await axios.delete(`${request}/api/banner/${id}`);
+        setBanners((prevBanners) =>
+          prevBanners.filter((banner) => banner._id !== id)
+        );
+        toast.success("Banner deleted successfully");
+      } catch (error) {
+        toast.error("Failed to delete banner");
+      }
     }
   };
 
@@ -188,7 +198,7 @@ export function Banner() {
   return (
     <>
       <Helmet>
-        <title>Filters</title>
+        <title>Banners</title>
       </Helmet>
       <div className="product_edit filters_add_update admin_page_all page_background">
         <div className="container">
@@ -201,7 +211,7 @@ export function Banner() {
             <div className="productForm">
               <div className="product_info product___">
                 <div className="features_box mt light_shadow">
-                  <div className="header  c_flex">
+                  <div ref={headerRef} className="header  c_flex">
                     <div className="left">
                       <div className="d_flex">
                         <div className="number l_flex">

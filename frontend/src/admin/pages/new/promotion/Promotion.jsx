@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { Helmet } from "react-helmet-async";
@@ -58,7 +58,11 @@ export function Promotion() {
     }
   };
 
+  const headerRef = useRef(null);
+
   const editPromotion = (id) => {
+    headerRef.current.scrollIntoView({ behavior: "smooth" });
+
     setFormData((prevData) => ({
       ...prevData,
       _id: id,
@@ -82,19 +86,25 @@ export function Promotion() {
   };
 
   const deletePromotion = async (id) => {
-    console.log("Deleting promotion with id:", id);
+    // Show confirmation dialog
+    const shouldDelete = window.confirm(
+      "Are you sure you want to delete this promotion?"
+    );
 
-    try {
-      await axios.delete(`${request}/api/promotions/${id}`);
+    // If the user confirms, proceed with deletion
+    if (shouldDelete) {
+      try {
+        await axios.delete(`${request}/api/promotions/${id}`);
 
-      // Update state by filtering out the deleted promotion
-      setPromotions((prevPromotions) =>
-        prevPromotions.filter((promotion) => promotion._id !== id)
-      );
+        // Update state by filtering out the deleted promotion
+        setPromotions((prevPromotions) =>
+          prevPromotions.filter((promotion) => promotion._id !== id)
+        );
 
-      toast.success("Promotion deleted successfully");
-    } catch (error) {
-      toast.error("Failed to delete promotion");
+        toast.success("Promotion deleted successfully");
+      } catch (error) {
+        toast.error("Failed to delete promotion");
+      }
     }
   };
 
@@ -217,7 +227,7 @@ export function Promotion() {
           <div className="productBottom mtb ">
             <div className="productForm">
               <div className="product_info product___">
-                <div className="features_box mt light_shadow">
+                <div ref={headerRef} className="features_box mt light_shadow">
                   <div className="header  c_flex">
                     <div className="left">
                       <div className="d_flex">

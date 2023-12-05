@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import "./styles.scss";
@@ -71,8 +71,12 @@ export function Category({ openBox, toggleBox }) {
     }
   };
 
+  const headerRef = useRef(null);
+
   // Function to handle editing a category
   const editCategory = (id) => {
+    headerRef.current.scrollIntoView({ behavior: "smooth" });
+
     const selectedCategory = categories.find((category) => category._id === id);
 
     if (selectedCategory) {
@@ -88,15 +92,23 @@ export function Category({ openBox, toggleBox }) {
 
   // Function to delete a category
   const deleteCategory = async (id) => {
-    try {
-      await axios.delete(`${request}/api/category/delete-category/${id}`);
-      setCategories((prevCategories) =>
-        prevCategories.filter((category) => category._id !== id)
-      );
-      toast.success("Category deleted successfully");
-    } catch (error) {
-      console.error("Failed to delete category:", error);
-      toast.error("Failed to delete category");
+    // Show confirmation dialog
+    const shouldDelete = window.confirm(
+      "Are you sure you want to delete this category?"
+    );
+
+    // If the user confirms, proceed with deletion
+    if (shouldDelete) {
+      try {
+        await axios.delete(`${request}/api/category/delete-category/${id}`);
+        setCategories((prevCategories) =>
+          prevCategories.filter((category) => category._id !== id)
+        );
+        toast.success("Category deleted successfully");
+      } catch (error) {
+        console.error("Failed to delete category:", error);
+        toast.error("Failed to delete category");
+      }
     }
   };
 
@@ -172,7 +184,7 @@ export function Category({ openBox, toggleBox }) {
       <div className="productBottom mtb">
         <div className="productForm">
           <div className="product_info product___">
-            <div className="features_box mt light_shadow">
+            <div ref={headerRef} className="features_box mt light_shadow">
               <div
                 className={
                   openBox === 0 ? "header  c_flex" : "header border c_flex"
@@ -407,20 +419,28 @@ export function SubCategory({ openBox, toggleBox }) {
   };
 
   const deleteSubCategory = async (subCategoryId) => {
-    try {
-      await axios.delete(
-        `${request}/api/category/${formData.selectedCategory}/delete-subcategory/${subCategoryId}`
-      );
-      setData((prevData) => ({
-        ...prevData,
-        subCategories: prevData.subCategories.filter(
-          (subCategory) => subCategory._id !== subCategoryId
-        ),
-      }));
-      toast.success("Subcategory deleted successfully");
-      fetchData();
-    } catch (error) {
-      toast.error("Failed to delete subcategory:", error);
+    // Show confirmation dialog
+    const shouldDelete = window.confirm(
+      "Are you sure you want to delete this subcategory?"
+    );
+
+    // If the user confirms, proceed with deletion
+    if (shouldDelete) {
+      try {
+        await axios.delete(
+          `${request}/api/category/${formData.selectedCategory}/delete-subcategory/${subCategoryId}`
+        );
+        setData((prevData) => ({
+          ...prevData,
+          subCategories: prevData.subCategories.filter(
+            (subCategory) => subCategory._id !== subCategoryId
+          ),
+        }));
+        toast.success("Subcategory deleted successfully");
+        fetchData();
+      } catch (error) {
+        toast.error("Failed to delete subcategory:", error);
+      }
     }
   };
 
@@ -766,25 +786,33 @@ export function SubItem({ openBox, toggleBox }) {
   };
 
   const deleteSubItem = async (subItemId) => {
-    try {
-      await axios.delete(
-        `${request}/api/category/${formData.selectedCategory}/${formData.selectedSubCategory}/${subItemId}`
-      );
-      setData((prevData) => ({
-        ...prevData,
-        subCategories: prevData.subCategories.map((subCategory) => {
-          if (subCategory._id === formData.selectedSubCategory) {
-            subCategory.subItems = subCategory.subItems.filter(
-              (subItem) => subItem._id !== subItemId
-            );
-          }
-          return subCategory;
-        }),
-      }));
-      toast.success("Subitem deleted successfully");
-      fetchData();
-    } catch (error) {
-      toast.error("Failed to delete subitem:", error);
+    // Show confirmation dialog
+    const shouldDelete = window.confirm(
+      "Are you sure you want to delete this subitem?"
+    );
+
+    // If the user confirms, proceed with deletion
+    if (shouldDelete) {
+      try {
+        await axios.delete(
+          `${request}/api/category/${formData.selectedCategory}/${formData.selectedSubCategory}/${subItemId}`
+        );
+        setData((prevData) => ({
+          ...prevData,
+          subCategories: prevData.subCategories.map((subCategory) => {
+            if (subCategory._id === formData.selectedSubCategory) {
+              subCategory.subItems = subCategory.subItems.filter(
+                (subItem) => subItem._id !== subItemId
+              );
+            }
+            return subCategory;
+          }),
+        }));
+        toast.success("Subitem deleted successfully");
+        fetchData();
+      } catch (error) {
+        toast.error("Failed to delete subitem:", error);
+      }
     }
   };
 
@@ -1087,8 +1115,11 @@ export function Color({ openBox, toggleBox }) {
     }
   };
 
+  const headerRef = useRef(null);
+
   // Function to handle editing a color
   const editColor = (id) => {
+    headerRef.current.scrollIntoView({ behavior: "smooth" });
     setFormData((prevData) => ({
       ...prevData,
       _id: id, // Set the _id to indicate it's an existing color
@@ -1113,12 +1144,22 @@ export function Color({ openBox, toggleBox }) {
 
   // Function to delete a color
   const deleteColor = async (id) => {
-    try {
-      await axios.delete(`${request}/api/color/${id}`);
-      setColors((prevColors) => prevColors.filter((color) => color._id !== id));
-      toast.success("Color deleted successfully");
-    } catch (error) {
-      toast.error("Failed to delete color");
+    // Show confirmation dialog
+    const shouldDelete = window.confirm(
+      "Are you sure you want to delete this color?"
+    );
+
+    // If the user confirms, proceed with deletion
+    if (shouldDelete) {
+      try {
+        await axios.delete(`${request}/api/color/${id}`);
+        setColors((prevColors) =>
+          prevColors.filter((color) => color._id !== id)
+        );
+        toast.success("Color deleted successfully");
+      } catch (error) {
+        toast.error("Failed to delete color");
+      }
     }
   };
 
@@ -1189,7 +1230,7 @@ export function Color({ openBox, toggleBox }) {
       <div className="productBottom mtb ">
         <div className="productForm">
           <div className="product_info product___">
-            <div className="features_box mt light_shadow">
+            <div ref={headerRef} className="features_box mt light_shadow">
               <div
                 className={
                   openBox === 3 ? "header  c_flex" : "header border c_flex"
