@@ -113,7 +113,6 @@ app.use("/api/updates", updateRouter);
 
 app.use("/api/blog", blogRouter);
 
-
 const _dirname = path.resolve();
 app.use(express.static(path.join(_dirname, "/frontend/build")));
 app.get("*", (req, res) =>
@@ -128,13 +127,26 @@ const server = createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
 // WebSocket setup
+// io.on("connection", async (socket) => {
+//   console.log("A user connected");
+//   // Handle events related to promotions here
+//   // Example: Broadcast the initial promotion data when a user connects
+//   try {
+//     const checkedPromotions = await Promotion.find({ isChecked: true });
+//     socket.emit("promotionUpdate", { promotion: checkedPromotions });
+//   } catch (error) {
+//     console.error("Error fetching initial promotion data:", error);
+//   }
+// });
+
+// WebSocket setup
 io.on("connection", async (socket) => {
   console.log("A user connected");
   // Handle events related to promotions here
   // Example: Broadcast the initial promotion data when a user connects
   try {
-    const checkedPromotions = await Promotion.find({ isChecked: true });
-    socket.emit("promotionUpdate", { promotion: checkedPromotions });
+    const allPromotions = await Promotion.find();
+    socket.emit("promotionUpdate", { promotion: allPromotions });
   } catch (error) {
     console.error("Error fetching initial promotion data:", error);
   }

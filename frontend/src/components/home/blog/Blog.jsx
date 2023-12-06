@@ -27,7 +27,7 @@ function Blog() {
   const navigate = useNavigate();
 
   //==============
-  //FETCH PRODUCTS
+  //FETCH BLOG POST
   //==============
   useEffect(() => {
     const fetchData = async () => {

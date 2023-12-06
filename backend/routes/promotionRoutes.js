@@ -40,6 +40,7 @@ promotionRouter.post(
       const promotion = new Promotion({
         ...promotionData,
         isChecked: false,
+        _id: undefined,
       });
       const createdPromotion = await promotion.save();
 

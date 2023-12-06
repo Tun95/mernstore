@@ -1,13 +1,12 @@
-import React, { useContext, useEffect, useReducer, useState } from "react";
+import React, { useEffect, useReducer, useState } from "react";
 import "./styles.scss";
 import BlogDetails from "../../components/blog/BlogDetails";
 import RecentPost from "../../components/blog/RecentPost";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
-import { useParams, useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 import { request } from "../../base url/BaseUrl";
-import { Context } from "../../context/Context";
 import Comments from "../../components/blog/Comments";
 
 const initialState = {
@@ -31,24 +30,6 @@ const reducer = (state, action) => {
     case "FETCH_FAIL":
       return { ...state, error: action.payload, loading: false };
 
-    case "CREATE_REQUEST":
-      return { ...state, loadingCreateReview: true, successCreate: false };
-    case "CREATE_SUCCESS":
-      return { ...state, loadingCreateReview: false, successCreate: true };
-    case "CREATE_FAIL":
-      return { ...state, loadingCreateReview: false, successCreate: false };
-    case "CREATE_RESET":
-      return { ...state, loadingCreateReview: false, successCreate: false };
-
-    case "DELETE_REQUEST":
-      return { ...state, loadingDelete: true, successDelete: false };
-    case "DELETE_SUCCESS":
-      return { ...state, loadingDelete: false, successDelete: true };
-    case "DELETE_FAIL":
-      return { ...state, loadingDelete: false };
-    case "DELETE_RESET":
-      return { ...state, loadingDelete: false, successDelete: false };
-
     default:
       return state;
   }
@@ -58,14 +39,11 @@ function BlogDetailScreen() {
   const { slug } = params;
   const [recentPosts, setRecentPosts] = useState([]);
 
-  const { state: cState, dispatch: ctxDispatch } = useContext(Context);
-  const { userInfo } = cState;
-
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { loading, error, blog, successDelete, successCreate } = state;
+  const { loading, error, blog } = state;
 
   //=======================
-  // FETCH PRODUCT DETAILS
+  // FETCH BLOG DETAILS
   //=======================
   useEffect(() => {
     const fetchData = async () => {
@@ -95,16 +73,13 @@ function BlogDetailScreen() {
         console.error("Error fetching recent posts", err);
       }
     };
-    if (successCreate || successDelete) {
-      dispatch({ type: "CREATE_RESET" });
-      dispatch({ type: "DELETE_RESET" });
-    } else {
-      fetchData();
-      fetchRecentPosts();
-    }
-  }, [slug, successDelete, successCreate]);
 
-  console.log("Blog Details:", blog);
+    fetchData();
+    fetchRecentPosts();
+  }, [slug]);
+
+  //BLOG ID
+  let blogId = blog?._id;
 
   return (
     <div className="blog_list_screen blog_details_screen">
@@ -123,7 +98,7 @@ function BlogDetailScreen() {
           <div className="full_width">
             <BlogDetails blog={blog} />
 
-            <Comments />
+            <Comments blogId={blogId} />
           </div>
           <div className="scroll_box">
             <RecentPost recentPosts={recentPosts} />

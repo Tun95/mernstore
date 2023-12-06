@@ -9,12 +9,49 @@ function truncateText(text, maxWords) {
   }
   return words.slice(0, maxWords).join(" ") + " ...";
 }
-function PromotionCard({ item, index }) {
+
+export function formatDate(dateString) {
+  const options = { day: "numeric", month: "numeric", year: "numeric" };
+  const formattedDate = new Intl.DateTimeFormat("en-GB", options).format(
+    new Date(dateString)
+  );
+  return formattedDate;
+}
+function PromotionCard({ item, index, calculateDaysUntilExpiration }) {
+  const [countdown, setCountdown] = useState({
+    days: calculateDaysUntilExpiration(item.expirationDate),
+  });
+
+  useEffect(() => {
+    const targetTime = new Date(item.expirationDate).getTime();
+    let intervalId;
+
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const distance = targetTime - now;
+
+      if (distance <= 0) {
+        clearInterval(intervalId);
+        setCountdown({ days: 0 });
+      } else {
+        setCountdown({
+          days: Math.floor(distance / (1000 * 60 * 60 * 24)),
+        });
+      }
+    };
+
+    updateCountdown();
+
+    intervalId = setInterval(updateCountdown, 1000);
+
+    return () => clearInterval(intervalId);
+  }, [item.expirationDate]);
+
   //==============
   // TEXT TRUNCATE
   //==============
-  const [truncatedName, setTruncatedName] = useState(
-    truncateText(item.name, 9)
+  const [truncatedTitle, setTruncatedTitle] = useState(
+    truncateText(item.title, 9)
   );
 
   useEffect(() => {
@@ -22,11 +59,11 @@ function PromotionCard({ item, index }) {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
       if (screenWidth >= 1200) {
-        setTruncatedName(truncateText(item.name, 9)); // Adjust the number of words for larger screens
+        setTruncatedTitle(truncateText(item.title, 9)); // Adjust the number of words for larger screens
       } else if (screenWidth >= 992) {
-        setTruncatedName(truncateText(item.name, 7)); // Adjust the number of words for medium screens
+        setTruncatedTitle(truncateText(item.title, 7)); // Adjust the number of words for medium screens
       } else {
-        setTruncatedName(truncateText(item.name, 5)); // Default truncation for smaller screens
+        setTruncatedTitle(truncateText(item.title, 5)); // Default truncation for smaller screens
       }
     };
 
@@ -34,27 +71,32 @@ function PromotionCard({ item, index }) {
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [item.name]);
+  }, [item.title]);
   return (
     <div className="promotion_card" key={index}>
       <div className="content">
         <div className="img">
-          <Link to="/promotions/:slug">
-            <img src={item.img} alt={item.name} />
+          <Link to={`/promotions/${item.slug}`}>
+            <img src={item.image} alt={item.title} />
           </Link>
         </div>
         <div className="name_date f_flex">
           <div className="days a_flex">
-            <h3 className="count">{item.daysLeft}</h3> <small>days left</small>
+            {countdown && countdown.days !== undefined && (
+              <>
+                <h3 className="count">{countdown.days}</h3>{" "}
+                <small>days left</small>
+              </>
+            )}
           </div>
           <div className="name_to ">
             <div className="name">
-              <Link to="/promotions/:slug">
-                <p>{truncatedName}</p>
+              <Link to={`/promotions/${item.slug}`}>
+                <p>{truncatedTitle}</p>
               </Link>
             </div>
             <div className="expire">
-              <small>to {item.date}</small>
+              <small>to {formatDate(item.expirationDate)}</small>
             </div>
           </div>
         </div>

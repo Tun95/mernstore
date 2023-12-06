@@ -1,67 +1,104 @@
-import React from "react";
-import { CommentModal } from "../modals/Modals";
-import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import { request } from "../../base url/BaseUrl";
+import { Context } from "../../context/Context";
+import { getError } from "../utilities/util/Utils";
+import { toast } from "react-toastify";
+import JoditEditor from "jodit-react";
+import "./styles.scss";
+import ReplyIcon from "@mui/icons-material/Reply";
+import { CommentSection } from "react-comments-section";
+import "react-comments-section/dist/index.css";
 
-function Comments() {
-  const reviews = [
+function Comments({ blogId }) {
+  const { state } = useContext(Context);
+  const { userInfo } = state;
+
+  const [data] = useState([
     {
-      id: 1,
-      name: "Michael J",
-      date: "08/10/2023",
-      time: "11:25",
-      description:
-        "Yes they are more expensive than Amazon, but honestly their customer service is very accomodating and helpful, at least when it comes to returns. I never had any issue with them. I even returned some items that were beyond the return policy and they accepted them. I have my loyalty card now and i am collecting points. Id rather shop at bestbuy and support them, than shopping with Amazon who will soon rule the world and make us all out of business.",
+      userId: "01a",
+      comId: "012",
+      fullName: "Riya Negi",
+      avatarUrl: "https://ui-avatars.com/api/name=Riya&background=random",
+      userProfile: "https://www.linkedin.com/in/riya-negi-8879631a9/",
+      text: `<p>Hey <strong>loved</strong> your blog! Can you show me some other ways to <del><em>fix</em></del>  solve this?🤔<br>Here's my <a href="https://www.linkedin.com/in/riya-negi-8879631a9/" target="_blank">Linkedin Profile</a> to reach out.</p>`,
+      replies: [
+        {
+          userId: "02a",
+          comId: "013",
+          userProfile: "https://www.linkedin.com/in/riya-negi-8879631a9/",
+          fullName: "Adam Scott",
+          avatarUrl: "https://ui-avatars.com/api/name=Adam&background=random",
+          text: `<p>Yeah sure try adding this line to your code. You need to pass <span style="color: rgb(147,101,184);">event</span><span style="color: rgb(26,188,156);"> </span><span style="color: rgb(0,0,0);">as a param. </span></p>
+          <pre>event.preventDefault()</pre>
+          <p>Best of luck with your project! <br></p>
+          <img src="https://c.tenor.com/4cR1jMpsrEgAAAAC/snoopy-cheerleader.gif" alt="undefined" style="height: auto;width: auto"/>
+          <p></p>`,
+        },
+        {
+          userId: "01a",
+          comId: "014",
+          userProfile: "https://www.linkedin.com/in/riya-negi-8879631a9/",
+          fullName: "Riya Negi",
+          avatarUrl: "https://ui-avatars.com/api/name=Riya&background=random",
+          text: '<p><strong>OMG!</strong> it worked! <span style="color: rgb(209,72,65);">DO NOT stop this blog series!!!!</span> 💃</p>',
+        },
+      ],
     },
-  ];
+    {
+      userId: "02b",
+      comId: "017",
+      fullName: "Lily",
+      userProfile: "https://www.linkedin.com/in/riya-negi-8879631a9/",
+      text: `<blockquote><strong>DRY </strong>- is the right of passage to good coding</blockquote>
+      <p>True story brother!! <em>Amen to that!  </em>For anyone wondering DRY is&nbsp;</p>
+      <ol>
+      <li>Don't</li>
+      <li>Repeat</li>
+      <li>Yoursef</li>
+      </ol>`,
+      avatarUrl: "https://ui-avatars.com/api/name=Lily&background=random",
+      replies: [],
+    },
+  ]);
+
   return (
-    <div className="comments">
-      <div className="content">
-        <div className="header">
-          <h2>Comments</h2>
-        </div>
-        <div className="list">
-          <div className="no_post l_flex">
-            <h3>No comment found</h3>
-          </div>
-          <small className="reviews">
-            <ul>
-              {reviews.map((item, index) => (
-                <li className="" key={index}>
-                  <div className="c_flex span_header">
-                    <div className="user_info a_flex">
-                      <div className="short l_flex">
-                        <h2>M</h2>
-                      </div>
-                      <div className="user">
-                        <span>
-                          <h4 className="name a_flex">{item.name}</h4>
-                          <small className="date_time">
-                            {item.date},&#160;&#160;{item.time}
-                          </small>
-                        </span>
-                      </div>
-                    </div>
-                    <div className="icons a_flex">
-                      <span className="l_flex">
-                        <DeleteForeverOutlinedIcon className="icon mui_icon" />
-                      </span>
-                      <span className="l_flex">
-                        <i class="fa-solid fa-pen-to-square icon"></i>
-                      </span>
-                    </div>
-                  </div>
-                  <div className="text">
-                    <p>{item.description}</p>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          </small>
-        </div>
-        <div className="btn">
-          <CommentModal />
-        </div>
-      </div>
+    <div style={{ width: "100%" }}>
+      <CommentSection
+        currentUser={{
+          currentUserId: "01a",
+          currentUserImg:
+            "https://ui-avatars.com/api/name=Riya&background=random",
+          currentUserProfile:
+            "https://www.linkedin.com/in/riya-negi-8879631a9/",
+          currentUserFullName: "Riya Negi",
+        }}
+        hrStyle={{ border: "0.5px solid #ff0072" }}
+        commentData={data}
+        currentData={(data) => {
+          console.log("curent data", data);
+        }}
+        logIn={{
+          loginLink: "http://localhost:3000/",
+          signupLink: "http://localhost:3000/",
+        }}
+        customImg="https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F13%2F2015%2F04%2F05%2Ffeatured.jpg&q=60"
+        inputStyle={{ border: "1px solid rgb(208 208 208)" }}
+        formStyle={{ backgroundColor: "white" }}
+        submitBtnStyle={{
+          border: "1px solid black",
+          backgroundColor: "black",
+          padding: "7px 15px",
+        }}
+        cancelBtnStyle={{
+          border: "1px solid gray",
+          backgroundColor: "gray",
+          color: "white",
+          padding: "7px 15px",
+        }}
+        advancedInput={true}
+        replyInputStyle={{ borderBottom: "1px solid black", color: "black" }}
+      />
     </div>
   );
 }

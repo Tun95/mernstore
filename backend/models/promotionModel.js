@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 const promotionSchema = new mongoose.Schema(
   {
     title: { type: String, default: "Default Title" },
-    subTitle: { type: String, default: "Default Title" },
+    subTitle: { type: String },
     slug: { type: String, default: "default-slug" },
     image: { type: String },
     description: { type: String, default: "Default Description" },

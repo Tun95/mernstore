@@ -202,11 +202,30 @@ blogRouter.post(
           email,
           image,
           comment,
-          user: req.user._id, // Set the user field to the ID of the authenticated user
+          user: req.user._id, 
         };
         blog.comments.push(newComment);
         const updatedBlog = await blog.save();
         res.status(201).json(updatedBlog);
+      } else {
+        res.status(404).json({ message: "Blog not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  })
+);
+
+//=============================
+// Fetch all comments for a specific blog
+//=============================
+blogRouter.get(
+  "/:blogId/comments",
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const blog = await Blog.findById(req.params.blogId);
+      if (blog) {
+        res.json(blog.comments);
       } else {
         res.status(404).json({ message: "Blog not found" });
       }

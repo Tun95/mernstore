@@ -6,6 +6,7 @@ import { Helmet } from "react-helmet-async";
 import { request } from "../../../../base url/BaseUrl";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Context } from "../../../../context/Context";
+import { getError } from "../../../../components/utilities/util/Utils";
 
 export function Banner() {
   const { state } = useContext(Context);
@@ -32,7 +33,7 @@ export function Banner() {
       const response = await axios.get(`${request}/api/banner`);
       setBanners(response.data);
     } catch (error) {
-      toast.error("Failed to fetch banners");
+      toast.error(getError(error));
     }
   };
 
@@ -73,7 +74,7 @@ export function Banner() {
       setBanners((prevBanners) => [...prevBanners, response.data]);
       toast.success("Banner added successfully");
     } catch (error) {
-      toast.error("Failed to add banner");
+      toast.error(getError(error));
     }
   };
 
@@ -124,7 +125,7 @@ export function Banner() {
         );
         toast.success("Banner deleted successfully");
       } catch (error) {
-        toast.error("Failed to delete banner");
+        toast.error(getError(error));
       }
     }
   };
@@ -140,7 +141,7 @@ export function Banner() {
       );
       return response.data;
     } catch (error) {
-      throw error;
+      toast.error(getError(error));
     }
   };
 

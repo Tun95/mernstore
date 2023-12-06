@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
-import DiscountCard from "./DiscountCard";
+import DiscountCard, { truncateText } from "./DiscountCard";
 import { Link, useNavigate } from "react-router-dom";
 import data from "../bestseller/data";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
@@ -106,7 +106,7 @@ function Discount() {
     // Listen for real-time updates
     socket.on("promotionUpdate", ({ promotion }) => {
       if (promotion) {
-        const countdownTime = new Date(promotion[0].expirationDate).getTime();
+        const countdownTime = new Date(promotion[0]?.expirationDate).getTime();
         startCountdown(countdownTime);
       }
     });
@@ -226,7 +226,7 @@ function Discount() {
                   <h2>{promotion.title}</h2>
                 </div>
                 <div className="description">
-                  <p>{promotion.description}</p>
+                  <p>{truncateText(promotion.description, 27)}</p>
                 </div>
                 <div className="time_period">
                   <div className="">
@@ -264,7 +264,7 @@ function Discount() {
                     </button>
                   </div>
                   <div className="link">
-                    <Link to={`/promotions/${promotion.slug}`}>
+                    <Link to={`/promotions`}>
                       All promotion
                     </Link>
                   </div>
