@@ -68,7 +68,7 @@
 
             /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
             @media screen and (max-width: 995px) {
-              height: 120px;
+              height: 100%;
               object-fit: cover;
             }
           }
@@ -83,7 +83,7 @@
         .img_date {
           img {
             width: 97%;
-            height: 60vh;
+            height: 56vh;
             object-fit: cover;
           }
         }
@@ -95,7 +95,8 @@
         .cards {
           .img_date {
             img {
-              height: 120px;
+              height: 100%;
+              width: 100%;
               object-fit: cover;
             }
           }
