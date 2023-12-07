@@ -75,6 +75,12 @@
             /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
             @media screen and (max-width: 745px) {
               flex-direction: column;
+
+              .img {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
             }
           }
           .img {

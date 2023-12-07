@@ -8,7 +8,6 @@ function SliderCard() {
   const { state } = useContext(Context);
   const { banners } = state;
 
-
   const settings = {
     dots: true,
     infinite: true,
@@ -51,30 +50,37 @@ function SliderCard() {
 
                 return (
                   <div className="content" key={index}>
-                    {item.videoBackground && (
-                      <div className="video">
-                        <div className="video_width">
-                          <video
-                            loop
-                            muted
-                            autoPlay
-                            src={item.videoBackground}
-                            ref={videoRef}
-                            className="video_tag"
-                            width="100%"
-                          ></video>
-                        </div>
-                      </div>
-                    )}
-                    {item.imgBackground && (
-                      <div className="background">
-                        <div className="img_background">
-                          <img
-                            src={item.imgBackground}
-                            alt={item.imgBackground}
-                          />
-                        </div>
-                      </div>
+                    {item.videoBackground ? (
+                      <>
+                        {item.videoBackground && (
+                          <div className="video">
+                            <div className="video_width">
+                              <video
+                                loop
+                                muted
+                                autoPlay
+                                src={item.videoBackground}
+                                ref={videoRef}
+                                className="video_tag"
+                                width="100%"
+                              ></video>
+                            </div>
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <>
+                        {item.imgBackground && (
+                          <div className="background">
+                            <div className="img_background">
+                              <img
+                                src={item.imgBackground}
+                                alt={item.imgBackground}
+                              />
+                            </div>
+                          </div>
+                        )}
+                      </>
                     )}
                     <div className="width">
                       <div className="main_content">
