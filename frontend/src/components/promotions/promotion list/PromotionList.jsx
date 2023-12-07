@@ -56,8 +56,10 @@ function PromotionList({ item, index, calculateDaysUntilExpiration }) {
         setTruncatedTitle(truncateText(item.title, 9)); // Adjust the number of words for larger screens
       } else if (screenWidth >= 992) {
         setTruncatedTitle(truncateText(item.title, 7)); // Adjust the number of words for medium screens
+      } else if (screenWidth >= 600) {
+        setTruncatedTitle(truncateText(item.title, 5)); // Adjust the number of words for medium screens
       } else {
-        setTruncatedTitle(truncateText(item.title, 5)); // Default truncation for smaller screens
+        setTruncatedTitle(truncateText(item.title, 4)); // Default truncation for smaller screens
       }
     };
 
@@ -66,6 +68,7 @@ function PromotionList({ item, index, calculateDaysUntilExpiration }) {
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [item.title]);
+
   return (
     <div className="promotion_card cards" key={index}>
       <div className="content">
