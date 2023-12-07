@@ -6,6 +6,8 @@ import BlogPost from "../../components/blog/BlogPost";
 import RecentPost from "../../components/blog/RecentPost";
 import { request } from "../../base url/BaseUrl";
 import axios from "axios";
+import { toast } from "react-toastify";
+import { getError } from "../../components/utilities/util/Utils";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -56,6 +58,7 @@ function BlogPostListScreen() {
         });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL" });
+        toast.error(getError(err));
       }
     };
 
@@ -65,6 +68,7 @@ function BlogPostListScreen() {
         setRecentPosts(data);
       } catch (err) {
         console.error("Error fetching recent posts", err);
+        toast.error(getError(err));
       }
     };
 

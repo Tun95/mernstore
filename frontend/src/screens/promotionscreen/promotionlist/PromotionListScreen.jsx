@@ -6,6 +6,8 @@ import "./styles.scss";
 import { request } from "../../../base url/BaseUrl";
 import axios from "axios";
 import io from "socket.io-client";
+import { getError } from "../../../components/utilities/util/Utils";
+import { toast } from "react-toastify";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -51,6 +53,7 @@ function PromotionListScreen() {
         dispatch({ type: "UPDATE_COUNTDOWNS", payload: countdownData });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: err.message });
+        toast.error(getError(err));
       }
     };
 

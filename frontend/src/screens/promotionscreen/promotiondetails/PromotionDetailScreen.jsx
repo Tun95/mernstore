@@ -7,6 +7,8 @@ import { useParams } from "react-router-dom";
 import { request } from "../../../base url/BaseUrl";
 import axios from "axios";
 import io from "socket.io-client"; // Import Socket.IO client library
+import { toast } from "react-toastify";
+import { getError } from "../../../components/utilities/util/Utils";
 
 const initialState = {
   promotion: null,
@@ -75,6 +77,7 @@ function PromotionDetailScreen() {
           type: "FETCH_FAIL",
           payload: "Error fetching promotion details",
         });
+        toast.error(getError(error));
       }
     };
 
@@ -92,7 +95,6 @@ function PromotionDetailScreen() {
     });
 
     return () => {
-      console.log("PromotionDetailScreen component will unmount");
       clearInterval(intervalIdRef.current);
       socket.current.disconnect();
     };

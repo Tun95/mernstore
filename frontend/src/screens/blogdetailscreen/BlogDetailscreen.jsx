@@ -8,15 +8,13 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { request } from "../../base url/BaseUrl";
 import Comments from "../../components/blog/Comments";
+import { getError } from "../../components/utilities/util/Utils";
+import { toast } from "react-toastify";
 
 const initialState = {
   blog: null,
   loading: true,
   error: "",
-  loadingCreateReview: false,
-  successCreate: false,
-  successDelete: false,
-  loadingDelete: false,
 };
 
 const reducer = (state, action) => {
@@ -62,6 +60,7 @@ function BlogDetailScreen() {
           type: "FETCH_FAIL",
           payload: "Error fetching blog details",
         });
+        toast.error(getError(error));
       }
     };
 
@@ -71,6 +70,7 @@ function BlogDetailScreen() {
         setRecentPosts(data);
       } catch (err) {
         console.error("Error fetching recent posts", err);
+        toast.error(getError(err));
       }
     };
 

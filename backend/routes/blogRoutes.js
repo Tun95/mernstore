@@ -84,7 +84,7 @@ blogRouter.get(
   "/recent",
   expressAsyncHandler(async (req, res) => {
     try {
-      const limit = 3; // Set the limit to the number of recent posts you want
+      const limit = 3;
 
       // Sort the blogs by createdAt in descending order to get the latest first
       const recentBlogs = await Blog.find()
@@ -202,7 +202,7 @@ blogRouter.post(
           email,
           image,
           comment,
-          user: req.user._id, 
+          user: req.user._id,
         };
         blog.comments.push(newComment);
         const updatedBlog = await blog.save();

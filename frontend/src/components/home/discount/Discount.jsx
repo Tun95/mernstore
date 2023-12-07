@@ -10,6 +10,7 @@ import { request } from "../../../base url/BaseUrl";
 import axios from "axios";
 import { getError } from "../../utilities/util/Utils";
 import io from "socket.io-client";
+import { toast } from "react-toastify";
 
 const NextArrow = (props) => {
   const { onClick } = props;
@@ -72,6 +73,7 @@ function Discount() {
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+        toast.error(getError(err));
       }
     };
 
@@ -96,6 +98,7 @@ function Discount() {
           console.error("No checked promotions found");
         }
       } catch (error) {
+        toast.error(getError(error));
         console.error("Error fetching initial promotion data:", error);
       }
     };
@@ -128,10 +131,6 @@ function Discount() {
       const now = new Date().getTime();
       const distance = targetTime - now;
 
-      console.log("now:", now);
-      console.log("targetTime:", targetTime);
-      console.log("distance:", distance);
-
       if (isNaN(now) || isNaN(targetTime) || isNaN(distance)) {
         console.error("Invalid date or distance calculation.");
       }
@@ -150,11 +149,6 @@ function Discount() {
         );
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-        console.log("days:", days);
-        console.log("hours:", hours);
-        console.log("minutes:", minutes);
-        console.log("seconds:", seconds);
 
         dispatch({
           type: "UPDATE_COUNTDOWN",
@@ -264,9 +258,7 @@ function Discount() {
                     </button>
                   </div>
                   <div className="link">
-                    <Link to={`/promotions`}>
-                      All promotion
-                    </Link>
+                    <Link to={`/promotions`}>All promotion</Link>
                   </div>
                 </div>
               </div>
