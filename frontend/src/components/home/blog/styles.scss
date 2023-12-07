@@ -87,6 +87,11 @@
             object-fit: cover;
           }
         }
+        .name {
+          a {
+            font-size: 18px;
+          }
+        }
       }
       /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
       @media screen and (max-width: 995px) {
