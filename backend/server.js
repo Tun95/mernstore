@@ -126,29 +126,43 @@ app.use((err, req, res, next) => {
 const server = createServer(app);
 const io = new Server(server, { cors: { origin: "*" } });
 
-// WebSocket setup
-// io.on("connection", async (socket) => {
-//   console.log("A user connected");
-//   // Handle events related to promotions here
-//   // Example: Broadcast the initial promotion data when a user connects
-//   try {
-//     const checkedPromotions = await Promotion.find({ isChecked: true });
-//     socket.emit("promotionUpdate", { promotion: checkedPromotions });
-//   } catch (error) {
-//     console.error("Error fetching initial promotion data:", error);
-//   }
-// });
-
-// WebSocket setup
-io.on("connection", async (socket) => {
-  console.log("A user connected");
-  // Handle events related to promotions here
-  // Example: Broadcast the initial promotion data when a user connects
+// Namespace for all promotions
+const allPromotionsNamespace = io.of("/all-promotions");
+allPromotionsNamespace.on("connection", async (socket) => {
+  console.log("A user connected to all promotions");
   try {
     const allPromotions = await Promotion.find();
     socket.emit("promotionUpdate", { promotion: allPromotions });
   } catch (error) {
     console.error("Error fetching initial promotion data:", error);
+  }
+});
+
+// Namespace for checked promotions
+const checkedPromotionsNamespace = io.of("/checked-promotions");
+checkedPromotionsNamespace.on("connection", async (socket) => {
+  console.log("A user connected to checked promotions");
+  try {
+    const checkedPromotions = await Promotion.find({ isChecked: true });
+    socket.emit("promotionUpdate", { promotion: checkedPromotions });
+  } catch (error) {
+    console.error("Error fetching initial promotion data:", error);
+  }
+});
+
+// Dynamic namespace for promotion by slug
+io.of(/^\/promotion-by-slug\/.+/).on("connection", async (socket) => {
+  const namespace = socket.nsp.name;
+  const slug = namespace.split("/")[2]; // get the slug from the namespace
+  console.log(`A user connected to promotion: ${slug}`);
+
+  // You can handle events related to a specific promotion here
+  // Fetch the promotion data by slug and emit it to the client
+  try {
+    const promotion = await Promotion.findOne({ slug: slug });
+    socket.emit("promotionUpdate", { promotion: promotion });
+  } catch (error) {
+    console.error(`Error fetching promotion data for slug: ${slug}`, error);
   }
 });
 

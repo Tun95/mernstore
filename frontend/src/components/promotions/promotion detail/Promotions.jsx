@@ -7,7 +7,7 @@ import data from "../../home/bestseller/data";
 import { Pagination } from "antd";
 import { Link } from "react-router-dom";
 
-function Promotions() {
+function Promotions({ promotion, countdown }) {
   const { products } = data;
 
   //===========
@@ -30,7 +30,7 @@ function Promotions() {
       </div>
       <div className="promotion_detail_products">
         <span>
-          <PromotionDetail />
+          <PromotionDetail promotion={promotion} countdown={countdown} />
         </span>
         <div className="filter_items">
           <div className="header">
