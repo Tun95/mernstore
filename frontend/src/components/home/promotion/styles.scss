@@ -80,3 +80,10 @@
     }
   }
 }
+
+/*======= MEDIA QUERIES (SMALL DEVICES) =======*/
+@media screen and (max-width: 600px) {
+  .control_display {
+    display: none;
+  }
+}

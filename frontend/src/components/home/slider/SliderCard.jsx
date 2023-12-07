@@ -26,7 +26,6 @@ function SliderCard() {
       },
     ],
   };
-  // const { banners } = data;
 
   const videoRef = useRef(null);
   useEffect(() => {

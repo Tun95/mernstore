@@ -12,7 +12,7 @@ import io from "socket.io-client";
 const NextArrow = (props) => {
   const { onClick } = props;
   return (
-    <div className="control-btn l_flex" onClick={onClick}>
+    <div className="control-btn control_display l_flex" onClick={onClick}>
       <button className="next l_flex">
         <KeyboardArrowRightIcon className="icon" />
       </button>
@@ -23,7 +23,7 @@ const NextArrow = (props) => {
 const PrevArrow = (props) => {
   const { onClick } = props;
   return (
-    <div className="control-btn l_flex" onClick={onClick}>
+    <div className="control-btn control_display l_flex" onClick={onClick}>
       <button className="prev l_flex">
         <KeyboardArrowLeftIcon className="icon" />
       </button>
@@ -140,6 +140,9 @@ function Promotion() {
     intervalId = setInterval(updateCountdown, 1000);
   };
 
+  //=============
+  // REACT SLICK
+  //=============
   const [slidesToShow, setSlidesToShow] = useState(1);
 
   useEffect(() => {
@@ -170,14 +173,14 @@ function Promotion() {
     slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
-    responsive: [
-      {
-        breakpoint: 600,
-        settings: {
-          arrows: false,
-        },
-      },
-    ],
+    // responsive: [
+    //   {
+    //     breakpoint: 600,
+    //     settings: {
+    //       arrows: false,
+    //     },
+    //   },
+    // ],
   };
 
   return (
@@ -197,7 +200,6 @@ function Promotion() {
                   item={item}
                   index={index}
                   calculateDaysUntilExpiration={calculateDaysUntilExpiration}
-                 
                 />
               ))}
             </Slider>
