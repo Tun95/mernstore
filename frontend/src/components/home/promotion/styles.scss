@@ -6,15 +6,15 @@
       color: var(--color-white);
     }
     .product_list {
-      height: auto;
+      height: 100%;
       .promotion_card {
-        height: auto;
+        height: 100%;
         .content {
           margin: 5px;
           border-radius: 20px;
           overflow: hidden;
           background-color: var(--color-white);
-          height: auto;
+          height: 100%;
           .img {
             img {
               width: 100%;
