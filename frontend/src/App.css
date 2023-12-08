@@ -217,6 +217,9 @@ button:disabled {
 .white-fill {
   fill: white;
 }
+.full_width {
+  width: 100%;
+}
 
 .fa-square-plus {
   color: var(--color-light-green);
@@ -397,8 +400,8 @@ select.input-error {
   color: var(--color-primary);
   padding: 0px 3px;
   font-weight: 600;
-  height: 15px;
-  border-radius: 5px;
+  height: 18px;
+  border-radius: 3px;
   font-size: 12px;
   border: 1px dotted var(--color-primary);
 }

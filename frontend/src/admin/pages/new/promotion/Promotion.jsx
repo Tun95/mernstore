@@ -359,12 +359,39 @@ export function Promotion() {
                                   <strong>Description: </strong>
                                   <span>{promotion.description}</span>
                                 </div>
-                                <div>
+                                <div className="a_flex expiring">
                                   <strong>Expiration Date: </strong>
-                                  <span>{promotion.expirationDate}</span>
+                                  <span className="c_flex full_width">
+                                    <span className="date_time">
+                                      {new Date(
+                                        promotion.expirationDate
+                                      ).toLocaleString("en-US", {
+                                        year: "numeric",
+                                        month: "2-digit",
+                                        day: "2-digit",
+                                        hour: "2-digit",
+                                        minute: "2-digit",
+                                        second: "2-digit",
+                                      })}
+                                    </span>
+                                    <span
+                                      className={`l_flex ${
+                                        new Date() <
+                                        new Date(promotion.expirationDate)
+                                          ? "verified_account"
+                                          : "unverified_account"
+                                      }`}
+                                    >
+                                      {new Date() <
+                                      new Date(promotion.expirationDate)
+                                        ? "Ongoing"
+                                        : "Expired"}
+                                    </span>
+                                  </span>
                                 </div>
+
                                 <div>
-                                  <label className="a_flex">
+                                  <label className="a_flex label">
                                     <input
                                       type="checkbox"
                                       checked={promotion.isChecked || false}
