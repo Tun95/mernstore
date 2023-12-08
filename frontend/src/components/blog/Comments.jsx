@@ -1,88 +1,207 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import { request } from "../../base url/BaseUrl";
 import { Context } from "../../context/Context";
 import { getError } from "../utilities/util/Utils";
 import { toast } from "react-toastify";
-import JoditEditor from "jodit-react";
 import "./styles.scss";
-import ReplyIcon from "@mui/icons-material/Reply";
 import { CommentSection } from "react-comments-section";
 import "react-comments-section/dist/index.css";
+import me from "../../assets/me.png";
 
 function Comments({ blogId }) {
   const { state } = useContext(Context);
   const { userInfo } = state;
 
-  const [data] = useState([
-    {
-      userId: "01a",
-      comId: "012",
-      fullName: "Riya Negi",
-      avatarUrl: "https://ui-avatars.com/api/name=Riya&background=random",
-      userProfile: "https://www.linkedin.com/in/riya-negi-8879631a9/",
-      text: `<p>Hey <strong>loved</strong> your blog! Can you show me some other ways to <del><em>fix</em></del>  solve this?🤔<br>Here's my <a href="https://www.linkedin.com/in/riya-negi-8879631a9/" target="_blank">Linkedin Profile</a> to reach out.</p>`,
-      replies: [
+  const [comments, setComments] = useState([]);
+
+  const fetchComments = async () => {
+    try {
+      const result = await axios.get(`${request}/api/blog/${blogId}/comments`);
+
+      // Transform the server response data into the format expected by CommentSection
+      const transformedComments = result.data.map((comment) => ({
+        userId: comment.user,
+        comId: comment._id,
+        fullName: comment.name,
+        avatarUrl: comment.image,
+        text: comment.comment,
+        replies: comment.replies.map((reply) => ({
+          userId: reply.userId,
+          comId: reply._id,
+          fullName: reply.fullName,
+          avatarUrl: reply.avatarUrl,
+          text: reply.text,
+          replies: [], // Assuming replies can't have replies in this structure
+        })),
+      }));
+
+      setComments(transformedComments);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+      toast.error(getError(error));
+    }
+  };
+
+  useEffect(() => {
+    if (blogId) {
+      fetchComments();
+    }
+    console.log("Comments Map", comments);
+  }, [blogId]);
+
+  const handleAddComment = async (commentData) => {
+    try {
+      const result = await axios.post(
+        `${request}/api/blog/${blogId}/comment/create`,
         {
-          userId: "02a",
-          comId: "013",
-          userProfile: "https://www.linkedin.com/in/riya-negi-8879631a9/",
-          fullName: "Adam Scott",
-          avatarUrl: "https://ui-avatars.com/api/name=Adam&background=random",
-          text: `<p>Yeah sure try adding this line to your code. You need to pass <span style="color: rgb(147,101,184);">event</span><span style="color: rgb(26,188,156);"> </span><span style="color: rgb(0,0,0);">as a param. </span></p>
-          <pre>event.preventDefault()</pre>
-          <p>Best of luck with your project! <br></p>
-          <img src="https://c.tenor.com/4cR1jMpsrEgAAAAC/snoopy-cheerleader.gif" alt="undefined" style="height: auto;width: auto"/>
-          <p></p>`,
+          name: `${userInfo.lastName} ${userInfo.firstName}`,
+          email: userInfo.email,
+          image: userInfo.image,
+          comment: commentData.text,
         },
         {
-          userId: "01a",
-          comId: "014",
-          userProfile: "https://www.linkedin.com/in/riya-negi-8879631a9/",
-          fullName: "Riya Negi",
-          avatarUrl: "https://ui-avatars.com/api/name=Riya&background=random",
-          text: '<p><strong>OMG!</strong> it worked! <span style="color: rgb(209,72,65);">DO NOT stop this blog series!!!!</span> 💃</p>',
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+
+      // Get the comment ID from the response
+      const commentId = result.data._id;
+
+      toast.success("Comment created successfully");
+
+      // Manually fetch comments after adding a comment
+      fetchComments();
+
+      // Return the comment ID in case you need it in your component
+      return commentId;
+    } catch (error) {
+      console.error("Error adding comment:", error);
+      toast.error(getError(error));
+    }
+  };
+
+  const handleUpdateComment = async (commentId, updatedData) => {
+    try {
+      const result = await axios.put(
+        `${request}/api/blog/${blogId}/comment/update/${commentId}`,
+        { comment: updatedData.text },
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+      setComments(result.data.comments);
+      // Manually fetch comments after adding a comment
+      fetchComments();
+    } catch (error) {
+      console.error("Error updating comment:", error);
+      toast.error(getError(error));
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    try {
+      const result = await axios.delete(
+        `${request}/api/blog/${blogId}/comment/delete/${commentId}`,
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+      setComments(result.data.comments);
+      // Manually fetch comments after adding a comment
+      fetchComments();
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      toast.error(getError(error));
+    }
+  };
+
+  //=============
+  // ADD REPLIES
+  //=============
+  const handleAddReply = async (commentId, replyData) => {
+    try {
+      console.log("Received commentId in handleAddReply:", commentId);
+
+      await axios.post(
+        `${request}/api/blog/${blogId}/comment/${commentId}/reply/create`,
+        {
+          text: replyData.text,
+          avatarUrl: userInfo.image,
+          fullName: `${userInfo.lastName} ${userInfo.firstName}`,
         },
-      ],
-    },
-    {
-      userId: "02b",
-      comId: "017",
-      fullName: "Lily",
-      userProfile: "https://www.linkedin.com/in/riya-negi-8879631a9/",
-      text: `<blockquote><strong>DRY </strong>- is the right of passage to good coding</blockquote>
-      <p>True story brother!! <em>Amen to that!  </em>For anyone wondering DRY is&nbsp;</p>
-      <ol>
-      <li>Don't</li>
-      <li>Repeat</li>
-      <li>Yoursef</li>
-      </ol>`,
-      avatarUrl: "https://ui-avatars.com/api/name=Lily&background=random",
-      replies: [],
-    },
-  ]);
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+      toast.success("Reply added successfully");
+
+      // Manually fetch comments after adding a reply
+      fetchComments();
+    } catch (error) {
+      console.error("Error adding reply:", error);
+      toast.error(getError(error));
+    }
+  };
+
+  //=============
+  // UPDATE REPLIES
+  //=============
+  const handleUpdateReply = async (commentId, replyId, updatedData) => {
+    try {
+      const result = await axios.put(
+        `${request}/api/blog/${blogId}/comment/${commentId}/reply/update/${replyId}`,
+        { text: updatedData.text },
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+      setComments(result.data.comments);
+      // Manually fetch comments after adding a comment
+      fetchComments();
+    } catch (error) {
+      console.error("Error updating reply:", error);
+      toast.error(getError(error));
+    }
+  };
+
+  //=============
+  // DELETE REPLIES
+  //=============
+  const handleDeleteReply = async (commentId, replyId) => {
+    try {
+      const result = await axios.delete(
+        `${request}/api/blog/${blogId}/comment/${commentId}/reply/delete/${replyId}`,
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+      setComments(result.data.comments);
+      // Manually fetch comments after adding a comment
+      fetchComments();
+    } catch (error) {
+      console.error("Error deleting reply:", error);
+      toast.error(getError(error));
+    }
+  };
 
   return (
-    <div style={{ width: "100%" }}>
+    <div
+      className="react_comment"
+      style={{ width: "100%", marginLeft: "-16px" }}
+    >
       <CommentSection
         currentUser={{
-          currentUserId: "01a",
-          currentUserImg:
-            "https://ui-avatars.com/api/name=Riya&background=random",
-          currentUserProfile:
-            "https://www.linkedin.com/in/riya-negi-8879631a9/",
-          currentUserFullName: "Riya Negi",
+          currentUserId: userInfo._id,
+          currentUserImg: userInfo.image,
+          currentUserFullName: `${userInfo.lastName} ${userInfo.firstName}`,
         }}
         hrStyle={{ border: "0.5px solid #ff0072" }}
-        commentData={data}
+        commentData={comments}
         currentData={(data) => {
-          console.log("curent data", data);
+          console.log("current data", data);
         }}
-        logIn={{
-          loginLink: "http://localhost:3000/",
-          signupLink: "http://localhost:3000/",
-        }}
-        customImg="https://imagesvc.meredithcorp.io/v3/mm/image?url=https%3A%2F%2Fstatic.onecms.io%2Fwp-content%2Fuploads%2Fsites%2F13%2F2015%2F04%2F05%2Ffeatured.jpg&q=60"
+        customImg={userInfo ? userInfo.image : me}
         inputStyle={{ border: "1px solid rgb(208 208 208)" }}
         formStyle={{ backgroundColor: "white" }}
         submitBtnStyle={{
@@ -98,6 +217,31 @@ function Comments({ blogId }) {
         }}
         advancedInput={true}
         replyInputStyle={{ borderBottom: "1px solid black", color: "black" }}
+        onSubmitAction={(data) => {
+          handleAddComment(data);
+        }}
+        onDeleteAction={(data) => {
+          handleDeleteComment(data.comIdToDelete);
+        }}
+        onEditAction={(data) => {
+          handleUpdateComment(data.comId, {
+            text: data.text,
+          });
+        }}
+        onReplyAction={(data) => {
+          console.log("onReplyAction data:", data);
+          handleAddReply(data.repliedToCommentId, {
+            text: data.text,
+          });
+        }}
+        onEditReplyAction={(data) => {
+          handleUpdateReply(data.comId, data.replyId, {
+            text: data.text,
+          });
+        }}
+        onDeleteReplyAction={(data) => {
+          handleDeleteReply(data.comId, data.replyId);
+        }}
       />
     </div>
   );

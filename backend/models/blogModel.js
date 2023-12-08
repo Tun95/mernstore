@@ -1,11 +1,23 @@
 import mongoose from "mongoose";
 
+const replySchema = new mongoose.Schema({
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+  avatarUrl: { type: String },
+  fullName: { type: String },
+  text: { type: String },
+});
+
 const commentSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
+    name: { type: String },
     email: { type: String },
     image: { type: String },
-    comment: { type: String, required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+    comment: { type: String },
+    replies: [replySchema],
   },
   {
     timestamps: true,
@@ -34,7 +46,7 @@ const blogSchema = mongoose.Schema(
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
-      required: true,
+      // required: true,
     },
   },
   {

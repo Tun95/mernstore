@@ -196,7 +196,7 @@ blogRouter.post(
     try {
       const blog = await Blog.findById(req.params.blogId);
       if (blog) {
-        const { name, email, image, comment } = req.body;
+        const { comment, name, email, image } = req.body;
         const newComment = {
           name,
           email,
@@ -205,12 +205,21 @@ blogRouter.post(
           user: req.user._id,
         };
         blog.comments.push(newComment);
-        const updatedBlog = await blog.save();
+        await blog.save(); // Save the blog first without populating
+
+        // Now, fetch the updated blog with populated user information
+        const updatedBlog = await Blog.findById(blog._id).populate(
+          "user",
+          "name email image profile"
+        );
+
         res.status(201).json(updatedBlog);
+        console.log(updatedBlog);
       } else {
         res.status(404).json({ message: "Blog not found" });
       }
     } catch (error) {
+      console.error("Error failed to create", error);
       res.status(500).json({ message: "Internal Server Error" });
     }
   })
@@ -223,7 +232,7 @@ blogRouter.get(
   "/:blogId/comments",
   expressAsyncHandler(async (req, res) => {
     try {
-      const blog = await Blog.findById(req.params.blogId);
+      const blog = await Blog.findById(req.params.blogId).populate("user");
       if (blog) {
         res.json(blog.comments);
       } else {
@@ -243,20 +252,19 @@ blogRouter.put(
   isAuth,
   expressAsyncHandler(async (req, res) => {
     try {
-      const blog = await Blog.findById(req.params.blogId);
-      if (blog) {
-        const comment = blog.comments.id(req.params.commentId);
-
-        // Check if the user making the request is the owner of the comment
-        if (comment && comment.user.equals(req.user._id)) {
-          comment.set(req.body);
-          const updatedBlog = await blog.save();
-          res.json(updatedBlog);
-        } else {
-          res
-            .status(403)
-            .json({ message: "Unauthorized to update this comment" });
+      const { comment } = req.body;
+      const updatedBlog = await Blog.findByIdAndUpdate(
+        req.params.blogId,
+        {
+          $set: { "comments.$[elem].comment": comment },
+        },
+        {
+          arrayFilters: [{ "elem._id": req.params.commentId }],
+          new: true,
         }
+      ).populate("user", "name email image profile");
+      if (updatedBlog) {
+        res.json(updatedBlog);
       } else {
         res.status(404).json({ message: "Blog not found" });
       }
@@ -274,20 +282,118 @@ blogRouter.delete(
   isAuth,
   expressAsyncHandler(async (req, res) => {
     try {
+      const updatedBlog = await Blog.findByIdAndUpdate(
+        req.params.blogId,
+        {
+          $pull: { comments: { _id: req.params.commentId } },
+        },
+        {
+          new: true,
+        }
+      ).populate("user", "name email image profile");
+      if (updatedBlog) {
+        res.json(updatedBlog);
+      } else {
+        res.status(404).json({ message: "Blog not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  })
+);
+
+//==================
+// Create a reply for a specific comment
+//==================
+blogRouter.post(
+  "/:blogId/comment/:commentId/reply/create",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    try {
       const blog = await Blog.findById(req.params.blogId);
       if (blog) {
+        const { text, avatarUrl, fullName } = req.body;
+        const newReply = {
+          userId: req.user._id,
+          avatarUrl,
+          fullName,
+          text,
+        };
         const comment = blog.comments.id(req.params.commentId);
+        comment.replies.push(newReply);
 
-        // Check if the user making the request is the owner of the comment
-        if (comment && comment.user.equals(req.user._id)) {
-          comment.remove();
-          const updatedBlog = await blog.save();
-          res.json(updatedBlog);
-        } else {
-          res
-            .status(403)
-            .json({ message: "Unauthorized to delete this comment" });
+        // Save the blog first
+        await blog.save();
+
+        // Reload the blog with populated comments.user field
+        const updatedBlog = await Blog.findById(req.params.blogId)
+          .populate("comments.user", "name email image profile")
+          .exec();
+
+        res.status(201).json(updatedBlog);
+      } else {
+        res.status(404).json({ message: "Blog not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+      console.error("Error failed to create", error);
+    }
+  })
+);
+
+//==================
+// Update a reply for a specific comment
+//==================
+blogRouter.put(
+  "/:blogId/comment/:commentId/reply/update/:replyId",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const { text } = req.body;
+      const updatedBlog = await Blog.findByIdAndUpdate(
+        req.params.blogId,
+        {
+          $set: { "comments.$[elem1].replies.$[elem2].text": text },
+        },
+        {
+          arrayFilters: [
+            { "elem1._id": req.params.commentId },
+            { "elem2._id": req.params.replyId },
+          ],
+          new: true,
         }
+      ).populate("user", "name email image profile");
+      if (updatedBlog) {
+        res.json(updatedBlog);
+      } else {
+        res.status(404).json({ message: "Blog not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  })
+);
+
+//=============================
+// Delete a reply for a specific comment
+//=============================
+blogRouter.delete(
+  "/:blogId/comment/:commentId/reply/delete/:replyId",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const updatedBlog = await Blog.findByIdAndUpdate(
+        req.params.blogId,
+        {
+          $pull: { "comments.$[elem].replies": { _id: req.params.replyId } },
+        },
+        {
+          arrayFilters: [{ "elem._id": req.params.commentId }],
+          new: true,
+        }
+      ).populate("user", "name email image profile");
+      if (updatedBlog) {
+        res.json(updatedBlog);
       } else {
         res.status(404).json({ message: "Blog not found" });
       }
