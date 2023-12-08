@@ -1,14 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-//TEXT TRUNCATE
-function truncateText(text, maxWords) {
-  const words = text.split(" ");
-  if (words.length <= maxWords) {
-    return text;
-  }
-  return words.slice(0, maxWords).join(" ") + " ...";
-}
+import TruncateMarkup from "react-truncate-markup";
 
 export function formatDate(dateString) {
   const options = { day: "numeric", month: "numeric", year: "numeric" };
@@ -47,33 +39,6 @@ function PromotionCard({ item, index, calculateDaysUntilExpiration }) {
     return () => clearInterval(intervalId);
   }, [item.expirationDate]);
 
-  //==============
-  // TEXT TRUNCATE
-  //==============
-  const [truncatedTitle, setTruncatedTitle] = useState(
-    truncateText(item.title, 9)
-  );
-
-  useEffect(() => {
-    // Update the truncation value based on screen size
-    const handleResize = () => {
-      const screenWidth = window.innerWidth;
-      if (screenWidth >= 1200) {
-        setTruncatedTitle(truncateText(item.title, 9)); // Adjust the number of words for larger screens
-      } else if (screenWidth >= 992) {
-        setTruncatedTitle(truncateText(item.title, 7)); // Adjust the number of words for medium screens
-      } else if (screenWidth >= 600) {
-        setTruncatedTitle(truncateText(item.title, 5)); // Adjust the number of words for medium screens
-      } else {
-        setTruncatedTitle(truncateText(item.title, 4)); // Default truncation for smaller screens
-      }
-    };
-
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [item.title]);
   return (
     <div className="promotion_card" key={index}>
       <div className="content">
@@ -94,7 +59,9 @@ function PromotionCard({ item, index, calculateDaysUntilExpiration }) {
           <div className="name_to ">
             <div className="name">
               <Link to={`/promotions/${item.slug}`}>
-                <p>{truncatedTitle}</p>
+                <TruncateMarkup lines={2}>
+                  <p>{item.title}</p>
+                </TruncateMarkup>
               </Link>
             </div>
             <div className="expire">
