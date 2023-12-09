@@ -1,6 +1,5 @@
 import React, { useEffect, useReducer, useState } from "react";
 import { Helmet } from "react-helmet-async";
-import { Link } from "react-router-dom";
 import "./styles.scss";
 import BlogPost from "../../components/blog/BlogPost";
 import RecentPost from "../../components/blog/RecentPost";
@@ -8,7 +7,9 @@ import { request } from "../../base url/BaseUrl";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { getError } from "../../components/utilities/util/Utils";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 
+// Reducer function
 function reducer(state, action) {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -28,7 +29,15 @@ function reducer(state, action) {
       return state;
   }
 }
+
 function BlogPostListScreen() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+
+  // Initialize currentPage from URL parameter
+  const initialPage = parseInt(searchParams.get("page")) || 1;
+
   const [recentPosts, setRecentPosts] = useState([]);
 
   const [{ blogs, loading, error, currentPage, totalPages }, dispatch] =
@@ -36,13 +45,11 @@ function BlogPostListScreen() {
       blogs: [],
       loading: true,
       error: "",
-      currentPage: 1,
+      currentPage: initialPage, // Initialize with the page from URL
       totalPages: 1,
     });
 
-  //================
-  // FETCH BLOG LIST
-  //================
+  // Fetch recent posts and blog list
   useEffect(() => {
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
@@ -56,6 +63,9 @@ function BlogPostListScreen() {
           type: "FETCH_SUCCESS",
           payload: data,
         });
+
+        // Update the URL with the current page
+        navigate(`/blog?page=${currentPage}`);
       } catch (err) {
         dispatch({ type: "FETCH_FAIL" });
         toast.error(getError(err));
@@ -74,7 +84,8 @@ function BlogPostListScreen() {
 
     fetchData();
     fetchRecentPosts();
-  }, [currentPage]);
+  }, [currentPage, navigate]);
+
   return (
     <div className="blog_list_screen">
       <Helmet>
