@@ -141,6 +141,15 @@
         &:last-child {
           border-bottom: none;
         }
+        .text {
+          .textarea {
+            width: 100%;
+            resize: vertical;
+            min-height: 200px;
+            border: 1px solid var(--color-border);
+            border-radius: 10px;
+          }
+        }
         /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
         @media (max-width: 900px) {
           .user_info {
@@ -161,8 +170,8 @@
           gap: 10px;
           margin-bottom: 10px;
           .short {
-            min-width: 50px;
-            min-height: 50px;
+            min-width: 40px;
+            min-height: 40px;
             border-radius: 50%;
             color: var(--color-white);
             background-color: var(--color-short);

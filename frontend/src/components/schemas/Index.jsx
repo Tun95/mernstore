@@ -116,7 +116,10 @@ export const reviewSchema = yup.object().shape({
 
 export const commentSchema = yup.object().shape({
   name: yup.string().required("Your name is required"),
-  comment: yup.string().required("Message is required"),
+  comment: yup
+    .string()
+    .required("Comment is required")
+    .min(50, "Comment must be at least 50 characters"),
 });
 
 export const billingSchema = yup.object().shape({

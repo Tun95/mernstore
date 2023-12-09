@@ -709,19 +709,48 @@ const initialCommentValues = {
   name: "",
   comment: "",
 };
-export function CommentModal() {
-  //COMMENT MODAL
+export function CommentModal({ blogId, fetchComments }) {
+  const { state } = useContext(Context);
+  const { userInfo } = state;
+
+  // COMMENT MODAL
   const [openReview, setOpenReview] = React.useState(false);
   const handleOpenReview = () => setOpenReview(true);
   const handleCloseReview = () => setOpenReview(false);
 
-  //=========
   // COMMENT
-  //=========
-  const handleSubmit = () => {};
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
+    try {
+      const { name, comment } = values;
+
+      await axios.post(
+        `${request}/api/blog/${blogId}/create-comment`,
+        {
+          name,
+          comment,
+          email: userInfo.email,
+          image: userInfo.image,
+        },
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
+      );
+
+      fetchComments();
+      resetForm(initialCommentValues);
+      handleCloseReview();
+      toast.success("Comment created successfully");
+    } catch (error) {
+      console.error("Error submitting comment:", error);
+      toast.error(getError(error));
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
   return (
     <>
-      <button onClick={handleOpenReview}>Write a review</button>
+      <button onClick={handleOpenReview}>Write a comment</button>
       <Modal
         open={openReview}
         onClose={handleCloseReview}
@@ -730,7 +759,7 @@ export function CommentModal() {
       >
         <Box className="customer_call login_modal review_modal">
           <div className="call_header c_flex">
-            <h1>Write a review</h1>
+            <h1>Write your comment</h1>
             <CloseIcon onClick={handleCloseReview} className="call_icon" />
           </div>
           <div className="call login_form">

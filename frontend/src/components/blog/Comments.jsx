@@ -1,45 +1,99 @@
-import React, { useState, useEffect, useContext, useRef } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
+import { CommentModal } from "../modals/Modals";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
+import CloseIcon from "@mui/icons-material/Close";
+import UpdateIcon from "@mui/icons-material/Update";
+import { Context } from "../../context/Context";
 import axios from "axios";
 import { request } from "../../base url/BaseUrl";
-import { Context } from "../../context/Context";
 import { getError } from "../utilities/util/Utils";
 import { toast } from "react-toastify";
-import "./styles.scss";
-import { CommentSection } from "react-comments-section";
-import "react-comments-section/dist/index.css";
-import me from "../../assets/me.png";
+import { Link } from "react-router-dom";
+import { Pagination } from "antd";
+
+//===========
+// PAGINATION
+//===========
+const itemRender = (_, type, originalElement) => {
+  if (type === "prev") {
+    return <Link to="">Previous</Link>;
+  }
+  if (type === "next") {
+    return <Link to="">Next</Link>;
+  }
+  return originalElement;
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "FETCH_REQUEST":
+      return { ...state, loading: true };
+    case "FETCH_SUCCESS":
+      return {
+        ...state,
+        loading: false,
+        comments: action.payload.comments,
+        totalPages: action.payload.totalPages,
+        totalComments: action.payload.totalComments,
+      };
+    case "FETCH_FAIL":
+      return { ...state, loading: false, error: action.payload };
+    case "SET_CURRENT_PAGE":
+      return { ...state, currentPage: action.payload };
+    default:
+      return state;
+  }
+}
 
 function Comments({ blogId }) {
-  const { state } = useContext(Context);
-  const { userInfo } = state;
+  const { state: cState } = useContext(Context);
+  const { userInfo } = cState;
 
-  const [comments, setComments] = useState([]);
+  const initialState = {
+    loading: false,
+    comments: [],
+    totalPages: 0,
+    currentPage: 1,
+    totalComments: 0,
+    error: null,
+  };
+
+  const [{ comments, totalPages, currentPage, totalComments }, dispatch] =
+    useReducer(reducer, initialState);
+
+  console.log(totalComments);
+
+  const [editingCommentId, setEditingCommentId] = useState(null);
+  const [editFormData, setEditFormData] = useState({
+    name: "",
+    comment: "",
+  });
 
   const fetchComments = async () => {
+    dispatch({ type: "FETCH_REQUEST" });
+
     try {
-      const result = await axios.get(`${request}/api/blog/${blogId}/comments`);
-
-      // Transform the server response data into the format expected by CommentSection
-      const transformedComments = result.data.map((comment) => ({
-        userId: comment.user,
-        comId: comment._id,
-        fullName: comment.name,
-        avatarUrl: comment.image,
-        text: comment.comment,
-        replies: comment.replies.map((reply) => ({
-          userId: reply.userId,
-          comId: reply._id,
-          fullName: reply.fullName,
-          avatarUrl: reply.avatarUrl,
-          text: reply.text,
-          replies: [], // Assuming replies can't have replies in this structure
-        })),
-      }));
-
-      setComments(transformedComments);
+      const response = await axios.get(
+        `${request}/api/blog/${blogId}/comments?page=${currentPage}`
+      );
+      dispatch({
+        type: "FETCH_SUCCESS",
+        payload: {
+          comments: response.data.comments,
+          totalPages: response.data.totalPages,
+          totalComments: response.data.totalComments,
+        },
+      });
     } catch (error) {
       console.error("Error fetching comments:", error);
       toast.error(getError(error));
+      dispatch({ type: "FETCH_FAIL", payload: error.message });
     }
   };
 
@@ -47,202 +101,205 @@ function Comments({ blogId }) {
     if (blogId) {
       fetchComments();
     }
-    console.log("Comments Map", comments);
-  }, [blogId]);
+  }, [blogId, currentPage]);
 
-  const handleAddComment = async (commentData) => {
+  const handleEditInputChange = (event) => {
+    const { name, value } = event.target;
+    setEditFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
+  };
+
+  const editComment = (commentId) => {
+    const commentToEdit = comments.find((comment) => comment._id === commentId);
+
+    if (commentToEdit) {
+      setEditingCommentId(commentId);
+      setEditFormData({
+        name: commentToEdit.name,
+        comment: commentToEdit.comment,
+      });
+    } else {
+      console.error(`Comment with ID ${commentId} not found.`);
+    }
+  };
+
+  const updateComment = async () => {
+    if (!editFormData.name || !editFormData.comment) {
+      console.error("Name and comment cannot be empty");
+      return;
+    }
+
     try {
-      const result = await axios.post(
-        `${request}/api/blog/${blogId}/comment/create`,
+      await axios.put(
+        `${request}/api/blog/update/${blogId}/${editingCommentId}`,
         {
-          name: `${userInfo.lastName} ${userInfo.firstName}`,
-          email: userInfo.email,
-          image: userInfo.image,
-          comment: commentData.text,
+          name: editFormData.name,
+          comment: editFormData.comment,
         },
         {
           headers: { Authorization: `Bearer ${userInfo.token}` },
         }
       );
-
-      // Get the comment ID from the response
-      const commentId = result.data._id;
-
-      toast.success("Comment created successfully");
-
-      // Manually fetch comments after adding a comment
-      fetchComments();
-
-      // Return the comment ID in case you need it in your component
-      return commentId;
-    } catch (error) {
-      console.error("Error adding comment:", error);
-      toast.error(getError(error));
-    }
-  };
-
-  const handleUpdateComment = async (commentId, updatedData) => {
-    try {
-      const result = await axios.put(
-        `${request}/api/blog/${blogId}/comment/update/${commentId}`,
-        { comment: updatedData.text },
-        {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-      setComments(result.data.comments);
-      // Manually fetch comments after adding a comment
-      fetchComments();
+      toast.success("Comment updated successfully");
+      fetchComments(); // Updated to fetch comments after an update
     } catch (error) {
       console.error("Error updating comment:", error);
       toast.error(getError(error));
+    } finally {
+      setEditingCommentId(null);
+      setEditFormData({
+        name: "",
+        comment: "",
+      });
     }
   };
 
-  const handleDeleteComment = async (commentId) => {
+  const cancelUpdate = () => {
+    setEditingCommentId(null);
+    setEditFormData({
+      name: "",
+      comment: "",
+    });
+  };
+
+  const deleteComment = async (commentId) => {
+    // Display a confirmation dialog
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this comment?"
+    );
+
+    if (!userConfirmed) {
+      return; // Do nothing if the user cancels the operation
+    }
+
     try {
-      const result = await axios.delete(
-        `${request}/api/blog/${blogId}/comment/delete/${commentId}`,
-        {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-      setComments(result.data.comments);
-      // Manually fetch comments after adding a comment
-      fetchComments();
+      await axios.delete(`${request}/api/blog/delete/${blogId}/${commentId}`, {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+      toast.success("Comment deleted successfully");
+      fetchComments(); // Updated to fetch comments after a delete
     } catch (error) {
       console.error("Error deleting comment:", error);
       toast.error(getError(error));
     }
   };
 
-  //=============
-  // ADD REPLIES
-  //=============
-  const handleAddReply = async (commentId, replyData) => {
-    try {
-      console.log("Received commentId in handleAddReply:", commentId);
-
-      await axios.post(
-        `${request}/api/blog/${blogId}/comment/${commentId}/reply/create`,
-        {
-          text: replyData.text,
-          avatarUrl: userInfo.image,
-          fullName: `${userInfo.lastName} ${userInfo.firstName}`,
-        },
-        {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-      toast.success("Reply added successfully");
-
-      // Manually fetch comments after adding a reply
-      fetchComments();
-    } catch (error) {
-      console.error("Error adding reply:", error);
-      toast.error(getError(error));
+  const headerRef = useRef(null);
+  const handlePageChange = (page) => {
+    if (headerRef.current) {
+      headerRef.current.scrollIntoView({ behavior: "smooth" });
     }
-  };
-
-  //=============
-  // UPDATE REPLIES
-  //=============
-  const handleUpdateReply = async (commentId, replyId, updatedData) => {
-    try {
-      const result = await axios.put(
-        `${request}/api/blog/${blogId}/comment/${commentId}/reply/update/${replyId}`,
-        { text: updatedData.text },
-        {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-      setComments(result.data.comments);
-      // Manually fetch comments after adding a comment
-      fetchComments();
-    } catch (error) {
-      console.error("Error updating reply:", error);
-      toast.error(getError(error));
-    }
-  };
-
-  //=============
-  // DELETE REPLIES
-  //=============
-  const handleDeleteReply = async (commentId, replyId) => {
-    try {
-      const result = await axios.delete(
-        `${request}/api/blog/${blogId}/comment/${commentId}/reply/delete/${replyId}`,
-        {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-      setComments(result.data.comments);
-      // Manually fetch comments after adding a comment
-      fetchComments();
-    } catch (error) {
-      console.error("Error deleting reply:", error);
-      toast.error(getError(error));
-    }
+    dispatch({ type: "SET_CURRENT_PAGE", payload: page });
   };
 
   return (
-    <div
-      className="react_comment"
-      style={{ width: "100%", marginLeft: "-16px" }}
-    >
-      <CommentSection
-        currentUser={{
-          currentUserId: userInfo._id,
-          currentUserImg: userInfo.image,
-          currentUserFullName: `${userInfo.lastName} ${userInfo.firstName}`,
-        }}
-        hrStyle={{ border: "0.5px solid #ff0072" }}
-        commentData={comments}
-        currentData={(data) => {
-          console.log("current data", data);
-        }}
-        customImg={userInfo ? userInfo.image : me}
-        inputStyle={{ border: "1px solid rgb(208 208 208)" }}
-        formStyle={{ backgroundColor: "white" }}
-        submitBtnStyle={{
-          border: "1px solid black",
-          backgroundColor: "black",
-          padding: "7px 15px",
-        }}
-        cancelBtnStyle={{
-          border: "1px solid gray",
-          backgroundColor: "gray",
-          color: "white",
-          padding: "7px 15px",
-        }}
-        advancedInput={true}
-        replyInputStyle={{ borderBottom: "1px solid black", color: "black" }}
-        onSubmitAction={(data) => {
-          handleAddComment(data);
-        }}
-        onDeleteAction={(data) => {
-          handleDeleteComment(data.comIdToDelete);
-        }}
-        onEditAction={(data) => {
-          handleUpdateComment(data.comId, {
-            text: data.text,
-          });
-        }}
-        onReplyAction={(data) => {
-          console.log("onReplyAction data:", data);
-          handleAddReply(data.repliedToCommentId, {
-            text: data.text,
-          });
-        }}
-        onEditReplyAction={(data) => {
-          handleUpdateReply(data.comId, data.replyId, {
-            text: data.text,
-          });
-        }}
-        onDeleteReplyAction={(data) => {
-          handleDeleteReply(data.comId, data.replyId);
-        }}
-      />
+    <div className="comments">
+      <div className="content">
+        <div className="header">
+          <h2>{totalComments} Comments</h2>
+        </div>
+        <div className="list" ref={headerRef}>
+          {totalComments === 0 && (
+            <div className="no_post l_flex">
+              <h3>No comment found</h3>
+            </div>
+          )}
+          <small className="reviews">
+            <ul>
+              {comments.map((item, index) => (
+                <li className="" key={index}>
+                  <div className="c_flex span_header">
+                    <div className="user_info a_flex">
+                      <div className="short l_flex">
+                        <h2>{item.name.charAt(0)}</h2>
+                      </div>
+                      <div className="user">
+                        <span>
+                          <h4 className="name a_flex">{item.name}</h4>
+                          <small className="date_time">
+                            {new Intl.DateTimeFormat("en-GB", {
+                              day: "numeric",
+                              month: "numeric",
+                              year: "numeric",
+                              hour: "numeric",
+                              minute: "numeric",
+                            }).format(new Date(item.createdAt))}
+                          </small>
+                        </span>
+                      </div>
+                    </div>
+                    {userInfo._id === item.user && (
+                      <div className="icons a_flex">
+                        <span className="l_flex">
+                          <DeleteForeverOutlinedIcon
+                            className="icon mui_icon"
+                            onClick={() => deleteComment(item._id)}
+                          />
+                        </span>
+
+                        {editingCommentId === item._id ? (
+                          <>
+                            <span className="l_flex">
+                              <UpdateIcon
+                                className="icon mui_icon"
+                                onClick={updateComment}
+                              />
+                            </span>
+                            <span className="l_flex">
+                              <CloseIcon
+                                className="icon mui_icon"
+                                onClick={cancelUpdate}
+                              />
+                            </span>
+                          </>
+                        ) : (
+                          <span className="l_flex">
+                            <i
+                              className="fa-solid fa-pen-to-square icon"
+                              onClick={() => editComment(item._id)}
+                            ></i>
+                          </span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  <div className="text">
+                    {editingCommentId === item._id ? (
+                      <textarea
+                        name="comment"
+                        className="textarea"
+                        value={editFormData.comment}
+                        onChange={handleEditInputChange}
+                        placeholder="Edit comment..."
+                      />
+                    ) : (
+                      <p>{item.comment}</p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </small>
+          {totalComments === 0 ? (
+            ""
+          ) : (
+            <div className="ant_pagination l_flex mt">
+              <Pagination
+                total={totalPages * 5}
+                itemRender={itemRender}
+                current={currentPage}
+                pageSize={5}
+                onChange={handlePageChange}
+              />
+            </div>
+          )}
+        </div>
+        <div className="btn">
+          <CommentModal blogId={blogId} fetchComments={fetchComments} />
+        </div>
+      </div>
     </div>
   );
 }

@@ -1,12 +1,5 @@
 import mongoose from "mongoose";
 
-const replySchema = new mongoose.Schema({
-  userId: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  avatarUrl: { type: String },
-  fullName: { type: String },
-  text: { type: String },
-});
-
 const commentSchema = new mongoose.Schema(
   {
     name: { type: String },
@@ -17,7 +10,6 @@ const commentSchema = new mongoose.Schema(
       ref: "User",
     },
     comment: { type: String },
-    replies: [replySchema],
   },
   {
     timestamps: true,
