@@ -230,7 +230,7 @@ function Comments({ blogId }) {
                         </span>
                       </div>
                     </div>
-                    {userInfo._id === item.user && (
+                    {userInfo && userInfo?._id === item.user && (
                       <div className="icons a_flex">
                         <span className="l_flex">
                           <DeleteForeverOutlinedIcon
@@ -296,9 +296,11 @@ function Comments({ blogId }) {
             </div>
           )}
         </div>
-        <div className="btn">
-          <CommentModal blogId={blogId} fetchComments={fetchComments} />
-        </div>
+        {userInfo && (
+          <div className="btn">
+            <CommentModal blogId={blogId} fetchComments={fetchComments} />
+          </div>
+        )}
       </div>
     </div>
   );
