@@ -18,6 +18,9 @@ import Taxjar from "taxjar";
 
 const orderRouter = express.Router();
 
+//==================
+// GET ALL ORDERS
+//==================
 const ADMIN_PAGE_SIZE = 25;
 orderRouter.get(
   "/",

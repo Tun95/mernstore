@@ -13,8 +13,8 @@ import { useMediaQuery, useTheme } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Home from "../../single/home/Home";
-import Filters from "../../single/filters/Filters";
 import Updates from "../../single/updates/Updates";
+import { VendorPlanCreate } from "../../new/plans/VendorPlanCreate";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -146,13 +146,18 @@ function OtherScreen() {
                   />
                   <Tab
                     className={value === 3 ? "activeTab" : "tab_sub"}
-                    label="Applicants"
+                    label="Vendors Plans"
                     {...a11yProps(3)}
                   />
                   <Tab
                     className={value === 4 ? "activeTab" : "tab_sub"}
-                    label="Updates"
+                    label="Applicants"
                     {...a11yProps(4)}
+                  />
+                  <Tab
+                    className={value === 5 ? "activeTab" : "tab_sub"}
+                    label="Updates"
+                    {...a11yProps(5)}
                   />
                 </Tabs>
               </Box>
@@ -166,9 +171,12 @@ function OtherScreen() {
                 <Subscribers />
               </TabPanel>
               <TabPanel value={value} index={3}>
-                <Applicants />
+                <VendorPlanCreate />
               </TabPanel>
               <TabPanel value={value} index={4}>
+                <Applicants />
+              </TabPanel>
+              <TabPanel value={value} index={5}>
                 <Updates />
               </TabPanel>
             </Box>

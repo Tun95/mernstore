@@ -277,56 +277,6 @@ applicationRoutes.put(
   })
 );
 
-// //=========
-// // DECLINED
-// //=========
-// applicationRoutes.put(
-//   "/:id",
-//   isAuth,
-//   isAdmin,
-//   expressAsyncHandler(async (req, res) => {
-//     const { id } = req.params;
-//     try {
-//       const application = await Apply.findById(id);
-//       if (!application) {
-//         res.status(404).json({ message: "Application not found" });
-//         return;
-//       }
-//       application.status = false;
-//       const updatedApplication = await application.save();
-
-//       res.json(updatedApplication);
-//     } catch (error) {
-//       res.status(500).json({ message: "Error updating application" });
-//     }
-//   })
-// );
-
-// //==========
-// // ACCEPT
-// //==========
-// applicationRoutes.put(
-//   "/:id/approve",
-//   isAuth,
-//   isAdmin,
-//   expressAsyncHandler(async (req, res) => {
-//     const { id } = req.params;
-//     try {
-//       const application = await Apply.findById(id);
-//       if (!application) {
-//         res.status(404).json({ message: "Application not found" });
-//         return;
-//       }
-//       application.status = true;
-//       const updatedApplication = await application.save();
-
-//       res.json(updatedApplication);
-//     } catch (error) {
-//       res.status(500).json({ message: "Error updating application" });
-//     }
-//   })
-// );
-
 //=======
 //DELETE
 //=======

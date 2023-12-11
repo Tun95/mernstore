@@ -86,7 +86,7 @@ const columns = [
     renderCell: (params) => {
       return (
         <>
-          <div className="cellWidthImg">{params.row.user?.lastName}</div>
+          <div className="cellWidthImg">{params.row?.lastName}</div>
         </>
       );
     },
@@ -98,7 +98,7 @@ const columns = [
     renderCell: (params) => {
       return (
         <>
-          <div className="cellWidthImg">{params.row.user?.firstName}</div>
+          <div className="cellWidthImg">{params.row?.firstName}</div>
         </>
       );
     },
@@ -110,12 +110,12 @@ const columns = [
     renderCell: (params) => {
       return (
         <>
-          <div className="cellWidthImg">{params.row.user?.email}</div>
+          <div className="cellWidthImg">{params.row?.email}</div>
         </>
       );
     },
   },
-  { field: "sellerName", headerName: "Store Name", width: 200 },
+  { field: "company", headerName: "Company", width: 200 },
   {
     field: "createdAt",
     headerName: "Date",
@@ -314,7 +314,7 @@ function Applicants() {
         <title>All Applicants</title>
       </Helmet>
       <div className="applicants">
-        <div className="datatable mtb">
+        <div className="datatable ">
           <span className="c_flex">
             <h3>All Applicants</h3>
           </span>

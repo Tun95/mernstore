@@ -27,11 +27,10 @@ const reducer = (state, action) => {
   }
 };
 function VendorScreen() {
-  const params = useParams();
   const { state, dispatch: ctxDispatch } = useContext(Context);
   const { userInfo } = state;
 
-  const [{ loading, error, user }, dispatch] = useReducer(reducer, {
+  const [{ loading, error }, dispatch] = useReducer(reducer, {
     loading: false,
     error: "",
   });
@@ -84,7 +83,7 @@ function VendorScreen() {
             state: selectedState,
             zipCode: values.zipCode,
             phone: selectedPhone,
-            status: true,
+            status: "pending",
           },
           {
             headers: { Authorization: `Bearer ${userInfo.token}` },
