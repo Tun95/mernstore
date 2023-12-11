@@ -1,8 +1,9 @@
-import React, { useEffect, useReducer } from "react";
+import React, { useContext, useEffect, useReducer } from "react";
 import "./styles.scss";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { request } from "../../base url/BaseUrl";
+import { Context } from "../../context/Context";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -19,6 +20,7 @@ const reducer = (state, action) => {
 
 function VendorPlans() {
   const navigate = useNavigate();
+  const { convertCurrency } = useContext(Context);
 
   const [{ loading, error, plans }, dispatch] = useReducer(reducer, {
     loading: true,
@@ -79,8 +81,10 @@ function VendorPlans() {
                     <h2>{item.name}</h2>
                   </div>
                   <div className="price_per_year l_flex">
-                    <h2>${item.price}</h2>
-                    <small>&#160;/ {item.range}</small>
+                    <span className="a_flex">
+                      <h2>{convertCurrency(item.price)}</h2>
+                      <small className="a_flex">/{item.range}</small>
+                    </span>
                   </div>
                   <div className="btn">
                     <button onClick={() => navigate("/apply-for-vendor")}>
