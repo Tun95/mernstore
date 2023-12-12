@@ -5,6 +5,7 @@ const applySchema = new mongoose.Schema(
     company: {
       type: String,
     },
+    
     taxNumber: {
       type: Number,
       default: 0,

@@ -26,6 +26,17 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import no from "../../assets/details/no.jpg";
+import "mapbox-gl/dist/mapbox-gl.css";
+import ReactMapGL, {
+  GeolocateControl,
+  NavigationControl,
+  FullscreenControl,
+  ScaleControl,
+  Marker,
+  Popup,
+} from "react-map-gl";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+
 
 //TEXT TRUNCATE
 function truncateText(text, maxWords) {
@@ -35,12 +46,61 @@ function truncateText(text, maxWords) {
   }
   return words.slice(0, maxWords).join(" ") + " ...";
 }
-//MAP MODAL
+
+// MAP MODAL
+// MAP MODAL
 export function LocationModal() {
-  //GOOGLE MAP
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const MAPBOX_TOKEN = process.env.REACT_APP_MAPBOX_PUBLIC;
+
+  // State for the map viewport
+  const [viewport, setViewport] = useState({
+    width: "100%",
+    height: "500px",
+    latitude: 48.858372,
+    longitude: 2.294481,
+    zoom: 8,
+  });
+
+  // State for the user's location
+  const [userLocation, setUserLocation] = useState(null);
+
+  // State for the popup
+  const [showPopup, setShowPopup] = useState(false);
+
+  // Handle the geolocate event
+  const onGeolocate = (options) => {
+    // Use the navigator.geolocation.getCurrentPosition method to get the user's location
+    navigator.geolocation.getCurrentPosition(
+      // Success callback
+      (position) => {
+        // Get the user's latitude and longitude from the position object
+        const { latitude, longitude } = position.coords;
+        // Set the user's location state
+        setUserLocation({ latitude, longitude });
+        // Set the map viewport to center on the user's location
+        setViewport({ ...viewport, latitude, longitude });
+        // Show the popup
+        setShowPopup(true);
+      },
+      // Error callback
+      (error) => {
+        // Handle the error
+        console.error(error);
+      },
+      // Position options
+      options // Pass the options object as the third argument
+    );
+  };
+
+  // Handle the popup close event
+  const onPopupClose = () => {
+    // Hide the popup
+    setShowPopup(false);
+  };
 
   return (
     <span>
@@ -59,10 +119,76 @@ export function LocationModal() {
             <h1>Customer location</h1>
             <CloseIcon onClick={handleClose} className="map_icon" />
           </div>
-          <div className="map"></div>
-          <div className="map_btn">
-            <button>OK</button>
+          <div className="map">
+            {/* map here please */}
+            <ReactMapGL
+              {...viewport}
+              mapboxAccessToken={MAPBOX_TOKEN}
+              onViewportChange={(nextViewport) => setViewport(nextViewport)}
+              transitionDuration={40}
+              style={{ position: "absolute", zIndex: "2" }}
+              mapStyle="mapbox://styles/mapbox/streets-v11"
+              interactive={true} // Add this prop here
+              onLoad={() => console.log("Map loaded successfully")}
+              onClick={() => console.log("Map clicked")}
+              dragPan={true} // Add this prop to enable panning with the mouse
+              scrollZoom={true}
+            >
+              <GeolocateControl
+                style={{ bottom: "50px", left: 0, margin: 10 }}
+                positionOptions={{ enableHighAccuracy: true }}
+                trackUserLocation
+                auto
+                onGeolocate={onGeolocate} // Add the event handler here
+              />
+
+              <FullscreenControl />
+              <NavigationControl />
+              <ScaleControl />
+
+              {userLocation && ( // Check if the user's location is available
+                <div>
+                  <Marker
+                    latitude={userLocation.latitude}
+                    longitude={userLocation.longitude}
+                    offsetLeft={-20}
+                    offsetTop={-10}
+                  >
+                    <div>
+                      <LocationOnIcon />
+                    </div>
+                  </Marker>
+                  {showPopup && ( // Check if the popup should be shown
+                    <Popup
+                      latitude={userLocation.latitude}
+                      longitude={userLocation.longitude}
+                      closeButton={true}
+                      closeOnClick={false}
+                      onClose={onPopupClose} // Add the event handler here
+                      dynamicPosition={true}
+                      anchor="bottom"
+                    >
+                      <div>
+                        <span
+                          style={{
+                            fontSize: "16px",
+                            maxWidth: "100px",
+                            height: "100px",
+                          }}
+                        >
+                          Your location is {userLocation.latitude.toFixed(2)},{" "}
+                          {userLocation.longitude.toFixed(2)}
+                        </span>
+                      </div>
+                    </Popup>
+                  )}
+                </div>
+              )}
+            </ReactMapGL>
           </div>
+          {/* <div className="map_btn">
+            <button>OK</button>
+          </div> */}
         </Box>
       </Modal>
     </span>

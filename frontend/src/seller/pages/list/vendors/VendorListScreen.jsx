@@ -245,11 +245,11 @@ function VendorListScreen() {
                 {vendors?.map((item, index) => (
                   <li key={index} className="d_flex">
                     <div className="img_rating l_flex">
-                      <Link to="/company-view" className="img">
+                      <Link to={`/vendors/:slug`} className="img">
                         <img src={item.img} alt={item.name} />
                       </Link>
                       <Link
-                        to="/company-view"
+                        to={`/vendors/:slug`}
                         className={`num_rating ${
                           item.rating === 0 ? "no_rating" : ""
                         }`}
@@ -259,7 +259,7 @@ function VendorListScreen() {
                       </Link>
                     </div>
                     <div className="name_desc a_flex">
-                      <Link to="/company-view">
+                      <Link to={`/vendors/:slug`}>
                         <h3>{item.name}</h3>
                       </Link>
                       <small>{item.description}</small>

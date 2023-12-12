@@ -32,7 +32,7 @@
                 display: flex;
                 align-items: center;
                 label {
-                  font-weight: 600;
+                  font-weight: 500;
                   color: var(--color-gray);
                   margin-right: 10px;
                 }
@@ -66,14 +66,14 @@
                 margin-top: -10px;
 
                 label {
-                  font-weight: 600;
+                  font-weight: 500;
                   color: var(--color-gray);
                 }
                 input {
-                  padding: 7px;
+                  padding: 10px;
                   font-size: 16px;
                   border-radius: 5px;
-                  border: 2px solid var(--color-light-gray);
+                  border: 1px solid var(--color-light-gray);
                 }
                 .eye-icon {
                   float: right;

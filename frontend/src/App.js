@@ -10,6 +10,7 @@ import MessengerCustomerChat from "react-messenger-customer-chat";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import LoadingOverlayComponent from "./components/utilities/message loading/OverlayLoading";
+import "mapbox-gl/dist/mapbox-gl.css";
 
 import Header from "./common/header/Header";
 import HomeScreen from "./screens/homescreen/HomeScreen";
@@ -178,7 +179,7 @@ function App() {
               element={<VendorProductScreen />}
             ></Route>
             <Route path="/vendors" element={<VendorListScreen />}></Route>
-            <Route path="/company-view" element={<CompanyViewScreen />}></Route>
+            <Route path="/vendors/:slug" element={<CompanyViewScreen />}></Route>
             <Route path="/vendors-plan" element={<VendorPlanScreen />}></Route>
             {/* VENDOR */}
 

@@ -24,6 +24,16 @@
       cursor: pointer;
     }
   }
+  .map {
+    position: relative;
+    z-index: 1;
+    height: 550px;
+    overflow: hidden;
+    .icon {
+      font-size: 18px;
+      color: var(--color-blue) !important;
+    }
+  }
   .map_btn {
     position: absolute;
     bottom: 0;
@@ -398,7 +408,6 @@
   }
 }
 .video_modal {
- 
   background-color: var(--color-dark);
   .video {
   }

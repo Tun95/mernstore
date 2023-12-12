@@ -40,6 +40,7 @@ const userSchema = new mongoose.Schema(
     isSeller: { type: Boolean, default: false, required: true },
     seller: {
       name: String,
+      slug: String,
       logo: String,
       description: String,
       rating: { type: Number, default: 0 },
@@ -49,6 +50,8 @@ const userSchema = new mongoose.Schema(
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
       },
+      longitude: { type: Number }, // Add this line for longitude
+      latitude: { type: Number },
     },
     isAccountVerified: { type: Boolean, default: false },
     accountVerificationToken: { type: String },
@@ -99,6 +102,40 @@ const userSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+
+// Pre-save middleware to generate slug from seller name
+userSchema.pre("save", async function (next) {
+  if (
+    (this.isModified("seller.name") || !this.seller.slug) &&
+    this.seller.name
+  ) {
+    let sellerName = this.seller.name || "Default Seller"; // Use a default seller name if it's missing or undefined
+    let baseSlug = sellerName
+      .toLowerCase()
+      .replace(/ /g, "-")
+      .replace(/[^\w-]+/g, "");
+
+    // Check for duplicate slugs
+    const existingUser = await this.constructor.findOne({
+      "seller.slug": baseSlug,
+    });
+
+    if (existingUser) {
+      let counter = 1;
+      while (
+        await this.constructor.findOne({
+          "seller.slug": `${baseSlug}-${counter}`,
+        })
+      ) {
+        counter++;
+      }
+      this.seller.slug = `${baseSlug}-${counter}`;
+    } else {
+      this.seller.slug = baseSlug;
+    }
+  }
+  next();
+});
 
 // Generate and save an affiliate code for the user
 userSchema.methods.generateAffiliateCode = async function () {
