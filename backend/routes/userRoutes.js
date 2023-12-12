@@ -110,6 +110,139 @@ userRouter.get(
   })
 );
 
+//=================
+// CREATE REVIEWS
+//=================
+userRouter.post(
+  "/:userId/reviews",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const { firstName, lastName, email, image, comment, rating } = req.body;
+    const userId = req.params.userId;
+
+    const user = await User.findById(userId);
+
+    if (user) {
+      // Check if the user already has a review
+      const existingReview = user.seller.reviews.find(
+        (review) => review.user.toString() === userId
+      );
+
+      if (existingReview) {
+        // If the user already has a review, you can choose to handle this case accordingly
+        return res
+          .status(400)
+          .json({ message: "User has already submitted a review" });
+      }
+
+      const newReview = {
+        firstName,
+        lastName,
+        email,
+        image,
+        comment,
+        rating,
+        user: userId,
+      };
+
+      user.seller.reviews.push(newReview);
+
+      user.seller.numReviews = user.seller.reviews.length;
+
+      await user.save();
+
+      // Update the seller's rating
+      await user.updateSellerRating();
+
+      res.status(201).json({ message: "Review created successfully" });
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  })
+);
+
+//=================
+// FETCH REVIEWS
+//=================
+userRouter.get(
+  "/:userId/reviews",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const userId = req.params.userId;
+    const user = await User.findById(userId);
+
+    if (user) {
+      const reviews = user.seller.reviews;
+      res.status(200).json(reviews);
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  })
+);
+
+//=================
+// UPDATE REVIEWS
+//=================
+userRouter.put(
+  "/:userId/reviews/:id",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const userId = req.params.userId;
+    const reviewId = req.params.id;
+    const { comment, rating } = req.body;
+
+    const user = await User.findById(userId);
+
+    if (user) {
+      const review = user.seller.reviews.id(reviewId);
+
+      if (review) {
+        review.comment = comment;
+        review.rating = rating;
+
+        await user.save();
+
+        res.status(200).json({ message: "Review updated successfully" });
+      } else {
+        res.status(404).json({ message: "Review not found" });
+      }
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  })
+);
+
+//=================
+// DELETE REVIEWS
+//=================
+userRouter.delete(
+  "/:userId/reviews/:id",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const userId = req.params.userId;
+    const reviewId = req.params.id;
+
+    const user = await User.findById(userId);
+
+    if (user) {
+      const review = user.seller.reviews.id(reviewId);
+
+      if (review) {
+        review.remove();
+        user.seller.numReviews = user.seller.reviews.length;
+
+        await user.save();
+
+        res.status(200).json({ message: "Review deleted successfully" });
+      } else {
+        res.status(404).json({ message: "Review not found" });
+      }
+    } else {
+      res.status(404).json({ message: "User not found" });
+    }
+  })
+);
+
 //=======================
 // AFFILIATE CODE
 //=======================

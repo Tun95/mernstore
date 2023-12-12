@@ -3,6 +3,24 @@ import crypto from "crypto";
 import bcrypt from "bcryptjs";
 import Order from "./orderModels.js";
 
+const reviewSchema = new mongoose.Schema(
+  {
+    firstName: { type: String, required: true },
+    lastName: { type: String, required: true },
+    email: { type: String, required: true },
+    image: { type: String },
+    comment: { type: String, required: true },
+    rating: { type: Number, required: true },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+
 const userSchema = new mongoose.Schema(
   {
     firstName: { type: String, required: true },
@@ -24,8 +42,9 @@ const userSchema = new mongoose.Schema(
       name: String,
       logo: String,
       description: String,
-      rating: { type: Number },
-      numReviews: { type: Number },
+      rating: { type: Number, default: 0 },
+      numReviews: { type: Number, default: 0 },
+      reviews: [reviewSchema],
       product: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Product",
@@ -143,6 +162,21 @@ userSchema.methods.calculateGrandTotalEarnings = async function () {
   } catch (error) {
     throw new Error("Failed to calculate grandTotalEarnings for the seller.");
   }
+};
+
+//Sellers rating update
+userSchema.methods.updateSellerRating = async function () {
+  const numReviews = this.seller.reviews.length;
+  if (numReviews > 0) {
+    const totalRating = this.seller.reviews.reduce(
+      (total, review) => total + review.rating,
+      0
+    );
+    this.seller.rating = totalRating / numReviews;
+  } else {
+    this.seller.rating = 0;
+  }
+  await this.save();
 };
 
 //Virtual method to populate created product
