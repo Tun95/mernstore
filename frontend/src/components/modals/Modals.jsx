@@ -26,7 +26,7 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import no from "../../assets/details/no.jpg";
-import mapboxgl from "mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
+import mapboxgl from "!mapbox-gl"; // eslint-disable-line import/no-webpack-loader-syntax
 
 //TEXT TRUNCATE
 function truncateText(text, maxWords) {
@@ -67,7 +67,14 @@ export function LocationModal() {
       setLat(map.current.getCenter().lat.toFixed(4));
       setZoom(map.current.getZoom().toFixed(2));
     });
-  });
+
+    return () => {
+      // Cleanup the map when the component is unmounted
+      if (map.current) {
+        map.current.remove();
+      }
+    };
+  }, [lat, lng, open, zoom]);
   return (
     <span>
       <Button onClick={handleOpen} className="button-text a_flex">

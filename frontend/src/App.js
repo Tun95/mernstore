@@ -179,7 +179,10 @@ function App() {
               element={<VendorProductScreen />}
             ></Route>
             <Route path="/vendors" element={<VendorListScreen />}></Route>
-            <Route path="/vendors/:slug" element={<CompanyViewScreen />}></Route>
+            <Route
+              path="/vendors/:slug"
+              element={<CompanyViewScreen />}
+            ></Route>
             <Route path="/vendors-plan" element={<VendorPlanScreen />}></Route>
             {/* VENDOR */}
 

@@ -22,6 +22,9 @@ import {
 import CloseOutlinedIcon from "@mui/icons-material/CloseOutlined";
 
 function VendorListScreen() {
+
+  
+
   const [searchExpanded, setSearchExpanded] = useState(true);
   const toggleSearch = () => {
     setSearchExpanded(!searchExpanded);
