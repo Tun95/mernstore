@@ -3,13 +3,16 @@
   margin-bottom: 50px;
   label,
   p,
-  a {
+  a,
+  .resend {
     font-size: 14px;
   }
-  a {
+  a,
+  .resend {
     color: var(--color-gray);
+    cursor: pointer;
   }
- 
+
   .form-box-content {
     display: grid;
     grid-template-columns: 50% 50%;

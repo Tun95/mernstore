@@ -27,6 +27,10 @@ userRouter.post(
         message: "😲 It appears this account has been blocked by Admin",
       });
     }
+    // Check if the user is verified by OTP
+    if (!user.isAccountVerified) {
+      return res.status(401).send({ message: "Account not verified" });
+    }
     if (bcrypt.compareSync(req.body.password, user.password)) {
       res.send({
         _id: user._id,
@@ -38,6 +42,7 @@ userRouter.post(
         isSeller: user.isSeller,
         isAffiliate: user.isAffiliate,
         isBlocked: user.isBlocked,
+        isLoggedIn: user.isLoggedIn,
         isAccountVerified: user.isAccountVerified,
         token: generateToken(user),
       });
@@ -77,6 +82,30 @@ userRouter.post(
       isAccountVerified: user.isAccountVerified,
       token: generateToken(user),
     });
+  })
+);
+
+//==============
+// USER SIGN OUT
+//==============
+userRouter.post(
+  "/signout",
+  expressAsyncHandler(async (req, res) => {
+    const userId = req.user._id;
+
+    try {
+      // Find the user by ID and update isLoggedIn to false
+      const user = await User.findByIdAndUpdate(userId, { isLoggedIn: false });
+
+      if (user) {
+        res.send({ message: "User signed out successfully" });
+      } else {
+        res.status(404).send({ message: "User not found" });
+      }
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
   })
 );
 
@@ -1101,24 +1130,29 @@ userRouter.put(
 );
 
 //=================================
-//Generate Email Verification Token
+// Route to handle OTP generation and email verification for user registration and login
 //=================================
 userRouter.post(
-  "/verification-token",
-  isAuth,
+  "/otp-verification",
   expressAsyncHandler(async (req, res) => {
     const settings = await Settings.findOne({});
     const { facebook, twitter, whatsapp } = settings || {};
 
-    const loginUserId = req?.user?._id;
-    const user = await User.findById(loginUserId);
     try {
-      const verificationToken = await user?.createAccountVerificationToken();
-      await user.save();
-      console.log(verificationToken);
+      // Get user information from the registration request
+      const { email } = req.body; // Adjust this based on your registration request structure
 
-      // Generate the verification link
-      const verificationLink = `${process.env.SUB_DOMAIN}/verify-success/${user.id}/${verificationToken}`;
+      // Find the user by email in the database
+      const user = await User.findOne({ email });
+
+      // Check if the user exists
+      if (!user) {
+        return res.status(400).json({ message: "User not found" });
+      }
+
+      // Generate and save OTP for account verification
+      const verificationOtp = await user.createAccountVerificationOtp();
+      await user.save();
 
       // HTML message
       const emailMessage = `
@@ -1169,10 +1203,9 @@ userRouter.post(
           <h1>Email Verification</h1>
           <p>Hello ${user.firstName},</p>
           <p>You have received this email because you have been requested to verify your account.</p>
-          <p>Please click the button below to verify your account:</p>
-          <a class="anchor" href="${verificationLink}">Verify Account</a>
+          <p>Your verification code is: <strong>${verificationOtp}</strong></p>
           <p>If you did not request this verification, you can safely ignore this email.</p>
-          <p>This verification link is valid for the next 10 minutes.</p>
+          <p>This verification code is valid for the next 10 minutes.</p>
           <p>Thank you,</p>
           <p>${process.env.SHOP_NAME} Team</p>
           <hr/>
@@ -1244,27 +1277,38 @@ userRouter.post(
 );
 
 //===============
-//Account Verification
+//OTP Verification
 //===============
 userRouter.put(
-  "/verify-account/:id/",
+  "/verify-otp/:id",
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const { token } = req?.body;
-    const hashedToken = crypto.createHash("sha256").update(token).digest("hex");
-    //find user by token
-    const userFound = await User.findOne({
-      accountVerificationToken: hashedToken,
-      accountVerificationTokenExpires: { $gt: new Date() },
-    });
-    if (!userFound) {
-      throw new Error("Invalid token or Token expired, try again");
+    const { otp } = req?.body;
+
+    try {
+      // Find user by OTP and check if the entered OTP matches
+      const userFound = await User.findOne({
+        accountVerificationOtp: otp,
+        accountVerificationOtpExpires: { $gt: new Date() },
+      });
+
+      if (!userFound) {
+        return res
+          .status(400)
+          .json({ message: "Invalid OTP or OTP expired. Please try again." });
+      }
+
+      // Mark the user as verified and clear OTP-related fields
+      userFound.isAccountVerified = true;
+      userFound.accountVerificationOtp = undefined;
+      userFound.accountVerificationOtpExpires = undefined;
+      await userFound.save();
+
+      res.json({ message: "OTP successfully verified." });
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ message: "Internal Server Error" });
     }
-    userFound.isAccountVerified = true;
-    userFound.accountVerificationToken = undefined;
-    userFound.accountVerificationTokenExpires = undefined;
-    await userFound.save();
-    res.send(userFound);
   })
 );
 

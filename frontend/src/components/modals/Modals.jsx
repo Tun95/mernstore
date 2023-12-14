@@ -75,6 +75,7 @@ export function LocationModal() {
       }
     };
   }, [lat, lng, open, zoom]);
+  
   return (
     <span>
       <Button onClick={handleOpen} className="button-text a_flex">

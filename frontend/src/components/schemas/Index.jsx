@@ -47,10 +47,17 @@ export const newPassSchema = yup.object().shape({
     .required("Password is reqiured*"),
 });
 
-export const otpSchema = yup
-  .object()
-  .shape({ otp: yup.number().required("OTP box is empty*") });
-
+export const otpSchema = yup.object().shape({
+  otp: yup
+    .number()
+    .required("OTP box is empty*")
+    .integer("OTP must be a whole number")
+    .test(
+      "len",
+      "OTP must be exactly 6 digits",
+      (val) => val && val.toString().length === 6
+    ),
+});
 export const contactSchema = yup.object().shape({
   name: yup.string().required("Name is required*"),
   email: yup

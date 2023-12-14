@@ -37,7 +37,6 @@ function PasswordResetFormScreen() {
 
   const [{ loading, error }, dispatch] = useReducer(reducer, {
     loading: true,
-    order: {},
     error: "",
   });
   //TOGGLE PASSWOD VIEW
@@ -78,13 +77,13 @@ function PasswordResetFormScreen() {
       setTimeout(() => {
         navigate("/login");
       }, 3000);
+      setTimeout(() => {
+        actions.resetForm();
+      }, 2000);
     } catch (err) {
       dispatch({ type: "SUBMIT_FAIL" });
       toast.error(getError(err), { position: "bottom-center" });
     }
-    setTimeout(() => {
-      actions.resetForm();
-    }, 2000);
   };
   return (
     <div className="form-box">

@@ -84,6 +84,7 @@ import Filters from "./admin/pages/single/filters/Filters";
 import { Banner } from "./admin/pages/new/banner/Banner";
 import { Promotion } from "./admin/pages/new/promotion/Promotion";
 import { BlogCreateUpdate } from "./admin/pages/new/blog/BlogCreateUpdate";
+import VerifyOtpScreen from "./screens/formscreens/verifyloginscreen/VerifyOtpScreen";
 
 TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
@@ -267,12 +268,8 @@ function App() {
               element={<AccountVerifyScreen />}
             ></Route>
             <Route
-              path="/verify-success/:id/:token"
-              element={
-                <ProtectedRoute>
-                  <VerifySuccessScreen />
-                </ProtectedRoute>
-              }
+              path="/otp-verification"
+              element={<VerifyOtpScreen />}
             ></Route>
             <Route
               path="/apply-for-vendor"

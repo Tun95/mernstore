@@ -12,11 +12,12 @@ export const generateToken = (user) => {
       isSeller: user.isSeller,
       isAffiliate: user.isAffiliate,
       isBlocked: user.isBlocked,
+      isLoggedIn: user.isLoggedIn,
       isAccountVerified: user.isAccountVerified,
     },
     process.env.JWT_SECRET || "somethingsecret",
     {
-      expiresIn: "30d",
+      expiresIn: "3d",
     }
   );
 };

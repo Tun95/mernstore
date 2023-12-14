@@ -23,11 +23,6 @@ function VerifySuccessScreen() {
   const params = useParams();
   const { token, id: userId } = params;
 
-  const navigate = useNavigate();
-  const { search } = useLocation();
-  const redirectUnUrl = new URLSearchParams(search).get("redirect");
-  const redirect = redirectUnUrl ? redirectUnUrl : "/login";
-
   const { state, dispatch: ctxDispatch } = useContext(Context);
   const { userInfo } = state;
   const [{ loading, error }, dispatch] = useReducer(reducer, {

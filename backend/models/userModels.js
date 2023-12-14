@@ -32,6 +32,7 @@ const userSchema = new mongoose.Schema(
     image: { type: String },
     isBlocked: { type: Boolean, default: false },
     application: { type: Boolean, default: false },
+    isLoggedIn: { type: Boolean, default: false },
     password: { type: String, required: true },
     passwordChangeAt: Date,
     passwordResetToken: String,
@@ -54,8 +55,8 @@ const userSchema = new mongoose.Schema(
       latitude: { type: Number },
     },
     isAccountVerified: { type: Boolean, default: false },
-    accountVerificationToken: { type: String },
-    accountVerificationTokenExpires: { type: Date },
+    accountVerificationOtp: { type: String },
+    accountVerificationOtpExpires: { type: Date },
 
     //Affiliate
     isAffiliate: { type: Boolean, default: false }, // Indicates if the user is an affiliate
@@ -245,15 +246,17 @@ userSchema.virtual("apply", {
 });
 
 //Verify Account
-userSchema.methods.createAccountVerificationToken = async function () {
-  const verificationToken = crypto.randomBytes(32).toString("hex");
-  this.accountVerificationToken = crypto
-    .createHash("sha256")
-    .update(verificationToken)
-    .digest("hex");
+userSchema.methods.createAccountVerificationOtp = async function () {
+  // Generate a random 6-digit verification code
+  const verificationCode = Math.floor(
+    100000 + Math.random() * 900000
+  ).toString();
 
-  this.accountVerificationTokenExpires = Date.now() + 30 * 60 * 1000; //10 mins
-  return verificationToken;
+  // Set the verification code and expiration time
+  this.accountVerificationOtp = verificationCode;
+  this.accountVerificationOtpExpires = Date.now() + 5 * 60 * 1000; // 10 mins
+
+  return verificationCode;
 };
 
 //Password Reset

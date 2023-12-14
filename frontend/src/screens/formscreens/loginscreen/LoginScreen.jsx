@@ -13,7 +13,6 @@ import { Context } from "../../../context/Context";
 import { getError } from "../../../components/utilities/util/Utils";
 import { request } from "../../../base url/BaseUrl";
 import { Helmet } from "react-helmet-async";
-import { GoogleLogin } from "@react-oauth/google";
 
 function LoginScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Context);
@@ -52,14 +51,32 @@ function LoginScreen() {
         email: values.email,
         password: values.password,
       });
-      console.log(data);
-      ctxDispatch({ type: "USER_SIGNIN", payload: data });
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      setTimeout(() => {
-        actions.resetForm();
-      }, 1000);
-      navigate(redirect || "/");
-      toast.success("Sign in successfully", { position: "bottom-center" });
+
+      localStorage.setItem("temporaryUserInfo", JSON.stringify(data));
+
+      // Send OTP verification email
+      const otpResponse = await axios.post(
+        `${request}/api/users/otp-verification`,
+        {
+          email: values.email,
+        }
+      );
+
+      if (otpResponse.status === 200) {
+        // Redirect to OTP verification screen
+        navigate("/otp-verification");
+        toast.success(
+          "An OTP Verification email has been sent to your email.",
+          {
+            position: "bottom-center",
+          }
+        );
+      } else {
+        // Handle error
+        toast.error("Failed to send verification email", {
+          position: "bottom-center",
+        });
+      }
     } catch (err) {
       toast.error(getError(err), {
         position: "bottom-center",
@@ -67,39 +84,6 @@ function LoginScreen() {
       });
     }
   };
-
-  //============
-  //GOOGLE LOGIN
-  //============
-  // const handleGoogleLoginSuccess = (response) => {
-  //   // Send the Google access token to your backend for validation
-  //   // Here, you can use an API endpoint to handle the communication with your backend
-  //   fetch(`${request}/api/users/auth/google`, {
-  //     method: "GET",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //       Authorization: `Bearer ${response.accessToken}`,
-  //     },
-  //   })
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       // Data returned from the backend (including JWT token)
-  //       console.log(data);
-
-  //       // Save the token to localStorage or handle it securely based on your needs
-  //       localStorage.setItem("userInfo", JSON.stringify(data.token));
-
-  //       // Redirect the user to the dashboard or any other protected route
-  //       navigate("/");
-  //     })
-  //     .catch((error) => {
-  //       console.error("Error during Google login:", error);
-  //     });
-  // };
-
-  // const handleGoogleLoginFailure = (error) => {
-  //   console.log("Google login failed:", error);
-  // };
 
   useEffect(() => {
     if (userInfo) {
