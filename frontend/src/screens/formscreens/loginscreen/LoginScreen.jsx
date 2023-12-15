@@ -64,6 +64,9 @@ function LoginScreen() {
 
       if (otpResponse.status === 200) {
         // Redirect to OTP verification screen
+         setTimeout(() => {
+           actions.resetForm();
+         }, 1000);
         navigate("/otp-verification");
         toast.success(
           "An OTP Verification email has been sent to your email.",

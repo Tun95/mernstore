@@ -75,7 +75,7 @@ export function LocationModal() {
       }
     };
   }, [lat, lng, open, zoom]);
-  
+
   return (
     <span>
       <Button onClick={handleOpen} className="button-text a_flex">
@@ -290,12 +290,7 @@ const initialLoginValues = {
   password: "",
 };
 export function LoginModals({ toggleDrawer, anchor }) {
-  const { state, dispatch: ctxDispatch } = useContext(Context);
-
   const navigate = useNavigate();
-  const { search } = useLocation();
-  const redirectUnUrl = new URLSearchParams(search).get("redirect");
-  const redirect = redirectUnUrl ? redirectUnUrl : "/";
 
   //TOGGLE PASSWOD VIEW
   const [type, setType] = useState("password");
@@ -325,16 +320,36 @@ export function LoginModals({ toggleDrawer, anchor }) {
         email: values.email,
         password: values.password,
       });
-      console.log(data);
-      ctxDispatch({ type: "USER_SIGNIN", payload: data });
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      setTimeout(() => {
-        actions.resetForm();
-      }, 1000);
-      toggleDrawer(anchor, false);
-      navigate(redirect || "/");
-      toast.success("Sign in successfully", { position: "bottom-center" });
-      handleCloseLogin();
+
+      localStorage.setItem("temporaryUserInfo", JSON.stringify(data));
+
+      // Send OTP verification email
+      const otpResponse = await axios.post(
+        `${request}/api/users/otp-verification`,
+        {
+          email: values.email,
+        }
+      );
+
+      if (otpResponse.status === 200) {
+        // Redirect to OTP verification screen
+        setTimeout(() => {
+          actions.resetForm();
+        }, 1000);
+        handleCloseLogin();
+        navigate("/otp-verification");
+        toast.success(
+          "An OTP Verification email has been sent to your email.",
+          {
+            position: "bottom-center",
+          }
+        );
+      } else {
+        // Handle error
+        toast.error("Failed to send verification email", {
+          position: "bottom-center",
+        });
+      }
     } catch (err) {
       toast.error(getError(err), {
         position: "bottom-center",

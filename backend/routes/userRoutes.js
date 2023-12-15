@@ -79,6 +79,7 @@ userRouter.post(
       isSeller: user.isSeller,
       isAffiliate: user.isAffiliate,
       isBlocked: user.isBlocked,
+      isLoggedIn: user.isLoggedIn,
       isAccountVerified: user.isAccountVerified,
       token: generateToken(user),
     });
@@ -1019,24 +1020,29 @@ userRouter.get(
   })
 );
 
-//ADMIN USER DELETE
+// ADMIN USER DELETE
 userRouter.delete(
   "/:id",
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id);
+
     if (!user) {
       return res.status(404).send({ message: "User Not Found" });
     }
-    if (user) {
-      if (user.isAdmin) {
-        return res.status(400).send({ message: "Cannot Delete Admin User" });
-      }
-      await user.remove();
-      res.send({ message: "User Deleted Successfuly" });
-    } else {
-      res.status(404).send({ message: "User Not Found" });
+
+    if (user.isAdmin) {
+      return res.status(400).send({ message: "Cannot Delete Admin User" });
+    }
+
+    try {
+      // Use deleteOne to delete the user
+      await User.deleteOne({ _id: req.params.id });
+      res.send({ message: "User Deleted Successfully" });
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      res.status(500).send({ message: "Internal Server Error" });
     }
   })
 );

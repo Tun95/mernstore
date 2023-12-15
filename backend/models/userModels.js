@@ -254,7 +254,7 @@ userSchema.methods.createAccountVerificationOtp = async function () {
 
   // Set the verification code and expiration time
   this.accountVerificationOtp = verificationCode;
-  this.accountVerificationOtpExpires = Date.now() + 5 * 60 * 1000; // 10 mins
+  this.accountVerificationOtpExpires = Date.now() + 10 * 60 * 1000; // 10 mins
 
   return verificationCode;
 };

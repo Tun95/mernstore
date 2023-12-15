@@ -35,24 +35,6 @@ function VerifyOtpScreen() {
     error: "",
   });
 
-  const [countdown, setCountdown] = useState(
-    parseInt(localStorage.getItem("countdown"), 10) || 8
-  );
-
-  useEffect(() => {
-    // Connect to socket.io server
-    const socket = io(request); // replace with your server URL
-
-    // Listen for server updates on countdown
-    socket.on("countdown", (newCountdown) => {
-      setCountdown(newCountdown);
-    });
-
-    return () => {
-      socket.disconnect(); // Disconnect the socket when the component unmounts
-    };
-  }, []);
-
   const initialValues = {
     otp: "",
   };
@@ -123,10 +105,6 @@ function VerifyOtpScreen() {
           email: temporaryUserInfo.email,
         });
 
-        // Notify the server that the countdown should start again
-        const socket = io(request); // replace with your server URL
-        socket.emit("startCountdown");
-
         toast.success("Verification email resent successfully", {
           position: "bottom-center",
         });
@@ -140,20 +118,6 @@ function VerifyOtpScreen() {
       toast.error(getError(err), { position: "bottom-center" });
     }
   };
-
-  // Update the countdown every second
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (countdown > 0) {
-        setCountdown(countdown - 1);
-        localStorage.setItem("countdown", countdown - 1);
-      }
-    }, 1000);
-
-    return () => {
-      clearInterval(intervalId); // Clear the interval when the component unmounts
-    };
-  }, [countdown]);
 
   return (
     <div className="form-box">
@@ -196,9 +160,7 @@ function VerifyOtpScreen() {
                         OTP<span className="red">*</span>
                       </label>
                       <span className="resend" onClick={handleResendOtp}>
-                        {countdown > 0
-                          ? `Resend OTP in ${countdown} seconds`
-                          : "Resend OTP"}
+                        Resend OTP
                       </span>
                     </div>
 

@@ -114,13 +114,25 @@ function Subscribers() {
   //=================
   const deleteHandler = async (subscriber) => {
     try {
+      // Display a confirmation dialog
+      const confirmed = window.confirm(
+        "Are you sure you want to delete this subscriber?"
+      );
+
+      if (!confirmed) {
+        return; // Do nothing if the user cancels the deletion
+      }
+
       dispatch({ type: "DELETE_REQUEST" });
+
       await axios.delete(`${request}/api/message/${subscriber.id}`, {
         headers: { Authorization: `Bearer ${userInfo.token}` },
       });
+
       toast.success("Deleted successfully", {
         position: "bottom-center",
       });
+
       dispatch({ type: "DELETE_SUCCESS" });
     } catch (err) {
       toast.error(getError(err), { position: "bottom-center" });

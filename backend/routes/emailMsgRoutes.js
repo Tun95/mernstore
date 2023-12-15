@@ -49,18 +49,26 @@ sendEmailRouter.post(
   "/subscribe",
   // isAuth,
   expressAsyncHandler(async (req, res) => {
-    const emailExist = await EmailMsg.findOne({ email: req.body.email });
-    if (emailExist) {
-      return res.status(400).send({ message: "Email already exists" });
+    try {
+      const emailExist = await EmailMsg.findOne({ email: req.body.email });
+
+      if (emailExist) {
+        return res.status(400).send({ message: "Email already exists" });
+      }
+
+      const subscribe = await EmailMsg.create({
+        email: req.body.email,
+        //user: req.user._id,
+      });
+
+      res.status(200).send({
+        message: "You have successfully subscribed to our newsletter",
+      });
+      console.log(subscribe);
+    } catch (error) {
+      console.error("Error during subscription:", error);
+      res.status(500).send({ message: "Internal Server Error" });
     }
-    const subscribe = await EmailMsg.create({
-      email: req.body.email,
-      //user: req.user._id,
-    });
-    res
-      .status(200)
-      .send({ message: "You have successfully subscribe to our newsletter" });
-    console.log(subscribe);
   })
 );
 
@@ -103,12 +111,18 @@ sendEmailRouter.delete(
   // isAuth,
   // isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const subscriber = await EmailMsg.findById(req.params.id);
-    if (subscriber) {
-      await subscriber.remove();
-      res.send({ message: "Subscriber Deleted Successfully" });
-    } else {
-      res.status(404).send({ message: "Subscriber Not Found" });
+    try {
+      const subscriber = await EmailMsg.findById(req.params.id);
+
+      if (subscriber) {
+        await EmailMsg.deleteOne({ _id: req.params.id });
+        res.send({ message: "Subscriber Deleted Successfully" });
+      } else {
+        res.status(404).send({ message: "Subscriber Not Found" });
+      }
+    } catch (err) {
+      console.error(err);
+      res.status(500).send({ message: "Internal Server Error" });
     }
   })
 );
@@ -121,15 +135,14 @@ sendEmailRouter.post(
   expressAsyncHandler(async (req, res) => {
     const { subject, message } = req.body;
 
-    EmailMsg.find({}, function (err, allUsers) {
-      if (err) {
-        console.log(err);
-      }
-      const mailList = [];
-      allUsers.forEach(function (users) {
-        mailList.push(users.email);
-        return mailList;
-      });
+    try {
+      // Retrieve all email addresses from the database
+      const allUsers = await EmailMsg.find({});
+
+      // Extract email addresses into an array
+      const mailList = allUsers.map((user) => user.email);
+
+      // Create a SMTP transport for sending emails
       const smtpTransport = nodemailer.createTransport({
         service: process.env.MAIL_SERVICE,
         auth: {
@@ -142,84 +155,56 @@ sendEmailRouter.post(
       const unsubscribeLink = `${process.env.SUB_DOMAIN}/unsubscribe`;
       const shopName = process.env.SHOP_NAME;
 
+      // Your email template
       const emailMessageWithUnsubscribe = `
         <html>
-        <head>
-          <style>
-            body {
-              font-family: Arial, sans-serif;
-              margin: 0;
-              padding: 0;
-            }
-            .container {
-              background-color: #f4f4f4;
-              padding: 20px;
-            }
-            .header {
-              background-color: #007bff;
-              color: #ffffff;
-              padding: 10px;
-              text-align: center;
-            }
-            .content {
-              background-color: #ffffff;
-              padding: 20px;
-            }
-            .footer {
-              background-color: #f4f4f4;
-              padding: 10px;
-              text-align: center;
-            }
-            .unsubscribe {
-              margin-top: 20px;
-              text-align: center;
-            }
-            .unsubscribe a {
-              color: #007bff;
-              text-decoration: none;
-            }
-          </style>
-        </head>
-        <body>
-          <div class="container">
-            <div class="header">
-              <h1>${shopName}</h1>
+          <head>
+            <style>
+              /* Add your email styles here */
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h1>${shopName}</h1>
+              </div>
+              <div class="content">
+                ${message}
+              </div>
+              <div class="footer">
+                <p>If you wish to unsubscribe from our newsletter, <a href="${unsubscribeLink}">click here</a>.</p>
+              </div>
+              <div class="unsubscribe">
+                <p><a href="${unsubscribeLink}">Unsubscribe</a> from our newsletter</p>
+              </div>
             </div>
-            <div class="content">
-              ${message}
-            </div>
-            <div class="footer">
-              <p>If you wish to unsubscribe from our newsletter, <a href="${unsubscribeLink}">click here</a>.</p>
-            </div>
-            <div class="unsubscribe">
-              <p><a href="${unsubscribeLink}">Unsubscribe</a> from our newsletter</p>
-            </div>
-          </div>
-        </body>
+          </body>
         </html>
       `;
 
+      // Configure mail options
       const mailOptions = {
-        to: [],
-        bcc: mailList,
+        to: [], // Add your "to" email addresses here if needed
+        bcc: mailList, // Use bcc for sending to multiple recipients
         from: `${shopName} ${process.env.EMAIL_ADDRESS}`,
         subject,
         html: emailMessageWithUnsubscribe,
       };
 
-      smtpTransport.sendMail(mailOptions, function (err) {
-        if (err) {
-          console.log(err);
-          req.flash(
-            "error",
-            "We seem to be experiencing issues. Please try again later."
-          );
-          res.redirect("/");
-        }
-        res.send("Mail sent to " + mailList);
-        console.log("Mail sent to " + mailList);
-      });
-    });
+      // Send the email
+      await smtpTransport.sendMail(mailOptions);
+
+      // Respond to the client
+      res.send("Mail sent to " + mailList);
+      console.log("Mail sent to " + mailList);
+    } catch (err) {
+      console.error(err);
+      req.flash(
+        "error",
+        "We seem to be experiencing issues. Please try again later."
+      );
+      res.redirect("/");
+    }
   })
 );
 

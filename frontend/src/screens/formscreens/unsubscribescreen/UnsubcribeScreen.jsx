@@ -5,8 +5,10 @@ import { request } from "../../../base url/BaseUrl";
 import { toast } from "react-toastify";
 import { getError } from "../../../components/utilities/util/Utils";
 import { Context } from "../../../context/Context";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import LoadingBox from "../../../components/utilities/message loading/LoadingBox";
+import { Helmet } from "react-helmet-async";
+import "../styles/style.scss";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -52,7 +54,7 @@ function UnSubscribeScreen() {
 
       setTimeout(() => {
         navigate("/");
-      }, 2000);
+      }, 1000);
     } catch (err) {
       dispatch({ type: "UNSUBSCRIBE_FAIL" });
       toast.error(getError(err), { position: "bottom-center" });
@@ -60,28 +62,36 @@ function UnSubscribeScreen() {
   };
   return (
     <div className="form-box">
-      <div className="form-box-content">
-        <div className="inner-form inner-form-small">
-          <div className="form-icon-done">
-            <span className="form-icon-span">
-              <DoneIcon className="form-icon" />
-            </span>
+      <Helmet>
+        <title>Unsubscribe</title>
+      </Helmet>
+      <div className="container">
+        <div className="quick_link ">
+          <div className="page a_flex">
+            <Link to="/">Home /</Link>
+            <p>&#160; Unsubscribe</p>
           </div>
-          <h2>Unsubscribe Now</h2>
-          <p>
-            Proceeding with your request to unsubscribe from our newsletter. We
-            sincerely appreciate your past engagement and support. Should you
-            choose to reconnect with us in the future, you're always welcome
-            back. Thank you for staying connected.
-          </p>
-          <div className="form-btn">
-            <button
-              className="form-submit-btn"
-              onClick={UnsubscribeHandler}
-              disabled={loading} // Disable the button while loading
-            >
-              {loading ? <LoadingBox /> : "Unsubscribe"}
-            </button>
+        </div>
+        <div className="form-box-content">
+          <div className="inner-form inner-form-small">
+            <div className="unsubscribe_text">
+              <h2>Unsubscribe Now</h2>
+              <p>
+                Proceeding with your request to unsubscribe from our newsletter.
+                We sincerely appreciate your past engagement and support. Should
+                you choose to reconnect with us in the future, you're always
+                welcome back. Thank you for staying connected.
+              </p>
+            </div>
+            <div className="form-btn">
+              <button
+                className="form-submit-btn a_flex"
+                onClick={UnsubscribeHandler}
+                disabled={loading} // Disable the button while loading
+              >
+                {loading ? <LoadingBox /> : "Unsubscribe"}
+              </button>
+            </div>
           </div>
         </div>
       </div>

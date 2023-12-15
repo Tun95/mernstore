@@ -16,19 +16,6 @@ import { GoogleLogin } from "@react-oauth/google";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { Helmet } from "react-helmet-async";
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case "CREATE_REQUEST":
-      return { ...state, loading: true };
-    case "CREATE_SUCCESS":
-      return { ...state, loading: false };
-    case "CREATE_FAIL":
-      return { ...state, loading: false };
-
-    default:
-      return state;
-  }
-};
 function RegisterScreen() {
   const navigate = useNavigate();
 
@@ -39,17 +26,13 @@ function RegisterScreen() {
   const { state, dispatch: ctxDispatch } = useContext(Context);
   const { userInfo } = state;
 
-  const [{ loading, error }, dispatch] = useReducer(reducer, {
-    loading: true,
-    error: "",
-  });
-
   const initialValues = {
     firstName: "",
     lastName: "",
     email: "",
     password: "",
     passwordConfirmation: "",
+    subscribeCheckbox: false,
   };
 
   //TOGGLE PASSWOD VIEW
@@ -90,53 +73,66 @@ function RegisterScreen() {
         email: values.email,
         password: values.password,
       });
-      ctxDispatch({ type: "USER_SIGNIN", payload: data });
-      localStorage.setItem("userInfo", JSON.stringify(data));
-      navigate(redirect || "/");
-      toast.success("Sign up successfully", { position: "bottom-center" });
-      await axios.post(
-        `${request}/api/users/verification-token`,
-        {},
+      localStorage.setItem("temporaryUserInfo", JSON.stringify(data));
+
+      // Check if the subscribeCheckbox is checked
+      if (values.subscribeCheckbox) {
+        // Subscribe only if the checkbox is checked
+        handleCheckbox(values.email, actions);
+      }
+
+      // Send OTP verification email
+      const otpResponse = await axios.post(
+        `${request}/api/users/otp-verification`,
         {
-          headers: { authorization: `Bearer ${data.token}` },
+          email: values.email,
         }
       );
-      toast.success("A Verification email has been sent to your email inbox", {
-        position: "bottom-center",
-      });
+
+      if (otpResponse.status === 200) {
+        // Redirect to OTP verification screen
+        setTimeout(() => {
+          actions.resetForm();
+        }, 1000);
+        navigate("/otp-verification");
+        toast.success(
+          "An OTP Verification email has been sent to your email.",
+          {
+            position: "bottom-center",
+          }
+        );
+      } else {
+        // Handle error
+        toast.error("Failed to send verification email", {
+          position: "bottom-center",
+        });
+      }
     } catch (err) {
       toast.error(getError(err), { position: "bottom-center", limit: 1 });
     }
-    setTimeout(() => {
-      actions.resetForm();
-    }, 1000);
   };
 
-  //====================
-  // REGISTER WITH GOOGLE
-  //====================
-  const handleGoogleSignUp = async () => {
+  //===========
+  // Subscribe
+  //===========
+  const handleCheckbox = async (email, actions) => {
     try {
-      const { data } = await axios.get(`${request}/api/users/auth/google`);
-      // Redirect the user to the provided URL for Google sign-up
-      window.location.href = data.redirectUrl;
-    } catch (error) {
-      // Handle error
-      console.log(error);
-    }
-  };
+      const response = await axios.post(`${request}/api/message/subscribe`, {
+        email: email, // or email directly if the variable is named email
+      });
 
-  //======================
-  // REGISTER WITH FACEBOOK
-  //======================
-  const handleFacebookSignUp = async () => {
-    try {
-      const { data } = await axios.get(`${request}/api/users/auth/facebook`);
-      // Redirect the user to the provided URL for Facebook sign-up
-      window.location.href = data.redirectUrl;
+      const data = await response.data; // Use response.data directly instead of response.json()
+
+      if (response.status === 200) {
+        toast.success(data.message);
+        console.log("Subscription successful:", data.message);
+      } else {
+        toast.error(data.message);
+        console.error("Subscription failed:", data.message);
+      }
     } catch (error) {
-      // Handle error
-      console.log(error);
+      toast.error(getError(error));
+      console.error("Error during subscription:", error);
     }
   };
 
@@ -331,8 +327,17 @@ function RegisterScreen() {
                   <div className="mailing">
                     <h1>Mailing lists</h1>
                     <p>Sign up for our newsletters!</p>
-                    <label htmlFor="remember" className="remember a_flex">
-                      <input type="checkbox" id="remember" />
+                    <label
+                      htmlFor="subscribeCheckbox"
+                      className="remember a_flex"
+                    >
+                      <Field
+                        type="checkbox"
+                        id="subscribeCheckbox"
+                        name="subscribeCheckbox"
+                        checked={values.subscribeCheckbox}
+                        onChange={handleChange}
+                      />
                       <small>
                         Company news and unique discounts for subscribers
                       </small>
