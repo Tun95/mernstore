@@ -1,6 +1,10 @@
 import jwt from "jsonwebtoken";
 
 export const generateToken = (user) => {
+  const expiresIn = "3d";
+  const expirationTime =
+    Math.floor(Date.now() / 1000) + expiresInToSeconds(expiresIn);
+
   return jwt.sign(
     {
       _id: user._id,
@@ -17,9 +21,24 @@ export const generateToken = (user) => {
     },
     process.env.JWT_SECRET || "somethingsecret",
     {
-      expiresIn: "3d",
+      expiresIn,
     }
   );
+};
+
+// Utility function to convert expiresIn string to seconds
+const expiresInToSeconds = (expiresIn) => {
+  const units = {
+    s: 1,
+    m: 60,
+    h: 3600,
+    d: 86400,
+  };
+
+  const unit = expiresIn.slice(-1);
+  const value = parseInt(expiresIn.slice(0, -1));
+
+  return units[unit] * value;
 };
 
 export const isAuth = (req, res, next) => {

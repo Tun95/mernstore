@@ -90,7 +90,7 @@ TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
 
 function App() {
-  const { darkMode, state } = useContext(Context);
+  const { darkMode, state, dispatch } = useContext(Context);
   const { settings } = state;
   const {
     messengerAppId,
@@ -112,6 +112,28 @@ function App() {
         }))
         .find(() => true)) ||
     {};
+
+  // // Somewhere in your authentication logic
+  // const handleTokenExpiration = () => {
+  //   const token = localStorage.getItem("token");
+  //   if (token) {
+  //     const expirationTime = decodeToken(token).exp;
+
+  //     if (expirationTime && expirationTime < Date.now() / 1000) {
+  //       dispatch({ type: "TOKEN_EXPIRED" });
+  //       // Optionally, you can perform other actions like redirecting the user to the login page.
+  //     }
+  //   }
+  // };
+  // // Utility function to decode JWT token
+  // const decodeToken = (token) => {
+  //   try {
+  //     return jwt.decode(token);
+  //   } catch (error) {
+  //     console.error("Error decoding token:", error);
+  //     return null;
+  //   }
+  // };
 
   // Set the appShortDesc as a global variable
   window.appShortDesc = shortDesc || "My web app";
@@ -136,6 +158,7 @@ function App() {
 
   //============================
   // Set the PayPal client ID on the window object
+  //============================
   useEffect(() => {
     window.paypalClientId = paypal;
   }, [paypal]);

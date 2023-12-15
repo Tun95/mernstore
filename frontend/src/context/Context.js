@@ -144,6 +144,9 @@ function reducer(state, action) {
         userInfo: null,
         cart: { cartItems: [], shippingAddress: {}, paymentMethod: "" },
       };
+    //TOKEN EXPIRE
+    case "TOKEN_EXPIRED":
+      return { ...state, userInfo: null };
 
     //SHIPPING
     case "SAVE_SHIPPING_ADDRESS":
@@ -205,7 +208,6 @@ export function ContextProvider(props) {
     };
     fetchData();
   }, []);
- 
 
   //==============
   //FETCH ALL SIZE

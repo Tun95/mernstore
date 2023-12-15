@@ -33,6 +33,7 @@
     "i18next-http-backend": "^2.2.1",
     "javascript-time-ago": "^2.5.9",
     "jodit-react": "^1.3.39",
+    "jsonwebtoken": "^9.0.2",
     "leaflet-geosearch": "^3.11.0",
     "mapbox-gl": "^3.0.1",
     "moment": "^2.29.4",

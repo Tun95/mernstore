@@ -45,6 +45,7 @@ const reducer = (state, action) => {
 
 function ApiKey() {
   const { state: contextState } = useContext(Context);
+  const { userInfo } = contextState;
   const [state, dispatch] = useReducer(reducer, initialState);
   const [updatedSettings, setUpdatedSettings] = useState({}); // State to hold updated settings
 
@@ -80,7 +81,10 @@ function ApiKey() {
     try {
       const response = await axios.put(
         `${request}/api/settings/${updatedSettings._id}`, // Add the _id to the URL
-        updatedSettings
+        updatedSettings,
+        {
+          headers: { Authorization: `Bearer ${userInfo.token}` },
+        }
       );
       dispatch({ type: "UPDATE_SUCCESS", payload: response.data });
       toast.success("Update successfully", { position: "bottom-center" });
