@@ -10,6 +10,10 @@ const reviewSchema = new mongoose.Schema(
     rating: { type: Number, required: true },
     likes: { type: Number, default: 0 },
     dislikes: { type: Number, default: 0 },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   {
     timestamps: true,
@@ -89,10 +93,28 @@ const productSchema = new mongoose.Schema(
 );
 
 // Create the slug before saving the product
-productSchema.pre("save", function (next) {
-  if (this.isNew || this.isModified("name")) {
-    // Replace spaces with hyphens in the name and convert to lowercase
-    this.slug = this.name.replace(/\s+/g, "-").toLowerCase();
+productSchema.pre("save", async function (next) {
+  if (this.isModified("name") || !this.slug) {
+    let name = this.name || "Default Name";
+    let baseSlug = name
+      .toLowerCase()
+      .replace(/ /g, "-")
+      .replace(/[^\w-]+/g, "");
+
+    // Check for duplicate slugs
+    const existingProduct = await this.constructor.findOne({ slug: baseSlug });
+
+    if (existingProduct) {
+      let counter = 1;
+      while (
+        await this.constructor.findOne({ slug: `${baseSlug}-${counter}` })
+      ) {
+        counter++;
+      }
+      this.set("slug", `${baseSlug}-${counter}`);
+    } else {
+      this.set("slug", baseSlug);
+    }
   }
   next();
 });

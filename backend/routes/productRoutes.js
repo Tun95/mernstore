@@ -82,32 +82,46 @@ productRouter.get("/flashdeal", async (req, res) => {
   }
 });
 
-//==============
-//CREATE PRODUCT
-//==============
+//================
+// CREATE PRODUCT
+//================
 productRouter.post(
   "/",
   isAuth,
   isSellerOrAdmin,
   expressAsyncHandler(async (req, res) => {
-    const { name, slug } = req.body;
+    try {
+      const { name, ...productData } = req.body;
 
-    const productNameExist = await Product.findOne({
-      $or: [{ name }, { slug }],
-    });
+      // Ensure that required fields are present
+      if (!name) {
+        return res.status(400).send({ message: "Name is a required field" });
+      }
 
-    if (productNameExist) {
-      return res
-        .status(400)
-        .send({ message: "Product name or slug already exists" });
+      // Check if the product name already exists
+      const productNameExist = await Product.findOne({ name });
+
+      if (productNameExist) {
+        return res.status(400).send({ message: "Product name already exists" });
+      }
+
+      // Create a new product with the logged-in user as the seller
+      const newProduct = new Product({
+        seller: req.user._id, // Set the seller to the logged-in user's ID
+        name,
+        ...productData,
+      });
+
+      // Save the new product
+      const product = await newProduct.save();
+
+      res
+        .status(201)
+        .send({ message: "Product Created Successfully", product });
+    } catch (error) {
+      console.error("Error creating product:", error);
+      res.status(500).send({ message: "Internal Server Error" });
     }
-    const newProduct = new Product({
-      seller: req.user._id,
-      ...req.body,
-    });
-
-    const product = await newProduct.save();
-    res.send({ message: "Product Created Successfully", product });
   })
 );
 
@@ -202,18 +216,34 @@ productRouter.put(
   })
 );
 
-//PRODUCT DELETE
+//================
+// PRODUCT DELETE
+//================
 productRouter.delete(
   "/:id",
   isAuth,
-  isSellerOrAdmin,
+  isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const product = await Product.findById(req.params.id);
-    if (product) {
-      await product.remove();
-      res.send({ message: "Product Deleted Successfully" });
-    } else {
-      res.status(404).send({ message: "Product Not Found" });
+    const productId = req.params.id;
+
+    try {
+      const product = await Product.findById(productId);
+
+      if (product) {
+        // Check if the logged-in user is an admin
+        if (req.user.isAdmin) {
+          // Use deleteOne to remove the product
+          await Product.deleteOne({ _id: productId });
+          res.send({ message: "Product Deleted Successfully" });
+        } else {
+          res.status(403).send({ message: "Permission Denied" });
+        }
+      } else {
+        res.status(404).send({ message: "Product Not Found" });
+      }
+    } catch (error) {
+      console.error("Error deleting product:", error);
+      res.status(500).send({ message: "Internal Server Error" });
     }
   })
 );
