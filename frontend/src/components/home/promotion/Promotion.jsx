@@ -64,7 +64,7 @@ function Promotion() {
 
   // Fetch promotions and initial countdown on component mount
   useEffect(() => {
-    const socket = io(request);
+    const socket = io(request, { withCredentials: true });
 
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });

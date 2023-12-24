@@ -132,7 +132,10 @@ app.use((err, req, res, next) => {
 });
 
 const server = createServer(app);
-const io = new Server(server, { cors: corsOptions });
+const io = new Server(server, {
+  cors: corsOptions,
+  allowEIO3: true,
+});
 
 // Namespace for all promotions
 const allPromotionsNamespace = io.of("/all-promotions");
