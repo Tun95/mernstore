@@ -9,7 +9,8 @@ import axios from "axios";
 import { request } from "../../base url/BaseUrl";
 import Comments from "../../components/blog/Comments";
 import { getError } from "../../components/utilities/util/Utils";
-import { toast } from "react-toastify";
+import LoadingBox from "../../components/utilities/message loading/LoadingBox";
+import MessageBox from "../../components/utilities/message loading/MessageBox";
 
 const initialState = {
   blog: null,
@@ -55,7 +56,7 @@ function BlogDetailScreen() {
         }
         window.scrollTo(0, 0);
       } catch (error) {
-        console.error("Error fetching blog details:", error);
+        console.error(getError(error));
         dispatch({
           type: "FETCH_FAIL",
           payload: "Error fetching blog details",
@@ -68,7 +69,7 @@ function BlogDetailScreen() {
         const { data } = await axios.get(`${request}/api/blog/recent`);
         setRecentPosts(data);
       } catch (err) {
-        console.error("Error fetching recent posts", err);
+        console.error(getError(err));
       }
     };
 
@@ -92,16 +93,22 @@ function BlogDetailScreen() {
             <p>&#160; {blog?.title}</p>
           </div>
         </div>
-        <div className="main_content ">
-          <div className="full_width">
-            <BlogDetails blog={blog} />
+        {loading ? (
+          <LoadingBox></LoadingBox>
+        ) : error ? (
+          <MessageBox variant="danger">{error}</MessageBox>
+        ) : (
+          <div className="main_content ">
+            <div className="full_width">
+              <BlogDetails blog={blog} />
 
-            <Comments blogId={blogId} />
+              <Comments blogId={blogId} />
+            </div>
+            <div className="scroll_box">
+              <RecentPost recentPosts={recentPosts} />
+            </div>
           </div>
-          <div className="scroll_box">
-            <RecentPost recentPosts={recentPosts} />
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

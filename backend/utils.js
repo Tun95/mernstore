@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 export const generateToken = (user) => {
-  const expiresIn = "3d";
+  const expiresIn = "30d";
   const expirationTime =
     Math.floor(Date.now() / 1000) + expiresInToSeconds(expiresIn);
 

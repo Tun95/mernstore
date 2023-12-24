@@ -53,6 +53,9 @@ const productSchema = new mongoose.Schema(
         image: { type: String },
       },
     ],
+    weight: {
+      type: String,
+    },
     video: [
       {
         videoTitle: { type: String },

@@ -10,6 +10,8 @@ import { request } from "../../../base url/BaseUrl";
 import io from "socket.io-client";
 import { getError } from "../../utilities/util/Utils";
 import { toast } from "react-toastify";
+import LoadingBox from "../../utilities/message loading/LoadingBox";
+import MessageBox from "../../utilities/message loading/MessageBox";
 
 const NextArrow = (props) => {
   const { onClick } = props;
@@ -180,30 +182,36 @@ function Promotion() {
   return (
     <div className="promotion product_main">
       <div className="container">
-        <div className="content">
-          <div className="header">
-            <div className="main_header">
-              <h2>Promotions</h2>
+        {loading ? (
+          <LoadingBox></LoadingBox>
+        ) : error ? (
+          <MessageBox variant="danger">{error}</MessageBox>
+        ) : (
+          <div className="content">
+            <div className="header">
+              <div className="main_header">
+                <h2>Promotions</h2>
+              </div>
+            </div>
+            <div className="product_list">
+              <Slider {...SliderSettings}>
+                {promotions.map((item, index) => (
+                  <PromotionCard
+                    key={index}
+                    item={item}
+                    index={index}
+                    calculateDaysUntilExpiration={calculateDaysUntilExpiration}
+                  />
+                ))}
+              </Slider>
+            </div>
+            <div className="btn">
+              <button onClick={() => navigate("/promotions")}>
+                All promotions
+              </button>
             </div>
           </div>
-          <div className="product_list">
-            <Slider {...SliderSettings}>
-              {promotions.map((item, index) => (
-                <PromotionCard
-                  key={index}
-                  item={item}
-                  index={index}
-                  calculateDaysUntilExpiration={calculateDaysUntilExpiration}
-                />
-              ))}
-            </Slider>
-          </div>
-          <div className="btn">
-            <button onClick={() => navigate("/promotions")}>
-              All promotions
-            </button>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

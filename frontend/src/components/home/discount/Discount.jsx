@@ -11,6 +11,8 @@ import axios from "axios";
 import { getError } from "../../utilities/util/Utils";
 import io from "socket.io-client";
 import { toast } from "react-toastify";
+import LoadingBox from "../../utilities/message loading/LoadingBox";
+import MessageBox from "../../utilities/message loading/MessageBox";
 
 const NextArrow = (props) => {
   const { onClick } = props;
@@ -210,66 +212,78 @@ function Discount() {
   return (
     <div className="discount_section product_main">
       <div className="container">
-        <div className="content box_shadow d_flex">
-          <div className="left">
-            {promotions?.map((promotion, index) => (
-              <div key={index} className="main_content">
-                <div className="header">
-                  <h2>{promotion.title}</h2>
-                </div>
-                <div className="description">
-                  <p>{truncateText(promotion.description, 27)}</p>
-                </div>
-                <div className="time_period">
-                  <div className="">
-                    <h4>Promotions expires within:</h4>
+        <div className="box_shadow">
+          {loading ? (
+            <LoadingBox></LoadingBox>
+          ) : error ? (
+            <MessageBox variant="danger">{error}</MessageBox>
+          ) : (
+            <div className="content  d_flex">
+              <div className="left">
+                {promotions?.map((promotion, index) => (
+                  <div key={index} className="main_content">
+                    <div className="header">
+                      <h2>{promotion.title}</h2>
+                    </div>
+                    <div className="description">
+                      <p>{truncateText(promotion.description, 27)}</p>
+                    </div>
+                    <div className="time_period">
+                      <div className="">
+                        <h4>Promotions expires within:</h4>
+                      </div>
+                      <div className="time">
+                        <span>
+                          <ul>
+                            <li>
+                              <span>{countdown.days}</span>
+                              <small>days</small>
+                            </li>
+                            <li>
+                              <span>{countdown.hours}</span>
+                              <small>hours</small>
+                            </li>
+                            <li>
+                              <span>{countdown.minutes}</span>
+                              <small>minutes</small>
+                            </li>
+                            <li>
+                              <span className="seconds">
+                                {countdown.seconds}
+                              </span>
+                              <small>seconds</small>
+                            </li>
+                          </ul>
+                        </span>
+                      </div>
+                    </div>
+                    <div className="btn a_flex">
+                      <div className="btn_btn">
+                        <button
+                          onClick={() =>
+                            navigate(`/promotions/${promotion.slug}`)
+                          }
+                        >
+                          More
+                        </button>
+                      </div>
+                      <div className="link">
+                        <Link to={`/promotions`}>All promotion</Link>
+                      </div>
+                    </div>
                   </div>
-                  <div className="time">
-                    <span>
-                      <ul>
-                        <li>
-                          <span>{countdown.days}</span>
-                          <small>days</small>
-                        </li>
-                        <li>
-                          <span>{countdown.hours}</span>
-                          <small>hours</small>
-                        </li>
-                        <li>
-                          <span>{countdown.minutes}</span>
-                          <small>minutes</small>
-                        </li>
-                        <li>
-                          <span className="seconds">{countdown.seconds}</span>
-                          <small>seconds</small>
-                        </li>
-                      </ul>
-                    </span>
-                  </div>
-                </div>
-                <div className="btn a_flex">
-                  <div className="btn_btn">
-                    <button
-                      onClick={() => navigate(`/promotions/${promotion.slug}`)}
-                    >
-                      More
-                    </button>
-                  </div>
-                  <div className="link">
-                    <Link to={`/promotions`}>All promotion</Link>
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
 
-          <div className="product_list contentWidth">
-            <Slider {...SliderSettings} className="slick-slider">
-              {products.map((product, index) => (
-                <DiscountCard key={index} product={product} index={index} />
-              ))}
-            </Slider>
-          </div>
+              <div className="product_list contentWidth">
+                <Slider {...SliderSettings} className="slick-slider">
+                  {products.map((product, index) => (
+                    <DiscountCard key={index} product={product} index={index} />
+                  ))}
+                </Slider>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>

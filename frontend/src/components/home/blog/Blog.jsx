@@ -4,6 +4,8 @@ import BlogCards from "./BlogCards";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { request } from "../../../base url/BaseUrl";
+import LoadingBox from "../../utilities/message loading/LoadingBox";
+import MessageBox from "../../utilities/message loading/MessageBox";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -18,7 +20,7 @@ function reducer(state, action) {
   }
 }
 function Blog() {
-  const [{ blogs }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, blogs }, dispatch] = useReducer(reducer, {
     blogs: [],
     loading: true,
     error: "",
@@ -48,22 +50,30 @@ function Blog() {
   return (
     <div className="blog_section">
       <div className="container">
-        <div className="content">
-          <div className="header">
-            <div className="main_header">
-              <h2>Reviews / News</h2>
+        {loading ? (
+          <LoadingBox></LoadingBox>
+        ) : error ? (
+          <MessageBox variant="danger">{error}</MessageBox>
+        ) : (
+          <div className="content">
+            <div className="header">
+              <div className="main_header">
+                <h2>Reviews / News</h2>
+              </div>
+            </div>
+            <div className="blog_list">
+              {blogs.map((blog, index) => (
+                <BlogCards index={index} blog={blog} key={index} />
+              ))}
+            </div>
+
+            <div className="btn">
+              <button onClick={() => navigate("/blog")}>
+                All blog articles
+              </button>
             </div>
           </div>
-          <div className="blog_list">
-            {blogs.map((blog, index) => (
-              <BlogCards index={index} blog={blog} key={index} />
-            ))}
-          </div>
-
-          <div className="btn">
-            <button onClick={() => navigate("/blog")}>All blog articles</button>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

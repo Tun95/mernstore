@@ -1,11 +1,11 @@
-import React from "react";
 import "../style/style.css";
+import MoonLoader from "react-spinners/MoonLoader";
 
 function LoadingBox() {
   return (
     <div id="load-err">
-      <div>
-        <i className="fa fa-spinner fa-spin"></i>Loading...
+      <div style={{ padding: "10px 0px" }}>
+        <MoonLoader size={45} color="#be0318" />
       </div>
     </div>
   );

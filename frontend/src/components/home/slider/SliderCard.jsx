@@ -3,10 +3,12 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { Context } from "../../../context/Context.js";
+import LoadingBox from "../../utilities/message loading/LoadingBox.js";
+import MessageBox from "../../utilities/message loading/MessageBox.js";
 
 function SliderCard() {
   const { state } = useContext(Context);
-  const { banners } = state;
+  const { banners, loading, error } = state;
 
   const settings = {
     dots: true,
@@ -39,87 +41,93 @@ function SliderCard() {
   }, []);
   return (
     <>
-      <Slider {...settings} className="slick_banner_slider">
-        {banners?.map((bannersGroup, groupIndex) => (
-          <React.Fragment key={groupIndex}>
-            {Array.isArray(bannersGroup.banners) &&
-              bannersGroup.banners.map((item, index) => {
-                const textColor = item.color;
-                const paragraphColor = item.pColor;
+      {loading ? (
+        <LoadingBox></LoadingBox>
+      ) : error ? (
+        <MessageBox variant="danger">{error}</MessageBox>
+      ) : (
+        <Slider {...settings} className="slick_banner_slider">
+          {banners?.map((bannersGroup, groupIndex) => (
+            <React.Fragment key={groupIndex}>
+              {Array.isArray(bannersGroup.banners) &&
+                bannersGroup.banners.map((item, index) => {
+                  const textColor = item.color;
+                  const paragraphColor = item.pColor;
 
-                return (
-                  <div className="content" key={index}>
-                    {item.videoBackground ? (
-                      <>
-                        {item.videoBackground && (
-                          <div className="video">
-                            <div className="video_width">
-                              <video
-                                loop
-                                muted
-                                autoPlay
-                                src={item.videoBackground}
-                                ref={videoRef}
-                                className="video_tag"
-                                width="100%"
-                              ></video>
+                  return (
+                    <div className="content" key={index}>
+                      {item.videoBackground ? (
+                        <>
+                          {item.videoBackground && (
+                            <div className="video">
+                              <div className="video_width">
+                                <video
+                                  loop
+                                  muted
+                                  autoPlay
+                                  src={item.videoBackground}
+                                  ref={videoRef}
+                                  className="video_tag"
+                                  width="100%"
+                                ></video>
+                              </div>
                             </div>
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <>
-                        {item.imgBackground && (
-                          <div className="background">
-                            <div className="img_background">
-                              <img
-                                src={item.imgBackground}
-                                alt={item.imgBackground}
-                              />
+                          )}
+                        </>
+                      ) : (
+                        <>
+                          {item.imgBackground && (
+                            <div className="background">
+                              <div className="img_background">
+                                <img
+                                  src={item.imgBackground}
+                                  alt={item.imgBackground}
+                                />
+                              </div>
                             </div>
-                          </div>
-                        )}
-                      </>
-                    )}
-                    <div className="width">
-                      <div className="main_content">
-                        <div className="container">
-                          <div className="a_flex">
-                            <div className="img">
-                              {item.img && <img src={item.img} alt="" />}
-                            </div>
+                          )}
+                        </>
+                      )}
+                      <div className="width">
+                        <div className="main_content">
+                          <div className="container">
+                            <div className="a_flex">
+                              <div className="img">
+                                {item.img && <img src={item.img} alt="" />}
+                              </div>
 
-                            <div
-                              className={`text ${
-                                item.img === "" ? "img_none" : ""
-                              }`}
-                            >
-                              <div className="header">
-                                <h1 style={{ color: textColor || "" }}>
-                                  {item.title}
-                                </h1>
-                              </div>
-                              <div className="description">
-                                <p style={{ color: paragraphColor || "" }}>
-                                  {item.description}
-                                </p>
-                              </div>
-                              {item.buttonText && (
-                                <div className="btn">
-                                  <button>{item.buttonText}</button>
+                              <div
+                                className={`text ${
+                                  item.img === "" ? "img_none" : ""
+                                }`}
+                              >
+                                <div className="header">
+                                  <h1 style={{ color: textColor || "" }}>
+                                    {item.title}
+                                  </h1>
                                 </div>
-                              )}
+                                <div className="description">
+                                  <p style={{ color: paragraphColor || "" }}>
+                                    {item.description}
+                                  </p>
+                                </div>
+                                {item.buttonText && (
+                                  <div className="btn">
+                                    <button>{item.buttonText}</button>
+                                  </div>
+                                )}
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-          </React.Fragment>
-        ))}
-      </Slider>
+                  );
+                })}
+            </React.Fragment>
+          ))}
+        </Slider>
+      )}
     </>
   );
 }

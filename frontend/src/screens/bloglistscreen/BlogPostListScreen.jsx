@@ -8,6 +8,8 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { getError } from "../../components/utilities/util/Utils";
 import { Link, useNavigate, useLocation } from "react-router-dom";
+import LoadingBox from "../../components/utilities/message loading/LoadingBox";
+import MessageBox from "../../components/utilities/message loading/MessageBox";
 
 // Reducer function
 function reducer(state, action) {
@@ -96,19 +98,25 @@ function BlogPostListScreen() {
             <p>&#160; Blog</p>
           </div>
         </div>
-        <div className="main_content ">
-          <div className="full_width">
-            <BlogPost
-              blogs={blogs}
-              totalPages={totalPages}
-              currentPage={currentPage}
-              dispatch={dispatch}
-            />
+        {loading ? (
+          <LoadingBox></LoadingBox>
+        ) : error ? (
+          <MessageBox variant="danger">{error}</MessageBox>
+        ) : (
+          <div className="main_content ">
+            <div className="full_width">
+              <BlogPost
+                blogs={blogs}
+                totalPages={totalPages}
+                currentPage={currentPage}
+                dispatch={dispatch}
+              />
+            </div>
+            <div className="scroll_box">
+              <RecentPost recentPosts={recentPosts} />
+            </div>
           </div>
-          <div className="scroll_box">
-            <RecentPost recentPosts={recentPosts} />
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );
