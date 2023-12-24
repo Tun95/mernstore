@@ -8,6 +8,8 @@ import axios from "axios";
 import io from "socket.io-client";
 import { getError } from "../../../components/utilities/util/Utils";
 import { toast } from "react-toastify";
+import LoadingBox from "../../../components/utilities/message loading/LoadingBox";
+import MessageBox from "../../../components/utilities/message loading/MessageBox";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -128,25 +130,31 @@ function PromotionListScreen() {
             <p>&#160; Promotions</p>
           </div>
         </div>
-        <div className="content">
-          <div className="header">
-            <div className="main_header">
-              <h2>Promotions</h2>
+        {loading ? (
+          <LoadingBox></LoadingBox>
+        ) : error ? (
+          <MessageBox variant="danger">{error}</MessageBox>
+        ) : (
+          <div className="content">
+            <div className="header">
+              <div className="main_header">
+                <h2>Promotions</h2>
+              </div>
+            </div>
+            <div className="product_list">
+              <div className="product_card">
+                {promotions.map((item, index) => (
+                  <PromotionList
+                    key={index}
+                    item={item}
+                    index={index}
+                    calculateDaysUntilExpiration={calculateDaysUntilExpiration}
+                  />
+                ))}
+              </div>
             </div>
           </div>
-          <div className="product_list">
-            <div className="product_card">
-              {promotions.map((item, index) => (
-                <PromotionList
-                  key={index}
-                  item={item}
-                  index={index}
-                  calculateDaysUntilExpiration={calculateDaysUntilExpiration}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

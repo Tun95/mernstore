@@ -9,6 +9,8 @@ import axios from "axios";
 import io from "socket.io-client"; // Import Socket.IO client library
 import { toast } from "react-toastify";
 import { getError } from "../../../components/utilities/util/Utils";
+import LoadingBox from "../../../components/utilities/message loading/LoadingBox";
+import MessageBox from "../../../components/utilities/message loading/MessageBox";
 
 const initialState = {
   promotion: null,
@@ -72,7 +74,7 @@ function PromotionDetailScreen() {
 
         window.scrollTo(0, 0);
       } catch (error) {
-        console.error("Error fetching promotion details:", error);
+        console.error(getError(error));
         dispatch({
           type: "FETCH_FAIL",
           payload: "Error fetching promotion details",
@@ -150,9 +152,15 @@ function PromotionDetailScreen() {
             <p>&#160; {promotion?.title}</p>
           </div>
         </div>
-        <div className="content">
-          <Promotions promotion={promotion} countdown={countdown} />
-        </div>
+        {loading ? (
+          <LoadingBox></LoadingBox>
+        ) : error ? (
+          <MessageBox variant="danger">{error}</MessageBox>
+        ) : (
+          <div className="content">
+            <Promotions promotion={promotion} countdown={countdown} />
+          </div>
+        )}
       </div>
     </div>
   );
