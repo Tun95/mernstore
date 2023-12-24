@@ -78,7 +78,6 @@
     "slick-carousel": "^1.8.1",
     "socket.io-client": "^4.7.2",
     "swiper": "^11.0.2",
-    "typewriter-effect": "^2.20.1",
     "web-vitals": "^2.1.4",
     "yup": "^1.2.0"
   },

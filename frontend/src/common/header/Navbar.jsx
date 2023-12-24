@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Menu from "@mui/material/Menu";
@@ -69,10 +69,62 @@ function Navbar() {
   //SEARCH BOX
   //=========
   const [query, setQuery] = useState("");
+  const [typedText, setTypedText] = useState("");
+  const [showCursor, setShowCursor] = useState(true);
+
   const submitHandler = (e) => {
     e.preventDefault();
     navigate(query ? `/store/?query=${query}` : "/store");
   };
+
+  useEffect(() => {
+    const statements = ["Search here", "For example PlayStation"];
+
+    let statementIndex = 0;
+    let currentIndex = 0;
+    let typingTimer;
+    let cursorTimer;
+
+    // Simulate typing effect
+    const typeText = () => {
+      const currentStatement = statements[statementIndex];
+
+      if (currentIndex <= currentStatement.length) {
+        setTypedText(currentStatement.substring(0, currentIndex));
+        currentIndex += 1;
+      } else {
+        // Reset index for the next statement
+        currentIndex = 0;
+        statementIndex = (statementIndex + 1) % statements.length;
+      }
+
+      // Toggle cursor visibility
+      setShowCursor((prev) => !prev);
+
+      // Repeat typing with a delay
+      typingTimer = setTimeout(typeText, 250); // Adjust the typing speed
+    };
+
+    // Toggle cursor blinking
+    cursorTimer = setInterval(() => {
+      setShowCursor((prev) => !prev);
+    }, 1000); // Adjust the blinking speed
+
+    // Trigger typing effect when the component mounts
+    typeText();
+
+    // Simulate backspace key clearing effect
+    setTimeout(() => {
+      currentIndex = Math.max(0, currentIndex - 1);
+      typeText();
+    }, 10000); // Adjust the delay before the backspace effect
+
+    // Clear the timers on component unmount
+    return () => {
+      clearTimeout(typingTimer);
+      clearInterval(cursorTimer);
+    };
+  }, []);
 
   //========
   //SIGN OUT
@@ -114,7 +166,7 @@ function Navbar() {
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 type="search"
-                placeholder="Search and hit enter..."
+                placeholder={typedText + (showCursor ? "|" : "")}
               />
             </form>
 
