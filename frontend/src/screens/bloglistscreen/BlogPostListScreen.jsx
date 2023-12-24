@@ -68,7 +68,6 @@ function BlogPostListScreen() {
         navigate(`/blog?page=${currentPage}`);
       } catch (err) {
         dispatch({ type: "FETCH_FAIL" });
-        toast.error(getError(err));
       }
     };
 
@@ -78,7 +77,6 @@ function BlogPostListScreen() {
         setRecentPosts(data);
       } catch (err) {
         console.error("Error fetching recent posts", err);
-        toast.error(getError(err));
       }
     };
 

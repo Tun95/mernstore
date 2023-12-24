@@ -60,7 +60,6 @@ function BlogDetailScreen() {
           type: "FETCH_FAIL",
           payload: "Error fetching blog details",
         });
-        toast.error(getError(error));
       }
     };
 
@@ -70,7 +69,6 @@ function BlogDetailScreen() {
         setRecentPosts(data);
       } catch (err) {
         console.error("Error fetching recent posts", err);
-        toast.error(getError(err));
       }
     };
 

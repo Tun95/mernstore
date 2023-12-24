@@ -291,24 +291,23 @@ productRouter.get(
   })
 );
 
-//PRODUCT REVIEW
+//==================================
+// Route for creating a product review
+//==================================
 productRouter.post(
   "/:id/reviews",
   isAuth,
   expressAsyncHandler(async (req, res) => {
     const productId = req.params.id;
     const product = await Product.findById(productId);
+
     if (product) {
-      // if (product.seller === req.user.id) {
-      //   return res
-      //     .status(400)
-      //     .send({ message: "You can't review your product" });
-      // } else {
       if (product.reviews.find((x) => x.email === req.user.email)) {
         return res
           .status(400)
           .send({ message: "You already submitted a review" });
       }
+
       const review = {
         firstName: req.user.firstName,
         lastName: req.user.lastName,
@@ -317,11 +316,13 @@ productRouter.post(
         rating: Number(req.body.rating),
         comment: req.body.comment,
       };
+
       product.reviews.push(review);
       product.numReviews = product.reviews.length;
       product.rating =
         product.reviews.reduce((a, c) => c.rating + a, 0) /
         product.reviews.length;
+
       const updatedProduct = await product.save();
       res.status(201).send({
         message: "Review Created",
@@ -329,6 +330,138 @@ productRouter.post(
         numReviews: product.numReviews,
         rating: product.rating,
       });
+    } else {
+      res.status(404).send({ message: "Product Not Found" });
+    }
+  })
+);
+
+//==================================
+// Route for fetching all product reviews
+//==================================
+productRouter.get(
+  "/:id/reviews",
+  expressAsyncHandler(async (req, res) => {
+    const productId = req.params.id;
+    const product = await Product.findById(productId);
+
+    if (product) {
+      res.send(product.reviews);
+    } else {
+      res.status(404).send({ message: "Product Not Found" });
+    }
+  })
+);
+
+//==================================
+// Route for fetching a specific product review by review ID
+//==================================
+productRouter.get(
+  "/:id/reviews/:reviewId",
+  expressAsyncHandler(async (req, res) => {
+    const productId = req.params.id;
+    const product = await Product.findById(productId);
+
+    if (product) {
+      const review = product.reviews.find(
+        (x) => x._id.toString() === req.params.reviewId
+      );
+
+      if (review) {
+        res.send(review);
+      } else {
+        res.status(404).send({ message: "Review Not Found" });
+      }
+    } else {
+      res.status(404).send({ message: "Product Not Found" });
+    }
+  })
+);
+
+//==================================
+// Route for updating a specific product review by review ID
+//==================================
+productRouter.put(
+  "/:id/reviews/:reviewId",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const productId = req.params.id;
+    const product = await Product.findById(productId);
+
+    if (product) {
+      const reviewIndex = product.reviews.findIndex(
+        (x) => x._id.toString() === req.params.reviewId
+      );
+
+      if (reviewIndex !== -1) {
+        const updatedReview = {
+          firstName: req.user.firstName,
+          lastName: req.user.lastName,
+          email: req.user.email,
+          image: req.user.image,
+          rating: Number(req.body.rating),
+          comment: req.body.comment,
+        };
+
+        product.reviews[reviewIndex] = updatedReview;
+
+        product.rating =
+          product.reviews.reduce((a, c) => c.rating + a, 0) /
+          product.reviews.length;
+
+        await product.save();
+
+        res.send({
+          message: "Review Updated",
+          review: updatedReview,
+          rating: product.rating,
+        });
+      } else {
+        res.status(404).send({ message: "Review Not Found" });
+      }
+    } else {
+      res.status(404).send({ message: "Product Not Found" });
+    }
+  })
+);
+
+//==================================
+// Route for deleting a specific product review by review ID
+//==================================
+productRouter.delete(
+  "/:id/reviews/:reviewId",
+  isAuth,
+  expressAsyncHandler(async (req, res) => {
+    const productId = req.params.id;
+    const product = await Product.findById(productId);
+
+    if (product) {
+      const reviewIndex = product.reviews.findIndex(
+        (x) => x._id.toString() === req.params.reviewId
+      );
+
+      if (reviewIndex !== -1) {
+        product.reviews.splice(reviewIndex, 1);
+        product.numReviews = product.reviews.length;
+
+        if (product.numReviews === 0) {
+          product.rating = 0;
+        } else {
+          product.rating =
+            product.reviews.reduce((a, c) => c.rating + a, 0) /
+            product.reviews.length;
+        }
+
+        await product.save();
+
+        res.send({
+          message: "Review Deleted",
+          numReviews: product.numReviews,
+          rating: product.rating,
+        });
+      } else {
+        res.status(404).send({ message: "Review Not Found" });
+      }
     } else {
       res.status(404).send({ message: "Product Not Found" });
     }

@@ -47,7 +47,12 @@ const productSchema = new mongoose.Schema(
     brand: { type: String },
     price: { type: Number, default: 0 },
     images: [String],
-    specification: [String],
+    specifications: [
+      {
+        name: { type: String },
+        image: { type: String },
+      },
+    ],
     video: [
       {
         videoTitle: { type: String },

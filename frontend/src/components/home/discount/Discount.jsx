@@ -73,7 +73,6 @@ function Discount() {
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
-        toast.error(getError(err));
       }
     };
 
@@ -98,7 +97,6 @@ function Discount() {
           console.error("No checked promotions found");
         }
       } catch (error) {
-        toast.error(getError(error));
         console.error("Error fetching initial promotion data:", error);
       }
     };

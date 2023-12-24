@@ -11,7 +11,6 @@ import io from "socket.io-client";
 import { getError } from "../../utilities/util/Utils";
 import { toast } from "react-toastify";
 
-
 const NextArrow = (props) => {
   const { onClick } = props;
   return (
@@ -80,7 +79,6 @@ function Promotion() {
         dispatch({ type: "UPDATE_COUNTDOWNS", payload: countdownData });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: err.message });
-        toast.error(getError(err));
       }
     };
 
@@ -177,7 +175,6 @@ function Promotion() {
     slidesToScroll: 1,
     nextArrow: <NextArrow />,
     prevArrow: <PrevArrow />,
-    
   };
 
   return (

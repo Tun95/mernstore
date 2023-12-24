@@ -14,6 +14,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import { Checkbox } from "antd";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -48,13 +49,12 @@ function NewProduct() {
   const [countInStock, setCountInStock] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
-  const [desc, setDesc] = useState("");
+  const [description, setDescription] = useState("");
   const [weight, setWeight] = useState("");
   const [category, setCategory] = useState([]);
   const [color, setColor] = useState([]);
   const [size, setSize] = useState([]);
   const [brand, setBrand] = useState([]);
-  const [image, setImage] = useState("");
   const [images, setImages] = useState([]);
 
   //=================
@@ -78,10 +78,6 @@ function NewProduct() {
         toast.error("Please add product price", { position: "bottom-center" });
         return;
       }
-      if (!image) {
-        toast.error("Please select an image", { position: "bottom-center" });
-        return;
-      }
 
       await axios.post(
         `${request}/api/products`,
@@ -92,13 +88,12 @@ function NewProduct() {
           countInStock,
           price,
           discount,
-          desc,
+          description,
           weight,
           category,
           color,
           size,
           brand,
-          image,
           images,
         },
         {
@@ -124,6 +119,7 @@ function NewProduct() {
     const file = e.target.files[0];
     const bodyFormData = new FormData();
     bodyFormData.append("file", file);
+
     try {
       dispatch({ type: "UPLOAD_REQUEST" });
       const { data } = await axios.post(`${request}/api/upload`, bodyFormData, {
@@ -133,11 +129,11 @@ function NewProduct() {
         },
       });
       dispatch({ type: "UPLOAD_SUCCESS" });
+
       if (forImages) {
         setImages([...images, data.secure_url]);
-      } else {
-        setImage(data.secure_url);
       }
+
       toast.success("Image uploaded successfully. Click update to apply it", {
         position: "bottom-center",
       });
@@ -186,6 +182,35 @@ function NewProduct() {
     updatedFeatureData[featureIndex].subFeatures.push("");
     setFeatureData(updatedFeatureData);
   };
+  const deleteFeature = (featureIndex) => {
+    const updatedFeatureData = [...featureData];
+    updatedFeatureData.splice(featureIndex, 1);
+    setFeatureData(updatedFeatureData);
+  };
+
+  const deleteSubFeature = (featureIndex, subFeatureIndex) => {
+    const updatedFeatureData = [...featureData];
+    updatedFeatureData[featureIndex].subFeatures.splice(subFeatureIndex, 1);
+    setFeatureData(updatedFeatureData);
+  };
+
+  //==================
+  // TOGGLE SPECIFICATIONS BOX
+  //==================
+  const [specificationsData, setSpecificationsData] = useState([
+    { name: "", image: "" }, // Initialize with one empty specification
+  ]);
+
+  const addMoreSpecification = () => {
+    setSpecificationsData([...specificationsData, { name: "", image: "" }]);
+  };
+
+  // Delete specification function
+  const deleteSpecification = (specificationIndex) => {
+    const updatedSpecificationsData = [...specificationsData];
+    updatedSpecificationsData.splice(specificationIndex, 1);
+    setSpecificationsData(updatedSpecificationsData);
+  };
 
   //==================
   //TOGGLE COLOR BOX
@@ -196,6 +221,13 @@ function NewProduct() {
 
   const addMoreColor = () => {
     setColorData([...colorData, { colorName: "", colorImg: "" }]);
+  };
+
+  // Delete color function
+  const deleteColor = (colorIndex) => {
+    const updatedColorData = [...colorData];
+    updatedColorData.splice(colorIndex, 1);
+    setColorData(updatedColorData);
   };
 
   //==================
@@ -216,6 +248,13 @@ function NewProduct() {
       },
     ]);
   };
+  // Delete video function
+  const deleteVideo = (videoIndex) => {
+    const updatedVideoData = [...videoData];
+    updatedVideoData.splice(videoIndex, 1);
+    setVideoData(updatedVideoData);
+  };
+
   return (
     <>
       <Helmet>
@@ -390,6 +429,20 @@ function NewProduct() {
                                       setFeatureData(updatedFeatureData);
                                     }}
                                   />
+                                  {featureData.length > 1 && (
+                                    <button
+                                      type="button"
+                                      className="remove_btn a_flex first_btn"
+                                      onClick={() =>
+                                        deleteFeature(featureIndex)
+                                      }
+                                    >
+                                      <span className="a_flex">
+                                        <CloseIcon className="icon" />
+                                        Delete Feature
+                                      </span>
+                                    </button>
+                                  )}
                                 </div>
                                 <div className="form-group">
                                   {feature.subFeatures.map(
@@ -414,6 +467,20 @@ function NewProduct() {
                                             setFeatureData(updatedFeatureData);
                                           }}
                                         />
+                                        <button
+                                          type="button"
+                                          className="remove_btn a_flex"
+                                          onClick={() =>
+                                            deleteSubFeature(
+                                              featureIndex,
+                                              subFeatureIndex
+                                            )
+                                          }
+                                        >
+                                          <span className="a_flex">
+                                            <DeleteForeverOutlinedIcon className="icon delete_icon" />
+                                          </span>
+                                        </button>
                                       </div>
                                     )
                                   )}
@@ -451,8 +518,8 @@ function NewProduct() {
                               <span>03</span>
                             </div>
                             <div className="text">
-                              <h4>Product Color</h4>
-                              <small>Add product image color</small>
+                              <h4>Product Specifications</h4>
+                              <small>Add product specifications</small>
                             </div>
                           </div>
                         </div>
@@ -465,6 +532,110 @@ function NewProduct() {
                         </div>
                       </div>
                       {openBox === 2 && (
+                        <div className="product_info_color">
+                          <div className="product_info_box box">
+                            {specificationsData.map(
+                              (specification, specificationIndex) => (
+                                <div
+                                  className="form-group"
+                                  key={specificationIndex}
+                                >
+                                  <label htmlFor="specification">
+                                    Specification
+                                  </label>
+                                  <span className="specification_name">
+                                    <input
+                                      type="text"
+                                      id="specification"
+                                      value={specification.name}
+                                      onChange={(e) => {
+                                        const updatedSpecificationsData = [
+                                          ...specificationsData,
+                                        ];
+                                        updatedSpecificationsData[
+                                          specificationIndex
+                                        ].name = e.target.value;
+                                        setSpecificationsData(
+                                          updatedSpecificationsData
+                                        );
+                                      }}
+                                      placeholder="specification name"
+                                    />
+                                  </span>
+                                  <span className="link_img">
+                                    <input
+                                      type="text"
+                                      id="specification"
+                                      value={specification.image}
+                                      onChange={(e) => {
+                                        const updatedSpecificationsData = [
+                                          ...specificationsData,
+                                        ];
+                                        updatedSpecificationsData[
+                                          specificationIndex
+                                        ].image = e.target.value;
+                                        setSpecificationsData(
+                                          updatedSpecificationsData
+                                        );
+                                      }}
+                                      placeholder="specification image link"
+                                    />
+                                  </span>
+                                  {specificationsData.length > 1 && (
+                                    <button
+                                      type="button"
+                                      className="remove_btn a_flex first_btn next_del_btn"
+                                      onClick={() =>
+                                        deleteSpecification(specificationIndex)
+                                      }
+                                    >
+                                      <span className="a_flex">
+                                        <CloseIcon className="icon" />
+                                        Delete Specification
+                                      </span>
+                                    </button>
+                                  )}
+                                </div>
+                              )
+                            )}
+                          </div>
+                          <div className="add_more_btn">
+                            <span onClick={addMoreSpecification}>
+                              Add More Specifications
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="light_shadow mt product_color">
+                      <div
+                        className={
+                          openBox === 3
+                            ? "header  c_flex"
+                            : "header border c_flex"
+                        }
+                        onClick={() => toggleBox(3)}
+                      >
+                        <div className="left">
+                          <div className="d_flex">
+                            <div className="number l_flex">
+                              <span>03</span>
+                            </div>
+                            <div className="text">
+                              <h4>Product Color</h4>
+                              <small>Add product image color</small>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="right">
+                          {openBox === 3 ? (
+                            <KeyboardArrowUpIcon className="icon" />
+                          ) : (
+                            <KeyboardArrowDownIcon className="icon" />
+                          )}
+                        </div>
+                      </div>
+                      {openBox === 3 && (
                         <div className="product_info_color">
                           <div className="product_info_box box">
                             {colorData.map((color, colorIndex) => (
@@ -498,6 +669,18 @@ function NewProduct() {
                                     placeholder="product image color link"
                                   />
                                 </span>
+                                {colorData.length > 1 && (
+                                  <button
+                                    type="button"
+                                    className="remove_btn a_flex first_btn next_del_btn"
+                                    onClick={() => deleteColor(colorIndex)}
+                                  >
+                                    <span className="a_flex">
+                                      <CloseIcon className="icon" />
+                                      Delete Color
+                                    </span>
+                                  </button>
+                                )}
                               </div>
                             ))}
                           </div>
@@ -507,14 +690,15 @@ function NewProduct() {
                         </div>
                       )}
                     </div>
+
                     <div className="light_shadow mt product_images">
                       <div
                         className={
-                          openBox === 3
+                          openBox === 4
                             ? "header  c_flex"
                             : "header border c_flex"
                         }
-                        onClick={() => toggleBox(3)}
+                        onClick={() => toggleBox(4)}
                       >
                         <div className="left">
                           <div className="d_flex">
@@ -528,14 +712,14 @@ function NewProduct() {
                           </div>
                         </div>
                         <div className="right">
-                          {openBox === 3 ? (
+                          {openBox === 4 ? (
                             <KeyboardArrowUpIcon className="icon" />
                           ) : (
                             <KeyboardArrowDownIcon className="icon" />
                           )}
                         </div>
                       </div>
-                      {openBox === 3 && (
+                      {openBox === 4 && (
                         <div className="product_info_images">
                           <div className="product_info_img_box box">
                             <div className="form_group f_flex">
@@ -588,11 +772,11 @@ function NewProduct() {
                     <div className="light_shadow mt product_color ">
                       <div
                         className={
-                          openBox === 4
+                          openBox === 5
                             ? "header  c_flex"
                             : "header border c_flex"
                         }
-                        onClick={() => toggleBox(4)}
+                        onClick={() => toggleBox(5)}
                       >
                         <div className="left">
                           <div className="d_flex">
@@ -606,14 +790,14 @@ function NewProduct() {
                           </div>
                         </div>
                         <div className="right">
-                          {openBox === 4 ? (
+                          {openBox === 5 ? (
                             <KeyboardArrowUpIcon className="icon" />
                           ) : (
                             <KeyboardArrowDownIcon className="icon" />
                           )}
                         </div>
                       </div>
-                      {openBox === 4 && (
+                      {openBox === 5 && (
                         <div className="product_info_video product_info_color">
                           <div className="product_info_box box">
                             {videoData.map((video, videoIndex) => (
@@ -666,7 +850,7 @@ function NewProduct() {
                                   <textarea
                                     name="description"
                                     id="description"
-                                    placeholder="Descritions here..."
+                                    placeholder="Descriptions here..."
                                     value={video.videoDescription}
                                     onChange={(e) => {
                                       const updatedVideoData = [...videoData];
@@ -677,6 +861,18 @@ function NewProduct() {
                                     }}
                                   ></textarea>
                                 </span>
+                                {videoData.length > 1 && (
+                                  <button
+                                    type="button"
+                                    className="remove_btn a_flex first_btn next_del_btn"
+                                    onClick={() => deleteVideo(videoIndex)}
+                                  >
+                                    <span className="a_flex">
+                                      <CloseIcon className="icon" />
+                                      Delete Video
+                                    </span>
+                                  </button>
+                                )}
                               </div>
                             ))}
                           </div>
@@ -689,11 +885,11 @@ function NewProduct() {
                     <div className="light_shadow mt product_description ">
                       <div
                         className={
-                          openBox === 5
+                          openBox === 6
                             ? "header  c_flex"
                             : "header border c_flex"
                         }
-                        onClick={() => toggleBox(5)}
+                        onClick={() => toggleBox(6)}
                       >
                         <div className="left">
                           <div className="d_flex">
@@ -709,14 +905,14 @@ function NewProduct() {
                           </div>
                         </div>
                         <div className="right">
-                          {openBox === 5 ? (
+                          {openBox === 6 ? (
                             <KeyboardArrowUpIcon className="icon" />
                           ) : (
                             <KeyboardArrowDownIcon className="icon" />
                           )}
                         </div>
                       </div>
-                      {openBox === 5 && (
+                      {openBox === 6 && (
                         <div className="product_info_desc ">
                           <div className="box">
                             <div className="form_group">
@@ -725,10 +921,12 @@ function NewProduct() {
                                 className="editor"
                                 id="desc"
                                 ref={editor}
-                                value={desc}
+                                value={description}
                                 // config={config}
                                 tabIndex={1} // tabIndex of textarea
-                                onBlur={(newContent) => setDesc(newContent)} // preferred to use only this option to update the content for performance reasons
+                                onBlur={(newContent) =>
+                                  setDescription(newContent)
+                                } // preferred to use only this option to update the content for performance reasons
                                 onChange={(newContent) => {}}
                               />
                             </div>
@@ -747,7 +945,7 @@ function NewProduct() {
                       <CloseIcon className="icon" /> Cancel
                     </button>
                     <button type="submit" className="a_flex">
-                      <DescriptionOutlinedIcon className="icon" /> Save
+                      <DescriptionOutlinedIcon className="icon" /> Create
                     </button>
                   </span>
                 </div>
