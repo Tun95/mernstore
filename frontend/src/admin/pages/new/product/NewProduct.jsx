@@ -52,8 +52,9 @@ function NewProduct() {
   const [description, setDescription] = useState("");
   const [weight, setWeight] = useState("");
   const [category, setCategory] = useState([]);
+  const [subcategory, setSubcategory] = useState([]);
+  const [subitem, setSubitem] = useState([]);
   const [color, setColor] = useState([]);
-  const [size, setSize] = useState([]);
   const [brand, setBrand] = useState([]);
   const [images, setImages] = useState([]);
 
@@ -92,7 +93,6 @@ function NewProduct() {
           weight,
           category,
           color,
-          size,
           brand,
           images,
         },
@@ -307,6 +307,8 @@ function NewProduct() {
                             <input
                               type="text"
                               id="name"
+                              value={name}
+                              onChange={(e) => setName(e.target.value)}
                               placeholder="product name"
                             />
                           </div>
@@ -315,20 +317,40 @@ function NewProduct() {
                             <input
                               type="text"
                               id="quantity"
+                              value={countInStock}
+                              onChange={(e) => setCountInStock(e.target.value)}
                               placeholder="123"
                             />
                           </div>
                           <div className="form-group">
                             <label htmlFor="price">Price</label>
-                            <input type="text" id="price" placeholder="1023" />
+                            <input
+                              type="text"
+                              value={price}
+                              onChange={(e) => setPrice(e.target.value)}
+                              id="price"
+                              placeholder="1023"
+                            />
                           </div>
                           <div className="form-group">
                             <label htmlFor="discount">Discount</label>
-                            <input type="text" id="discount" placeholder="15" />
+                            <input
+                              type="text"
+                              id="discount"
+                              value={discount}
+                              onChange={(e) => setDiscount(e.target.value)}
+                              placeholder="15 in %"
+                            />
                           </div>
                           <div className="form-group">
                             <label htmlFor="weight">Weight</label>
-                            <input type="text" id="weight" placeholder="225g" />
+                            <input
+                              type="text"
+                              id="weight"
+                              value={weight}
+                              onChange={(e) => setWeight(e.target.value)}
+                              placeholder="225 in g"
+                            />
                           </div>
                           <div className="form-group">
                             <label htmlFor="category">Category</label>
@@ -619,7 +641,7 @@ function NewProduct() {
                         <div className="left">
                           <div className="d_flex">
                             <div className="number l_flex">
-                              <span>03</span>
+                              <span>04</span>
                             </div>
                             <div className="text">
                               <h4>Product Color</h4>
@@ -703,7 +725,7 @@ function NewProduct() {
                         <div className="left">
                           <div className="d_flex">
                             <div className="number l_flex">
-                              <span>04</span>
+                              <span>05</span>
                             </div>
                             <div className="text">
                               <h4>Product Images</h4>
@@ -781,7 +803,7 @@ function NewProduct() {
                         <div className="left">
                           <div className="d_flex">
                             <div className="number l_flex">
-                              <span>05</span>
+                              <span>06</span>
                             </div>
                             <div className="text">
                               <h4>Video Reviews</h4>
@@ -894,7 +916,7 @@ function NewProduct() {
                         <div className="left">
                           <div className="d_flex">
                             <div className="number l_flex">
-                              <span>06</span>
+                              <span>07</span>
                             </div>
                             <div className="text">
                               <h4>Product Description</h4>
