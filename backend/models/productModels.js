@@ -24,24 +24,21 @@ const productSchema = new mongoose.Schema(
   {
     name: { type: String, required: true, unique: true },
     seller: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-    slug: { type: String, required: true, unique: true },
+    slug: { type: String },
     keygen: { type: String },
     category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category", // Reference to the Category model
+      type: String,
     },
     subcategory: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category.subCategories", // Reference the subcategories within the Category
+      type: String,
     },
     subitem: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category.subCategories.subItems", // Reference the subitems within the subcategories
+      type: String,
     },
     color: [
       {
         colorName: { type: String },
-        colorLink: { type: String },
+        colorImg: { type: String },
       },
     ],
     brand: { type: String },
@@ -67,10 +64,11 @@ const productSchema = new mongoose.Schema(
     description: { type: String },
     features: [
       {
-        name: { type: String },
+        featureName: { type: String },
         subFeatures: [{ type: String }],
       },
     ],
+    promotion: { type: String },
     countInStock: { type: Number, default: 0 },
     numSales: { type: Number, default: 0 },
     sold: [
@@ -131,13 +129,6 @@ productSchema.pre("save", async function (next) {
 productSchema.virtual("order", {
   ref: "Order",
   foreignField: "orderItems.product",
-  localField: "_id",
-});
-
-//Virtual method to populate created order
-productSchema.virtual("promotion", {
-  ref: "Promotion",
-  foreignField: "product",
   localField: "_id",
 });
 

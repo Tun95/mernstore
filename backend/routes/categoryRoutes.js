@@ -283,4 +283,27 @@ categoryRouter.get(
   })
 );
 
+//=======================
+// Fetch a category by ID
+//=======================
+categoryRouter.get(
+  "/:id",
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const categoryId = req.params.id;
+      const category = await Category.findById(categoryId);
+
+      if (category) {
+        res.status(200).json(category);
+      } else {
+        res.status(404).json({ message: "Category not found" });
+      }
+    } catch (error) {
+      res
+        .status(500)
+        .json({ message: "Internal Server Error", error: error.message });
+    }
+  })
+);
+
 export default categoryRouter;

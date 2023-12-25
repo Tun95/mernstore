@@ -34,6 +34,10 @@
         justify-content: flex-start;
         flex-direction: row;
       }
+      .black_friday {
+        position: relative;
+        top: 10px;
+      }
       .header {
         padding: 20px;
         cursor: pointer;
@@ -203,6 +207,7 @@
             .form-group:nth-child(2) {
               margin-top: 10px;
             }
+
             .form-group {
               gap: 10px;
               position: relative;

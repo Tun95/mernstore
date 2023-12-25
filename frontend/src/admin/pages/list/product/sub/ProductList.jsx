@@ -56,7 +56,7 @@ function ProductList({ currencySign, webname }) {
           <>
             <div className="cellWidthImg">
               <img
-                src={params.row.image || photo}
+                src={params.row.images[0] || photo}
                 alt="image_banner"
                 className="cellImg"
               />

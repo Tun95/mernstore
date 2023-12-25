@@ -1,4 +1,10 @@
-import React, { useContext, useReducer, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useReducer,
+  useRef,
+  useState,
+} from "react";
 import JoditEditor from "jodit-react";
 import CloseIcon from "@mui/icons-material/Close";
 import { Helmet } from "react-helmet-async";
@@ -32,116 +38,37 @@ const reducer = (state, action) => {
 
 function NewProduct() {
   const [{ loading, error }, dispatch] = useReducer(reducer, {
-    loading: true,
+    loading: false,
     error: "",
   });
 
   const { state } = useContext(Context);
-  const { userInfo, colors, categories, brands, sizes } = state;
+  const { userInfo, categories, promotions } = state;
 
   const navigate = useNavigate();
 
   const editor = useRef(null);
 
   const [name, setName] = useState("");
-  const [slug, setSlug] = useState("");
   const [keygen, setKeygen] = useState("");
   const [countInStock, setCountInStock] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
   const [description, setDescription] = useState("");
   const [weight, setWeight] = useState("");
-  const [category, setCategory] = useState([]);
-  const [subcategory, setSubcategory] = useState([]);
-  const [subitem, setSubitem] = useState([]);
-  const [color, setColor] = useState([]);
-  const [brand, setBrand] = useState([]);
+  const [category, setCategory] = useState("");
+  const [subcategory, setSubcategory] = useState("");
+  const [subitem, setSubitem] = useState("");
+  const [promotion, setPromotion] = useState("");
+  const [brand, setBrand] = useState("");
   const [images, setImages] = useState([]);
+  const [blackFriday, setBlackFriday] = useState(false);
 
-  //=================
-  // CREATE PRODUCT
-  //=================
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    try {
-      dispatch({ type: "CREATE_REQUEST" });
-
-      if (!name) {
-        toast.error("Please enter product name", { position: "bottom-center" });
-        return;
-      }
-
-      if (!slug) {
-        toast.error("Please enter product slug", { position: "bottom-center" });
-        return;
-      }
-      if (!price) {
-        toast.error("Please add product price", { position: "bottom-center" });
-        return;
-      }
-
-      await axios.post(
-        `${request}/api/products`,
-        {
-          name,
-          slug,
-          keygen,
-          countInStock,
-          price,
-          discount,
-          description,
-          weight,
-          category,
-          color,
-          brand,
-          images,
-        },
-        {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-
-      dispatch({ type: "CREATE_SUCCESS" });
-      toast.success("Product created successfully", {
-        position: "bottom-center",
-      });
-      navigate("/admin/products");
-    } catch (err) {
-      toast.error(getError(err), { position: "bottom-center" });
-      dispatch({ type: "CREATE_FAIL" });
-    }
-  };
-
-  //=================
-  // IMAGES UPLOAD
-  //=================
-  const uploadFileHandler = async (e, forImages) => {
-    const file = e.target.files[0];
-    const bodyFormData = new FormData();
-    bodyFormData.append("file", file);
-
-    try {
-      dispatch({ type: "UPLOAD_REQUEST" });
-      const { data } = await axios.post(`${request}/api/upload`, bodyFormData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          authorization: `Bearer ${userInfo.token}`,
-        },
-      });
-      dispatch({ type: "UPLOAD_SUCCESS" });
-
-      if (forImages) {
-        setImages([...images, data.secure_url]);
-      }
-
-      toast.success("Image uploaded successfully. Click update to apply it", {
-        position: "bottom-center",
-      });
-    } catch (err) {
-      toast.error(getError(err), { position: "bottom-center" });
-      dispatch({ type: "UPLOAD_FAIL" });
-    }
-  };
+  useEffect(() => {
+    // Reset subcategory and subitem when category changes
+    setSubcategory("");
+    setSubitem("");
+  }, [category]);
 
   //=================
   //DELETE IMAGES
@@ -231,7 +158,7 @@ function NewProduct() {
   };
 
   //==================
-  //TOGGLE COLOR BOX
+  //TOGGLE VIDEO BOX
   //==================
   const [videoData, setVideoData] = useState([
     { videoTitle: "", videoLink: "", videoThumbnail: "", videoDescription: "" },
@@ -253,6 +180,126 @@ function NewProduct() {
     const updatedVideoData = [...videoData];
     updatedVideoData.splice(videoIndex, 1);
     setVideoData(updatedVideoData);
+  };
+
+  //=================
+  // CREATE PRODUCT
+  //=================
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch({ type: "CREATE_REQUEST" });
+
+      // Validate required fields
+      if (!name) {
+        toast.error("Please enter product name", { position: "bottom-center" });
+        return;
+      }
+      if (!price) {
+        toast.error("Please add product price", { position: "bottom-center" });
+        return;
+      }
+
+      // Clean up arrays with empty values
+      const cleanedFeatureData = featureData.filter((feature) => {
+        return (
+          feature.featureName.trim() !== "" ||
+          feature.subFeatures.some((subFeature) => subFeature.trim() !== "")
+        );
+      });
+
+      const cleanedSpecificationsData = specificationsData.filter(
+        (specification) => {
+          return (
+            specification.name.trim() !== "" ||
+            specification.image.trim() !== ""
+          );
+        }
+      );
+
+      const cleanedColorData = colorData.filter((color) => {
+        return color.colorName.trim() !== "" || color.colorImg.trim() !== "";
+      });
+
+      const cleanedVideoData = videoData.filter((video) => {
+        return (
+          video.videoTitle.trim() !== "" ||
+          video.videoLink.trim() !== "" ||
+          video.videoThumbnail.trim() !== "" ||
+          video.videoDescription.trim() !== ""
+        );
+      });
+
+      // Prepare product data based on your schema
+      const productData = {
+        name,
+        keygen,
+        countInStock,
+        price,
+        discount,
+        description,
+        weight,
+        category,
+        subcategory,
+        subitem,
+        promotion,
+        brand,
+        images,
+        blackFriday,
+        features: cleanedFeatureData,
+        specifications: cleanedSpecificationsData,
+        video: cleanedVideoData,
+        color: cleanedColorData,
+        // Add other fields as needed
+      };
+
+      // Make the API call to create a new product
+      await axios.post(`${request}/api/products`, productData, {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+
+      dispatch({ type: "CREATE_SUCCESS" });
+      toast.success("Product created successfully", {
+        position: "bottom-center",
+      });
+
+      // Redirect to the product list page or navigate to another route as needed
+      navigate("/admin/products");
+    } catch (err) {
+      toast.error(getError(err), { position: "bottom-center" });
+      dispatch({ type: "CREATE_FAIL" });
+    }
+  };
+
+  //=================
+  // IMAGES UPLOAD
+  //=================
+  const uploadFileHandler = async (e, forImages) => {
+    const file = e.target.files[0];
+    const bodyFormData = new FormData();
+    bodyFormData.append("file", file);
+
+    try {
+      dispatch({ type: "UPLOAD_REQUEST" });
+      const { data } = await axios.post(`${request}/api/upload`, bodyFormData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          authorization: `Bearer ${userInfo.token}`,
+        },
+      });
+      dispatch({ type: "UPLOAD_SUCCESS" });
+
+      if (forImages) {
+        setImages([...images, data.secure_url]);
+      }
+
+      toast.success("Image uploaded successfully. Click update to apply it", {
+        position: "bottom-center",
+      });
+    } catch (err) {
+      toast.error(getError(err), { position: "bottom-center" });
+      dispatch({ type: "UPLOAD_FAIL" });
+    }
   };
 
   return (
@@ -313,6 +360,16 @@ function NewProduct() {
                             />
                           </div>
                           <div className="form-group">
+                            <label htmlFor="name">Keygen</label>
+                            <input
+                              type="text"
+                              id="keygen"
+                              value={keygen}
+                              onChange={(e) => setKeygen(e.target.value)}
+                              placeholder="product keygen"
+                            />
+                          </div>
+                          <div className="form-group">
                             <label htmlFor="quantity">Quantity</label>
                             <input
                               type="text"
@@ -354,47 +411,129 @@ function NewProduct() {
                           </div>
                           <div className="form-group">
                             <label htmlFor="category">Category</label>
-                            <select name="category" id="category">
-                              <option value="category">category</option>
+                            <select
+                              name="category"
+                              id="category"
+                              value={category}
+                              onChange={(e) => {
+                                setCategory(e.target.value);
+                                setSubcategory(""); // Reset subcategory when category changes
+                                setSubitem(""); // Reset subitem when category changes
+                              }}
+                            >
+                              <option value="" disabled>
+                                Select Category
+                              </option>
+                              {categories.map((categoryGroup) =>
+                                categoryGroup.categories.map((cat) => (
+                                  <option key={cat._id} value={cat.name}>
+                                    {cat.name}
+                                  </option>
+                                ))
+                              )}
                             </select>
                           </div>
                           <div className="form-group">
                             <label htmlFor="sub-category">Sub-Category</label>
-                            <select name="sub-category" id="sub-category">
-                              <option value="category">category</option>
+                            <select
+                              name="sub-category"
+                              id="sub-category"
+                              value={subcategory}
+                              onChange={(e) => {
+                                setSubcategory(e.target.value);
+                                setSubitem(""); // Reset subitem when subcategory changes
+                              }}
+                            >
+                              <option value="" disabled>
+                                Select Sub-Category
+                              </option>
+                              {categories
+                                .flatMap(
+                                  (categoryGroup) => categoryGroup.categories
+                                )
+                                .find((cat) => cat.name === category)
+                                ?.subCategories.map((subCategory) => (
+                                  <option
+                                    key={subCategory._id}
+                                    value={subCategory.name}
+                                  >
+                                    {subCategory.name}
+                                  </option>
+                                ))}
                             </select>
                           </div>
                           <div className="form-group">
                             <label htmlFor="sub-category-items">
-                              Sub-Category items
+                              Sub-Category Items
                             </label>
                             <select
                               name="sub-category-items"
                               id="sub-category-items"
+                              value={subitem}
+                              onChange={(e) => setSubitem(e.target.value)}
                             >
-                              <option value="category">category</option>
+                              <option value="" disabled>
+                                Select Sub-Category Item
+                              </option>
+                              {categories
+                                .flatMap(
+                                  (categoryGroup) => categoryGroup.categories
+                                )
+                                .find((cat) => cat.name === category)
+                                ?.subCategories.find(
+                                  (subCat) => subCat.name === subcategory
+                                )
+                                ?.subItems.map((subItem) => (
+                                  <option
+                                    key={subItem._id}
+                                    value={subItem.name}
+                                  >
+                                    {subItem.name}
+                                  </option>
+                                ))}
                             </select>
                           </div>
                           <div className="form-group">
                             <label htmlFor="brand">Brand</label>
-                            <input type="text" id="brand" placeholder="brand" />
-                          </div>{" "}
-                          <div className="form-group">
-                            <label htmlFor="image">Image</label>
                             <input
                               type="text"
-                              id="image"
-                              placeholder="image link"
+                              id="brand"
+                              value={brand}
+                              onChange={(e) => setBrand(e.target.value)}
+                              placeholder="brand"
                             />
-                          </div>
+                          </div>{" "}
                           <div className="form-group">
                             <label htmlFor="promotion">Promotion</label>
-                            <select name="promotion" id="promotion">
-                              <option value="promotion">promotion</option>
+                            <select
+                              name="promotion"
+                              id="promotion"
+                              value={promotion}
+                              onChange={(e) => setPromotion(e.target.value)}
+                              required
+                            >
+                              <option value="" disabled>
+                                Select a promotion
+                              </option>
+                              {promotions.map((promotion) => (
+                                <option
+                                  key={promotion._id}
+                                  value={promotion._id}
+                                >
+                                  {promotion.title}
+                                </option>
+                              ))}
                             </select>
                           </div>
-                          <div className="form-group a_flex">
-                            <Checkbox>Activate for Black Friday sale</Checkbox>
+                          <div className="form-group a_flex black_friday">
+                            <Checkbox
+                              checked={blackFriday}
+                              onChange={() =>
+                                setBlackFriday((prevValue) => !prevValue)
+                              }
+                            >
+                              Activate for Black Friday sale
+                            </Checkbox>
                           </div>
                         </div>
                       )}
@@ -688,7 +827,7 @@ function NewProduct() {
                                         e.target.value;
                                       setColorData(updatedColorData);
                                     }}
-                                    placeholder="product image color link"
+                                    placeholder="color e.g #ffffff"
                                   />
                                 </span>
                                 {colorData.length > 1 && (
@@ -966,8 +1105,14 @@ function NewProduct() {
                     >
                       <CloseIcon className="icon" /> Cancel
                     </button>
-                    <button type="submit" className="a_flex">
-                      <DescriptionOutlinedIcon className="icon" /> Create
+                    <button type="submit" className="a_flex" disabled={loading}>
+                      {loading ? (
+                        <div className="loading-spinner">Loading...</div>
+                      ) : (
+                        <>
+                          <DescriptionOutlinedIcon className="icon" /> Create
+                        </>
+                      )}
                     </button>
                   </span>
                 </div>

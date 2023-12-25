@@ -76,12 +76,12 @@ function reducer(state, action) {
     case "FETCH_PRICE_FAIL":
       return { ...state, loading: false, error: action.payload };
 
-    //FETCH SIZES
-    case "FETCH_SIZE_REQUEST":
+    //FETCH PROMOTION
+    case "FETCH_PROMOTION_REQUEST":
       return { ...state, loading: true };
-    case "FETCH_SIZE_SUCCESS":
-      return { ...state, loading: false, sizes: action.payload };
-    case "FETCH_SIZE_FAIL":
+    case "FETCH_PROMOTION_SUCCESS":
+      return { ...state, loading: false, promotions: action.payload };
+    case "FETCH_PROMOTION_FAIL":
       return { ...state, loading: false, error: action.payload };
 
     //FETCH COLOR
@@ -209,16 +209,16 @@ export function ContextProvider(props) {
     fetchData();
   }, []);
 
-  //==============
-  //FETCH ALL SIZE
-  //==============
+  //====================
+  //FETCH ALL PROMOTIONS
+  //====================
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const { data } = await axios.get(`${request}/api/size`);
-        dispatch({ type: "FETCH_SIZE_SUCCESS", payload: data });
+        const { data } = await axios.get(`${request}/api/promotions`);
+        dispatch({ type: "FETCH_PROMOTION_SUCCESS", payload: data });
       } catch (err) {
-        dispatch({ type: "FETCH_SIZE_FAIL", payload: getError(err) });
+        dispatch({ type: "FETCH_PROMOTION_FAIL", payload: getError(err) });
       }
     };
     fetchData();
