@@ -22,6 +22,7 @@ import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import CloseIcon from "@mui/icons-material/Close";
 import airpod6 from "../../../../assets/bestsellers/airpod.webp";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -58,113 +59,37 @@ function ProductEdit() {
   const { id: productId } = params;
 
   const { state } = useContext(Context);
-  const { userInfo, colors, categories, brands, sizes } = state;
+  const { userInfo, categories, promotions } = state;
 
-  const [{ product, loadingUpload }, dispatch] = useReducer(reducer, {
+  const [{ product, loading, error }, dispatch] = useReducer(reducer, {
     product: [],
     loading: true,
     error: "",
   });
 
   const [name, setName] = useState("");
-  const [slug, setSlug] = useState("");
   const [keygen, setKeygen] = useState("");
   const [countInStock, setCountInStock] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
-  const [desc, setDesc] = useState("");
+  const [description, setDescription] = useState("");
   const [weight, setWeight] = useState("");
-  const [category, setCategory] = useState([]);
-  const [color, setColor] = useState([]);
-  const [size, setSize] = useState([]);
-  const [brand, setBrand] = useState([]);
-  const [image, setImage] = useState("");
+  const [category, setCategory] = useState("");
+  const [subcategory, setSubcategory] = useState("");
+  const [subitem, setSubitem] = useState("");
+  const [promotion, setPromotion] = useState("");
+  const [brand, setBrand] = useState("");
   const [images, setImages] = useState([]);
-  const [flashdeal, setFlashdeal] = useState(false);
+  const [blackFriday, setBlackFriday] = useState(false);
 
-  //=====================
-  //PRODUCT FETCHING
-  //=====================
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(
-          `${request}/api/products/admin/${productId}`
-        );
-        setName(data.name);
-        setSlug(data.slug);
-        setKeygen(data.keygen);
-        setCountInStock(data.countInStock);
-        setPrice(data.price);
-        setDiscount(data.discount);
-        setDesc(data.desc);
-        setWeight(data.weight);
-        setCategory(data.category);
-        setColor(data.color);
-        setSize(data.size);
-        setBrand(data.brand);
-        setImage(data.image);
-        setImages(data.images);
-        setFlashdeal(data.flashdeal);
-        dispatch({ type: "FETCH_SUCCESS", payload: data });
-      } catch (err) {
-        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
-      }
-    };
-    fetchData();
-  }, [productId]);
-  console.log(product);
-
-  //==============
-  //PRODUCT UPDATE
-  //==============
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    try {
-      dispatch({ type: "UPDATE_REQUEST" });
-      await axios.put(
-        `${request}/api/products/${productId}`,
-        {
-          _id: productId,
-          name,
-          slug,
-          keygen,
-          countInStock,
-          price,
-          discount,
-          desc,
-          weight,
-          category,
-          color,
-          size,
-          brand,
-          image,
-          images,
-          flashdeal,
-        },
-        {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-      dispatch({ type: "UPDATE_SUCCESS" });
-      toast.success("Product updated successfully", {
-        position: "bottom-center",
-      });
-      navigate("/admin/products");
-    } catch (err) {
-      toast.error(getError(err), { position: "bottom-center" });
-      dispatch({ type: "UPDATE_FAIL" });
-    }
-  };
-
-  //============
-  //IMAGE UPLOAD
-  //============
+  //=================
+  // IMAGES UPLOAD
+  //=================
   const uploadFileHandler = async (e, forImages) => {
     const file = e.target.files[0];
     const bodyFormData = new FormData();
     bodyFormData.append("file", file);
+
     try {
       dispatch({ type: "UPLOAD_REQUEST" });
       const { data } = await axios.post(`${request}/api/upload`, bodyFormData, {
@@ -174,11 +99,11 @@ function ProductEdit() {
         },
       });
       dispatch({ type: "UPLOAD_SUCCESS" });
+
       if (forImages) {
         setImages([...images, data.secure_url]);
-      } else {
-        setImage(data.secure_url);
       }
+
       toast.success("Image uploaded successfully. Click update to apply it", {
         position: "bottom-center",
       });
@@ -267,6 +192,35 @@ function ProductEdit() {
     updatedFeatureData[featureIndex].subFeatures.push("");
     setFeatureData(updatedFeatureData);
   };
+  const deleteFeature = (featureIndex) => {
+    const updatedFeatureData = [...featureData];
+    updatedFeatureData.splice(featureIndex, 1);
+    setFeatureData(updatedFeatureData);
+  };
+
+  const deleteSubFeature = (featureIndex, subFeatureIndex) => {
+    const updatedFeatureData = [...featureData];
+    updatedFeatureData[featureIndex].subFeatures.splice(subFeatureIndex, 1);
+    setFeatureData(updatedFeatureData);
+  };
+
+  //==================
+  // TOGGLE SPECIFICATIONS BOX
+  //==================
+  const [specificationsData, setSpecificationsData] = useState([
+    { name: "", image: "" }, // Initialize with one empty specification
+  ]);
+
+  const addMoreSpecification = () => {
+    setSpecificationsData([...specificationsData, { name: "", image: "" }]);
+  };
+
+  // Delete specification function
+  const deleteSpecification = (specificationIndex) => {
+    const updatedSpecificationsData = [...specificationsData];
+    updatedSpecificationsData.splice(specificationIndex, 1);
+    setSpecificationsData(updatedSpecificationsData);
+  };
 
   //==================
   //TOGGLE COLOR BOX
@@ -279,8 +233,15 @@ function ProductEdit() {
     setColorData([...colorData, { colorName: "", colorImg: "" }]);
   };
 
+  // Delete color function
+  const deleteColor = (colorIndex) => {
+    const updatedColorData = [...colorData];
+    updatedColorData.splice(colorIndex, 1);
+    setColorData(updatedColorData);
+  };
+
   //==================
-  //TOGGLE COLOR BOX
+  //TOGGLE VIDEO BOX
   //==================
   const [videoData, setVideoData] = useState([
     { videoTitle: "", videoLink: "", videoThumbnail: "", videoDescription: "" },
@@ -296,6 +257,126 @@ function ProductEdit() {
         videoDescription: "",
       },
     ]);
+  };
+  // Delete video function
+  const deleteVideo = (videoIndex) => {
+    const updatedVideoData = [...videoData];
+    updatedVideoData.splice(videoIndex, 1);
+    setVideoData(updatedVideoData);
+  };
+
+  //=====================
+  //PRODUCT FETCHING
+  //=====================
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        dispatch({ type: "FETCH_REQUEST" });
+        const { data } = await axios.get(
+          `${request}/api/products/admin/${productId}`
+        );
+        setName(data.name);
+        setKeygen(data.keygen);
+        setCountInStock(data.countInStock);
+        setPrice(data.price);
+        setDiscount(data.discount);
+        setDescription(data.description);
+        setWeight(data.weight);
+        setCategory(data.category);
+        setSubcategory(data.subcategory);
+        setSubitem(data.subitem);
+        setPromotion(data.promotion);
+        setVideoData(data.video || []);
+        setFeatureData(data.features || []);
+        setColorData(data.color || []);
+        setSpecificationsData(data.specifications || []);
+        setBrand(data.brand);
+        setImages(data.images);
+        setBlackFriday(data.blackFriday);
+        dispatch({ type: "FETCH_SUCCESS", payload: data });
+      } catch (err) {
+        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+      }
+    };
+    fetchData();
+  }, [productId]);
+  console.log(product);
+
+  //==============
+  //PRODUCT UPDATE
+  //==============
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch({ type: "UPDATE_REQUEST" });
+
+      // Clean up arrays with empty values
+      const cleanedFeatureData = featureData.filter((feature) => {
+        return (
+          feature.featureName.trim() !== "" ||
+          feature.subFeatures.some((subFeature) => subFeature.trim() !== "")
+        );
+      });
+
+      const cleanedSpecificationsData = specificationsData.filter(
+        (specification) => {
+          return (
+            specification.name.trim() !== "" ||
+            specification.image.trim() !== ""
+          );
+        }
+      );
+
+      const cleanedColorData = colorData.filter((color) => {
+        return color.colorName.trim() !== "" || color.colorImg.trim() !== "";
+      });
+
+      const cleanedVideoData = videoData.filter((video) => {
+        return (
+          video.videoTitle.trim() !== "" ||
+          video.videoLink.trim() !== "" ||
+          video.videoThumbnail.trim() !== "" ||
+          video.videoDescription.trim() !== ""
+        );
+      });
+
+      // Prepare product data based on your schema
+      const productData = {
+        name,
+        keygen,
+        countInStock,
+        price,
+        discount,
+        description,
+        weight,
+        category,
+        subcategory,
+        subitem,
+        promotion,
+        brand,
+        images,
+        blackFriday,
+        features: cleanedFeatureData,
+        specifications: cleanedSpecificationsData,
+        video: cleanedVideoData,
+        color: cleanedColorData,
+        // Add other fields as needed
+      };
+
+      // Make the API call to create a new product
+      await axios.put(`${request}/api/products/${productId}`, productData, {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+
+      dispatch({ type: "UPDATE_SUCCESS" });
+      toast.success("Product updated successfully", {
+        position: "bottom-center",
+      });
+      navigate("/admin/products");
+    } catch (err) {
+      toast.error(getError(err), { position: "bottom-center" });
+      dispatch({ type: "UPDATE_FAIL" });
+    }
   };
 
   return (
@@ -362,7 +443,7 @@ function ProductEdit() {
                                     <td className="imageCell">
                                       <div className="productImg">
                                         <img
-                                          src={airpod6}
+                                          src={product.images[0] || airpod6}
                                           alt=""
                                           className="img"
                                         />
@@ -371,10 +452,7 @@ function ProductEdit() {
                                     <td className="textCell">
                                       <div>
                                         <label htmlFor="name">Name:</label>
-                                        <span>
-                                          {product.name}AB: Apple iPhone 14 Pro
-                                          128GB Deep Purple (MQ0G3RX/A)
-                                        </span>
+                                        <span>{product.name}</span>
                                       </div>
                                       <div>
                                         <label htmlFor="id">Id:</label>
@@ -400,7 +478,19 @@ function ProductEdit() {
                               <input
                                 type="text"
                                 id="name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
                                 placeholder="product name"
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="name">Keygen</label>
+                              <input
+                                type="text"
+                                id="keygen"
+                                value={keygen}
+                                onChange={(e) => setKeygen(e.target.value)}
+                                placeholder="product keygen"
                               />
                             </div>
                             <div className="form-group">
@@ -408,6 +498,10 @@ function ProductEdit() {
                               <input
                                 type="text"
                                 id="quantity"
+                                value={countInStock}
+                                onChange={(e) =>
+                                  setCountInStock(e.target.value)
+                                }
                                 placeholder="123"
                               />
                             </div>
@@ -415,6 +509,8 @@ function ProductEdit() {
                               <label htmlFor="price">Price</label>
                               <input
                                 type="text"
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
                                 id="price"
                                 placeholder="1023"
                               />
@@ -424,7 +520,9 @@ function ProductEdit() {
                               <input
                                 type="text"
                                 id="discount"
-                                placeholder="15"
+                                value={discount}
+                                onChange={(e) => setDiscount(e.target.value)}
+                                placeholder="15 in %"
                               />
                             </div>
                             <div className="form-group">
@@ -432,30 +530,93 @@ function ProductEdit() {
                               <input
                                 type="text"
                                 id="weight"
-                                placeholder="225g"
+                                value={weight}
+                                onChange={(e) => setWeight(e.target.value)}
+                                placeholder="225 in g"
                               />
                             </div>
                             <div className="form-group">
                               <label htmlFor="category">Category</label>
-                              <select name="category" id="category">
-                                <option value="category">category</option>
+                              <select
+                                name="category"
+                                id="category"
+                                value={category}
+                                onChange={(e) => {
+                                  setCategory(e.target.value);
+                                  setSubcategory(""); // Reset subcategory when category changes
+                                  setSubitem(""); // Reset subitem when category changes
+                                }}
+                              >
+                                <option value="" disabled>
+                                  Select Category
+                                </option>
+                                {categories.map((categoryGroup) =>
+                                  categoryGroup.categories.map((cat) => (
+                                    <option key={cat._id} value={cat.name}>
+                                      {cat.name}
+                                    </option>
+                                  ))
+                                )}
                               </select>
                             </div>
                             <div className="form-group">
                               <label htmlFor="sub-category">Sub-Category</label>
-                              <select name="sub-category" id="sub-category">
-                                <option value="category">category</option>
+                              <select
+                                name="sub-category"
+                                id="sub-category"
+                                value={subcategory}
+                                onChange={(e) => {
+                                  setSubcategory(e.target.value);
+                                  setSubitem(""); // Reset subitem when subcategory changes
+                                }}
+                              >
+                                <option value="" disabled>
+                                  Select Sub-Category
+                                </option>
+                                {categories
+                                  .flatMap(
+                                    (categoryGroup) => categoryGroup.categories
+                                  )
+                                  .find((cat) => cat.name === category)
+                                  ?.subCategories.map((subCategory) => (
+                                    <option
+                                      key={subCategory._id}
+                                      value={subCategory.name}
+                                    >
+                                      {subCategory.name}
+                                    </option>
+                                  ))}
                               </select>
                             </div>
                             <div className="form-group">
                               <label htmlFor="sub-category-items">
-                                Sub-Category items
+                                Sub-Category Items
                               </label>
                               <select
                                 name="sub-category-items"
                                 id="sub-category-items"
+                                value={subitem}
+                                onChange={(e) => setSubitem(e.target.value)}
                               >
-                                <option value="category">category</option>
+                                <option value="" disabled>
+                                  Select Sub-Category Item
+                                </option>
+                                {categories
+                                  .flatMap(
+                                    (categoryGroup) => categoryGroup.categories
+                                  )
+                                  .find((cat) => cat.name === category)
+                                  ?.subCategories.find(
+                                    (subCat) => subCat.name === subcategory
+                                  )
+                                  ?.subItems.map((subItem) => (
+                                    <option
+                                      key={subItem._id}
+                                      value={subItem.name}
+                                    >
+                                      {subItem.name}
+                                    </option>
+                                  ))}
                               </select>
                             </div>
                             <div className="form-group">
@@ -463,25 +624,40 @@ function ProductEdit() {
                               <input
                                 type="text"
                                 id="brand"
+                                value={brand}
+                                onChange={(e) => setBrand(e.target.value)}
                                 placeholder="brand"
                               />
                             </div>{" "}
                             <div className="form-group">
-                              <label htmlFor="image">Image</label>
-                              <input
-                                type="text"
-                                id="image"
-                                placeholder="image link"
-                              />
-                            </div>
-                            <div className="form-group">
                               <label htmlFor="promotion">Promotion</label>
-                              <select name="promotion" id="promotion">
-                                <option value="promotion">promotion</option>
+                              <select
+                                name="promotion"
+                                id="promotion"
+                                value={promotion}
+                                onChange={(e) => setPromotion(e.target.value)}
+                                required
+                              >
+                                <option value="" disabled>
+                                  Select a promotion
+                                </option>
+                                {promotions.map((promotion) => (
+                                  <option
+                                    key={promotion._id}
+                                    value={promotion._id}
+                                  >
+                                    {promotion.title}
+                                  </option>
+                                ))}
                               </select>
                             </div>
-                            <div className="form-group a_flex">
-                              <Checkbox>
+                            <div className="form-group a_flex black_friday">
+                              <Checkbox
+                                checked={blackFriday}
+                                onChange={() =>
+                                  setBlackFriday((prevValue) => !prevValue)
+                                }
+                              >
                                 Activate for Black Friday sale
                               </Checkbox>
                             </div>
@@ -541,6 +717,20 @@ function ProductEdit() {
                                       setFeatureData(updatedFeatureData);
                                     }}
                                   />
+                                  {featureData.length > 1 && (
+                                    <button
+                                      type="button"
+                                      className="remove_btn a_flex first_btn"
+                                      onClick={() =>
+                                        deleteFeature(featureIndex)
+                                      }
+                                    >
+                                      <span className="a_flex">
+                                        <CloseIcon className="icon" />
+                                        Delete Feature
+                                      </span>
+                                    </button>
+                                  )}
                                 </div>
                                 <div className="form-group">
                                   {feature.subFeatures.map(
@@ -565,6 +755,20 @@ function ProductEdit() {
                                             setFeatureData(updatedFeatureData);
                                           }}
                                         />
+                                        <button
+                                          type="button"
+                                          className="remove_btn a_flex"
+                                          onClick={() =>
+                                            deleteSubFeature(
+                                              featureIndex,
+                                              subFeatureIndex
+                                            )
+                                          }
+                                        >
+                                          <span className="a_flex">
+                                            <DeleteForeverOutlinedIcon className="icon delete_icon" />
+                                          </span>
+                                        </button>
                                       </div>
                                     )
                                   )}
@@ -602,8 +806,8 @@ function ProductEdit() {
                               <span>03</span>
                             </div>
                             <div className="text">
-                              <h4>Product Color</h4>
-                              <small>Add product image color</small>
+                              <h4>Product Specifications</h4>
+                              <small>Add product specifications</small>
                             </div>
                           </div>
                         </div>
@@ -616,6 +820,110 @@ function ProductEdit() {
                         </div>
                       </div>
                       {openBox === 2 && (
+                        <div className="product_info_color">
+                          <div className="product_info_box box">
+                            {specificationsData.map(
+                              (specification, specificationIndex) => (
+                                <div
+                                  className="form-group"
+                                  key={specificationIndex}
+                                >
+                                  <label htmlFor="specification">
+                                    Specification
+                                  </label>
+                                  <span className="specification_name">
+                                    <input
+                                      type="text"
+                                      id="specification"
+                                      value={specification.name}
+                                      onChange={(e) => {
+                                        const updatedSpecificationsData = [
+                                          ...specificationsData,
+                                        ];
+                                        updatedSpecificationsData[
+                                          specificationIndex
+                                        ].name = e.target.value;
+                                        setSpecificationsData(
+                                          updatedSpecificationsData
+                                        );
+                                      }}
+                                      placeholder="specification name"
+                                    />
+                                  </span>
+                                  <span className="link_img">
+                                    <input
+                                      type="text"
+                                      id="specification"
+                                      value={specification.image}
+                                      onChange={(e) => {
+                                        const updatedSpecificationsData = [
+                                          ...specificationsData,
+                                        ];
+                                        updatedSpecificationsData[
+                                          specificationIndex
+                                        ].image = e.target.value;
+                                        setSpecificationsData(
+                                          updatedSpecificationsData
+                                        );
+                                      }}
+                                      placeholder="specification image link"
+                                    />
+                                  </span>
+                                  {specificationsData.length > 1 && (
+                                    <button
+                                      type="button"
+                                      className="remove_btn a_flex first_btn next_del_btn"
+                                      onClick={() =>
+                                        deleteSpecification(specificationIndex)
+                                      }
+                                    >
+                                      <span className="a_flex">
+                                        <CloseIcon className="icon" />
+                                        Delete Specification
+                                      </span>
+                                    </button>
+                                  )}
+                                </div>
+                              )
+                            )}
+                          </div>
+                          <div className="add_more_btn">
+                            <span onClick={addMoreSpecification}>
+                              Add More Specifications
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="light_shadow mt product_color">
+                      <div
+                        className={
+                          openBox === 3
+                            ? "header  c_flex"
+                            : "header border c_flex"
+                        }
+                        onClick={() => toggleBox(3)}
+                      >
+                        <div className="left">
+                          <div className="d_flex">
+                            <div className="number l_flex">
+                              <span>04</span>
+                            </div>
+                            <div className="text">
+                              <h4>Product Color</h4>
+                              <small>Add product image color</small>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="right">
+                          {openBox === 3 ? (
+                            <KeyboardArrowUpIcon className="icon" />
+                          ) : (
+                            <KeyboardArrowDownIcon className="icon" />
+                          )}
+                        </div>
+                      </div>
+                      {openBox === 3 && (
                         <div className="product_info_color">
                           <div className="product_info_box box">
                             {colorData.map((color, colorIndex) => (
@@ -646,9 +954,21 @@ function ProductEdit() {
                                         e.target.value;
                                       setColorData(updatedColorData);
                                     }}
-                                    placeholder="product image color link"
+                                    placeholder="color e.g #ffffff"
                                   />
                                 </span>
+                                {colorData.length > 1 && (
+                                  <button
+                                    type="button"
+                                    className="remove_btn a_flex first_btn next_del_btn"
+                                    onClick={() => deleteColor(colorIndex)}
+                                  >
+                                    <span className="a_flex">
+                                      <CloseIcon className="icon" />
+                                      Delete Color
+                                    </span>
+                                  </button>
+                                )}
                               </div>
                             ))}
                           </div>
@@ -658,19 +978,20 @@ function ProductEdit() {
                         </div>
                       )}
                     </div>
+
                     <div className="light_shadow mt product_images">
                       <div
                         className={
-                          openBox === 3
+                          openBox === 4
                             ? "header  c_flex"
                             : "header border c_flex"
                         }
-                        onClick={() => toggleBox(3)}
+                        onClick={() => toggleBox(4)}
                       >
                         <div className="left">
                           <div className="d_flex">
                             <div className="number l_flex">
-                              <span>04</span>
+                              <span>05</span>
                             </div>
                             <div className="text">
                               <h4>Product Images</h4>
@@ -679,14 +1000,14 @@ function ProductEdit() {
                           </div>
                         </div>
                         <div className="right">
-                          {openBox === 3 ? (
+                          {openBox === 4 ? (
                             <KeyboardArrowUpIcon className="icon" />
                           ) : (
                             <KeyboardArrowDownIcon className="icon" />
                           )}
                         </div>
                       </div>
-                      {openBox === 3 && (
+                      {openBox === 4 && (
                         <div className="product_info_images">
                           <div className="product_info_img_box box">
                             <div className="form_group f_flex">
@@ -739,16 +1060,16 @@ function ProductEdit() {
                     <div className="light_shadow mt product_color ">
                       <div
                         className={
-                          openBox === 4
+                          openBox === 5
                             ? "header  c_flex"
                             : "header border c_flex"
                         }
-                        onClick={() => toggleBox(4)}
+                        onClick={() => toggleBox(5)}
                       >
                         <div className="left">
                           <div className="d_flex">
                             <div className="number l_flex">
-                              <span>05</span>
+                              <span>06</span>
                             </div>
                             <div className="text">
                               <h4>Video Reviews</h4>
@@ -757,14 +1078,14 @@ function ProductEdit() {
                           </div>
                         </div>
                         <div className="right">
-                          {openBox === 4 ? (
+                          {openBox === 5 ? (
                             <KeyboardArrowUpIcon className="icon" />
                           ) : (
                             <KeyboardArrowDownIcon className="icon" />
                           )}
                         </div>
                       </div>
-                      {openBox === 4 && (
+                      {openBox === 5 && (
                         <div className="product_info_video product_info_color">
                           <div className="product_info_box box">
                             {videoData.map((video, videoIndex) => (
@@ -817,7 +1138,7 @@ function ProductEdit() {
                                   <textarea
                                     name="description"
                                     id="description"
-                                    placeholder="Descritions here..."
+                                    placeholder="Descriptions here..."
                                     value={video.videoDescription}
                                     onChange={(e) => {
                                       const updatedVideoData = [...videoData];
@@ -828,6 +1149,18 @@ function ProductEdit() {
                                     }}
                                   ></textarea>
                                 </span>
+                                {videoData.length > 1 && (
+                                  <button
+                                    type="button"
+                                    className="remove_btn a_flex first_btn next_del_btn"
+                                    onClick={() => deleteVideo(videoIndex)}
+                                  >
+                                    <span className="a_flex">
+                                      <CloseIcon className="icon" />
+                                      Delete Video
+                                    </span>
+                                  </button>
+                                )}
                               </div>
                             ))}
                           </div>
@@ -840,16 +1173,16 @@ function ProductEdit() {
                     <div className="light_shadow mt product_description ">
                       <div
                         className={
-                          openBox === 5
+                          openBox === 6
                             ? "header  c_flex"
                             : "header border c_flex"
                         }
-                        onClick={() => toggleBox(5)}
+                        onClick={() => toggleBox(6)}
                       >
                         <div className="left">
                           <div className="d_flex">
                             <div className="number l_flex">
-                              <span>06</span>
+                              <span>07</span>
                             </div>
                             <div className="text">
                               <h4>Product Description</h4>
@@ -860,14 +1193,14 @@ function ProductEdit() {
                           </div>
                         </div>
                         <div className="right">
-                          {openBox === 5 ? (
+                          {openBox === 6 ? (
                             <KeyboardArrowUpIcon className="icon" />
                           ) : (
                             <KeyboardArrowDownIcon className="icon" />
                           )}
                         </div>
                       </div>
-                      {openBox === 5 && (
+                      {openBox === 6 && (
                         <div className="product_info_desc ">
                           <div className="box">
                             <div className="form_group">
@@ -876,10 +1209,12 @@ function ProductEdit() {
                                 className="editor"
                                 id="desc"
                                 ref={editor}
-                                value={desc}
+                                value={description}
                                 // config={config}
                                 tabIndex={1} // tabIndex of textarea
-                                onBlur={(newContent) => setDesc(newContent)} // preferred to use only this option to update the content for performance reasons
+                                onBlur={(newContent) =>
+                                  setDescription(newContent)
+                                } // preferred to use only this option to update the content for performance reasons
                                 onChange={(newContent) => {}}
                               />
                             </div>
@@ -897,8 +1232,14 @@ function ProductEdit() {
                     >
                       <CloseIcon className="icon" /> Cancel
                     </button>
-                    <button type="submit" className="a_flex">
-                      <DescriptionOutlinedIcon className="icon" /> Save
+                    <button type="submit" className="a_flex" disabled={loading}>
+                      {loading ? (
+                        <div className="loading-spinner">Loading...</div>
+                      ) : (
+                        <>
+                          <DescriptionOutlinedIcon className="icon" /> Save
+                        </>
+                      )}
                     </button>
                   </span>
                 </div>

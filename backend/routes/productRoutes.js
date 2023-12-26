@@ -125,6 +125,89 @@ productRouter.post(
   })
 );
 
+//===========================
+//ADMIN PRODUCT DETAILS BY ID
+//===========================
+productRouter.get("/admin/:id", async (req, res) => {
+  const productId = req.params.id;
+
+  try {
+    const product = await Product.aggregate([
+      { $match: { _id: new mongoose.Types.ObjectId(productId) } },
+      {
+        $addFields: {
+          seller: { $ifNull: ["$seller", null] }, // Set a default value for seller if it's not present
+        },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "seller",
+          foreignField: "_id",
+          as: "seller",
+        },
+      },
+      {
+        $lookup: {
+          from: "orders",
+          localField: "_id",
+          foreignField: "orderItems.product",
+          as: "orders",
+        },
+      },
+      {
+        $addFields: {
+          sold: { $slice: ["$sold", -3] }, // Limit the 'sold' array to the last 3 entries
+        },
+      },
+    ]);
+
+    if (product.length === 0) {
+      return res.status(404).send({ message: "Product Not Found" });
+    }
+
+    // Assuming there's only one product with the given ID
+    res.send(product[0]);
+  } catch (error) {
+    console.error(error);
+    res.status(500).send({ message: "Internal Server Error" });
+  }
+});
+
+//=================
+// UPDATING PRODUCT
+//=================
+productRouter.put(
+  "/:id",
+  isAuth,
+  isSellerOrAdmin,
+  expressAsyncHandler(async (req, res) => {
+    const productId = req.params.id;
+
+    try {
+      // Find the product by ID
+      const product = await Product.findById(productId);
+
+      // Check if the product exists
+      if (!product) {
+        return res.status(404).send({ message: "Product Not Found" });
+      }
+
+      // Update product properties based on the request body using the spread operator
+      Object.assign(product, req.body);
+
+      // Save the updated product
+      await product.save();
+
+      // Send a success response
+      res.send({ message: "Product Updated", updatedProduct: product });
+    } catch (error) {
+      console.error("Error updating product:", error);
+      res.status(500).send({ message: "Internal Server Error" });
+    }
+  })
+);
+
 //============================
 // AFFILIATE PRODUCTS APPROVAL
 //============================
@@ -468,59 +551,59 @@ productRouter.delete(
   })
 );
 
-//===============
-//DELETE REVIEW
-//===============
-productRouter.delete(
-  "/:id/reviews/:reviewId",
-  isAuth,
-  expressAsyncHandler(async (req, res) => {
-    const productId = req.params.id;
-    const reviewId = req.params.reviewId;
+// //===============
+// //DELETE REVIEW
+// //===============
+// productRouter.delete(
+//   "/:id/reviews/:reviewId",
+//   isAuth,
+//   expressAsyncHandler(async (req, res) => {
+//     const productId = req.params.id;
+//     const reviewId = req.params.reviewId;
 
-    const product = await Product.findById(productId);
-    if (product) {
-      const review = product.reviews.find((r) => r._id.toString() === reviewId);
-      if (review) {
-        // Check if the review belongs to the authenticated user
-        if (review.email === req.user.email) {
-          // Remove the review from the product's reviews array
-          product.reviews = product.reviews.filter(
-            (r) => r._id.toString() !== reviewId
-          );
+//     const product = await Product.findById(productId);
+//     if (product) {
+//       const review = product.reviews.find((r) => r._id.toString() === reviewId);
+//       if (review) {
+//         // Check if the review belongs to the authenticated user
+//         if (review.email === req.user.email) {
+//           // Remove the review from the product's reviews array
+//           product.reviews = product.reviews.filter(
+//             (r) => r._id.toString() !== reviewId
+//           );
 
-          product.numReviews = product.reviews.length;
+//           product.numReviews = product.reviews.length;
 
-          // Recalculate the average rating
-          if (product.numReviews > 0) {
-            product.rating =
-              product.reviews.reduce((a, c) => c.rating + a, 0) /
-              product.numReviews;
-          } else {
-            product.rating = 0;
-          }
+//           // Recalculate the average rating
+//           if (product.numReviews > 0) {
+//             product.rating =
+//               product.reviews.reduce((a, c) => c.rating + a, 0) /
+//               product.numReviews;
+//           } else {
+//             product.rating = 0;
+//           }
 
-          // Save the updated product
-          const updatedProduct = await product.save();
+//           // Save the updated product
+//           const updatedProduct = await product.save();
 
-          res.status(200).send({
-            message: "Review deleted",
-            numReviews: updatedProduct.numReviews,
-            rating: updatedProduct.rating,
-          });
-        } else {
-          res.status(401).send({
-            message: "Unauthorized: Review does not belong to the user",
-          });
-        }
-      } else {
-        res.status(404).send({ message: "Review not found" });
-      }
-    } else {
-      res.status(404).send({ message: "Product not found" });
-    }
-  })
-);
+//           res.status(200).send({
+//             message: "Review deleted",
+//             numReviews: updatedProduct.numReviews,
+//             rating: updatedProduct.rating,
+//           });
+//         } else {
+//           res.status(401).send({
+//             message: "Unauthorized: Review does not belong to the user",
+//           });
+//         }
+//       } else {
+//         res.status(404).send({ message: "Review not found" });
+//       }
+//     } else {
+//       res.status(404).send({ message: "Product not found" });
+//     }
+//   })
+// );
 
 //ADMIN PRODUCT LIST
 const ADMIN_PAGE_SIZE = 15;
@@ -905,55 +988,6 @@ productRouter.get("/:id", async (req, res) => {
     res.send(product);
   } else {
     res.status(404).send({ message: "Product Not Found" });
-  }
-});
-
-//===========================
-//ADMIN PRODUCT DETAILS BY ID
-//===========================
-productRouter.get("/admin/:id", async (req, res) => {
-  const productId = req.params.id;
-
-  try {
-    const product = await Product.aggregate([
-      { $match: { _id: mongoose.Types.ObjectId(productId) } },
-      {
-        $addFields: {
-          seller: { $ifNull: ["$seller", null] }, // Set a default value for seller if it's not present
-        },
-      },
-      {
-        $lookup: {
-          from: "users",
-          localField: "seller",
-          foreignField: "_id",
-          as: "seller",
-        },
-      },
-      {
-        $lookup: {
-          from: "orders",
-          localField: "_id",
-          foreignField: "orderItems.product",
-          as: "orders",
-        },
-      },
-      {
-        $addFields: {
-          sold: { $slice: ["$sold", -3] }, // Limit the 'sold' array to the last 3 entries
-        },
-      },
-    ]);
-
-    if (product.length === 0) {
-      return res.status(404).send({ message: "Product Not Found" });
-    }
-
-    // Assuming there's only one product with the given ID
-    res.send(product[0]);
-  } catch (error) {
-    console.error(error);
-    res.status(500).send({ message: "Internal Server Error" });
   }
 });
 
