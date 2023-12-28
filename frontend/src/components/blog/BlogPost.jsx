@@ -33,8 +33,6 @@ export function formatDate(dateString) {
 
 function BlogPost({
   blogs,
-  loading,
-  error,
   dispatch,
   currentPage,
   totalPages,
@@ -53,8 +51,7 @@ function BlogPost({
         <div className="header" ref={headerRef}>
           <h1>Blog</h1>
         </div>
-        {loading && <p>Loading...</p>}
-        {error && <p>Error fetching data</p>}
+
         {blogs?.map((blog, index) => (
           <div className="list f_flex" key={index}>
             <div className="img">

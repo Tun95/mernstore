@@ -12,9 +12,11 @@
         img {
           width: 350px;
           border-radius: 20px;
-          /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
-          @media screen and (max-width: 420px) {
-            width: 100%;
+        } /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
+        @media screen and (max-width: 500px) {
+          margin-right: 0;
+          img {
+            width: 100% !important;
           }
         }
       }
