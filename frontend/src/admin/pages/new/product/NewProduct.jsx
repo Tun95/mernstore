@@ -590,20 +590,6 @@ function NewProduct() {
                                       setFeatureData(updatedFeatureData);
                                     }}
                                   />
-                                  {featureData.length > 1 && (
-                                    <button
-                                      type="button"
-                                      className="remove_btn a_flex first_btn"
-                                      onClick={() =>
-                                        deleteFeature(featureIndex)
-                                      }
-                                    >
-                                      <span className="a_flex">
-                                        <CloseIcon className="icon" />
-                                        Delete Feature
-                                      </span>
-                                    </button>
-                                  )}
                                 </div>
                                 <div className="form-group">
                                   {feature.subFeatures.map(
@@ -655,6 +641,18 @@ function NewProduct() {
                                     </span>
                                   </div>
                                 </div>
+                                {featureData.length > 1 && (
+                                  <button
+                                    type="button"
+                                    className="remove_btn a_flex first_btn"
+                                    onClick={() => deleteFeature(featureIndex)}
+                                  >
+                                    <span className="a_flex">
+                                      <CloseIcon className="icon" />
+                                      Delete Feature
+                                    </span>
+                                  </button>
+                                )}
                               </div>
                             ))}
                           </div>
