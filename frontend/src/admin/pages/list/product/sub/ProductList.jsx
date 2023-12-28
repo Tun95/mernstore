@@ -44,7 +44,7 @@ const reducer = (state, action) => {
   }
 };
 
-function ProductList({ currencySign, webname }) {
+function ProductList({ currencySign, webname, rows }) {
   const columns = [
     { field: "_id", headerName: "ID", width: 220 },
     {
@@ -192,6 +192,31 @@ function ProductList({ currencySign, webname }) {
     },
   ];
   console.log(products);
+
+  const getRowId = (row) => {
+    // Implement your custom logic to generate a unique id for each row
+    return row._id;
+  };
+
+  // Check if any row is missing the id property
+  const hasMissingId = rows?.some((row) => !row._id);
+
+  if (hasMissingId) {
+    // Generate unique ids for rows without an id property
+    rows = rows?.map((row, index) => {
+      if (!row._id) {
+        return {
+          ...row,
+          id: `row_${index}`, // Replace with your preferred id generation logic
+        };
+      }
+      return row;
+    });
+  }
+
+  const customTranslations = {
+    noRowsLabel: "No product found", // Customize the "No Rows" message here
+  };
   return (
     <div className="admin_page_all page_background admin_page_screen">
       <Helmet>
@@ -219,6 +244,7 @@ function ProductList({ currencySign, webname }) {
             <DataGrid
               className="datagrid"
               rows={products}
+              localeText={customTranslations}
               getRowId={(row) => row._id}
               columns={columns.concat(actionColumn)}
               autoPageSize

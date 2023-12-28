@@ -6,21 +6,21 @@ import React, {
   useState,
 } from "react";
 import JoditEditor from "jodit-react";
-import PublishIcon from "@mui/icons-material/Publish";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { Helmet } from "react-helmet-async";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
-import photo from "../../../admin/assets/photo.png";
+import { Checkbox } from "antd";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import CloseIcon from "@mui/icons-material/Close";
+import airpod6 from "../../../assets/bestsellers/airpod.webp";
+import DeleteForeverOutlinedIcon from "@mui/icons-material/DeleteForeverOutlined";
 import { Context } from "../../../context/Context";
-import { getError } from "../../../components/utilities/util/Utils";
 import { request } from "../../../base url/BaseUrl";
-import MessageBox from "../../../components/utilities/message loading/MessageBox";
-import LoadingBox from "../../../components/utilities/message loading/LoadingBox";
+import { getError } from "../../../components/utilities/util/Utils";
 import Chart from "../../../admin/components/chart/Chart";
 
 const reducer = (state, action) => {
@@ -57,114 +57,38 @@ function SellerProductEdit() {
   const params = useParams();
   const { id: productId } = params;
 
-  const { state, convertCurrency, toCurrencies } = useContext(Context);
-  const { userInfo, colors, categories, brands, sizes } = state;
+  const { state } = useContext(Context);
+  const { userInfo, categories, promotions } = state;
 
-  const [{ loading, error, product, loadingUpload }, dispatch] = useReducer(
-    reducer,
-    {
-      product: [],
-      loading: true,
-      summary: { salesData: [] },
-      error: "",
-    }
-  );
+  const [{ product, loading, error }, dispatch] = useReducer(reducer, {
+    product: [],
+    loading: true,
+    error: "",
+  });
 
   const [name, setName] = useState("");
-  const [slug, setSlug] = useState("");
   const [keygen, setKeygen] = useState("");
   const [countInStock, setCountInStock] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
-  const [desc, setDesc] = useState("");
-  const [category, setCategory] = useState([]);
-  const [color, setColor] = useState([]);
-  const [size, setSize] = useState([]);
-  const [brand, setBrand] = useState([]);
-  const [image, setImage] = useState("");
+  const [description, setDescription] = useState("");
+  const [weight, setWeight] = useState("");
+  const [category, setCategory] = useState("");
+  const [subcategory, setSubcategory] = useState("");
+  const [subitem, setSubitem] = useState("");
+  const [promotion, setPromotion] = useState("");
+  const [brand, setBrand] = useState("");
   const [images, setImages] = useState([]);
-  const [flashdeal, setFlashdeal] = useState(false);
+  const [blackFriday, setBlackFriday] = useState(false);
 
-  //=====================
-  //PRODUCT FETCHING
-  //=====================
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(
-          `${request}/api/products/${productId}`
-        );
-        setName(data.name);
-        setSlug(data.slug);
-        setKeygen(data.keygen);
-        setCountInStock(data.countInStock);
-        setPrice(data.price);
-        setDiscount(data.discount);
-        setDesc(data.desc);
-        setCategory(data.category);
-        setColor(data.color);
-        setSize(data.size);
-        setBrand(data.brand);
-        setImage(data.image);
-        setImages(data.images);
-        setFlashdeal(data.flashdeal);
-        dispatch({ type: "FETCH_SUCCESS", payload: data });
-      } catch (err) {
-        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
-      }
-    };
-    fetchData();
-  }, [productId]);
-
-  //==============
-  //PRODUCT UPDATE
-  //==============
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    try {
-      dispatch({ type: "UPDATE_REQUEST" });
-      await axios.put(
-        `${request}/api/products/${productId}`,
-        {
-          _id: productId,
-          name,
-          slug,
-          keygen,
-          countInStock,
-          price,
-          discount,
-          desc,
-          category,
-          color,
-          size,
-          brand,
-          image,
-          images,
-          flashdeal,
-        },
-        {
-          headers: { Authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-      dispatch({ type: "UPDATE_SUCCESS" });
-      toast.success("Product updated successfully", {
-        position: "bottom-center",
-      });
-      navigate("/vendor/products");
-    } catch (err) {
-      toast.error(getError(err), { position: "bottom-center" });
-      dispatch({ type: "UPDATE_FAIL" });
-    }
-  };
-
-  //============
-  //IMAGE UPLOAD
-  //============
+  //=================
+  // IMAGES UPLOAD
+  //=================
   const uploadFileHandler = async (e, forImages) => {
     const file = e.target.files[0];
     const bodyFormData = new FormData();
     bodyFormData.append("file", file);
+
     try {
       dispatch({ type: "UPLOAD_REQUEST" });
       const { data } = await axios.post(`${request}/api/upload`, bodyFormData, {
@@ -174,11 +98,11 @@ function SellerProductEdit() {
         },
       });
       dispatch({ type: "UPLOAD_SUCCESS" });
+
       if (forImages) {
         setImages([...images, data.secure_url]);
-      } else {
-        setImage(data.secure_url);
       }
+
       toast.success("Image uploaded successfully. Click update to apply it", {
         position: "bottom-center",
       });
@@ -238,338 +162,1052 @@ function SellerProductEdit() {
     });
   };
 
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 210,
-      },
-    },
+  //============
+  //TOGGLE BOX
+  //============
+  const [openBox, setOpenBox] = useState(null);
+
+  const toggleBox = (index) => {
+    if (openBox === index) {
+      setOpenBox(null);
+    } else {
+      setOpenBox(index);
+    }
   };
+
+  //==================
+  //TOGGLE FEATURE BOX
+  //==================
+  const [featureData, setFeatureData] = useState([
+    { featureName: "", subFeatures: [""] }, // Initialize with one empty feature and one sub-feature
+  ]);
+
+  const addFeature = () => {
+    setFeatureData([...featureData, { featureName: "", subFeatures: [""] }]);
+  };
+
+  const addSubFeature = (featureIndex) => {
+    const updatedFeatureData = [...featureData];
+    updatedFeatureData[featureIndex].subFeatures.push("");
+    setFeatureData(updatedFeatureData);
+  };
+  const deleteFeature = (featureIndex) => {
+    const updatedFeatureData = [...featureData];
+    updatedFeatureData.splice(featureIndex, 1);
+    setFeatureData(updatedFeatureData);
+  };
+
+  const deleteSubFeature = (featureIndex, subFeatureIndex) => {
+    const updatedFeatureData = [...featureData];
+    updatedFeatureData[featureIndex].subFeatures.splice(subFeatureIndex, 1);
+    setFeatureData(updatedFeatureData);
+  };
+
+  //==================
+  // TOGGLE SPECIFICATIONS BOX
+  //==================
+  const [specificationsData, setSpecificationsData] = useState([
+    { name: "", image: "" }, // Initialize with one empty specification
+  ]);
+
+  const addMoreSpecification = () => {
+    setSpecificationsData([...specificationsData, { name: "", image: "" }]);
+  };
+
+  // Delete specification function
+  const deleteSpecification = (specificationIndex) => {
+    const updatedSpecificationsData = [...specificationsData];
+    updatedSpecificationsData.splice(specificationIndex, 1);
+    setSpecificationsData(updatedSpecificationsData);
+  };
+
+  //==================
+  //TOGGLE COLOR BOX
+  //==================
+  const [colorData, setColorData] = useState([
+    { colorName: "", colorImg: "" }, // Initialize with one empty Color and one sub-Color
+  ]);
+
+  const addMoreColor = () => {
+    setColorData([...colorData, { colorName: "", colorImg: "" }]);
+  };
+
+  // Delete color function
+  const deleteColor = (colorIndex) => {
+    const updatedColorData = [...colorData];
+    updatedColorData.splice(colorIndex, 1);
+    setColorData(updatedColorData);
+  };
+
+  //==================
+  //TOGGLE VIDEO BOX
+  //==================
+  const [videoData, setVideoData] = useState([
+    { videoTitle: "", videoLink: "", videoThumbnail: "", videoDescription: "" },
+  ]);
+
+  const addMoreVideo = () => {
+    setVideoData([
+      ...videoData,
+      {
+        videoTitle: "",
+        videoLink: "",
+        videoThumbnail: "",
+        videoDescription: "",
+      },
+    ]);
+  };
+  // Delete video function
+  const deleteVideo = (videoIndex) => {
+    const updatedVideoData = [...videoData];
+    updatedVideoData.splice(videoIndex, 1);
+    setVideoData(updatedVideoData);
+  };
+
+  //=====================
+  //PRODUCT FETCHING
+  //=====================
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        dispatch({ type: "FETCH_REQUEST" });
+        const { data } = await axios.get(
+          `${request}/api/products/admin/${productId}`
+        );
+        setName(data.name);
+        setKeygen(data.keygen);
+        setCountInStock(data.countInStock);
+        setPrice(data.price);
+        setDiscount(data.discount);
+        setDescription(data.description);
+        setWeight(data.weight);
+        setCategory(data.category);
+        setSubcategory(data.subcategory);
+        setSubitem(data.subitem);
+        setPromotion(data.promotion);
+        setVideoData(data.video || []);
+        setFeatureData(data.features || []);
+        setColorData(data.color || []);
+        setSpecificationsData(data.specifications || []);
+        setBrand(data.brand);
+        setImages(data.images);
+        setBlackFriday(data.blackFriday);
+        dispatch({ type: "FETCH_SUCCESS", payload: data });
+      } catch (err) {
+        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+      }
+    };
+    fetchData();
+  }, [productId]);
+  console.log(product);
+
+  //==============
+  //PRODUCT UPDATE
+  //==============
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    try {
+      dispatch({ type: "UPDATE_REQUEST" });
+
+      // Clean up arrays with empty values
+      const cleanedFeatureData = featureData.filter((feature) => {
+        return (
+          feature.featureName.trim() !== "" ||
+          feature.subFeatures.some((subFeature) => subFeature.trim() !== "")
+        );
+      });
+
+      const cleanedSpecificationsData = specificationsData.filter(
+        (specification) => {
+          return (
+            specification.name.trim() !== "" ||
+            specification.image.trim() !== ""
+          );
+        }
+      );
+
+      const cleanedColorData = colorData.filter((color) => {
+        return color.colorName.trim() !== "" || color.colorImg.trim() !== "";
+      });
+
+      const cleanedVideoData = videoData.filter((video) => {
+        return (
+          video.videoTitle.trim() !== "" ||
+          video.videoLink.trim() !== "" ||
+          video.videoThumbnail.trim() !== "" ||
+          video.videoDescription.trim() !== ""
+        );
+      });
+
+      // Prepare product data based on your schema
+      const productData = {
+        name,
+        keygen,
+        countInStock,
+        price,
+        discount,
+        description,
+        weight,
+        category,
+        subcategory,
+        subitem,
+        promotion,
+        brand,
+        images,
+        blackFriday,
+        features: cleanedFeatureData,
+        specifications: cleanedSpecificationsData,
+        video: cleanedVideoData,
+        color: cleanedColorData,
+        // Add other fields as needed
+      };
+
+      // Make the API call to create a new product
+      await axios.put(`${request}/api/products/${productId}`, productData, {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+
+      dispatch({ type: "UPDATE_SUCCESS" });
+      toast.success("Product updated successfully", {
+        position: "bottom-center",
+      });
+      navigate("/vendor/products");
+    } catch (err) {
+      toast.error(getError(err), { position: "bottom-center" });
+      dispatch({ type: "UPDATE_FAIL" });
+    }
+  };
+
   return (
     <>
       <Helmet>
-        <title>Product Edit</title>
+        <title>Edit Product :: {`${product.name}`}</title>
       </Helmet>
-      <div className="container">
-        <div className="product_edit">
-          <div className="box_shadow mtb">
+      <div className="product_edit admin_page_all page_background">
+        <div className="container">
+          <div className=" ">
             <div className="productTitleContainer">
-              <h2 className="productTitle featured uppercase">Product Edit </h2>
+              <h3 className="productTitle light_shadow uppercase">
+                Edit Product
+              </h3>
             </div>
-            <div className="productTop d_flex mtb">
-              <div className="productTopLeft featured">
-                <Chart
-                  data={salesStats}
-                  CustomTooltip={CustomTooltip}
-                  dataKey="Sales"
-                  aspect={3 / 1}
-                  title="Sales Performance"
-                />
-              </div>
-              <div className="productTopRight featured">
-                <div className="productInfoTop">
-                  <img src={product.image} alt="" className="productInfoImg" />
-                  <div>
-                    <span className="productName top_right_label">Name:</span>
-                    <span className="productName ">&nbsp;{product.name}</span>
-                  </div>
-                </div>
-                <div className="productInfoBottom">
-                  <div className="productInfoItem">
-                    <span className="productInfoKey top_right_label">id: </span>
-                    <span className="productInfoValue productInfoValueaId">
-                      &nbsp;{productId}
-                    </span>
-                  </div>
-                  <div className="productInfoItem">
-                    <span className="productInfoKey top_right_label">
-                      sales:
-                    </span>
-                    <span className="productInfoValue">
-                      &nbsp;{product.numSales}
-                    </span>
-                  </div>
-
-                  <div className="productInfoItem">
-                    <span className="productInfoKey top_right_label">
-                      in stock:
-                    </span>
-                    <span className="productInfoValue">
-                      &nbsp; {product.countInStock}
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="productBottom">
+            <div className="productBottom mtb">
               <form action="" onSubmit={submitHandler}>
                 <div className="productForm">
-                  <div className="productFormLeft_styles">
-                    <div className="productFormLeft productFormLeft-one">
-                      <label htmlFor="name">Name</label>
-                      <input
-                        type="text"
-                        id="name"
-                        value={name}
-                        maxLength="23"
-                        onChange={(e) => setName(e.target.value)}
-                        placeholder="Bracelet Armchair Fendi"
-                      />
-                      <label htmlFor="slug">Slug</label>
-                      <input
-                        type="text"
-                        id="slug"
-                        value={slug}
-                        onChange={(e) => setSlug(e.target.value)}
-                        placeholder="Bracelet Armchair Fendi"
-                      />
-                      <label htmlFor="keygen">Keygen</label>
-                      <input
-                        type="text"
-                        id="keygen"
-                        value={keygen}
-                        onChange={(e) => setKeygen(e.target.value)}
-                        placeholder="SKU BK3569"
-                      />
-                      <label htmlFor="qty">Quantity</label>
-                      <input
-                        type="text"
-                        id="qty"
-                        value={countInStock}
-                        onChange={(e) => setCountInStock(e.target.value)}
-                        placeholder="123"
-                      />
-                    </div>
-                    <div className="productFormLeft productFormLeft-Two">
-                      <label htmlFor="category" className="ccatb-des">
-                        Category
-                      </label>
-                      <FormControl
-                        variant="filled"
-                        size="small"
-                        id="formControl"
+                  <div className="product_info product___">
+                    <div className="light_shadow product___main">
+                      <div
+                        className={
+                          openBox === 0
+                            ? "header  c_flex"
+                            : "header border c_flex"
+                        }
+                        onClick={() => toggleBox(0)}
                       >
-                        <Select
-                          labelId="mui-simple-select-label"
-                          id="mui_simple_select"
-                          multiple
-                          MenuProps={MenuProps}
-                          SelectDisplayProps={{
-                            style: { paddingTop: 8, paddingBottom: 8 },
-                          }}
-                          value={category}
-                          label={category}
-                          onChange={(e) => setCategory(e.target.value)}
-                        >
-                          {categories?.map((c, index) => (
-                            <MenuItem key={index} value={c.category}>
-                              {c.category}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                      <label htmlFor="color" className="ccatb-des">
-                        Color
-                      </label>
-                      <FormControl
-                        variant="filled"
-                        size="small"
-                        id="formControl"
-                      >
-                        {/* <InputLabel id="mui-simple-select-label">
-                        Color
-                      </InputLabel> */}
-                        <Select
-                          labelId="mui-simple-select-label"
-                          id="mui_simple_select"
-                          multiple
-                          MenuProps={MenuProps}
-                          SelectDisplayProps={{
-                            style: { paddingTop: 8, paddingBottom: 8 },
-                          }}
-                          value={color}
-                          label={color}
-                          onChange={(e) => setColor(e.target.value)}
-                        >
-                          {colors?.map((c, index) => (
-                            <MenuItem key={index} value={c.color}>
-                              <img
-                                src={c.color}
-                                alt={c.color}
-                                className="color_image_size"
-                              />
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                      <label htmlFor="img" className="ccatb-des">
-                        Image
-                      </label>
-                      <input
-                        type="text"
-                        id="img"
-                        value={image}
-                        onChange={(e) => setImage(e.target.value)}
-                        placeholder="/imgs/couch.png"
-                      />
-                      {/* <span className="check_box">
-                        <input
-                          type="checkbox"
-                          checked={flashdeal}
-                          id="flashdeal"
-                          className="flashdeal"
-                          onChange={(e) => setFlashdeal(e.target.checked)}
-                        />
-                        <label htmlFor="flashdeal">Add to Flashdeal</label>
-                      </span> */}
-                    </div>
-                    <div className="productFormLeft productFormLeft-three">
-                      <label htmlFor="size">Size</label>
-                      <FormControl
-                        variant="filled"
-                        size="small"
-                        id="formControl"
-                      >
-                        {/* <InputLabel id="mui-simple-select-label">Size</InputLabel> */}
-                        <Select
-                          labelId="mui-simple-select-label"
-                          id="mui_simple_select"
-                          multiple
-                          MenuProps={MenuProps}
-                          SelectDisplayProps={{
-                            style: { paddingTop: 8, paddingBottom: 8 },
-                          }}
-                          value={size}
-                          label={size}
-                          onChange={(e) => setSize(e.target.value)}
-                        >
-                          {sizes?.map((s, index) => (
-                            <MenuItem key={index} value={s.size}>
-                              {s.size}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                      <label htmlFor="brand" className="ccatb-des">
-                        Brand
-                      </label>
-                      <FormControl
-                        variant="filled"
-                        size="small"
-                        id="formControl"
-                      >
-                        <Select
-                          labelId="mui-simple-select-label"
-                          id="mui_simple_select"
-                          multiple
-                          MenuProps={MenuProps}
-                          SelectDisplayProps={{
-                            style: { paddingTop: 8, paddingBottom: 8 },
-                          }}
-                          value={brand}
-                          label={brand}
-                          onChange={(e) => setBrand(e.target.value)}
-                        >
-                          {brands?.map((b, index) => (
-                            <MenuItem key={index} value={b.brand}>
-                              {b.brand}
-                            </MenuItem>
-                          ))}
-                        </Select>
-                      </FormControl>
-                      <label htmlFor="price">Price</label>
-                      <input
-                        type="text"
-                        id="price"
-                        value={price}
-                        onChange={(e) => setPrice(e.target.value)}
-                        placeholder="23"
-                      />
-                      <label htmlFor="discount">Discount</label>
-                      <input
-                        type="text"
-                        id="discount"
-                        value={discount}
-                        onChange={(e) => setDiscount(e.target.value)}
-                        placeholder="10"
-                      />
-                    </div>
-                  </div>
-                  <div className="productFormRight mtb c_flex">
-                    <div className="productUpload box_shadow">
-                      <img
-                        src={image || photo}
-                        alt=""
-                        className="productUploadImg main_img"
-                      />
-                      {image && loadingUpload && <LoadingBox></LoadingBox>}
-                      <label htmlFor="file">
-                        <PublishIcon
-                          className="upload-btn"
-                          onChange={uploadFileHandler}
-                        />
-                      </label>
-                      <input
-                        onChange={uploadFileHandler}
-                        type="file"
-                        id="file"
-                        style={{ display: "none" }}
-                      />
-                    </div>
-                    <div className="productUpload box_shadow mtb">
-                      <div className="productUploadImg-delete">
-                        {images.map((x) => (
-                          <div key={x}>
-                            <img
-                              src={x}
-                              alt=""
-                              className="productUploadImg wtdh-imgs small_imgs"
-                            />
-                            <DeleteIcon
-                              onClick={() => deleteFileHandler(x)}
-                              className="deleteImages"
-                            />
+                        <div className="left">
+                          <div className="d_flex">
+                            <div className="number l_flex">
+                              <span>01</span>
+                            </div>
+                            <div className="text">
+                              <h4>Product Info</h4>
+                              <small>Fill all information below</small>
+                            </div>
                           </div>
-                        ))}
+                        </div>
+                        <div className="right">
+                          {openBox === 0 ? (
+                            <KeyboardArrowUpIcon className="icon" />
+                          ) : (
+                            <KeyboardArrowDownIcon className="icon" />
+                          )}
+                        </div>
                       </div>
-                      <label htmlFor="files" className="products-images-upload">
-                        {images.length === 0 && (
-                          <MessageBox>No Image</MessageBox>
-                        )}
-                        {images && loadingUpload && <LoadingBox></LoadingBox>}
-                        <PublishIcon
-                          className="upload-btn images-list-l"
-                          onChange={(e) => uploadFileHandler(e, true)}
-                        />
-                      </label>
-                      <input
-                        style={{ display: "none" }}
-                        type="file"
-                        id="files"
-                        onChange={(e) => uploadFileHandler(e, true)}
-                      />
+                      {openBox === 0 && (
+                        <>
+                          <div className="product_chart_info f_flex">
+                            <div className="product_left light_shadow">
+                              <Chart
+                                data={salesStats}
+                                CustomTooltip={CustomTooltip}
+                                dataKey="Sales"
+                                aspect={3 / 1}
+                                title="Sales Performance"
+                              />
+                            </div>
+                            <div className="product_right light_shadow ">
+                              <table className="productTable">
+                                <tbody>
+                                  <tr>
+                                    <td className="imageCell">
+                                      <div className="productImg">
+                                        <img
+                                          src={product.images[0] || airpod6}
+                                          alt=""
+                                          className="img"
+                                        />
+                                      </div>
+                                    </td>
+                                    <td className="textCell">
+                                      <div>
+                                        <label htmlFor="name">Name:</label>
+                                        <span>{product.name}</span>
+                                      </div>
+                                      <div>
+                                        <label htmlFor="id">Id:</label>
+                                        <span>{productId}</span>
+                                      </div>
+                                      <div>
+                                        <label htmlFor="sales">Sales:</label>
+                                        <span>{product.numSales}</span>
+                                      </div>
+                                      <div>
+                                        <label htmlFor="stock">In stock:</label>
+                                        <span> {product.countInStock}</span>
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                          <div className="product_info_box box">
+                            <div className="form-group">
+                              <label htmlFor="name">Name</label>
+                              <input
+                                type="text"
+                                id="name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                placeholder="product name"
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="name">Keygen</label>
+                              <input
+                                type="text"
+                                id="keygen"
+                                value={keygen}
+                                onChange={(e) => setKeygen(e.target.value)}
+                                placeholder="product keygen"
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="quantity">Quantity</label>
+                              <input
+                                type="text"
+                                id="quantity"
+                                value={countInStock}
+                                onChange={(e) =>
+                                  setCountInStock(e.target.value)
+                                }
+                                placeholder="123"
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="price">Price</label>
+                              <input
+                                type="text"
+                                value={price}
+                                onChange={(e) => setPrice(e.target.value)}
+                                id="price"
+                                placeholder="1023"
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="discount">Discount</label>
+                              <input
+                                type="text"
+                                id="discount"
+                                value={discount}
+                                onChange={(e) => setDiscount(e.target.value)}
+                                placeholder="15 in %"
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="weight">Weight</label>
+                              <input
+                                type="text"
+                                id="weight"
+                                value={weight}
+                                onChange={(e) => setWeight(e.target.value)}
+                                placeholder="225 in g"
+                              />
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="category">Category</label>
+                              <select
+                                name="category"
+                                id="category"
+                                value={category}
+                                onChange={(e) => {
+                                  setCategory(e.target.value);
+                                  setSubcategory(""); // Reset subcategory when category changes
+                                  setSubitem(""); // Reset subitem when category changes
+                                }}
+                              >
+                                <option value="" disabled>
+                                  Select Category
+                                </option>
+                                {categories.map((categoryGroup) =>
+                                  categoryGroup.categories.map((cat) => (
+                                    <option key={cat._id} value={cat.name}>
+                                      {cat.name}
+                                    </option>
+                                  ))
+                                )}
+                              </select>
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="sub-category">Sub-Category</label>
+                              <select
+                                name="sub-category"
+                                id="sub-category"
+                                value={subcategory}
+                                onChange={(e) => {
+                                  setSubcategory(e.target.value);
+                                  setSubitem(""); // Reset subitem when subcategory changes
+                                }}
+                              >
+                                <option value="" disabled>
+                                  Select Sub-Category
+                                </option>
+                                {categories
+                                  .flatMap(
+                                    (categoryGroup) => categoryGroup.categories
+                                  )
+                                  .find((cat) => cat.name === category)
+                                  ?.subCategories.map((subCategory) => (
+                                    <option
+                                      key={subCategory._id}
+                                      value={subCategory.name}
+                                    >
+                                      {subCategory.name}
+                                    </option>
+                                  ))}
+                              </select>
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="sub-category-items">
+                                Sub-Category Items
+                              </label>
+                              <select
+                                name="sub-category-items"
+                                id="sub-category-items"
+                                value={subitem}
+                                onChange={(e) => setSubitem(e.target.value)}
+                              >
+                                <option value="" disabled>
+                                  Select Sub-Category Item
+                                </option>
+                                {categories
+                                  .flatMap(
+                                    (categoryGroup) => categoryGroup.categories
+                                  )
+                                  .find((cat) => cat.name === category)
+                                  ?.subCategories.find(
+                                    (subCat) => subCat.name === subcategory
+                                  )
+                                  ?.subItems.map((subItem) => (
+                                    <option
+                                      key={subItem._id}
+                                      value={subItem.name}
+                                    >
+                                      {subItem.name}
+                                    </option>
+                                  ))}
+                              </select>
+                            </div>
+                            <div className="form-group">
+                              <label htmlFor="brand">Brand</label>
+                              <input
+                                type="text"
+                                id="brand"
+                                value={brand}
+                                onChange={(e) => setBrand(e.target.value)}
+                                placeholder="brand"
+                              />
+                            </div>{" "}
+                          </div>
+                        </>
+                      )}
+                    </div>
+                    <div className="features_box mt light_shadow">
+                      <div
+                        className={
+                          openBox === 1
+                            ? "header  c_flex"
+                            : "header border c_flex"
+                        }
+                        onClick={() => toggleBox(1)}
+                      >
+                        <div className="left">
+                          <div className="d_flex">
+                            <div className="number l_flex">
+                              <span>02</span>
+                            </div>
+                            <div className="text">
+                              <h4>Features</h4>
+                              <small>Add product features below</small>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="right">
+                          {openBox === 1 ? (
+                            <KeyboardArrowUpIcon className="icon" />
+                          ) : (
+                            <KeyboardArrowDownIcon className="icon" />
+                          )}
+                        </div>
+                      </div>
+                      {openBox === 1 && (
+                        <div className="features box">
+                          <div className="more_feature">
+                            {featureData.map((feature, featureIndex) => (
+                              <div
+                                className="more_feature_box"
+                                key={featureIndex}
+                              >
+                                <div className="form-group">
+                                  <label htmlFor="feature">Feature</label>
+                                  <input
+                                    type="text"
+                                    placeholder="feature name"
+                                    value={feature.featureName}
+                                    onChange={(e) => {
+                                      const updatedFeatureData = [
+                                        ...featureData,
+                                      ];
+                                      updatedFeatureData[
+                                        featureIndex
+                                      ].featureName = e.target.value;
+                                      setFeatureData(updatedFeatureData);
+                                    }}
+                                  />
+                                </div>
+                                <div className="form-group">
+                                  {feature.subFeatures.map(
+                                    (subFeature, subFeatureIndex) => (
+                                      <div
+                                        className="sub_features a_flex"
+                                        key={subFeatureIndex}
+                                      >
+                                        <input
+                                          type="text"
+                                          className="sub-features"
+                                          placeholder="sub-features name"
+                                          value={subFeature}
+                                          onChange={(e) => {
+                                            const updatedFeatureData = [
+                                              ...featureData,
+                                            ];
+                                            updatedFeatureData[
+                                              featureIndex
+                                            ].subFeatures[subFeatureIndex] =
+                                              e.target.value;
+                                            setFeatureData(updatedFeatureData);
+                                          }}
+                                        />
+                                        <button
+                                          type="button"
+                                          className="remove_btn a_flex"
+                                          onClick={() =>
+                                            deleteSubFeature(
+                                              featureIndex,
+                                              subFeatureIndex
+                                            )
+                                          }
+                                        >
+                                          <span className="a_flex">
+                                            <DeleteForeverOutlinedIcon className="icon delete_icon" />
+                                          </span>
+                                        </button>
+                                      </div>
+                                    )
+                                  )}
+                                  <div className="add_btn">
+                                    <span
+                                      onClick={() =>
+                                        addSubFeature(featureIndex)
+                                      }
+                                    >
+                                      Add Sub-Features
+                                    </span>
+                                  </div>
+                                </div>
+                                {featureData.length > 1 && (
+                                  <button
+                                    type="button"
+                                    className="remove_btn a_flex first_btn"
+                                    onClick={() => deleteFeature(featureIndex)}
+                                  >
+                                    <span className="a_flex">
+                                      <CloseIcon className="icon" />
+                                      Delete Feature
+                                    </span>
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                          <div className="add_more_btn">
+                            <span onClick={addFeature}>Add More Features</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="light_shadow mt product_color">
+                      <div
+                        className={
+                          openBox === 2
+                            ? "header  c_flex"
+                            : "header border c_flex"
+                        }
+                        onClick={() => toggleBox(2)}
+                      >
+                        <div className="left">
+                          <div className="d_flex">
+                            <div className="number l_flex">
+                              <span>03</span>
+                            </div>
+                            <div className="text">
+                              <h4>Product Specifications</h4>
+                              <small>Add product specifications</small>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="right">
+                          {openBox === 2 ? (
+                            <KeyboardArrowUpIcon className="icon" />
+                          ) : (
+                            <KeyboardArrowDownIcon className="icon" />
+                          )}
+                        </div>
+                      </div>
+                      {openBox === 2 && (
+                        <div className="product_info_color">
+                          <div className="product_info_box box">
+                            {specificationsData.map(
+                              (specification, specificationIndex) => (
+                                <div
+                                  className="form-group"
+                                  key={specificationIndex}
+                                >
+                                  <label htmlFor="specification">
+                                    Specification
+                                  </label>
+                                  <span className="specification_name">
+                                    <input
+                                      type="text"
+                                      id="specification"
+                                      value={specification.name}
+                                      onChange={(e) => {
+                                        const updatedSpecificationsData = [
+                                          ...specificationsData,
+                                        ];
+                                        updatedSpecificationsData[
+                                          specificationIndex
+                                        ].name = e.target.value;
+                                        setSpecificationsData(
+                                          updatedSpecificationsData
+                                        );
+                                      }}
+                                      placeholder="specification name"
+                                    />
+                                  </span>
+                                  <span className="link_img">
+                                    <input
+                                      type="text"
+                                      id="specification"
+                                      value={specification.image}
+                                      onChange={(e) => {
+                                        const updatedSpecificationsData = [
+                                          ...specificationsData,
+                                        ];
+                                        updatedSpecificationsData[
+                                          specificationIndex
+                                        ].image = e.target.value;
+                                        setSpecificationsData(
+                                          updatedSpecificationsData
+                                        );
+                                      }}
+                                      placeholder="specification image link"
+                                    />
+                                  </span>
+                                  {specificationsData.length > 1 && (
+                                    <button
+                                      type="button"
+                                      className="remove_btn a_flex first_btn next_del_btn"
+                                      onClick={() =>
+                                        deleteSpecification(specificationIndex)
+                                      }
+                                    >
+                                      <span className="a_flex">
+                                        <CloseIcon className="icon" />
+                                        Delete Specification
+                                      </span>
+                                    </button>
+                                  )}
+                                </div>
+                              )
+                            )}
+                          </div>
+                          <div className="add_more_btn">
+                            <span onClick={addMoreSpecification}>
+                              Add More Specifications
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="light_shadow mt product_color">
+                      <div
+                        className={
+                          openBox === 3
+                            ? "header  c_flex"
+                            : "header border c_flex"
+                        }
+                        onClick={() => toggleBox(3)}
+                      >
+                        <div className="left">
+                          <div className="d_flex">
+                            <div className="number l_flex">
+                              <span>04</span>
+                            </div>
+                            <div className="text">
+                              <h4>Product Color</h4>
+                              <small>Add product image color</small>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="right">
+                          {openBox === 3 ? (
+                            <KeyboardArrowUpIcon className="icon" />
+                          ) : (
+                            <KeyboardArrowDownIcon className="icon" />
+                          )}
+                        </div>
+                      </div>
+                      {openBox === 3 && (
+                        <div className="product_info_color">
+                          <div className="product_info_box box">
+                            {colorData.map((color, colorIndex) => (
+                              <div className="form-group" key={colorIndex}>
+                                <label htmlFor="color">Color</label>
+                                <span className="color_name">
+                                  <input
+                                    type="text"
+                                    id="color"
+                                    value={color.colorName}
+                                    onChange={(e) => {
+                                      const updatedColorData = [...colorData];
+                                      updatedColorData[colorIndex].colorName =
+                                        e.target.value;
+                                      setColorData(updatedColorData);
+                                    }}
+                                    placeholder="color name"
+                                  />
+                                </span>
+                                <span className="link_img">
+                                  <input
+                                    type="text"
+                                    id="color"
+                                    value={color.colorImg}
+                                    onChange={(e) => {
+                                      const updatedColorData = [...colorData];
+                                      updatedColorData[colorIndex].colorImg =
+                                        e.target.value;
+                                      setColorData(updatedColorData);
+                                    }}
+                                    placeholder="color e.g #ffffff"
+                                  />
+                                </span>
+                                {colorData.length > 1 && (
+                                  <button
+                                    type="button"
+                                    className="remove_btn a_flex first_btn next_del_btn"
+                                    onClick={() => deleteColor(colorIndex)}
+                                  >
+                                    <span className="a_flex">
+                                      <CloseIcon className="icon" />
+                                      Delete Color
+                                    </span>
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                          <div className="add_more_btn">
+                            <span onClick={addMoreColor}>Add More Color</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="light_shadow mt product_images">
+                      <div
+                        className={
+                          openBox === 4
+                            ? "header  c_flex"
+                            : "header border c_flex"
+                        }
+                        onClick={() => toggleBox(4)}
+                      >
+                        <div className="left">
+                          <div className="d_flex">
+                            <div className="number l_flex">
+                              <span>05</span>
+                            </div>
+                            <div className="text">
+                              <h4>Product Images</h4>
+                              <small>Upload product images</small>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="right">
+                          {openBox === 4 ? (
+                            <KeyboardArrowUpIcon className="icon" />
+                          ) : (
+                            <KeyboardArrowDownIcon className="icon" />
+                          )}
+                        </div>
+                      </div>
+                      {openBox === 4 && (
+                        <div className="product_info_images">
+                          <div className="product_info_img_box box">
+                            <div className="form_group f_flex">
+                              {images.map((x) => (
+                                <div key={x} className="drop_zone">
+                                  <img src={x} alt="" className="images" />
+                                  <div className="icon_bg l_flex">
+                                    <CloseIcon
+                                      onClick={() => deleteFileHandler(x)}
+                                      className="icon"
+                                    />
+                                  </div>
+                                </div>
+                              ))}
+                              <div>
+                                <label
+                                  htmlFor="files"
+                                  className="upload_box l_flex"
+                                >
+                                  <div className="inner">
+                                    <div className="icon_btn">
+                                      <CloudUploadIcon className="icon" />
+                                    </div>
+                                    <div className="text">
+                                      <div>
+                                        <p>Upload product images</p>
+                                      </div>
+                                      <div>
+                                        <small>
+                                          recommended: high quality, small size
+                                          image
+                                        </small>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <input
+                                    style={{ display: "none" }}
+                                    type="file"
+                                    id="files"
+                                    onChange={(e) => uploadFileHandler(e, true)}
+                                  />
+                                </label>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="light_shadow mt product_color ">
+                      <div
+                        className={
+                          openBox === 5
+                            ? "header  c_flex"
+                            : "header border c_flex"
+                        }
+                        onClick={() => toggleBox(5)}
+                      >
+                        <div className="left">
+                          <div className="d_flex">
+                            <div className="number l_flex">
+                              <span>06</span>
+                            </div>
+                            <div className="text">
+                              <h4>Video Reviews</h4>
+                              <small>Add product review videos</small>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="right">
+                          {openBox === 5 ? (
+                            <KeyboardArrowUpIcon className="icon" />
+                          ) : (
+                            <KeyboardArrowDownIcon className="icon" />
+                          )}
+                        </div>
+                      </div>
+                      {openBox === 5 && (
+                        <div className="product_info_video product_info_color">
+                          <div className="product_info_box box">
+                            {videoData.map((video, videoIndex) => (
+                              <div className="form-group" key={videoIndex}>
+                                <label htmlFor="title">Video</label>
+                                <span className="video_name">
+                                  <input
+                                    type="text"
+                                    id="title"
+                                    value={video.videoTitle}
+                                    onChange={(e) => {
+                                      const updatedVideoData = [...videoData];
+                                      updatedVideoData[videoIndex].videoTitle =
+                                        e.target.value;
+                                      setVideoData(updatedVideoData);
+                                    }}
+                                    placeholder="title"
+                                  />
+                                </span>
+                                <span className="link_img">
+                                  <input
+                                    type="text"
+                                    id="link"
+                                    value={video.videoLink}
+                                    onChange={(e) => {
+                                      const updatedVideoData = [...videoData];
+                                      updatedVideoData[videoIndex].videoLink =
+                                        e.target.value;
+                                      setVideoData(updatedVideoData);
+                                    }}
+                                    placeholder="video link"
+                                  />
+                                </span>
+                                <span className="link_img">
+                                  <input
+                                    type="text"
+                                    id="thumbnail"
+                                    value={video.videoThumbnail}
+                                    onChange={(e) => {
+                                      const updatedVideoData = [...videoData];
+                                      updatedVideoData[
+                                        videoIndex
+                                      ].videoThumbnail = e.target.value;
+                                      setVideoData(updatedVideoData);
+                                    }}
+                                    placeholder="video thumbnail link"
+                                  />
+                                </span>
+                                <span className="description">
+                                  <textarea
+                                    name="description"
+                                    id="description"
+                                    placeholder="Descriptions here..."
+                                    value={video.videoDescription}
+                                    onChange={(e) => {
+                                      const updatedVideoData = [...videoData];
+                                      updatedVideoData[
+                                        videoIndex
+                                      ].videoDescription = e.target.value;
+                                      setVideoData(updatedVideoData);
+                                    }}
+                                  ></textarea>
+                                </span>
+                                {videoData.length > 1 && (
+                                  <button
+                                    type="button"
+                                    className="remove_btn a_flex first_btn next_del_btn"
+                                    onClick={() => deleteVideo(videoIndex)}
+                                  >
+                                    <span className="a_flex">
+                                      <CloseIcon className="icon" />
+                                      Delete Video
+                                    </span>
+                                  </button>
+                                )}
+                              </div>
+                            ))}
+                          </div>
+                          <div className="add_more_btn">
+                            <span onClick={addMoreVideo}>Add More Videos</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="light_shadow mt product_description ">
+                      <div
+                        className={
+                          openBox === 6
+                            ? "header  c_flex"
+                            : "header border c_flex"
+                        }
+                        onClick={() => toggleBox(6)}
+                      >
+                        <div className="left">
+                          <div className="d_flex">
+                            <div className="number l_flex">
+                              <span>07</span>
+                            </div>
+                            <div className="text">
+                              <h4>Product Description</h4>
+                              <small>
+                                Provide in detail product description
+                              </small>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="right">
+                          {openBox === 6 ? (
+                            <KeyboardArrowUpIcon className="icon" />
+                          ) : (
+                            <KeyboardArrowDownIcon className="icon" />
+                          )}
+                        </div>
+                      </div>
+                      {openBox === 6 && (
+                        <div className="product_info_desc ">
+                          <div className="box">
+                            <div className="form_group">
+                              <label htmlFor="">Description</label>
+                              <JoditEditor
+                                className="editor"
+                                id="desc"
+                                ref={editor}
+                                value={description}
+                                // config={config}
+                                tabIndex={1} // tabIndex of textarea
+                                onBlur={(newContent) =>
+                                  setDescription(newContent)
+                                } // preferred to use only this option to update the content for performance reasons
+                                onChange={(newContent) => {}}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
-                <div className="lower_test">
-                  <label htmlFor="">Description</label>
-                  <JoditEditor
-                    className="editor"
-                    id="desc"
-                    ref={editor}
-                    value={desc}
-                    // config={config}
-                    tabIndex={1} // tabIndex of textarea
-                    onBlur={(newContent) => setDesc(newContent)} // preferred to use only this option to update the content for performance reasons
-                    onChange={(newContent) => {}}
-                  />
+                <div className="bottom_btn mtb">
+                  <span className="a_flex">
+                    <button
+                      className=" a_flex"
+                      onClick={() => navigate("/admin/products")}
+                    >
+                      <CloseIcon className="icon" /> Cancel
+                    </button>
+                    <button type="submit" className="a_flex" disabled={loading}>
+                      {loading ? (
+                        <div className="loading-spinner">Loading...</div>
+                      ) : (
+                        <>
+                          <DescriptionOutlinedIcon className="icon" /> Save
+                        </>
+                      )}
+                    </button>
+                  </span>
                 </div>
-                <button className="productButton main_btn mtb">
-                  Update All
-                </button>
               </form>
             </div>
           </div>

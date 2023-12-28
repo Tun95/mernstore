@@ -49,17 +49,31 @@ function SellerProductListScreen({ rows }) {
     {
       field: "name",
       headerName: "Products",
-      width: 400,
+      width: 300,
       renderCell: (params) => {
         return (
           <>
             <div className="cellWidthImg">
               <img
-                src={params.row.image || photo}
+                src={params.row.images[0] || photo}
                 alt="image_banner"
                 className="cellImg"
               />
               {params.row.name}
+            </div>
+          </>
+        );
+      },
+    },
+    {
+      field: "seller",
+      headerName: "Vendor",
+      width: 180,
+      renderCell: (params) => {
+        return (
+          <>
+            <div className="cellWidthImg">
+              {params.row?.seller?.seller?.name}
             </div>
           </>
         );
@@ -85,6 +99,8 @@ function SellerProductListScreen({ rows }) {
     { field: "category", headerName: "Category", width: 200 },
   ];
 
+  const navigate = useNavigate();
+
   const { state } = useContext(Context);
   const { userInfo } = state;
 
@@ -93,22 +109,24 @@ function SellerProductListScreen({ rows }) {
       loading,
       error,
       products,
-      pages,
-      loadingDelete,
+
       successDelete,
-      errorDelete,
     },
     dispatch,
   ] = useReducer(reducer, {
+    products: [],
     loading: true,
     error: "",
   });
-  const { search } = useLocation();
 
+  const { search } = useLocation();
   const sp = new URLSearchParams(search);
   const page = parseInt(sp.get("page") || 1);
   const seller = sp.get("seller") || userInfo._id || "";
 
+  //==============
+  //FETCH PRODUCTS
+  //==============
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -134,8 +152,6 @@ function SellerProductListScreen({ rows }) {
       fetchData();
     }
   }, [page, userInfo, successDelete, seller]);
-
-  const navigate = useNavigate();
 
   //==============
   //DELETE PRODUCT
@@ -210,14 +226,17 @@ function SellerProductListScreen({ rows }) {
     noRowsLabel: "No product found", // Customize the "No Rows" message here
   };
   return (
-    <>
+    <div className="admin_page_all page_background admin_page_screen">
       <Helmet>
         <title>All Products</title>
       </Helmet>
-      <div className="container">
-        <div className="datatable mtb">
+      <div className="container ">
+        <div className="productTitleContainer">
+          <h3 className="productTitle light_shadow uppercase">All Products</h3>
+        </div>
+        <div className="datatable">
           <span className="c_flex">
-            <h2>All Products</h2>
+            <span></span>
             <i
               onClick={() => {
                 navigate(`/vendor/product/new`);
@@ -228,13 +247,13 @@ function SellerProductListScreen({ rows }) {
           {loading || successDelete ? (
             <LoadingBox></LoadingBox>
           ) : error ? (
-            <MessageBox>{error}</MessageBox>
+            <MessageBox variant="danger">{error}</MessageBox>
           ) : (
             <DataGrid
               className="datagrid"
               rows={products}
               localeText={customTranslations}
-              getRowId={getRowId}
+              getRowId={(row) => row._id}
               columns={columns.concat(actionColumn)}
               autoPageSize
               rowsPerPageOptions={[8]}
@@ -243,7 +262,7 @@ function SellerProductListScreen({ rows }) {
           )}
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
