@@ -206,6 +206,11 @@ button {
   -webkit-appearance: none;
   appearance: none;
 }
+.select_styles {
+  width: 100%;
+  padding: 10px;
+  border-radius: 8px;
+}
 
 .red {
   color: var(--color-primary);
@@ -213,6 +218,7 @@ button {
 
 button:disabled {
   opacity: 0.9;
+  cursor: not-allowed;
 }
 .white-fill {
   fill: white;

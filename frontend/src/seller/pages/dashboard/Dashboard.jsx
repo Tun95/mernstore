@@ -114,7 +114,7 @@ function SellerDashboard() {
 
   console.log(salesStats);
   return (
-    <>
+    <div className="admin_page_all page_background admin_page_screen">
       <Helmet>
         <title>Seller's Dashboard</title>
       </Helmet>
@@ -149,7 +149,7 @@ function SellerDashboard() {
           </>
         )}
       </div>
-    </>
+    </div>
   );
 }
 

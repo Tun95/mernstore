@@ -177,7 +177,7 @@ function VendorScreen() {
                     </label>
                     <Field
                       name="taxNumber"
-                      type="taxNumber"
+                      type="number"
                       value={values.taxNumber}
                       onChange={handleChange}
                       onBlur={handleBlur}
@@ -272,7 +272,7 @@ function VendorScreen() {
                         errors.email && touched.email ? "input-error" : ""
                       }
                       id="email"
-                      placeholder="Enter your last name"
+                      placeholder="Enter your email"
                     />
                     <ErrorMessage
                       name="email"
@@ -404,6 +404,7 @@ function VendorScreen() {
                         errors.zipCode && touched.zipCode ? "input-error" : ""
                       }
                       id="zipCode"
+                      placeholder="Enter your zip/postal code"
                     />
                     <ErrorMessage
                       name="zipCode"

@@ -218,7 +218,10 @@ orderRouter.get(
       const last10DaysEarnings = await Order.aggregate([
         // Match orders for the specific seller that are paid (isPaid: true)
         {
-          $match: { seller: mongoose.Types.ObjectId(sellerId), isPaid: true },
+          $match: {
+            seller: new mongoose.Types.ObjectId(sellerId),
+            isPaid: true,
+          },
         },
         // Group orders by date
         {
@@ -247,7 +250,10 @@ orderRouter.get(
       const earningsPerDay = await Order.aggregate([
         // Match orders for the specific seller that are paid (isPaid: true)
         {
-          $match: { seller: mongoose.Types.ObjectId(sellerId), isPaid: true },
+          $match: {
+            seller: new mongoose.Types.ObjectId(sellerId),
+            isPaid: true,
+          },
         },
         // Group orders by date and limit to only one document to get earnings for each day
         {
@@ -275,7 +281,10 @@ orderRouter.get(
       const earningsByMonth = await Order.aggregate([
         // Match orders for the specific seller that are paid (isPaid: true)
         {
-          $match: { seller: mongoose.Types.ObjectId(sellerId), isPaid: true },
+          $match: {
+            seller: new mongoose.Types.ObjectId(sellerId),
+            isPaid: true,
+          },
         },
         // Group orders by year and month to calculate total earnings per month
         {
@@ -290,7 +299,8 @@ orderRouter.get(
       // const totalOrders = await Order.aggregate([
       //   // Match orders for the specific seller that are paid (isPaid: true)
       //   {
-      //     $match: { seller: mongoose.Types.ObjectId(sellerId), isPaid: true },
+      //     $match: { seller: new mongoose.Types.ObjectId(sellerId), isPaid: true },
+
       //   },
       //   // Group orders to get the total number of orders
       //   {
@@ -310,7 +320,7 @@ orderRouter.get(
       const totalOrders = await Order.aggregate([
         // Match orders for the specific seller
         {
-          $match: { seller: mongoose.Types.ObjectId(sellerId) },
+          $match: { seller: new mongoose.Types.ObjectId(sellerId) },
         },
         // Group orders to get the total number of orders
         {
@@ -331,7 +341,10 @@ orderRouter.get(
       const grandTotalEarnings = await Order.aggregate([
         // Match orders for the specific seller that are paid (isPaid: true)
         {
-          $match: { seller: mongoose.Types.ObjectId(sellerId), isPaid: true },
+          $match: {
+            seller: new mongoose.Types.ObjectId(sellerId),
+            isPaid: true,
+          },
         },
         // Group orders to get the grand total earnings of all time
         {

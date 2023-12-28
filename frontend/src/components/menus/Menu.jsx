@@ -21,11 +21,8 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Context } from "../../context/Context";
 
 export function CategoryMenu() {
-
   const { state } = useContext(Context);
   const { categories } = state;
-
-  console.log("MAP CATEGORY:", categories);
 
   //CONTACT MENU
   const [anchorEle, setAnchorEle] = React.useState(null);
