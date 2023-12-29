@@ -270,34 +270,41 @@ function User() {
                               <label>Email:</label>
                               <h4>{user?.email}</h4>
                             </div>
-                            <div className="user_detail_list">
-                              <label>Address:</label>
-                              <h4>{user?.address}</h4>
-                            </div>
-                            <div className="user_detail_list">
-                              <label>Country:</label>
-                              <h4>{user?.country}</h4>
-                            </div>
-                            <div className="user_detail_list">
-                              <label>Application Status:</label>
-                              {user?.apply[0]?.status === false ? (
-                                <span className="unverified_account a_flex">
-                                  declined
-                                </span>
-                              ) : user?.apply[0]?.status === true &&
-                                user.isSeller === true ? (
-                                <span className="verified_account a_flex">
-                                  approved
-                                </span>
-                              ) : user?.apply[0]?.status === true &&
-                                user?.isSeller === false ? (
-                                <span className="pending_account a_flex">
-                                  pending
-                                </span>
-                              ) : (
-                                ""
-                              )}
-                            </div>
+                            {user?.address && (
+                              <div className="user_detail_list">
+                                <label>Address:</label>
+                                <h4>{user?.address}</h4>
+                              </div>
+                            )}
+                            {user?.country && (
+                              <div className="user_detail_list">
+                                <label>Country:</label>
+                                <h4>{user?.country}</h4>
+                              </div>
+                            )}
+                            {user?.apply[0]?.status && (
+                              <div className="user_detail_list">
+                                <label>Application Status:</label>
+                                {user?.apply[0]?.status === false ? (
+                                  <span className="unverified_account a_flex">
+                                    declined
+                                  </span>
+                                ) : user?.apply[0]?.status === true &&
+                                  user.isSeller === true ? (
+                                  <span className="verified_account a_flex">
+                                    approved
+                                  </span>
+                                ) : user?.apply[0]?.status === true &&
+                                  user?.isSeller === false ? (
+                                  <span className="pending_account a_flex">
+                                    pending
+                                  </span>
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                            )}
+
                             <div className="user_detail_list">
                               <label>Account Status:</label>
                               {user?.isAccountVerified === false ? (
