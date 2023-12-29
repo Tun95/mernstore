@@ -503,38 +503,6 @@ function SellerNewProduct() {
                               placeholder="brand"
                             />
                           </div>{" "}
-                          <div className="form-group">
-                            <label htmlFor="promotion">Promotion</label>
-                            <select
-                              name="promotion"
-                              id="promotion"
-                              value={promotion}
-                              onChange={(e) => setPromotion(e.target.value)}
-                              required
-                            >
-                              <option value="" disabled>
-                                Select a promotion
-                              </option>
-                              {promotions.map((promotion) => (
-                                <option
-                                  key={promotion._id}
-                                  value={promotion._id}
-                                >
-                                  {promotion.title}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                          <div className="form-group a_flex black_friday">
-                            <Checkbox
-                              checked={blackFriday}
-                              onChange={() =>
-                                setBlackFriday((prevValue) => !prevValue)
-                              }
-                            >
-                              Activate for Black Friday sale
-                            </Checkbox>
-                          </div>
                         </div>
                       )}
                     </div>
