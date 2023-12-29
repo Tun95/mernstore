@@ -114,7 +114,6 @@ function OrderList(props) {
   return (
     <div className="admin_page_all page_background admin_page_screen">
       <div className="container">
-    
         <div className="productTitleContainer">
           <h3 className="productTitle light_shadow uppercase">All Orders</h3>
         </div>
@@ -197,20 +196,23 @@ function OrderList(props) {
                           )}
                         </TableCell>
                         <TableCell className="tableCell">
-                          <button
-                            className="tableBtn"
-                            onClick={() => {
-                              navigate(`/order-details/${order._id}`);
-                            }}
-                          >
-                            Details
-                          </button>
-                          <button
-                            className="deleteButton"
-                            onClick={() => deleteHandler(order)}
-                          >
-                            Delete
-                          </button>
+                          <div className="a_flex">
+                            {" "}
+                            <button
+                              className="tableBtn"
+                              onClick={() => {
+                                navigate(`/order-details/${order._id}`);
+                              }}
+                            >
+                              Details
+                            </button>
+                            <button
+                              className="deleteButton"
+                              onClick={() => deleteHandler(order)}
+                            >
+                              Delete
+                            </button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}

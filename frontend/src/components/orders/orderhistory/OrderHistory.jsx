@@ -86,83 +86,92 @@ function OrderHistory() {
   }, [userInfo, navigate, page]);
   console.log(orders);
   return (
-    <div className="order-table">
-      <h3>Order History</h3>
-      {loading ? (
-        <LoadingBox></LoadingBox>
-      ) : error ? (
-        <MessageBox>{error}</MessageBox>
-      ) : (
-        <>
-          <TableContainer component={Paper} className="table">
-            <Table sx={{ minWidth: 650 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell className="tableCell">Tracking ID</TableCell>
-                  <TableCell className="tableCell">Date</TableCell>
-                  <TableCell className="tableCell">Total</TableCell>
-                  <TableCell className="tableCell">Paid</TableCell>
-                  <TableCell className="tableCell">Delivery Status</TableCell>
-                  <TableCell className="tableCell">Actions</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {orders?.length === 0 && (
-                  <div className="product_not">
-                    <span className="product-not">
-                      <MessageBox>No Orders Found </MessageBox>
-                    </span>
-                  </div>
-                )}
-                {orders?.map((order, index) => (
-                  <TableRow key={index}>
-                    <TableCell className="tableCell">
-                      {order.trackingId}
-                    </TableCell>
-                    <TableCell className="tableCell">
-                      <div className="cellWrapper">
-                        <ReactTimeAgo
-                          date={Date.parse(order.createdAt)}
-                          locale="en-US"
-                        />
-                      </div>
-                    </TableCell>
-                    <TableCell className="tableCell">
-                      <div className="price">
-                        {convertCurrency(order.grandTotal?.toFixed(2))}
-                      </div>
-                    </TableCell>
-                    <TableCell className="tableCell">
-                      {order.paymentMethod === "Cash on Delivery" ? (
-                        <span className="with_cash">With Cash</span>
-                      ) : order.paymentMethod !== "Cash on Delivery" &&
-                        order.isPaid ? (
-                        <div className="paidAt">{formatDate(order.paidAt)}</div>
-                      ) : (
-                        <div className="negate">No</div>
-                      )}
-                    </TableCell>
-                    <TableCell className="tableCell tableCellPrice">
-                      {order.isDelivered ? (
-                        <div className="paidAt">
-                          {formatDate(order.deliveredAt)}
+    <>
+      <div className="quick_link mt10">
+        <div className="page a_flex">
+          <Link to="/">Home /</Link>
+          <p>&#160; orders</p>
+        </div>
+      </div>
+      <div className="order-table">
+        <h3>Order History</h3>
+        {loading ? (
+          <LoadingBox></LoadingBox>
+        ) : error ? (
+          <MessageBox>{error}</MessageBox>
+        ) : (
+          <>
+            <TableContainer component={Paper} className="table">
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell className="tableCell">Tracking ID</TableCell>
+                    <TableCell className="tableCell">Date</TableCell>
+                    <TableCell className="tableCell">Total</TableCell>
+                    <TableCell className="tableCell">Paid</TableCell>
+                    <TableCell className="tableCell">Delivery Status</TableCell>
+                    <TableCell className="tableCell">Actions</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {orders?.length === 0 && (
+                    <div className="product_not">
+                      <span className="product-not">
+                        <MessageBox>No Orders Found </MessageBox>
+                      </span>
+                    </div>
+                  )}
+                  {orders?.map((order, index) => (
+                    <TableRow key={index}>
+                      <TableCell className="tableCell">
+                        {order.trackingId}
+                      </TableCell>
+                      <TableCell className="tableCell">
+                        <div className="cellWrapper">
+                          <ReactTimeAgo
+                            date={Date.parse(order.createdAt)}
+                            locale="en-US"
+                          />
                         </div>
-                      ) : order.isPaid ? (
-                        <div className="in_progress">In Progress</div>
-                      ) : (
-                        <div className="negate">No</div>
-                      )}
-                    </TableCell>
-                    <TableCell className="tableCell">
-                      <button
-                        className="tableBtn"
-                        onClick={() => {
-                          navigate(`/order-details/${order._id}`);
-                        }}
-                      >
-                        Details
-                      </button>
-                      {/* <button
+                      </TableCell>
+                      <TableCell className="tableCell">
+                        <div className="price">
+                          {convertCurrency(order.grandTotal?.toFixed(2))}
+                        </div>
+                      </TableCell>
+                      <TableCell className="tableCell">
+                        {order.paymentMethod === "Cash on Delivery" ? (
+                          <span className="with_cash">With Cash</span>
+                        ) : order.paymentMethod !== "Cash on Delivery" &&
+                          order.isPaid ? (
+                          <div className="paidAt">
+                            {formatDate(order.paidAt)}
+                          </div>
+                        ) : (
+                          <div className="negate">No</div>
+                        )}
+                      </TableCell>
+                      <TableCell className="tableCell tableCellPrice">
+                        {order.isDelivered ? (
+                          <div className="paidAt">
+                            {formatDate(order.deliveredAt)}
+                          </div>
+                        ) : order.isPaid ? (
+                          <div className="in_progress">In Progress</div>
+                        ) : (
+                          <div className="negate">No</div>
+                        )}
+                      </TableCell>
+                      <TableCell className="tableCell">
+                        <button
+                          className="tableBtn"
+                          onClick={() => {
+                            navigate(`/order-details/${order._id}`);
+                          }}
+                        >
+                          Details
+                        </button>
+                        {/* <button
                         className="deleteButton"
                         onClick={() => {
                           navigate(`/track-shipment/`);
@@ -170,33 +179,34 @@ function OrderHistory() {
                       >
                         Track Now
                       </button> */}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <div className="pagination p_flex">
-            <Pagination
-              page={page}
-              count={pages}
-              renderItem={(item) => (
-                <PaginationItem
-                  className={`${
-                    item.page !== page
-                      ? "paginationItemStyle"
-                      : "paginationItemStyle active"
-                  }`}
-                  component={Link}
-                  to={`/track-order?page=${item.page}`}
-                  {...item}
-                />
-              )}
-            />
-          </div>
-        </>
-      )}
-    </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+            <div className="pagination p_flex">
+              <Pagination
+                page={page}
+                count={pages}
+                renderItem={(item) => (
+                  <PaginationItem
+                    className={`${
+                      item.page !== page
+                        ? "paginationItemStyle"
+                        : "paginationItemStyle active"
+                    }`}
+                    component={Link}
+                    to={`/track-order?page=${item.page}`}
+                    {...item}
+                  />
+                )}
+              />
+            </div>
+          </>
+        )}
+      </div>
+    </>
   );
 }
 

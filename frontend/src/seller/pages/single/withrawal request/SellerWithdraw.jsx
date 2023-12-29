@@ -110,108 +110,120 @@ function SellerWithdraw() {
   const SellersBalance = convertCurrency(balance);
 
   return (
-    <div className="seller_withdrawal">
-      <Helmet>
-        <title>Withdraw</title>
-      </Helmet>
-      <div className="container mt mb">
-        <div className="box_shadow d_flex">
-          <div className="product ">
-            <div className="left">
-              <h1 className="title">Information</h1>
-              <div className="item">
-                <img
-                  src={user?.user?.image ? user?.user?.image : me}
-                  alt=""
-                  className="itemImg"
-                />
-                <div className="details">
-                  <h1 className="itemTitle">
-                    {user?.user?.firstName} {user?.user?.lastName}
-                  </h1>
-                  <div className="detailItem">
-                    <span className="itemKey">Email:</span>
-                    <span className="itemValue">{user?.user?.email}</span>
+    <div className="admin_page_all seller_withdrawal page_background admin_page_screen">
+      <div className="container">
+        <div className="productTitleContainer">
+          <h3 className="productTitle light_shadow uppercase">
+            Submit withdrawal request
+          </h3>
+        </div>
+        <div className="">
+          <Helmet>
+            <title>Withdraw</title>
+          </Helmet>
+          <div className="light_shadow d_flex">
+            <div className="product ">
+              <div className="left">
+                <h1 className="title">Information</h1>
+                <div className="item">
+                  <img
+                    src={user?.user?.image ? user?.user?.image : me}
+                    alt=""
+                    className="itemImg"
+                  />
+                  <div className="details">
+                    <h1 className="itemTitle">
+                      {user?.user?.firstName} {user?.user?.lastName}
+                    </h1>
+                    <div className="detailItem">
+                      <span className="itemKey">Email:</span>
+                      <span className="itemValue">{user?.user?.email}</span>
+                    </div>
+                    {user?.user?.phone && (
+                      <div className="detailItem">
+                        <span className="itemKey">Phone:</span>
+                        <span className="itemValue">{user?.user?.phone}</span>
+                      </div>
+                    )}
                   </div>
-                  <div className="detailItem">
-                    <span className="itemKey">Phone:</span>
-                    <span className="itemValue">{user?.user?.phone}</span>
-                  </div>{" "}
                 </div>
+                {user?.user?.isSeller ? (
+                  <div className="userInfo_widget">
+                    <Widget SellersBalance={SellersBalance} type="seller" />
+                  </div>
+                ) : null}
               </div>
-              {user?.user?.isSeller ? (
-                <div className="userInfo_widget">
-                  <Widget SellersBalance={SellersBalance} type="seller" />
-                </div>
-              ) : null}
             </div>
-          </div>
-          <div className="product">
-            <h1 className="title">Request withdraw</h1>
-            <Formik
-              initialValues={{
-                amount: 0,
-                email: "",
-                gateway: "",
-              }}
-              validationSchema={validationSchema}
-              onSubmit={handleSubmit}
-            >
-              <Form>
-                <div className="form-group">
-                  <label htmlFor="amount">Amount</label>
-                  <Field type="number" id="amount" name="amount" />
-                  <ErrorMessage
-                    name="amount"
-                    component="div"
-                    className="error"
-                  />
-                </div>
+            <div className="product">
+              <h1 className="title">Request withdraw</h1>
+              <Formik
+                initialValues={{
+                  amount: 0,
+                  email: "",
+                  gateway: "",
+                }}
+                validationSchema={validationSchema}
+                onSubmit={handleSubmit}
+              >
+                <Form>
+                  <div className="form-group">
+                    <label htmlFor="amount">Amount</label>
+                    <Field type="number" id="amount" name="amount" />
+                    <ErrorMessage
+                      name="amount"
+                      component="div"
+                      className="error"
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label htmlFor="email">Email</label>
-                  <Field
-                    type="email"
-                    id="email"
-                    name="email"
-                    // className={email && email ? "input-error" : ""}
-                    placeholder="Enter e.g PayPal Email"
-                  />
-                  <ErrorMessage
-                    name="email"
-                    component="div"
-                    className="error"
-                  />
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="email">Email</label>
+                    <Field
+                      type="email"
+                      id="email"
+                      name="email"
+                      // className={email && email ? "input-error" : ""}
+                      placeholder="Enter e.g PayPal Email"
+                    />
+                    <ErrorMessage
+                      name="email"
+                      component="div"
+                      className="error"
+                    />
+                  </div>
 
-                <div className="form-group">
-                  <label htmlFor="gateway">Gateway</label>
-                  <Field
-                    as="select"
-                    id="gateway"
-                    name="gateway"
-                    className="gateway_select"
-                  >
-                    <option value="">Select Gateway</option>
-                    <option value="PayPal">PayPal</option>
-                    <option value="Stripe">Stripe</option>
-                  </Field>
-                  <ErrorMessage
-                    name="gateway"
-                    component="div"
-                    className="error"
-                  />
-                </div>
+                  <div className="form-group">
+                    <label htmlFor="gateway">Gateway</label>
+                    <Field
+                      as="select"
+                      id="gateway"
+                      name="gateway"
+                      className="gateway_select"
+                    >
+                      <option value="">Select Gateway</option>
+                      <option value="PayPal">PayPal</option>
+                      <option value="Stripe">Stripe</option>
+                    </Field>
+                    <ErrorMessage
+                      name="gateway"
+                      component="div"
+                      className="error"
+                    />
+                  </div>
 
-                <button
-                  type="submit"
-                  disabled={loadingPost}
-                  className="submit-button"
-                >
-                  {loadingPost ? "Submitting..." : "Submit"}
-                </button>
-              </Form>
-            </Formik>
+                  <div className="sub_btn">
+                    {" "}
+                    <button
+                      type="submit"
+                      disabled={loadingPost}
+                      className="submit-button"
+                    >
+                      {loadingPost ? "Submitting..." : "Submit"}
+                    </button>
+                  </div>
+                </Form>
+              </Formik>
+            </div>
           </div>
         </div>
       </div>

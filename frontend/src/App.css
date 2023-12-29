@@ -153,6 +153,9 @@ body {
 .mt {
   margin-top: 20px;
 }
+.mt10 {
+  margin-top: 10px;
+}
 
 a {
   text-decoration: none;

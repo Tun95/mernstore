@@ -31,9 +31,21 @@
       text-transform: uppercase;
       border-radius: 4px;
     }
+    .a_flex {
+      gap: 10px;
+    }
+    .deleteButton {
+      font-weight: 600;
+      padding: 5px;
+      border-radius: 5px;
+      color: crimson !important;
+      background: transparent;
+      border: 1px dotted rgba(220, 20, 60, 0.6) !important;
+      cursor: pointer;
+    }
   }
   .tableBtn {
-    background-color: var(--color-primary);
+    background-color: var(--color-blue);
     color: var(--color-white);
     font-weight: 600;
     padding: 5px;
