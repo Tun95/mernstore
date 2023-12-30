@@ -31,6 +31,7 @@ import Promotion from "./models/promotionModel.js";
 import blogRouter from "./routes/blogRoutes.js";
 import planRouter from "./routes/planRoutes.js";
 import announcementRouter from "./routes/announcement.js";
+import callRouter from "./routes/callRequestRoutes.js";
 
 dotenv.config();
 
@@ -122,6 +123,8 @@ app.use("/api/updates", updateRouter);
 app.use("/api/blog", blogRouter);
 app.use("/api/plans", planRouter);
 app.use("/api/announcement", announcementRouter);
+app.use("/api/calls", callRouter);
+
 
 const _dirname = path.resolve();
 app.use(express.static(path.join(_dirname, "/frontend/build")));

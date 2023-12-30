@@ -15,6 +15,7 @@ import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Home from "../../single/home/Home";
 import Updates from "../../single/updates/Updates";
 import { VendorPlanCreate } from "../../new/plans/VendorPlanCreate";
+import CallRequest from "../../list/call request/CallRequest";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -156,8 +157,13 @@ function OtherScreen() {
                   />
                   <Tab
                     className={value === 5 ? "activeTab" : "tab_sub"}
-                    label="Updates"
+                    label="Call Requests"
                     {...a11yProps(5)}
+                  />
+                  <Tab
+                    className={value === 6 ? "activeTab" : "tab_sub"}
+                    label="Updates"
+                    {...a11yProps(6)}
                   />
                 </Tabs>
               </Box>
@@ -177,6 +183,9 @@ function OtherScreen() {
                 <Applicants />
               </TabPanel>
               <TabPanel value={value} index={5}>
+                <CallRequest />
+              </TabPanel>
+              <TabPanel value={value} index={6}>
                 <Updates />
               </TabPanel>
             </Box>

@@ -159,10 +159,18 @@ export function CallRequestModals() {
   //============
   //CALL HANDLER
   //============
-  const handleSubmit = (values) => {
-    // Handle form submission here
-    console.log(values);
+  const handleSubmit = async (values) => {
+    try {
+      await axios.post(`${request}/api/calls`, values);
+      toast.success("Call record created successfully");
+      // You can add further logic here, e.g., closing the modal
+      handleCloseCall();
+    } catch (error) {
+      console.error(getError(error));
+      toast.error(getError(error));
+    }
   };
+
   return (
     <>
       <button onClick={handleOpenCall}>Request call</button>

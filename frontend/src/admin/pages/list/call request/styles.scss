@@ -1,0 +1,12 @@
+.admin_call_request {
+  .delete_all {
+    background-color: var(--color-primary);
+    color: var(--color-white);
+    border-radius: 5px;
+    padding: 6px 8px;
+    cursor: pointer;
+    &:disabled {
+      opacity: 0.5;
+    }
+  }
+}
