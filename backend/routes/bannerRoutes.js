@@ -94,9 +94,9 @@ bannerRouter.put(
         imgBackground,
         videoBackground,
         buttonText,
+        buttonLink,
         color,
         pColor,
-        user,
       } = req.body;
       const bannerId = req.params.id;
 
@@ -114,6 +114,7 @@ bannerRouter.put(
       banner.banners[0].imgBackground = imgBackground;
       banner.banners[0].videoBackground = videoBackground;
       banner.banners[0].buttonText = buttonText;
+      banner.banners[0].buttonLink = buttonLink;
       banner.banners[0].color = color;
       banner.banners[0].pColor = pColor;
 

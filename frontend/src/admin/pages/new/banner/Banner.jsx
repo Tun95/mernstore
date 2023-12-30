@@ -20,6 +20,7 @@ export function Banner() {
     imgBackground: "",
     videoBackground: "",
     buttonText: "",
+    buttonLink: "",
     color: "",
     pColor: "",
   });
@@ -62,6 +63,7 @@ export function Banner() {
               imgBackground: formData.imgBackground,
               videoBackground: formData.videoBackground,
               buttonText: formData.buttonText,
+              buttonLink: formData.buttonLink,
               color: formData.color,
               pColor: formData.pColor,
             },
@@ -100,6 +102,7 @@ export function Banner() {
         imgBackground: selectedBanner.banners[0].imgBackground,
         videoBackground: selectedBanner.banners[0].videoBackground,
         buttonText: selectedBanner.banners[0].buttonText,
+        buttonLink: selectedBanner.banners[0].buttonLink,
         color: selectedBanner.banners[0].color,
         pColor: selectedBanner.banners[0].pColor,
       }));
@@ -155,6 +158,7 @@ export function Banner() {
           imgBackground: formData.imgBackground,
           videoBackground: formData.videoBackground,
           buttonText: formData.buttonText,
+          buttonLink: formData.buttonLink,
           color: formData.color,
           pColor: formData.pColor,
         };
@@ -186,6 +190,7 @@ export function Banner() {
       imgBackground: "",
       videoBackground: "",
       buttonText: "",
+      buttonLink: "",
       color: "",
       pColor: "",
 
@@ -201,9 +206,9 @@ export function Banner() {
       imgBackground: "",
       videoBackground: "",
       buttonText: "",
+      buttonLink: "",
       color: "",
       pColor: "",
-
       _id: "",
     });
   };
@@ -310,6 +315,16 @@ export function Banner() {
                                 placeholder="Button Text"
                               />
                             </span>
+                            <span className="buttonLink">
+                              <label htmlFor="buttonLink">Button Link</label>
+                              <input
+                                type="text"
+                                name="buttonLink"
+                                value={formData.buttonLink}
+                                onChange={handleInputChange}
+                                placeholder="Button Link"
+                              />
+                            </span>
                             <span className="color">
                               <label htmlFor="color">Header Text Color</label>
                               <input
@@ -375,6 +390,10 @@ export function Banner() {
                                   <div>
                                     <strong>Button Text: </strong>
                                     <span>{banner.buttonText}</span>
+                                  </div>
+                                  <div>
+                                    <strong>Button Link: </strong>
+                                    <span>{banner.buttonLink}</span>
                                   </div>
                                   <div>
                                     <strong>Color: </strong>

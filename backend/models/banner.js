@@ -27,6 +27,9 @@ const bannerSchema = new mongoose.Schema(
         buttonText: {
           type: String,
         },
+        buttonLink: {
+          type: String,
+        },
         color: {
           type: String,
         },

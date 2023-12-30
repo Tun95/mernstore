@@ -5,8 +5,10 @@ import Slider from "react-slick";
 import { Context } from "../../../context/Context.js";
 import LoadingBox from "../../utilities/message loading/LoadingBox.js";
 import MessageBox from "../../utilities/message loading/MessageBox.js";
+import { useNavigate } from "react-router-dom";
 
 function SliderCard() {
+  const navigate = useNavigate();
   const { state } = useContext(Context);
   const { banners, loadingBanner, errorBanner } = state;
 
@@ -113,7 +115,11 @@ function SliderCard() {
                                 </div>
                                 {item.buttonText && (
                                   <div className="btn">
-                                    <button>{item.buttonText}</button>
+                                    <button
+                                      onClick={() => navigate(item.buttonLink)}
+                                    >
+                                      {item.buttonText}
+                                    </button>
                                   </div>
                                 )}
                               </div>
