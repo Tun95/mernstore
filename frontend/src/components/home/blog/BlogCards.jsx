@@ -1,14 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-
-//TEXT TRUNCATE
-function truncateText(text, maxWords) {
-  const words = text.split(" ");
-  if (words.length <= maxWords) {
-    return text;
-  }
-  return words.slice(0, maxWords).join(" ") + " ...";
-}
+import TruncateMarkup from "react-truncate-markup";
 
 export function formatDate(dateString) {
   const options = { day: "numeric", month: "numeric", year: "numeric" };
@@ -19,33 +11,6 @@ export function formatDate(dateString) {
 }
 
 function BlogCards({ index, blog }) {
-  //==============
-  // TEXT TRUNCATE
-  //==============
-  const [truncatedTitle, setTruncatedTitle] = useState(
-    truncateText(blog.title, 9)
-  );
-
-  useEffect(() => {
-    // Update the truncation value based on screen size
-    const handleResize = () => {
-      const screenWidth = window.innerWidth;
-      if (screenWidth >= 1200) {
-        setTruncatedTitle(truncateText(blog.title, 9)); // Adjust the number of words for larger screens
-      } else if (screenWidth >= 992) {
-        setTruncatedTitle(truncateText(blog.title, 7)); // Adjust the number of words for medium screens
-      } else if (screenWidth >= 320) {
-        setTruncatedTitle(truncateText(blog.title, 7)); // Adjust the number of words for medium screens
-      } else {
-        setTruncatedTitle(truncateText(blog.title, 8)); // Default truncation for smaller screens
-      }
-    };
-
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, [blog.title]);
   return (
     <div className={`blog_card ${index === 0 ? "first" : ""}`} key={index}>
       <div className="cards">
@@ -60,7 +25,11 @@ function BlogCards({ index, blog }) {
           </div>
         </div>
         <div className="name">
-          <Link to={`/blog-detail/${blog.slug}`}>{truncatedTitle}</Link>
+          <Link to={`/blog-detail/${blog.slug}`}>
+            <TruncateMarkup lines={2}>
+              <p>{blog.title}</p>
+            </TruncateMarkup>
+          </Link>
         </div>
       </div>
     </div>
