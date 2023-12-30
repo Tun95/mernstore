@@ -17,6 +17,12 @@ export function Category({ openBox, toggleBox }) {
     img: "",
     name: "",
     description: "",
+    banner: {
+      video: "",
+      heading1: "",
+      heading2: "",
+      heading3: "",
+    },
   });
 
   useEffect(() => {
@@ -37,10 +43,22 @@ export function Category({ openBox, toggleBox }) {
   // Function to handle changes in the form input fields
   const handleInputChange = (event) => {
     const { name, value } = event.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+
+    // If the input field is in the 'banner' section
+    if (name.startsWith("banner.")) {
+      setFormData((prevData) => ({
+        ...prevData,
+        banner: {
+          ...prevData.banner,
+          [name.substring(7)]: value,
+        },
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
   };
 
   // Function to add a new category
@@ -54,13 +72,7 @@ export function Category({ openBox, toggleBox }) {
     try {
       const response = await axios.post(
         `${request}/api/category/create-category`,
-        {
-          icon: formData.icon,
-          background: formData.background,
-          img: formData.img,
-          name: formData.name,
-          description: formData.description,
-        }
+        formData
       );
 
       setCategories((prevCategories) => [...prevCategories, response.data]);
@@ -123,13 +135,7 @@ export function Category({ openBox, toggleBox }) {
     try {
       const response = await axios.put(
         `${request}/api/category/update-category/${formData._id}`,
-        {
-          icon: formData.icon,
-          background: formData.background,
-          img: formData.img,
-          name: formData.name,
-          description: formData.description,
-        }
+        formData
       );
 
       setCategories((prevCategories) =>
@@ -153,31 +159,43 @@ export function Category({ openBox, toggleBox }) {
     }
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    updateOrAddCategory();
-    // Clear form data after submitting
-    setFormData({
-      icon: "",
-      background: "",
-      img: "",
-      name: "",
-      description: "",
-      _id: "", // Clear the _id field to indicate it's a new category
-    });
-  };
+ const handleSubmit = async (e) => {
+   e.preventDefault();
+   updateOrAddCategory();
+   // Clear form data after submitting
+   setFormData({
+     icon: "",
+     background: "",
+     img: "",
+     name: "",
+     description: "",
+     banner: {
+       video: "",
+       heading1: "",
+       heading2: "",
+       heading3: "",
+     },
+     _id: "", // Clear the _id field to indicate it's a new category
+   });
+ };
 
-  // Function to handle editing cancellation
-  const handleCancelEdit = () => {
-    setFormData({
-      icon: "",
-      background: "",
-      img: "",
-      name: "",
-      description: "",
-      _id: "", // Clear the _id field to indicate it's a new category
-    });
-  };
+ // Function to handle editing cancellation
+ const handleCancelEdit = () => {
+   setFormData({
+     icon: "",
+     background: "",
+     img: "",
+     name: "",
+     description: "",
+     banner: {
+       video: "",
+       heading1: "",
+       heading2: "",
+       heading3: "",
+     },
+     _id: "", // Clear the _id field to indicate it's a new category
+   });
+ };
 
   return (
     <>
@@ -274,6 +292,52 @@ export function Category({ openBox, toggleBox }) {
                             placeholder="Category Description"
                           />
                         </div>
+
+                        {/* BANNER INPUTS */}
+                        <div className="form-group">
+                          <label htmlFor="video">Video</label>
+                          <input
+                            type="text"
+                            name="banner.video"
+                            value={formData.banner?.video || ""}
+                            onChange={handleInputChange}
+                            placeholder="Banner Video URL"
+                          />
+                        </div>
+
+                        <div className="form-group">
+                          <label htmlFor="heading1">Heading 1</label>
+                          <input
+                            type="text"
+                            name="banner.heading1"
+                            value={formData.banner?.heading1 || ""}
+                            onChange={handleInputChange}
+                            placeholder="Banner Heading 1"
+                          />
+                        </div>
+
+                        <div className="form-group">
+                          <label htmlFor="heading2">Heading 2</label>
+                          <input
+                            type="text"
+                            name="banner.heading2"
+                            value={formData.banner?.heading2 || ""}
+                            onChange={handleInputChange}
+                            placeholder="Banner Heading 2"
+                          />
+                        </div>
+
+                        <div className="form-group">
+                          <label htmlFor="heading3">Heading 3</label>
+                          <input
+                            type="text"
+                            name="banner.heading3"
+                            value={formData.banner?.heading3 || ""}
+                            onChange={handleInputChange}
+                            placeholder="Banner Heading 3"
+                          />
+                        </div>
+                        {/* BANNER INPUTS */}
 
                         {/* Conditional Rendering of the Buttons */}
                         <div className="a_flex">
