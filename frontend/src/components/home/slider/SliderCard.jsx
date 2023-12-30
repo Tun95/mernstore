@@ -8,7 +8,7 @@ import MessageBox from "../../utilities/message loading/MessageBox.js";
 
 function SliderCard() {
   const { state } = useContext(Context);
-  const { banners, loading, error } = state;
+  const { banners, loadingBanner, errorBanner } = state;
 
   const settings = {
     dots: true,
@@ -41,10 +41,10 @@ function SliderCard() {
   }, []);
   return (
     <>
-      {loading ? (
+      {loadingBanner ? (
         <LoadingBox></LoadingBox>
-      ) : error ? (
-        <MessageBox variant="danger">{error}</MessageBox>
+      ) : errorBanner ? (
+        <MessageBox variant="danger">{errorBanner}</MessageBox>
       ) : (
         <Slider {...settings} className="slick_banner_slider">
           {banners?.map((bannersGroup, groupIndex) => (

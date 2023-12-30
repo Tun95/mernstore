@@ -213,17 +213,6 @@ function Settings() {
                         placeholder="USD"
                       />
                     </span>
-                    <span className="flex_row">
-                      <small>Stripe Public key:</small>
-                      <input
-                        className="sub_input"
-                        type="text"
-                        name="stripePubKey"
-                        value={updatedSettings.stripePubKey || ""}
-                        onChange={handleInputChange}
-                        placeholder="stripe pub. key"
-                      />
-                    </span>
                   </span>
                 </div>
                 <div className="lower_group">
@@ -300,6 +289,58 @@ function Settings() {
                         value={updatedSettings.facebook || ""}
                         onChange={handleInputChange}
                         placeholder="facebook"
+                      />
+                    </span>
+                  </span>
+                </div>{" "}
+                <div className="lower_group">
+                  <span className="d_flex">
+                    <span className="flex_row">
+                      <small>Your instagram profile link:</small>
+                      <input
+                        className="sub_input"
+                        type="text"
+                        name="instagram"
+                        value={updatedSettings.instagram || ""}
+                        onChange={handleInputChange}
+                        placeholder="instagram"
+                      />
+                    </span>
+                    <span className="flex_row">
+                      <small>Your pinterest profile link here:</small>
+                      <input
+                        className="sub_input"
+                        type="text"
+                        name="pinterest"
+                        value={updatedSettings.pinterest || ""}
+                        onChange={handleInputChange}
+                        placeholder="pinterest"
+                      />
+                    </span>
+                  </span>
+                </div>{" "}
+                <div className="lower_group">
+                  <span className="d_flex">
+                    <span className="flex_row">
+                      <small>Your skype id here:</small>
+                      <input
+                        className="sub_input"
+                        type="text"
+                        name="skype"
+                        value={updatedSettings.skype || ""}
+                        onChange={handleInputChange}
+                        placeholder="skype"
+                      />
+                    </span>
+                    <span className="flex_row">
+                      <small>Your youTube channel link here:</small>
+                      <input
+                        className="sub_input"
+                        type="text"
+                        name="youTube"
+                        value={updatedSettings.youTube || ""}
+                        onChange={handleInputChange}
+                        placeholder="youTube"
                       />
                     </span>
                   </span>
@@ -453,10 +494,8 @@ function Settings() {
                 <div className="lower_group">
                   <small>Your store short description here:</small>
                   <textarea
-                    name="about_store"
+                    name="shortDesc"
                     id="about_store"
-                    cols="30"
-                    rows="10"
                     className="about_store"
                     value={updatedSettings.shortDesc || ""}
                     onChange={handleInputChange}

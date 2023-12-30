@@ -25,7 +25,7 @@ const reducer = (state, action) => {
   }
 };
 function ContactScreen() {
-  const { state, dispatch: ctxDispatch } = useContext(Context);
+  const { state } = useContext(Context);
   const { settings } = state;
   const { email, shortDesc, storeAddress, whatsapp } =
     (settings &&
@@ -39,8 +39,8 @@ function ContactScreen() {
         .find(() => true)) ||
     {};
 
-  const [{ loading, error }, dispatch] = useReducer(reducer, {
-    loading: true,
+  const [{ loading }, dispatch] = useReducer(reducer, {
+    loading: false,
     error: "",
   });
 

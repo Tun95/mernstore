@@ -975,7 +975,8 @@ userRouter.put(
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     if (user) {
-      user.name = req.body.name;
+      user.firstName = req.body.firstName;
+      user.lastName = req.body.lastName;
       user.email = req.body.email;
       user.image = req.body.image || user.image;
       user.phone = req.body.phone;
@@ -993,7 +994,8 @@ userRouter.put(
       const updatedUser = await user.save();
       res.send({
         _id: updatedUser._id,
-        name: updatedUser.name,
+        firstName: updatedUser.firstName,
+        lastName: updatedUser.lastName,
         email: updatedUser.email,
         image: updatedUser.image,
         phone: updatedUser.phone,

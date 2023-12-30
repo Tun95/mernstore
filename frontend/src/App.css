@@ -221,7 +221,7 @@ button {
 
 button:disabled {
   opacity: 0.9;
-  cursor: not-allowed;
+  cursor: not-allowed !important;
 }
 .white-fill {
   fill: white;

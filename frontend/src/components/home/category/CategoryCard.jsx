@@ -6,13 +6,13 @@ import MessageBox from "../../utilities/message loading/MessageBox";
 
 function CategoryCard({ data }) {
   const { state } = useContext(Context);
-  const { categories, loading, error } = state;
+  const { categories, loadingCategory, errorCategory } = state;
   return (
     <>
-      {loading ? (
+      {loadingCategory ? (
         <LoadingBox></LoadingBox>
-      ) : error ? (
-        <MessageBox variant="danger">{error}</MessageBox>
+      ) : errorCategory ? (
+        <MessageBox variant="danger">{errorCategory}</MessageBox>
       ) : (
         <div className="category_card">
           {categories?.map((categoryGroup, groupIndex) => (

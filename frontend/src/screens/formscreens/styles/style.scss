@@ -82,6 +82,9 @@
           cursor: pointer;
           font-size: 15px;
         }
+        .form-submit-btn:disabled {
+          opacity: 0.5;
+        }
       }
       .mailing {
         h1 {

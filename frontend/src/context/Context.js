@@ -54,51 +54,59 @@ function reducer(state, action) {
 
     //FETCH CATEGORY
     case "FETCH_CATEGORY_REQUEST":
-      return { ...state, loading: true };
+      return { ...state, loadingCategory: true };
     case "FETCH_CATEGORY_SUCCESS":
-      return { ...state, loading: false, categories: action.payload };
+      return { ...state, loadingCategory: false, categories: action.payload };
     case "FETCH_CATEGORY_FAIL":
-      return { ...state, loading: false, error: action.payload };
+      return {
+        ...state,
+        loadingCategory: false,
+        errorCategory: action.payload,
+      };
 
     //FETCH BRANDS
     case "FETCH_BRAND_REQUEST":
-      return { ...state, loading: true };
+      return { ...state, loadingBrand: true };
     case "FETCH_BRAND_SUCCESS":
-      return { ...state, loading: false, brands: action.payload };
+      return { ...state, loadingBrand: false, brands: action.payload };
     case "FETCH_BRAND_FAIL":
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loadingBrand: false, errorBrand: action.payload };
 
     //FETCH PRICE
     case "FETCH_PRICE_REQUEST":
-      return { ...state, loading: true };
+      return { ...state, loadingPrice: true };
     case "FETCH_PRICE_SUCCESS":
-      return { ...state, loading: false, prices: action.payload };
+      return { ...state, loadingPrice: false, prices: action.payload };
     case "FETCH_PRICE_FAIL":
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loadingPrice: false, errorPrice: action.payload };
 
     //FETCH PROMOTION
     case "FETCH_PROMOTION_REQUEST":
-      return { ...state, loading: true };
+      return { ...state, loadingPromotion: true };
     case "FETCH_PROMOTION_SUCCESS":
-      return { ...state, loading: false, promotions: action.payload };
+      return { ...state, loadingPromotion: false, promotions: action.payload };
     case "FETCH_PROMOTION_FAIL":
-      return { ...state, loading: false, error: action.payload };
+      return {
+        ...state,
+        loadingPromotion: false,
+        errorPromotion: action.payload,
+      };
 
     //FETCH COLOR
     case "FETCH_COLOR_REQUEST":
       return { ...state, loadingColor: true };
     case "FETCH_COLOR_SUCCESS":
-      return { ...state, loadingColo: false, colors: action.payload };
+      return { ...state, loadingColor: false, colors: action.payload };
     case "FETCH_COLOR_FAIL":
-      return { ...state, loadingColo: false, errorColor: action.payload };
+      return { ...state, loadingColor: false, errorColor: action.payload };
 
     //FETCH BANNER
     case "FETCH_BANNER_REQUEST":
-      return { ...state, loading: true };
+      return { ...state, loadingBanner: true };
     case "FETCH_BANNER_SUCCESS":
-      return { ...state, loading: false, banners: action.payload };
+      return { ...state, loadingBanner: false, banners: action.payload };
     case "FETCH_BANNER_FAIL":
-      return { ...state, loading: false, error: action.payload };
+      return { ...state, loadingBanner: false, errorBanner: action.payload };
 
     //ADD TO CART
     case "CART_ADD_ITEM":
@@ -200,6 +208,7 @@ export function ContextProvider(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        dispatch({ type: "FETCH_CATEGORY_REQUEST" });
         const { data } = await axios.get(`${request}/api/category`);
         dispatch({ type: "FETCH_CATEGORY_SUCCESS", payload: data });
       } catch (err) {
@@ -215,6 +224,7 @@ export function ContextProvider(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        dispatch({ type: "FETCH_PROMOTION_REQUEST" });
         const { data } = await axios.get(`${request}/api/promotions`);
         dispatch({ type: "FETCH_PROMOTION_SUCCESS", payload: data });
       } catch (err) {
@@ -230,6 +240,7 @@ export function ContextProvider(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        dispatch({ type: "FETCH_PRICE_REQUEST" });
         const { data } = await axios.get(`${request}/api/price`);
         dispatch({ type: "FETCH_PRICE_SUCCESS", payload: data });
       } catch (err) {
@@ -245,6 +256,7 @@ export function ContextProvider(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        dispatch({ type: "FETCH_COLOR_REQUEST" });
         const { data } = await axios.get(`${request}/api/color`);
         dispatch({ type: "FETCH_COLOR_SUCCESS", payload: data });
       } catch (err) {
@@ -261,6 +273,7 @@ export function ContextProvider(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        dispatch({ type: "FETCH_BRAND_REQUEST" });
         const { data } = await axios.get(`${request}/api/brand`);
         dispatch({ type: "FETCH_BRAND_SUCCESS", payload: data });
       } catch (err) {
@@ -276,6 +289,7 @@ export function ContextProvider(props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        dispatch({ type: "FETCH_BANNER_REQUEST" });
         const { data } = await axios.get(`${request}/api/banner`);
         dispatch({ type: "FETCH_BANNER_SUCCESS", payload: data });
       } catch (err) {

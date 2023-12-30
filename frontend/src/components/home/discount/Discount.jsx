@@ -10,7 +10,6 @@ import { request } from "../../../base url/BaseUrl";
 import axios from "axios";
 import { getError } from "../../utilities/util/Utils";
 import io from "socket.io-client";
-import { toast } from "react-toastify";
 import LoadingBox from "../../utilities/message loading/LoadingBox";
 import MessageBox from "../../utilities/message loading/MessageBox";
 
@@ -43,7 +42,7 @@ const reducer = (state, action) => {
     case "FETCH_SUCCESS":
       return { ...state, loading: false, promotions: action.payload };
     case "FETCH_FAIL":
-      return { ...state, loading: false, errors: action.payload };
+      return { ...state, loading: false, error: action.payload };
     case "UPDATE_COUNTDOWN":
       return { ...state, countdown: action.payload };
     default:

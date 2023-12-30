@@ -13,7 +13,7 @@ import { eyeOff } from "react-icons-kit/feather/eyeOff";
 import { eye } from "react-icons-kit/feather/eye";
 import axios from "axios";
 import { request } from "../../base url/BaseUrl";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { getError } from "../utilities/util/Utils";
 import {
   commentSchema,

@@ -13,6 +13,10 @@ const planSchema = mongoose.Schema(
     range: {
       type: String,
     },
+    numProduct: {
+      type: Number,
+      default: 0,
+    },
     description: {
       type: String,
     },

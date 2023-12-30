@@ -17,6 +17,7 @@ export function VendorPlanCreate() {
     name: "",
     price: 0,
     range: "",
+    numProduct: 0,
     description: "",
     isChecked: false,
   });
@@ -127,38 +128,39 @@ export function VendorPlanCreate() {
     }
   };
 
-   const updateOrAddPlan = async () => {
-     if (!formData._id) {
-       await addPlan();
-     } else {
-       try {
-         const updatedPlan = await updatePlan(formData._id, formData);
+  const updateOrAddPlan = async () => {
+    if (!formData._id) {
+      await addPlan();
+    } else {
+      try {
+        const updatedPlan = await updatePlan(formData._id, formData);
 
-         setPlans((prevPlans) =>
-           prevPlans.map((plan) =>
-             plan._id === formData._id ? updatedPlan : plan
-           )
-         );
+        setPlans((prevPlans) =>
+          prevPlans.map((plan) =>
+            plan._id === formData._id ? updatedPlan : plan
+          )
+        );
 
-         toast.success("Plan updated successfully");
+        toast.success("Plan updated successfully");
 
-         // Fetch plans after updating
-         await fetchPlans();
-       } catch (error) {
-         console.error("Error updating plan:", error);
-         toast.error("Failed to update plan");
-       }
-     }
+        // Fetch plans after updating
+        await fetchPlans();
+      } catch (error) {
+        console.error("Error updating plan:", error);
+        toast.error("Failed to update plan");
+      }
+    }
 
-     setFormData({
-       name: "",
-       price: 0,
-       range: "",
-       description: "",
-       isChecked: false,
-       _id: "",
-     });
-   };
+    setFormData({
+      name: "",
+      price: 0,
+      range: "",
+      numProduct: 0,
+      description: "",
+      isChecked: false,
+      _id: "",
+    });
+  };
 
   const handleCheckChange = async (planId) => {
     const existingCheckedPlan = plans.find((plan) => plan.isChecked);
@@ -207,6 +209,7 @@ export function VendorPlanCreate() {
       name: "",
       price: 0,
       range: "",
+      numProduct: 0,
       description: "",
       isChecked: false,
       _id: "",
@@ -270,10 +273,23 @@ export function VendorPlanCreate() {
                             value={formData.range}
                             onChange={handleInputChange}
                           >
-                            <option value="">Select Range</option>
+                            <option value="" disabled>
+                              Select Range
+                            </option>
                             <option value="monthly">Monthly</option>
                             <option value="yearly">Yearly</option>
                           </select>
+                        </span>
+                        <span>
+                          <label htmlFor="numProduct">Number of products</label>
+                          <input
+                            id="numProduct"
+                            type="number"
+                            name="numProduct"
+                            value={formData.numProduct}
+                            onChange={handleInputChange}
+                            placeholder="Number of product"
+                          />
                         </span>
                         <span>
                           <label htmlFor="description">Description</label>
@@ -318,6 +334,10 @@ export function VendorPlanCreate() {
                             <div>
                               <strong>Range: </strong>
                               <span>{plan.range}</span>
+                            </div>
+                            <div>
+                              <strong>Product Count: </strong>
+                              <span>{plan.numProduct}</span>
                             </div>
                             <div>
                               <label className="a_flex label">

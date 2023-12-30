@@ -67,9 +67,25 @@ const settingsSchema = new mongoose.Schema(
       type: String,
       default: "https://web.facebook.com/",
     },
+    instagram: {
+      type: String,
+      default: "https://www.instagram.com/",
+    },
     twitter: {
       type: String,
       default: "https://twitter.com/",
+    },
+    youTube: {
+      type: String,
+      default: "https://www.youtube.com/",
+    },
+    skype: {
+      type: String,
+      default: "skype id",
+    },
+    pinterest: {
+      type: String,
+      default: "https://www.pinterest.com/",
     },
     email: {
       type: String,

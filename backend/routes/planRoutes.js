@@ -84,7 +84,8 @@ planRouter.put(
   expressAsyncHandler(async (req, res) => {
     try {
       const planId = req.params.id;
-      const { name, price, choice, range, description, isChecked } = req.body; // Add isChecked here
+      const { name, price, choice, range, numProduct, description, isChecked } =
+        req.body;
 
       const plan = await Plan.findById(planId);
 
@@ -93,6 +94,7 @@ planRouter.put(
         plan.price = price;
         plan.choice = choice;
         plan.range = range;
+        plan.numProduct = numProduct;
         plan.description = description;
         plan.isChecked = isChecked; // Set isChecked property
 

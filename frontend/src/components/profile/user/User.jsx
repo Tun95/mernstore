@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useReducer,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import "../styles/styles.scss";
 import { Link, useParams } from "react-router-dom";
 import { Context } from "../../../context/Context";
@@ -45,22 +39,27 @@ const reducer = (state, action) => {
     case "UPDATE_SUCCESS":
       return { ...state, loadingUpdate: false };
     case "UPDATE_FAIL":
-      return { ...state, loadingUpdate: false };
+      return { ...state, loadingUpdate: false, errorUpdate: true };
+
+    case "UPLOAD_REQUEST":
+      return { ...state, loadingUpload: true };
+    case "UPLOAD_SUCCESS":
+      return { ...state, loadingUpload: false };
+    case "UPLOAD_FAIL":
+      return { ...state, loadingUpload: false, errorUpload: true };
 
     default:
       return state;
   }
 };
 function User() {
-  const editor = useRef(null);
-
   const params = useParams();
   const { id: userId } = params;
   const { state, dispatch: ctxDispatch } = useContext(Context);
   const { userInfo } = state;
   console.log(userInfo);
 
-  const [{ loading, error, user }, dispatch] = useReducer(reducer, {
+  const [{ loadingUpdate, user }, dispatch] = useReducer(reducer, {
     loading: true,
     error: "",
     loadingUpdate: false,
@@ -76,32 +75,31 @@ function User() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(
-          `${request}/api/users/info/${userId}`,
-          {
-            headers: { Authorization: `Bearer ${userInfo.token}` },
-          }
-        );
-        setFirstName(data.firstName);
-        setLastName(data.lastName);
-        setEmail(data.email);
-        setPhone(data.phone);
-        setAddress(data.address);
-        setCountry(data.country);
-        setImage(data.image);
+  // FETCH DATA
+  const fetchData = async () => {
+    try {
+      dispatch({ type: "FETCH_REQUEST" });
+      const { data } = await axios.get(`${request}/api/users/info/${userId}`, {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+      setFirstName(data.firstName);
+      setLastName(data.lastName);
+      setEmail(data.email);
+      setPhone(data.phone);
+      setAddress(data.address);
+      setCountry(data.country);
+      setImage(data.image);
 
-        dispatch({ type: "FETCH_SUCCESS", payload: data });
-      } catch (err) {
-        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
-      }
-    };
+      dispatch({ type: "FETCH_SUCCESS", payload: data });
+    } catch (err) {
+      dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+    }
+  };
+  useEffect(() => {
     fetchData();
   }, [userId, userInfo]);
 
+  //PROFILE UPDATE
   const submitHandler = async (e) => {
     e.preventDefault();
 
@@ -129,6 +127,7 @@ function User() {
         payload: data,
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
+      fetchData();
       toast.success("User profile updated successfully", {
         position: "bottom-center",
       });
@@ -443,8 +442,8 @@ function User() {
                         </div>
 
                         <div className="profile_form_button">
-                          <button className="a_flex" disabled={loading}>
-                            {loading ? (
+                          <button className="a_flex" disabled={loadingUpdate}>
+                            {loadingUpdate ? (
                               <div className="loading-spinner">Loading...</div>
                             ) : (
                               <>

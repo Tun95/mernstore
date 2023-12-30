@@ -54,7 +54,8 @@
           }
         }
         .about_store {
-          height: 100px;
+          min-height: 100px;
+          resize: vertical;
           border: 1px solid var(--color-light-gray);
           border-radius: 10px;
         }

@@ -34,6 +34,7 @@ function Blog() {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        dispatch({ type: "FETCH_REQUEST" });
         const { data } = await axios.get(`${request}/api/blog/blog-list`);
         dispatch({
           type: "FETCH_SUCCESS",

@@ -158,6 +158,9 @@
         cursor: pointer;
         box-shadow: var(--light-shadow);
       }
+      button:disabled {
+        opacity: 0.5;
+      }
     }
   }
   @media (max-width: 500px) {

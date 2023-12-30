@@ -13,8 +13,6 @@ import { toast } from "react-toastify";
 import { getError } from "../../utilities/util/Utils";
 import "react-phone-number-input/style.css";
 import PhoneInput from "react-phone-number-input";
-import LoadingBox from "../../utilities/message loading/LoadingBox";
-import MessageBox from "../../utilities/message loading/MessageBox";
 import { Helmet } from "react-helmet-async";
 import PublishIcon from "@mui/icons-material/Publish";
 import JoditEditor from "jodit-react";
@@ -45,7 +43,14 @@ const reducer = (state, action) => {
     case "UPDATE_SUCCESS":
       return { ...state, loadingUpdate: false };
     case "UPDATE_FAIL":
-      return { ...state, loadingUpdate: false };
+      return { ...state, loadingUpdate: false, errorUpdate: true };
+
+    case "UPLOAD_REQUEST":
+      return { ...state, loadingUpload: true };
+    case "UPLOAD_SUCCESS":
+      return { ...state, loadingUpload: false };
+    case "UPLOAD_FAIL":
+      return { ...state, loadingUpload: false, errorUpload: true };
 
     default:
       return state;
@@ -60,7 +65,7 @@ function Vendor() {
   const { userInfo } = state;
   console.log(userInfo);
 
-  const [{ loading, error, user }, dispatch] = useReducer(reducer, {
+  const [{ loadingUpdate, user }, dispatch] = useReducer(reducer, {
     loading: true,
     error: "",
     loadingUpdate: false,
@@ -87,32 +92,29 @@ function Vendor() {
   //==============
   //FETCH HANDLER
   //==============
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(
-          `${request}/api/users/info/${userId}`,
-          {
-            headers: { Authorization: `Bearer ${userInfo.token}` },
-          }
-        );
-        setFirstName(data.firstName);
-        setLastName(data.lastName);
-        setEmail(data.email);
-        setPhone(data.phone);
-        setAddress(data.address);
-        setCountry(data.country);
-        setImage(data.image);
+  const fetchData = async () => {
+    try {
+      dispatch({ type: "FETCH_REQUEST" });
+      const { data } = await axios.get(`${request}/api/users/info/${userId}`, {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+      setFirstName(data.firstName);
+      setLastName(data.lastName);
+      setEmail(data.email);
+      setPhone(data.phone);
+      setAddress(data.address);
+      setCountry(data.country);
+      setImage(data.image);
 
-        setSellerName(data?.seller?.name);
-        setSellerLogo(data?.seller?.logo);
-        setSellerDescription(data?.seller?.description);
-        dispatch({ type: "FETCH_SUCCESS", payload: data });
-      } catch (err) {
-        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
-      }
-    };
+      setSellerName(data?.seller?.name);
+      setSellerLogo(data?.seller?.logo);
+      setSellerDescription(data?.seller?.description);
+      dispatch({ type: "FETCH_SUCCESS", payload: data });
+    } catch (err) {
+      dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+    }
+  };
+  useEffect(() => {
     fetchData();
   }, [userId, userInfo]);
 
@@ -148,6 +150,7 @@ function Vendor() {
         payload: data,
       });
       localStorage.setItem("userInfo", JSON.stringify(data));
+      fetchData();
       toast.success("Vendor profile updated successfully", {
         position: "bottom-center",
       });
@@ -206,29 +209,6 @@ function Vendor() {
     } catch (err) {
       toast.error(getError(err), { position: "bottom-center" });
       dispatch({ type: "UPLOAD_FAIL" });
-    }
-  };
-
-  //=================
-  //VERIFICATION HANDLER
-  //=================
-  const verificationHandler = async () => {
-    // dispatch({ type: "CREATE_REQUEST" });
-    try {
-      const { data } = await axios.post(
-        `${request}/api/users/verification-token`,
-        {},
-        {
-          headers: { authorization: `Bearer ${userInfo.token}` },
-        }
-      );
-      dispatch({ type: "CREATE_SUCCESS" });
-      toast.success("Verification email sent successfully ", {
-        position: "bottom-center",
-      });
-    } catch (err) {
-      dispatch({ type: "CREATE_FAIL" });
-      toast.error(getError(err), { position: "bottom-center" });
     }
   };
 
@@ -552,8 +532,8 @@ function Vendor() {
                           </>
                         )}
                         <div className="profile_form_button">
-                          <button className="a_flex" disabled={loading}>
-                            {loading ? (
+                          <button className="a_flex" disabled={loadingUpdate}>
+                            {loadingUpdate ? (
                               <div className="loading-spinner">Loading...</div>
                             ) : (
                               <>
