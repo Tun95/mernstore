@@ -30,6 +30,7 @@ import promotionRouter from "./routes/promotionRoutes.js";
 import Promotion from "./models/promotionModel.js";
 import blogRouter from "./routes/blogRoutes.js";
 import planRouter from "./routes/planRoutes.js";
+import announcementRouter from "./routes/announcement.js";
 
 dotenv.config();
 
@@ -120,6 +121,7 @@ app.use("/api/updates", updateRouter);
 
 app.use("/api/blog", blogRouter);
 app.use("/api/plans", planRouter);
+app.use("/api/announcement", announcementRouter);
 
 const _dirname = path.resolve();
 app.use(express.static(path.join(_dirname, "/frontend/build")));
@@ -181,4 +183,3 @@ const port = process.env.PORT || 5000;
 server.listen(port, () => {
   console.log(`serve at http://localhost:${port}`);
 });
-
