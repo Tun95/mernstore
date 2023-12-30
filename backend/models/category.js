@@ -1,5 +1,12 @@
 import mongoose from "mongoose";
 
+const bannerSchema = new mongoose.Schema({
+  video: String,
+  heading1: String,
+  heading2: String,
+  heading3: String,
+});
+
 const subItemSchema = new mongoose.Schema({
   name: String,
 });
@@ -17,6 +24,7 @@ const categorySchema = new mongoose.Schema({
   name: String,
   description: String,
   subCategories: [subCategorySchema],
+  banner: bannerSchema,
 });
 
 const categoryModel = new mongoose.Schema(
