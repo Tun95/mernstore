@@ -21,6 +21,8 @@ import me from "../../../assets/me.png";
 import { request } from "../../../base url/BaseUrl";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import { CountryDropdown, RegionDropdown } from "react-country-region-selector";
+import LoadingBox from "../../utilities/message loading/LoadingBox";
+import MessageBox from "../../utilities/message loading/MessageBox";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -65,11 +67,14 @@ function Vendor() {
   const { userInfo } = state;
   console.log(userInfo);
 
-  const [{ loadingUpdate, user }, dispatch] = useReducer(reducer, {
-    loading: true,
-    error: "",
-    loadingUpdate: false,
-  });
+  const [{ loading, error, loadingUpdate, user }, dispatch] = useReducer(
+    reducer,
+    {
+      loading: true,
+      error: "",
+      loadingUpdate: false,
+    }
+  );
 
   const [company, setCompany] = useState("");
   const [taxNumber, setTaxNumber] = useState("");
@@ -218,7 +223,9 @@ function Vendor() {
       <div className="container ">
         <div className="profile">
           <Helmet>
-            <title>User :: {`${user?.lastName} ${user?.firstName}`}</title>
+            <title>
+              User :: {user ? `${user?.lastName} ${user?.firstName}` : ""}
+            </title>{" "}
           </Helmet>
           <div className="quick_link ">
             <div className="page a_flex">
@@ -228,328 +235,343 @@ function Vendor() {
               </p>
             </div>
           </div>
-
-          <div className="profile">
-            <div className="profile-styles">
-              <div className="profile_seller">
-                <div className="profile_box">
-                  <div className="profile-box">
-                    <form onSubmit={submitHandler} className="profile_form">
-                      <div className="profile-form-header seller_form_header">
-                        <div className="c_flex seller_flex">
-                          <div className="form_header seller_header">
-                            <div className="user_image">
-                              <div className="drop_zone">
-                                <img
-                                  src={image ? image : me}
-                                  alt=""
-                                  className="image"
-                                />
-                                <input
-                                  className="profile-input-box"
-                                  id="file"
-                                  type="file"
-                                  onChange={uploadFileHandler}
-                                  style={{ display: "none" }}
-                                />
-                                <div className="icon_bg l_flex">
-                                  <label htmlFor="file">
-                                    <PublishIcon
-                                      className={
-                                        image ? "icon" : "icon no_image"
-                                      }
-                                      onChange={uploadFileHandler}
-                                    />
-                                  </label>
+          {loading ? (
+            <LoadingBox></LoadingBox>
+          ) : error ? (
+            <MessageBox variant="danger">{error}</MessageBox>
+          ) : (
+            <div className="profile">
+              <div className="profile-styles">
+                <div className="profile_seller">
+                  <div className="profile_box">
+                    <div className="profile-box">
+                      <form onSubmit={submitHandler} className="profile_form">
+                        <div className="profile-form-header seller_form_header">
+                          <div className="c_flex seller_flex">
+                            <div className="form_header seller_header">
+                              <div className="user_image">
+                                <div className="drop_zone">
+                                  <img
+                                    src={image ? image : me}
+                                    alt=""
+                                    className="image"
+                                  />
+                                  <input
+                                    className="profile-input-box"
+                                    id="file"
+                                    type="file"
+                                    onChange={uploadFileHandler}
+                                    style={{ display: "none" }}
+                                  />
+                                  <div className="icon_bg l_flex">
+                                    <label htmlFor="file">
+                                      <PublishIcon
+                                        className={
+                                          image ? "icon" : "icon no_image"
+                                        }
+                                        onChange={uploadFileHandler}
+                                      />
+                                    </label>
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                            <div className="user_details">
-                              <div className="user_detail_list">
-                                <label>Name:</label>
-                                <h4>
-                                  {user?.lastName}&#160;{user?.firstName}
-                                </h4>
-                              </div>
-                              <div className="user_detail_list">
-                                <label>Email:</label>
-                                <h4>{user?.email}</h4>
-                              </div>
-                              {user?.address && (
+                              <div className="user_details">
                                 <div className="user_detail_list">
-                                  <label>Address:</label>
-                                  <h4>{user?.address}</h4>
+                                  <label>Name:</label>
+                                  <h4>
+                                    {user?.lastName}&#160;{user?.firstName}
+                                  </h4>
                                 </div>
-                              )}
-                              {user?.country && (
                                 <div className="user_detail_list">
-                                  <label>Country:</label>
-                                  <h4>{user?.country}</h4>
+                                  <label>Email:</label>
+                                  <h4>{user?.email}</h4>
                                 </div>
-                              )}
+                                {user?.address && (
+                                  <div className="user_detail_list">
+                                    <label>Address:</label>
+                                    <h4>{user?.address}</h4>
+                                  </div>
+                                )}
+                                {user?.country && (
+                                  <div className="user_detail_list">
+                                    <label>Country:</label>
+                                    <h4>{user?.country}</h4>
+                                  </div>
+                                )}
 
-                              <div className="user_detail_list">
-                                <label>Account Status:</label>
-                                {user?.isAccountVerified === false ? (
-                                  <span className="unverified_account a_flex">
-                                    unverified account
-                                  </span>
-                                ) : (
-                                  <span className="verified_account a_flex">
-                                    verified account
-                                  </span>
+                                <div className="user_detail_list">
+                                  <label>Account Status:</label>
+                                  {user?.isAccountVerified === false ? (
+                                    <span className="unverified_account a_flex">
+                                      unverified account
+                                    </span>
+                                  ) : (
+                                    <span className="verified_account a_flex">
+                                      verified account
+                                    </span>
+                                  )}
+                                </div>
+                              </div>
+                            </div>{" "}
+                            <div className="form_header seller_header">
+                              <div className="user_image">
+                                <div className="drop_zone seller_drop_zone">
+                                  <img
+                                    src={sellerLogo ? sellerLogo : photo}
+                                    alt=""
+                                    className="image"
+                                  />
+                                  <input
+                                    className="profile-input-box"
+                                    id="file"
+                                    type="file"
+                                    onChange={uploadSellerFileHandler}
+                                    style={{ display: "none" }}
+                                  />
+                                  <div className="icon_bg l_flex">
+                                    <label htmlFor="file">
+                                      <PublishIcon
+                                        className={"icon"}
+                                        onChange={uploadSellerFileHandler}
+                                      />
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="user_details">
+                                <div className="user_detail_list">
+                                  <label>Name:</label>
+                                  <h4>
+                                    {user?.lastName}&#160;{user?.firstName}
+                                  </h4>
+                                </div>
+                                <div className="user_detail_list">
+                                  <label>Email:</label>
+                                  <h4>{user?.email}</h4>
+                                </div>
+                                {user?.address && (
+                                  <div className="user_detail_list">
+                                    <label>Address:</label>
+                                    <h4>{user?.address}</h4>
+                                  </div>
+                                )}
+                                {user?.country && (
+                                  <div className="user_detail_list">
+                                    <label>Country:</label>
+                                    <h4>{user?.country}</h4>
+                                  </div>
+                                )}
+                                {user?.apply[0]?.status && (
+                                  <div className="user_detail_list">
+                                    <label>Application Status:</label>
+                                    {user?.apply[0]?.status === false ? (
+                                      <span className="unverified_account a_flex">
+                                        declined
+                                      </span>
+                                    ) : user?.apply[0]?.status === true &&
+                                      user.isSeller === true ? (
+                                      <span className="verified_account a_flex">
+                                        approved
+                                      </span>
+                                    ) : user?.apply[0]?.status === true &&
+                                      user?.isSeller === false ? (
+                                      <span className="pending_account a_flex">
+                                        pending
+                                      </span>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </div>
                                 )}
                               </div>
                             </div>
-                          </div>{" "}
-                          <div className="form_header seller_header">
-                            <div className="user_image">
-                              <div className="drop_zone seller_drop_zone">
-                                <img
-                                  src={sellerLogo ? sellerLogo : photo}
-                                  alt=""
-                                  className="image"
-                                />
-                                <input
-                                  className="profile-input-box"
-                                  id="file"
-                                  type="file"
-                                  onChange={uploadSellerFileHandler}
-                                  style={{ display: "none" }}
-                                />
-                                <div className="icon_bg l_flex">
-                                  <label htmlFor="file">
-                                    <PublishIcon
-                                      className={"icon"}
-                                      onChange={uploadSellerFileHandler}
-                                    />
-                                  </label>
-                                </div>
-                              </div>
-                            </div>
-                            <div className="user_details">
-                              <div className="user_detail_list">
-                                <label>Name:</label>
-                                <h4>
-                                  {user?.lastName}&#160;{user?.firstName}
-                                </h4>
-                              </div>
-                              <div className="user_detail_list">
-                                <label>Email:</label>
-                                <h4>{user?.email}</h4>
-                              </div>
-                              {user?.address && (
-                                <div className="user_detail_list">
-                                  <label>Address:</label>
-                                  <h4>{user?.address}</h4>
-                                </div>
-                              )}
-                              {user?.country && (
-                                <div className="user_detail_list">
-                                  <label>Country:</label>
-                                  <h4>{user?.country}</h4>
-                                </div>
-                              )}
-                              {user?.apply[0]?.status && (
-                                <div className="user_detail_list">
-                                  <label>Application Status:</label>
-                                  {user?.apply[0]?.status === false ? (
-                                    <span className="unverified_account a_flex">
-                                      declined
-                                    </span>
-                                  ) : user?.apply[0]?.status === true &&
-                                    user.isSeller === true ? (
-                                    <span className="verified_account a_flex">
-                                      approved
-                                    </span>
-                                  ) : user?.apply[0]?.status === true &&
-                                    user?.isSeller === false ? (
-                                    <span className="pending_account a_flex">
-                                      pending
-                                    </span>
-                                  ) : (
-                                    ""
-                                  )}
-                                </div>
-                              )}
-                            </div>
                           </div>
                         </div>
-                      </div>
 
-                      <div className="profile_inner_form">
-                        {userInfo?.isSeller && (
-                          <>
-                            <div className="profile_user_form">
-                              {" "}
-                              <div className="profile_form_group">
-                                <label htmlFor="company">Company </label>
-                                <input
-                                  className="profile-input-box"
-                                  id="company"
-                                  type="name"
-                                  placeholder="Enter your company name"
-                                  value={company}
-                                  onChange={(e) => setCompany(e.target.value)}
-                                />
-                              </div>
-                              <div className="profile_form_group">
-                                <label htmlFor="taxNumber">Tax number </label>
-                                <input
-                                  className="profile-input-box"
-                                  id="taxNumber"
-                                  type="number"
-                                  placeholder="Enter tax number"
-                                  value={taxNumber}
-                                  onChange={(e) => setTaxNumber(e.target.value)}
-                                />
-                              </div>{" "}
-                              <div className="profile_form_group">
-                                <label htmlFor="firstName">First Name </label>
-                                <input
-                                  className="profile-input-box"
-                                  id="firstName"
-                                  type="name"
-                                  placeholder="Enter your first name"
-                                  value={firstName}
-                                  onChange={(e) => setFirstName(e.target.value)}
-                                />
-                              </div>{" "}
-                              <div className="profile_form_group">
-                                <label htmlFor="lastName">Last name </label>
-                                <input
-                                  className="profile-input-box"
-                                  id="lastName"
-                                  type="name"
-                                  placeholder="Enter your last name"
-                                  value={lastName}
-                                  onChange={(e) => setLastName(e.target.value)}
-                                />
-                              </div>{" "}
-                              <div className="profile_form_group">
-                                <label htmlFor="email">E-mail </label>
-                                <input
-                                  className="profile-input-box"
-                                  id="email"
-                                  type="email"
-                                  placeholder="Enter your email"
-                                  value={email}
-                                  onChange={(e) => setEmail(e.target.value)}
-                                />
-                              </div>{" "}
-                              <div className="profile_form_group">
-                                <label htmlFor="address">Address </label>
-                                <input
-                                  className="profile-input-box"
-                                  id="address"
-                                  type="address"
-                                  placeholder="Enter your store address"
-                                  value={address}
-                                  onChange={(e) => setAddress(e.target.value)}
-                                />
-                              </div>{" "}
-                              <div className="profile_form_group">
-                                <label htmlFor="country">Country </label>
-                                <CountryDropdown
-                                  name="country"
-                                  value={selectedCountry} // Use selectedCountry state
-                                  onChange={(val) => setSelectedCountry(val)} // Update selectedCountry state
-                                  // onBlur={handleBlur}
-                                  className="select_styles"
-                                />
-                              </div>
-                              <div className="profile_form_group">
-                                <label htmlFor="state">State/Province </label>
-                                <RegionDropdown
-                                  country={selectedCountry} // Use selectedCountry state
-                                  name="state"
-                                  value={selectedState} // Use selectedState state
-                                  onChange={(val) => setSelectedState(val)} // Update selectedState state
-                                  // onBlur={handleBlur}
-                                  className="select_styles"
-                                />
-                              </div>{" "}
-                              <div className="profile_form_group">
-                                <label htmlFor="city">City </label>
-                                <input
-                                  className="profile-input-box"
-                                  id="city"
-                                  type="text"
-                                  placeholder="Enter your city"
-                                  value={city}
-                                  onChange={(e) => setCity(e.target.value)}
-                                />
-                              </div>{" "}
-                              <div className="profile_form_group">
-                                <label htmlFor="zipCode">
-                                  Zip/postal code{" "}
-                                </label>
-                                <input
-                                  className="profile-input-box"
-                                  id="zipCode"
-                                  type="zipCode"
-                                  placeholder="Enter your zip/postal code"
-                                  value={zipCode}
-                                  onChange={(e) => setZipCode(e.target.value)}
-                                />
-                              </div>
-                              <div className="profile_form_group">
-                                <label htmlFor="phone">Phone </label>
-                                <PhoneInput
-                                  international
-                                  countryCallingCodeEditable={true}
-                                  inputProps={{
-                                    name: "phone",
-                                    id: "phone",
-                                  }}
-                                  country={selectedCountry}
-                                  value={selectedPhone}
-                                  onChange={(value, country) =>
-                                    setSelectedPhone(value)
-                                  } // Update selectedPhone state
-                                  // onBlur={handleBlur}
-                                />
-                              </div>
-                            </div>
-                            <div className="seller_component">
-                              <div className="profile-form-group">
-                                <label htmlFor="sellerdesc">Description:</label>
-                                <div className="form_box">
-                                  <JoditEditor
-                                    className="editor"
-                                    id="desc"
-                                    ref={editor}
-                                    value={sellerDescription}
-                                    tabIndex={1}
-                                    onBlur={(newContent) =>
-                                      setSellerDescription(newContent)
+                        <div className="profile_inner_form">
+                          {userInfo?.isSeller && (
+                            <>
+                              <div className="profile_user_form">
+                                {" "}
+                                <div className="profile_form_group">
+                                  <label htmlFor="company">Company </label>
+                                  <input
+                                    className="profile-input-box"
+                                    id="company"
+                                    type="name"
+                                    placeholder="Enter your company name"
+                                    value={company}
+                                    onChange={(e) => setCompany(e.target.value)}
+                                  />
+                                </div>
+                                <div className="profile_form_group">
+                                  <label htmlFor="taxNumber">Tax number </label>
+                                  <input
+                                    className="profile-input-box"
+                                    id="taxNumber"
+                                    type="number"
+                                    placeholder="Enter tax number"
+                                    value={taxNumber}
+                                    onChange={(e) =>
+                                      setTaxNumber(e.target.value)
                                     }
-                                    onChange={(newContent) => {}}
+                                  />
+                                </div>{" "}
+                                <div className="profile_form_group">
+                                  <label htmlFor="firstName">First Name </label>
+                                  <input
+                                    className="profile-input-box"
+                                    id="firstName"
+                                    type="name"
+                                    placeholder="Enter your first name"
+                                    value={firstName}
+                                    onChange={(e) =>
+                                      setFirstName(e.target.value)
+                                    }
+                                  />
+                                </div>{" "}
+                                <div className="profile_form_group">
+                                  <label htmlFor="lastName">Last name </label>
+                                  <input
+                                    className="profile-input-box"
+                                    id="lastName"
+                                    type="name"
+                                    placeholder="Enter your last name"
+                                    value={lastName}
+                                    onChange={(e) =>
+                                      setLastName(e.target.value)
+                                    }
+                                  />
+                                </div>{" "}
+                                <div className="profile_form_group">
+                                  <label htmlFor="email">E-mail </label>
+                                  <input
+                                    className="profile-input-box"
+                                    id="email"
+                                    type="email"
+                                    placeholder="Enter your email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                  />
+                                </div>{" "}
+                                <div className="profile_form_group">
+                                  <label htmlFor="address">Address </label>
+                                  <input
+                                    className="profile-input-box"
+                                    id="address"
+                                    type="address"
+                                    placeholder="Enter your store address"
+                                    value={address}
+                                    onChange={(e) => setAddress(e.target.value)}
+                                  />
+                                </div>{" "}
+                                <div className="profile_form_group">
+                                  <label htmlFor="country">Country </label>
+                                  <CountryDropdown
+                                    name="country"
+                                    value={selectedCountry} // Use selectedCountry state
+                                    onChange={(val) => setSelectedCountry(val)} // Update selectedCountry state
+                                    // onBlur={handleBlur}
+                                    className="select_styles"
+                                  />
+                                </div>
+                                <div className="profile_form_group">
+                                  <label htmlFor="state">State/Province </label>
+                                  <RegionDropdown
+                                    country={selectedCountry} // Use selectedCountry state
+                                    name="state"
+                                    value={selectedState} // Use selectedState state
+                                    onChange={(val) => setSelectedState(val)} // Update selectedState state
+                                    // onBlur={handleBlur}
+                                    className="select_styles"
+                                  />
+                                </div>{" "}
+                                <div className="profile_form_group">
+                                  <label htmlFor="city">City </label>
+                                  <input
+                                    className="profile-input-box"
+                                    id="city"
+                                    type="text"
+                                    placeholder="Enter your city"
+                                    value={city}
+                                    onChange={(e) => setCity(e.target.value)}
+                                  />
+                                </div>{" "}
+                                <div className="profile_form_group">
+                                  <label htmlFor="zipCode">
+                                    Zip/postal code{" "}
+                                  </label>
+                                  <input
+                                    className="profile-input-box"
+                                    id="zipCode"
+                                    type="zipCode"
+                                    placeholder="Enter your zip/postal code"
+                                    value={zipCode}
+                                    onChange={(e) => setZipCode(e.target.value)}
+                                  />
+                                </div>
+                                <div className="profile_form_group">
+                                  <label htmlFor="phone">Phone </label>
+                                  <PhoneInput
+                                    international
+                                    countryCallingCodeEditable={true}
+                                    inputProps={{
+                                      name: "phone",
+                                      id: "phone",
+                                    }}
+                                    country={selectedCountry}
+                                    value={selectedPhone}
+                                    onChange={(value, country) =>
+                                      setSelectedPhone(value)
+                                    } // Update selectedPhone state
+                                    // onBlur={handleBlur}
                                   />
                                 </div>
                               </div>
-                            </div>
-                          </>
-                        )}
-                        <div className="profile_form_button">
-                          <button className="a_flex" disabled={loadingUpdate}>
-                            {loadingUpdate ? (
-                              <div className="loading-spinner">Loading...</div>
-                            ) : (
-                              <>
-                                <DescriptionOutlinedIcon className="icon" />{" "}
-                                Save
-                              </>
-                            )}
-                          </button>
+                              <div className="seller_component">
+                                <div className="profile-form-group">
+                                  <label htmlFor="sellerdesc">
+                                    Description:
+                                  </label>
+                                  <div className="form_box">
+                                    <JoditEditor
+                                      className="editor"
+                                      id="desc"
+                                      ref={editor}
+                                      value={sellerDescription}
+                                      tabIndex={1}
+                                      onBlur={(newContent) =>
+                                        setSellerDescription(newContent)
+                                      }
+                                      onChange={(newContent) => {}}
+                                    />
+                                  </div>
+                                </div>
+                              </div>
+                            </>
+                          )}
+                          <div className="profile_form_button">
+                            <button className="a_flex" disabled={loadingUpdate}>
+                              {loadingUpdate ? (
+                                <div className="loading-spinner">
+                                  Loading...
+                                </div>
+                              ) : (
+                                <>
+                                  <DescriptionOutlinedIcon className="icon" />{" "}
+                                  Save
+                                </>
+                              )}
+                            </button>
+                          </div>
                         </div>
-                      </div>
-                    </form>
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

@@ -232,20 +232,7 @@
       }
     }
   }
-  @media screen and (max-width: 490px) {
-    .profile-styles {
-      .profile_seller {
-        .profile_box {
-          .profile_form {
-            .form_header {
-              padding: 10px;
-            }
-           
-          }
-        }
-      }
-    }
-  }
+
   @media screen and (max-width: 420px) {
     .box_shadow {
       box-shadow: none;
@@ -257,6 +244,9 @@
         padding: 0px;
         .profile_box {
           .profile_form {
+            .profile-form-header {
+              padding: 8px;
+            }
             .profile_inner_form {
               padding: 8px;
               margin: 10px 0px;

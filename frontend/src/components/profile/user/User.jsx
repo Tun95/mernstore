@@ -59,11 +59,14 @@ function User() {
   const { userInfo } = state;
   console.log(userInfo);
 
-  const [{ loadingUpdate, user }, dispatch] = useReducer(reducer, {
-    loading: true,
-    error: "",
-    loadingUpdate: false,
-  });
+  const [{ loading, error, loadingUpdate, user }, dispatch] = useReducer(
+    reducer,
+    {
+      loading: true,
+      error: "",
+      loadingUpdate: false,
+    }
+  );
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -216,7 +219,9 @@ function User() {
       <div className="container ">
         <div className="profile  ">
           <Helmet>
-            <title>User :: {`${user?.lastName} ${user?.firstName}`}</title>
+            <title>
+              User :: {user ? `${user?.lastName} ${user?.firstName}` : ""}
+            </title>
           </Helmet>
           <div className="quick_link ">
             <div className="page a_flex">
@@ -226,240 +231,250 @@ function User() {
               </p>
             </div>
           </div>
-          <div className="profile">
-            <div className="profile-styles">
-              <div className="profile_seller">
-                <div className="profile_box">
-                  <div className="profile-box">
-                    <form onSubmit={submitHandler} className="profile_form">
-                      <div className="profile-form-header">
-                        <div className="form_header">
-                          <div className="user_image">
-                            <div className="drop_zone">
-                              <img
-                                src={image ? image : me}
-                                alt=""
-                                className="image"
-                              />
-                              <input
-                                className="profile-input-box"
-                                id="file"
-                                type="file"
-                                onChange={uploadFileHandler}
-                                style={{ display: "none" }}
-                              />
-                              <div className="icon_bg l_flex">
-                                <label htmlFor="file">
-                                  <PublishIcon
-                                    className={image ? "icon" : "icon no_image"}
-                                    onChange={uploadFileHandler}
-                                  />
-                                </label>
+          {loading ? (
+            <LoadingBox></LoadingBox>
+          ) : error ? (
+            <MessageBox variant="danger">{error}</MessageBox>
+          ) : (
+            <div className="profile">
+              <div className="profile-styles">
+                <div className="profile_seller">
+                  <div className="profile_box">
+                    <div className="profile-box">
+                      <form onSubmit={submitHandler} className="profile_form">
+                        <div className="profile-form-header">
+                          <div className="form_header">
+                            <div className="user_image">
+                              <div className="drop_zone">
+                                <img
+                                  src={image ? image : me}
+                                  alt=""
+                                  className="image"
+                                />
+                                <input
+                                  className="profile-input-box"
+                                  id="file"
+                                  type="file"
+                                  onChange={uploadFileHandler}
+                                  style={{ display: "none" }}
+                                />
+                                <div className="icon_bg l_flex">
+                                  <label htmlFor="file">
+                                    <PublishIcon
+                                      className={
+                                        image ? "icon" : "icon no_image"
+                                      }
+                                      onChange={uploadFileHandler}
+                                    />
+                                  </label>
+                                </div>
                               </div>
                             </div>
-                          </div>
-                          <div className="user_details">
-                            <div className="user_detail_list">
-                              <label>Name:</label>
-                              <h4>
-                                {user?.lastName}&#160;{user?.firstName}
-                              </h4>
-                            </div>
-                            <div className="user_detail_list">
-                              <label>Email:</label>
-                              <h4>{user?.email}</h4>
-                            </div>
-                            {user?.address && (
+                            <div className="user_details">
                               <div className="user_detail_list">
-                                <label>Address:</label>
-                                <h4>{user?.address}</h4>
+                                <label>Name:</label>
+                                <h4>
+                                  {user?.lastName}&#160;{user?.firstName}
+                                </h4>
                               </div>
-                            )}
-                            {user?.country && (
                               <div className="user_detail_list">
-                                <label>Country:</label>
-                                <h4>{user?.country}</h4>
+                                <label>Email:</label>
+                                <h4>{user?.email}</h4>
                               </div>
-                            )}
-                            {user?.apply[0]?.status && (
+                              {user?.address && (
+                                <div className="user_detail_list">
+                                  <label>Address:</label>
+                                  <h4>{user?.address}</h4>
+                                </div>
+                              )}
+                              {user?.country && (
+                                <div className="user_detail_list">
+                                  <label>Country:</label>
+                                  <h4>{user?.country}</h4>
+                                </div>
+                              )}
+                              {user?.apply[0]?.status && (
+                                <div className="user_detail_list">
+                                  <label>Application Status:</label>
+                                  {user?.apply[0]?.status === false ? (
+                                    <span className="unverified_account a_flex">
+                                      declined
+                                    </span>
+                                  ) : user?.apply[0]?.status === true &&
+                                    user.isSeller === true ? (
+                                    <span className="verified_account a_flex">
+                                      approved
+                                    </span>
+                                  ) : user?.apply[0]?.status === true &&
+                                    user?.isSeller === false ? (
+                                    <span className="pending_account a_flex">
+                                      pending
+                                    </span>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                              )}
+
                               <div className="user_detail_list">
-                                <label>Application Status:</label>
-                                {user?.apply[0]?.status === false ? (
+                                <label>Account Status:</label>
+                                {user?.isAccountVerified === false ? (
                                   <span className="unverified_account a_flex">
-                                    declined
-                                  </span>
-                                ) : user?.apply[0]?.status === true &&
-                                  user.isSeller === true ? (
-                                  <span className="verified_account a_flex">
-                                    approved
-                                  </span>
-                                ) : user?.apply[0]?.status === true &&
-                                  user?.isSeller === false ? (
-                                  <span className="pending_account a_flex">
-                                    pending
+                                    unverified account
                                   </span>
                                 ) : (
-                                  ""
+                                  <span className="verified_account a_flex">
+                                    verified account
+                                  </span>
                                 )}
                               </div>
-                            )}
-
-                            <div className="user_detail_list">
-                              <label>Account Status:</label>
-                              {user?.isAccountVerified === false ? (
-                                <span className="unverified_account a_flex">
-                                  unverified account
-                                </span>
-                              ) : (
-                                <span className="verified_account a_flex">
-                                  verified account
-                                </span>
-                              )}
+                              {!user?.isAccountVerified ? (
+                                <div className="verify_now">
+                                  <span onClick={verificationHandler}>
+                                    Verify Now
+                                  </span>
+                                </div>
+                              ) : null}
                             </div>
-                            {!user?.isAccountVerified ? (
-                              <div className="verify_now">
-                                <span onClick={verificationHandler}>
-                                  Verify Now
-                                </span>
-                              </div>
-                            ) : null}
                           </div>
                         </div>
-                      </div>
 
-                      <div className="profile_inner_form">
-                        <div className="profile_user_form">
-                          <div className="profile_form_group">
-                            <label htmlFor="firstName">First Name </label>
-                            <input
-                              className="profile-input-box"
-                              id="firstName"
-                              type="name"
-                              placeholder="Name"
-                              value={firstName}
-                              onChange={(e) => setFirstName(e.target.value)}
-                            />
-                          </div>
-                          <div className="profile_form_group">
-                            <label htmlFor="lastName">Last Name </label>
-                            <input
-                              className="profile-input-box"
-                              id="lastName"
-                              type="name"
-                              placeholder="Name"
-                              value={lastName}
-                              onChange={(e) => setLastName(e.target.value)}
-                            />
-                          </div>
-                          <div className="profile_form_group">
-                            <label htmlFor="email">Email </label>
-                            <input
-                              className="profile-input-box"
-                              id="email"
-                              type="email"
-                              value={email}
-                              // disabled={userInfo?.isAdmin}
-                              placeholder="Email"
-                              onChange={(e) => setEmail(e.target.value)}
-                            />
-                          </div>
-                          <div className="profile_form_group">
-                            <label htmlFor="phone">Phone </label>
-                            <PhoneInput
-                              international
-                              countryCallingCodeEditable={true}
-                              placeholder="Enter phone number"
-                              value={phone}
-                              className="phone_width"
-                              onChange={setPhone}
-                            />
-                          </div>
-                          <div className="profile_form_group">
-                            <label htmlFor="address">Address </label>
-                            <input
-                              className="profile-input-box"
-                              id="address"
-                              type="address"
-                              value={address}
-                              placeholder="address"
-                              onChange={(e) => setAddress(e.target.value)}
-                            />
-                          </div>
-                          <div className="profile_form_group">
-                            <label htmlFor="country">Country </label>
-                            <input
-                              className="profile-input-box"
-                              id="country"
-                              type="country"
-                              value={country}
-                              placeholder="country"
-                              onChange={(e) => setCountry(e.target.value)}
-                            />
-                          </div>
-
-                          <div className="profile_form_group">
-                            <label htmlFor="password">Password </label>
-                            <input
-                              className="profile-input-box"
-                              id="password"
-                              type={type}
-                              value={password}
-                              // disabled={userInfo?.isAdmin}
-                              placeholder="Password"
-                              onChange={(e) => setPassword(e.target.value)}
-                            />
-                            <span onClick={handleToggle}>
-                              <Icon
-                                icon={icon}
-                                size={20}
-                                className="eye-icon"
+                        <div className="profile_inner_form">
+                          <div className="profile_user_form">
+                            <div className="profile_form_group">
+                              <label htmlFor="firstName">First Name </label>
+                              <input
+                                className="profile-input-box"
+                                id="firstName"
+                                type="name"
+                                placeholder="Name"
+                                value={firstName}
+                                onChange={(e) => setFirstName(e.target.value)}
                               />
-                            </span>
-                          </div>
-                          <div className="profile_form_group">
-                            <label htmlFor="c-password">
-                              Confirm password{" "}
-                            </label>
-                            <input
-                              className="profile-input-box"
-                              id="c-password"
-                              type={typeCom}
-                              value={confirmPassword}
-                              // disabled={userInfo?.isAdmin}
-                              placeholder="Confirm password"
-                              onChange={(e) =>
-                                setConfirmPassword(e.target.value)
-                              }
-                            />
-                            <span onClick={handleComToggle}>
-                              <Icon
-                                icon={iconCom}
-                                size={20}
-                                className="eye-icon"
+                            </div>
+                            <div className="profile_form_group">
+                              <label htmlFor="lastName">Last Name </label>
+                              <input
+                                className="profile-input-box"
+                                id="lastName"
+                                type="name"
+                                placeholder="Name"
+                                value={lastName}
+                                onChange={(e) => setLastName(e.target.value)}
                               />
-                            </span>
+                            </div>
+                            <div className="profile_form_group">
+                              <label htmlFor="email">Email </label>
+                              <input
+                                className="profile-input-box"
+                                id="email"
+                                type="email"
+                                value={email}
+                                // disabled={userInfo?.isAdmin}
+                                placeholder="Email"
+                                onChange={(e) => setEmail(e.target.value)}
+                              />
+                            </div>
+                            <div className="profile_form_group">
+                              <label htmlFor="phone">Phone </label>
+                              <PhoneInput
+                                international
+                                countryCallingCodeEditable={true}
+                                placeholder="Enter phone number"
+                                value={phone}
+                                className="phone_width"
+                                onChange={setPhone}
+                              />
+                            </div>
+                            <div className="profile_form_group">
+                              <label htmlFor="address">Address </label>
+                              <input
+                                className="profile-input-box"
+                                id="address"
+                                type="address"
+                                value={address}
+                                placeholder="address"
+                                onChange={(e) => setAddress(e.target.value)}
+                              />
+                            </div>
+                            <div className="profile_form_group">
+                              <label htmlFor="country">Country </label>
+                              <input
+                                className="profile-input-box"
+                                id="country"
+                                type="country"
+                                value={country}
+                                placeholder="country"
+                                onChange={(e) => setCountry(e.target.value)}
+                              />
+                            </div>
+
+                            <div className="profile_form_group">
+                              <label htmlFor="password">Password </label>
+                              <input
+                                className="profile-input-box"
+                                id="password"
+                                type={type}
+                                value={password}
+                                // disabled={userInfo?.isAdmin}
+                                placeholder="Password"
+                                onChange={(e) => setPassword(e.target.value)}
+                              />
+                              <span onClick={handleToggle}>
+                                <Icon
+                                  icon={icon}
+                                  size={20}
+                                  className="eye-icon"
+                                />
+                              </span>
+                            </div>
+                            <div className="profile_form_group">
+                              <label htmlFor="c-password">
+                                Confirm password{" "}
+                              </label>
+                              <input
+                                className="profile-input-box"
+                                id="c-password"
+                                type={typeCom}
+                                value={confirmPassword}
+                                // disabled={userInfo?.isAdmin}
+                                placeholder="Confirm password"
+                                onChange={(e) =>
+                                  setConfirmPassword(e.target.value)
+                                }
+                              />
+                              <span onClick={handleComToggle}>
+                                <Icon
+                                  icon={iconCom}
+                                  size={20}
+                                  className="eye-icon"
+                                />
+                              </span>
+                            </div>
+                          </div>
+
+                          <div className="profile_form_button">
+                            <button className="a_flex" disabled={loadingUpdate}>
+                              {loadingUpdate ? (
+                                <div className="loading-spinner">
+                                  Loading...
+                                </div>
+                              ) : (
+                                <>
+                                  <DescriptionOutlinedIcon className="icon" />{" "}
+                                  Save
+                                </>
+                              )}
+                            </button>
                           </div>
                         </div>
-
-                        <div className="profile_form_button">
-                          <button className="a_flex" disabled={loadingUpdate}>
-                            {loadingUpdate ? (
-                              <div className="loading-spinner">Loading...</div>
-                            ) : (
-                              <>
-                                <DescriptionOutlinedIcon className="icon" />{" "}
-                                Save
-                              </>
-                            )}
-                          </button>
-                        </div>
-                      </div>
-                    </form>
+                      </form>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>
