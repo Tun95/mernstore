@@ -63,7 +63,7 @@ const columns = [
   {
     field: "name",
     headerName: "Name",
-    width: 380,
+    width: 230,
     renderCell: (params) => {
       return (
         <>
@@ -76,7 +76,7 @@ const columns = [
   {
     field: "phone",
     headerName: "Phone",
-    width: 300,
+    width: 200,
     renderCell: (params) => {
       return (
         <>
@@ -84,6 +84,16 @@ const columns = [
         </>
       );
     },
+  },
+  {
+    field: "convenientTime",
+    headerName: "Convenient Time",
+    width: 280,
+    renderCell: (params) => (
+      <div className="cellWidthImg">
+        {`${params.row?.convenientTimeFrom} - ${params.row?.convenientTimeTo}`}
+      </div>
+    ),
   },
   {
     field: "createdAt",
