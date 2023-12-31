@@ -6,8 +6,6 @@
 
   .left {
     flex: 1;
-    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
     padding: 20px;
     position: relative;
     .userInfo_widget {
@@ -26,6 +24,7 @@
       background-color: #7551f81c;
       cursor: pointer;
       border-radius: 0px 0px 0px 5px;
+      border-top-right-radius: 10px;
     }
 
     .item {
@@ -64,15 +63,11 @@
 
   .right {
     flex: 2;
-    -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-    box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
     padding: 20px;
   }
 }
 .bottom {
-  -webkit-box-shadow: 2px 4px 10px 1px rgba(0, 0, 0, 0.47);
-  box-shadow: 2px 4px 10px 1px rgba(201, 201, 201, 0.47);
-  padding: 20px;
+ padding: 20px;
   margin: 20px 0px;
 }
 .title {

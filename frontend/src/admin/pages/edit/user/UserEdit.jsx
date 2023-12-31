@@ -10,6 +10,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Context } from "../../../../context/Context";
 import noimage from "../../../assets/noimage.png";
 import { request } from "../../../../base url/BaseUrl";
+import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import LoadingBox from "../../../../components/utilities/message loading/LoadingBox";
+import MessageBox from "../../../../components/utilities/message loading/MessageBox";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -59,30 +62,27 @@ function UserEdit() {
   const [isSeller, setIsSeller] = useState(false);
 
   //FETCHING
+  const fetchData = async () => {
+    try {
+      dispatch({ type: "FETCH_REQUEST" });
+      const { data } = await axios.get(`${request}/api/users/info/${userId}`, {
+        headers: { Authorization: `Bearer ${userInfo.token}` },
+      });
+      setFirstName(data.firstName);
+      setLastName(data.lastName);
+      setEmail(data.email);
+      setPhone(data.phone);
+      setAddress(data.address);
+      setCountry(data.country);
+      setIsAdmin(data.isAdmin);
+      setIsSeller(data.isSeller);
+      setImage(data.image);
+      dispatch({ type: "FETCH_SUCCESS", payload: data });
+    } catch (err) {
+      dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        dispatch({ type: "FETCH_REQUEST" });
-        const { data } = await axios.get(
-          `${request}/api/users/info/${userId}`,
-          {
-            headers: { Authorization: `Bearer ${userInfo.token}` },
-          }
-        );
-        setFirstName(data.firstName);
-        setLastName(data.lastName);
-        setEmail(data.email);
-        setPhone(data.phone);
-        setAddress(data.address);
-        setCountry(data.country);
-        setIsAdmin(data.isAdmin);
-        setIsSeller(data.isSeller);
-        setImage(data.image);
-        dispatch({ type: "FETCH_SUCCESS", payload: data });
-      } catch (err) {
-        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
-      }
-    };
     fetchData();
     console.log(userId);
   }, [userId, userInfo]);
@@ -91,6 +91,7 @@ function UserEdit() {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
+      dispatch({ type: "UPDATE_REQUEST" });
       await axios.put(
         `${request}/api/users/${userId}`,
         {
@@ -110,10 +111,10 @@ function UserEdit() {
         }
       );
       dispatch({ type: "UPDATE_SUCCESS" });
+      fetchData();
       toast.success("User updated successfully", {
         position: "bottom-center",
       });
-      navigate("/admin/users");
     } catch (err) {
       toast.error(getError(err), { position: "bottom-center" });
       dispatch({ type: "UPDATE_FAIL" });
@@ -150,117 +151,145 @@ function UserEdit() {
       <Helmet>
         <title>Edit User Info</title>
       </Helmet>
-      <div className="container">
-        <div className="userEdit">
-          <div className="utop">
-            <h1>Edit User Info</h1>
-          </div>
-          <div className="ubottom">
-            <div className="left">
-              <div className="featured">
-                <img src={image ? image : noimage} alt="" />
+      <div className="product_edit admin_page_all page_background">
+        <div className="container">
+          <div className=" ">
+            <div className="productTitleContainer">
+              <h3 className="productTitle light_shadow uppercase">
+                Edit User Info
+              </h3>
+            </div>
+            {loading ? (
+              <LoadingBox></LoadingBox>
+            ) : error ? (
+              <MessageBox variant="danger">{error}</MessageBox>
+            ) : (
+              <div className="userEdit">
+                <div className="ubottom">
+                  <div className="left light_shadow">
+                    <div className="featured">
+                      <img src={image ? image : noimage} alt="" />
+                    </div>
+                  </div>
+                  <div className="right light_shadow">
+                    <form action="" onSubmit={submitHandler}>
+                      <div className="form_group">
+                        <div className="formInput ">
+                          <label htmlFor="file" className="formInputLabel">
+                            Image:{" "}
+                            <DriveFolderUploadIcon
+                              onChange={uploadFileHandler}
+                              className="icon"
+                            />
+                          </label>
+                          <input
+                            onChange={uploadFileHandler}
+                            type="file"
+                            id="file"
+                            style={{ display: "none" }}
+                          />
+                        </div>
+
+                        <div className="formInput">
+                          <label htmlFor="firstName">First Name</label>
+                          <input
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            type="name"
+                            placeholder="first name"
+                            id="firstName"
+                          />
+                        </div>
+
+                        <div className="formInput">
+                          <label htmlFor="lastName">Last Name</label>
+                          <input
+                            type="name"
+                            id="lastName"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                          />
+                        </div>
+                        <div className="formInput">
+                          <label htmlFor="">Phone</label>
+                          {/* <input type="text" placeholder="+1 234 34 5465" /> */}
+                          <PhoneInput
+                            international
+                            countryCallingCodeEditable={false}
+                            id="specialInput"
+                            className="userUpdateInput"
+                            placeholder="Enter phone number"
+                            value={phone}
+                            onChange={setPhone}
+                          />
+                        </div>
+                        <div className="formInput">
+                          <label htmlFor="">Email</label>
+                          <input
+                            value={email}
+                            // disabled={user?.isAdmin}
+                            onChange={(e) => setEmail(e.target.value)}
+                            type="email"
+                            placeholder="tunji@gmail.com"
+                          />
+                        </div>
+                        <div className="formInput">
+                          <label htmlFor="">Address</label>
+                          <input
+                            value={address}
+                            onChange={(e) => setAddress(e.target.value)}
+                            type="text"
+                            placeholder="70 Washington Square,"
+                          />
+                        </div>
+                        <div className="formInput">
+                          <label htmlFor="">Country</label>
+                          <input
+                            value={country}
+                            onChange={(e) => setCountry(e.target.value)}
+                            type="text"
+                            placeholder="USA"
+                          />
+                        </div>
+                        <div className="formInput formUserType d_flex">
+                          <span className="checkBox a_flex ">
+                            <input
+                              type="checkbox"
+                              checked={isAdmin}
+                              id="isAdmin"
+                              onChange={(e) => setIsAdmin(e.target.checked)}
+                            />
+                            <label htmlFor="isAdmin">IsAdmin</label>
+                            <input
+                              type="checkbox"
+                              id="isSeller"
+                              checked={isSeller}
+                              onChange={(e) => setIsSeller(e.target.checked)}
+                            />
+                            <label htmlFor="isSeller">IsSeller</label>
+                          </span>
+                        </div>
+                      </div>
+                      <div className="bottom_btn ">
+                        <button
+                          type="submit"
+                          className="a_flex"
+                          disabled={loadingUpdate}
+                        >
+                          {loadingUpdate ? (
+                            <div className="loading-spinner">Loading...</div>
+                          ) : (
+                            <>
+                              <DescriptionOutlinedIcon className="icon" /> Save
+                            </>
+                          )}
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="right">
-              <form action="" onSubmit={submitHandler}>
-                <div className="formInput ">
-                  <label htmlFor="file" className="formInputLabel">
-                    Image:{" "}
-                    <DriveFolderUploadIcon
-                      onChange={uploadFileHandler}
-                      className="icon"
-                    />
-                  </label>
-                  <input
-                    onChange={uploadFileHandler}
-                    type="file"
-                    id="file"
-                    style={{ display: "none" }}
-                  />
-                </div>
-
-                <div className="formInput">
-                  <label htmlFor="firstName">First Name</label>
-                  <input
-                    value={firstName}
-                    onChange={(e) => setFirstName(e.target.value)}
-                    type="name"
-                    placeholder="first name"
-                    id="firstName"
-                  />
-                </div>
-
-                <div className="formInput">
-                  <label htmlFor="lastName">Last Name</label>
-                  <input
-                    type="name"
-                    id="lastName"
-                    value={lastName}
-                    onChange={(e) => setLastName(e.target.value)}
-                  />
-                </div>
-                <div className="formInput">
-                  <label htmlFor="">Phone</label>
-                  {/* <input type="text" placeholder="+1 234 34 5465" /> */}
-                  <PhoneInput
-                    international
-                    countryCallingCodeEditable={false}
-                    id="specialInput"
-                    className="userUpdateInput"
-                    placeholder="Enter phone number"
-                    value={phone}
-                    onChange={setPhone}
-                  />
-                </div>
-                <div className="formInput">
-                  <label htmlFor="">Email</label>
-                  <input
-                    value={email}
-                    // disabled={user?.isAdmin}
-                    onChange={(e) => setEmail(e.target.value)}
-                    type="email"
-                    placeholder="tunji@gmail.com"
-                  />
-                </div>
-                <div className="formInput">
-                  <label htmlFor="">Address</label>
-                  <input
-                    value={address}
-                    onChange={(e) => setAddress(e.target.value)}
-                    type="text"
-                    placeholder="70 Washington Square,"
-                  />
-                </div>
-                <div className="formInput">
-                  <label htmlFor="">Country</label>
-                  <input
-                    value={country}
-                    onChange={(e) => setCountry(e.target.value)}
-                    type="text"
-                    placeholder="USA"
-                  />
-                </div>
-                <div className="formInput formUserType d_flex">
-                  <span className="checkBox a_flex ">
-                    <input
-                      type="checkbox"
-                      checked={isAdmin}
-                      id="isAdmin"
-                      onChange={(e) => setIsAdmin(e.target.checked)}
-                    />
-                    <label htmlFor="isAdmin">IsAdmin</label>
-                    <input
-                      type="checkbox"
-                      id="isSeller"
-                      checked={isSeller}
-                      onChange={(e) => setIsSeller(e.target.checked)}
-                    />
-                    <label htmlFor="isSeller">IsSeller</label>
-                  </span>
-                  <button type="submit">Update</button>
-                </div>
-              </form>
-            </div>
+            )}
           </div>
         </div>
       </div>

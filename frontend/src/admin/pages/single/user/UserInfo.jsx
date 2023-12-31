@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useReducer, useState } from "react";
 import Chart from "../../../components/chart/Chart";
-import List from "../../../components/table/Table";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import "../styles/styles.scss";
 import axios from "axios";
 import me from "../../../../assets/me.png";
@@ -11,6 +10,8 @@ import { request } from "../../../../base url/BaseUrl";
 import UserOrderList from "./table/Table";
 import { Helmet } from "react-helmet-async";
 import Widget from "../../../components/widget/Widget";
+import LoadingBox from "../../../../components/utilities/message loading/LoadingBox";
+import MessageBox from "../../../../components/utilities/message loading/MessageBox";
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -41,7 +42,6 @@ const reducer = (state, action) => {
   }
 };
 function UserInfo() {
-  const navigate = useNavigate();
   const params = useParams();
   const { id: userId } = params;
 
@@ -116,83 +116,100 @@ function UserInfo() {
   const SellersBalance = convertCurrency(balance);
 
   return (
-    <div className="container">
-      <Helmet>
-        <title>User Info</title>
-      </Helmet>
-      <div className="userInfotop">
-        <div className="left">
-          <div className="editButton">
-            <Link to={`/admin/user/${userId}/edit`}>Edit</Link>
+    <div className="product_edit admin_page_all page_background">
+      <div className="container">
+        <div className=" ">
+          <div className="productTitleContainer">
+            <h3 className="productTitle light_shadow uppercase">
+              User Details For: {user.user?.lastName} {user?.user?.firstName}
+            </h3>
           </div>
-          <h1 className="title">Information</h1>
-          <div className="item">
-            <img
-              src={user?.user?.image ? user?.user?.image : me}
-              alt=""
-              className="itemImg"
-            />
-            <div className="details">
-              <h1 className="itemTitle">
-                {user?.user?.firstName} {user?.user?.lastName}
-              </h1>
-              <div className="detailItem">
-                <span className="itemKey">Email:</span>
-                <span className="itemValue">{user?.user?.email}</span>
+          <Helmet>
+            <title>User Info</title>
+          </Helmet>
+          {loading ? (
+            <LoadingBox></LoadingBox>
+          ) : error ? (
+            <MessageBox variant="danger">{error}</MessageBox>
+          ) : (
+            <>
+              <div className="userInfotop">
+                <div className="left light_shadow">
+                  <div className="editButton">
+                    <Link to={`/admin/user/${userId}/edit`}>Edit</Link>
+                  </div>
+                  <h1 className="title">Information</h1>
+                  <div className="item">
+                    <img
+                      src={user?.user?.image ? user?.user?.image : me}
+                      alt=""
+                      className="itemImg"
+                    />
+                    <div className="details">
+                      <h1 className="itemTitle">
+                        {user?.user?.firstName} {user?.user?.lastName}
+                      </h1>
+                      <div className="detailItem">
+                        <span className="itemKey">Email:</span>
+                        <span className="itemValue">{user?.user?.email}</span>
+                      </div>
+                      <div className="detailItem">
+                        <span className="itemKey">Phone:</span>
+                        <span className="itemValue">{user?.user?.phone}</span>
+                      </div>{" "}
+                      <div className="detailItem">
+                        <span className="itemKey">Address:</span>
+                        <span className="itemValue">{user?.user?.address}</span>
+                      </div>{" "}
+                      <div className="detailItem">
+                        <span className="itemKey">Country:</span>
+                        <span className="itemValue">{user?.user?.country}</span>
+                      </div>
+                      <div className="detailItem a_flex">
+                        <span className="itemKey">Status:</span>
+                        <span className="itemValue">
+                          {!user?.user?.isAccountVerified ? (
+                            <span className="unverified_account a_flex">
+                              unverified account
+                            </span>
+                          ) : (
+                            <span className="verified_account a_flex">
+                              verified account
+                            </span>
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  {user?.user?.isSeller ? (
+                    <div className="userInfo_widget">
+                      <Widget SellersBalance={SellersBalance} type="seller" />
+                    </div>
+                  ) : null}
+                </div>
+                <div className="right light_shadow">
+                  <Chart
+                    aspect={3 / 1}
+                    data={userSpending}
+                    CustomTooltip={CustomTooltip}
+                    grid
+                    dataKey="Total Sales"
+                    title="User Spending (Last 10 Days)"
+                  />
+                </div>
               </div>
-              <div className="detailItem">
-                <span className="itemKey">Phone:</span>
-                <span className="itemValue">{user?.user?.phone}</span>
-              </div>{" "}
-              <div className="detailItem">
-                <span className="itemKey">Address:</span>
-                <span className="itemValue">{user?.user?.address}</span>
-              </div>{" "}
-              <div className="detailItem">
-                <span className="itemKey">Country:</span>
-                <span className="itemValue">{user?.user?.country}</span>
-              </div>
-              <div className="detailItem a_flex">
-                <span className="itemKey">Status:</span>
-                <span className="itemValue">
-                  {!user?.user?.isAccountVerified ? (
-                    <span className="unverified_account a_flex">
-                      unverified account
-                    </span>
-                  ) : (
-                    <span className="verified_account a_flex">
-                      verified account
-                    </span>
-                  )}
-                </span>
-              </div>
-            </div>
-          </div>
-          {user?.user?.isSeller ? (
-            <div className="userInfo_widget">
-              <Widget SellersBalance={SellersBalance} type="seller" />
-            </div>
-          ) : null}
-        </div>
-        <div className="right">
-          <Chart
-            aspect={3 / 1}
-            data={userSpending}
-            CustomTooltip={CustomTooltip}
-            grid
-            dataKey="Total Sales"
-            title="User Spending (Last 10 Days)"
-          />
-        </div>
-      </div>
-      <div className="bottom">
-        <h1 className="title">Last Transactions</h1>
+              <div className="bottom light_shadow">
+                <h1 className="title">Last Transactions</h1>
 
-        <UserOrderList
-          userId={userId}
-          userInfo={userInfo}
-          convertCurrency={convertCurrency}
-        />
+                <UserOrderList
+                  userId={userId}
+                  userInfo={userInfo}
+                  convertCurrency={convertCurrency}
+                />
+              </div>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
