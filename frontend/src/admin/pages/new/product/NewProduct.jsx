@@ -50,7 +50,6 @@ function NewProduct() {
   const editor = useRef(null);
 
   const [name, setName] = useState("");
-  const [keygen, setKeygen] = useState("");
   const [countInStock, setCountInStock] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
@@ -233,7 +232,6 @@ function NewProduct() {
       // Prepare product data based on your schema
       const productData = {
         name,
-        keygen,
         countInStock,
         price,
         discount,
@@ -357,16 +355,6 @@ function NewProduct() {
                               value={name}
                               onChange={(e) => setName(e.target.value)}
                               placeholder="product name"
-                            />
-                          </div>
-                          <div className="form-group">
-                            <label htmlFor="name">Keygen</label>
-                            <input
-                              type="text"
-                              id="keygen"
-                              value={keygen}
-                              onChange={(e) => setKeygen(e.target.value)}
-                              placeholder="product keygen"
                             />
                           </div>
                           <div className="form-group">
@@ -825,7 +813,7 @@ function NewProduct() {
                                         e.target.value;
                                       setColorData(updatedColorData);
                                     }}
-                                    placeholder="color e.g #ffffff"
+                                    placeholder="color image link"
                                   />
                                 </span>
                                 {colorData.length > 1 && (

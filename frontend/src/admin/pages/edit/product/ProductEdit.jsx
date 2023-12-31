@@ -68,7 +68,6 @@ function ProductEdit() {
   });
 
   const [name, setName] = useState("");
-  const [keygen, setKeygen] = useState("");
   const [countInStock, setCountInStock] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
@@ -276,7 +275,6 @@ function ProductEdit() {
           `${request}/api/products/admin/${productId}`
         );
         setName(data.name);
-        setKeygen(data.keygen);
         setCountInStock(data.countInStock);
         setPrice(data.price);
         setDiscount(data.discount);
@@ -343,7 +341,6 @@ function ProductEdit() {
       // Prepare product data based on your schema
       const productData = {
         name,
-        keygen,
         countInStock,
         price,
         discount,
@@ -382,7 +379,7 @@ function ProductEdit() {
   return (
     <>
       <Helmet>
-        <title>Edit Product :: {`${product.name}`}</title>
+        <title>Edit Product :: {product ? `${product.name}` : ""}</title>{" "}
       </Helmet>
       <div className="product_edit admin_page_all page_background">
         <div className="container">
@@ -481,16 +478,6 @@ function ProductEdit() {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="product name"
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="name">Keygen</label>
-                              <input
-                                type="text"
-                                id="keygen"
-                                value={keygen}
-                                onChange={(e) => setKeygen(e.target.value)}
-                                placeholder="product keygen"
                               />
                             </div>
                             <div className="form-group">

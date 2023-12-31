@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { nanoid } from "nanoid";
 
 const reviewSchema = new mongoose.Schema(
   {
@@ -121,6 +122,10 @@ productSchema.pre("save", async function (next) {
     } else {
       this.set("slug", baseSlug);
     }
+  }
+  if (!this.keygen) {
+    const generatedKeygen = nanoid(11).toUpperCase(); // Convert to uppercase
+    this.set("keygen", generatedKeygen);
   }
   next();
 });

@@ -67,7 +67,6 @@ function SellerProductEdit() {
   });
 
   const [name, setName] = useState("");
-  const [keygen, setKeygen] = useState("");
   const [countInStock, setCountInStock] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
@@ -76,10 +75,8 @@ function SellerProductEdit() {
   const [category, setCategory] = useState("");
   const [subcategory, setSubcategory] = useState("");
   const [subitem, setSubitem] = useState("");
-  const [promotion, setPromotion] = useState("");
   const [brand, setBrand] = useState("");
   const [images, setImages] = useState([]);
-  const [blackFriday, setBlackFriday] = useState(false);
 
   //=================
   // IMAGES UPLOAD
@@ -275,7 +272,6 @@ function SellerProductEdit() {
           `${request}/api/products/admin/${productId}`
         );
         setName(data.name);
-        setKeygen(data.keygen);
         setCountInStock(data.countInStock);
         setPrice(data.price);
         setDiscount(data.discount);
@@ -284,14 +280,12 @@ function SellerProductEdit() {
         setCategory(data.category);
         setSubcategory(data.subcategory);
         setSubitem(data.subitem);
-        setPromotion(data.promotion);
         setVideoData(data.video || []);
         setFeatureData(data.features || []);
         setColorData(data.color || []);
         setSpecificationsData(data.specifications || []);
         setBrand(data.brand);
         setImages(data.images);
-        setBlackFriday(data.blackFriday);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: getError(err) });
@@ -342,7 +336,6 @@ function SellerProductEdit() {
       // Prepare product data based on your schema
       const productData = {
         name,
-        keygen,
         countInStock,
         price,
         discount,
@@ -351,10 +344,8 @@ function SellerProductEdit() {
         category,
         subcategory,
         subitem,
-        promotion,
         brand,
         images,
-        blackFriday,
         features: cleanedFeatureData,
         specifications: cleanedSpecificationsData,
         video: cleanedVideoData,
@@ -381,7 +372,7 @@ function SellerProductEdit() {
   return (
     <>
       <Helmet>
-        <title>Edit Product :: {`${product.name}`}</title>
+        <title>Edit Product :: {product ? `${product.name}` : ""}</title>
       </Helmet>
       <div className="product_edit admin_page_all page_background">
         <div className="container">
@@ -480,16 +471,6 @@ function SellerProductEdit() {
                                 value={name}
                                 onChange={(e) => setName(e.target.value)}
                                 placeholder="product name"
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="name">Keygen</label>
-                              <input
-                                type="text"
-                                id="keygen"
-                                value={keygen}
-                                onChange={(e) => setKeygen(e.target.value)}
-                                placeholder="product keygen"
                               />
                             </div>
                             <div className="form-group">

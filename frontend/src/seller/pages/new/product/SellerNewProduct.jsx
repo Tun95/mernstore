@@ -50,7 +50,6 @@ function SellerNewProduct() {
   const editor = useRef(null);
 
   const [name, setName] = useState("");
-  const [keygen, setKeygen] = useState("");
   const [countInStock, setCountInStock] = useState("");
   const [price, setPrice] = useState("");
   const [discount, setDiscount] = useState("");
@@ -59,10 +58,8 @@ function SellerNewProduct() {
   const [category, setCategory] = useState("");
   const [subcategory, setSubcategory] = useState("");
   const [subitem, setSubitem] = useState("");
-  const [promotion, setPromotion] = useState("");
   const [brand, setBrand] = useState("");
   const [images, setImages] = useState([]);
-  const [blackFriday, setBlackFriday] = useState(false);
 
   useEffect(() => {
     // Reset subcategory and subitem when category changes
@@ -233,7 +230,6 @@ function SellerNewProduct() {
       // Prepare product data based on your schema
       const productData = {
         name,
-        keygen,
         countInStock,
         price,
         discount,
@@ -242,15 +238,12 @@ function SellerNewProduct() {
         category,
         subcategory,
         subitem,
-        promotion,
         brand,
         images,
-        blackFriday,
         features: cleanedFeatureData,
         specifications: cleanedSpecificationsData,
         video: cleanedVideoData,
         color: cleanedColorData,
-        // Add other fields as needed
       };
 
       // Make the API call to create a new product
@@ -357,16 +350,6 @@ function SellerNewProduct() {
                               value={name}
                               onChange={(e) => setName(e.target.value)}
                               placeholder="product name"
-                            />
-                          </div>
-                          <div className="form-group">
-                            <label htmlFor="name">Keygen</label>
-                            <input
-                              type="text"
-                              id="keygen"
-                              value={keygen}
-                              onChange={(e) => setKeygen(e.target.value)}
-                              placeholder="product keygen"
                             />
                           </div>
                           <div className="form-group">
@@ -793,7 +776,7 @@ function SellerNewProduct() {
                                         e.target.value;
                                       setColorData(updatedColorData);
                                     }}
-                                    placeholder="color e.g #ffffff"
+                                    placeholder="color image link"
                                   />
                                 </span>
                                 {colorData.length > 1 && (
