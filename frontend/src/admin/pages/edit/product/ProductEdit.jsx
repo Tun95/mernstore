@@ -456,6 +456,10 @@ function ProductEdit() {
                                         <span>{productId}</span>
                                       </div>
                                       <div>
+                                        <label htmlFor="code">Code:</label>
+                                        <span>{product.keygen}</span>
+                                      </div>
+                                      <div>
                                         <label htmlFor="sales">Sales:</label>
                                         <span>{product.numSales}</span>
                                       </div>
