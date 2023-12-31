@@ -103,6 +103,18 @@ const settingsSchema = new mongoose.Schema(
       type: String,
       default: "+918851746286",
     },
+    whatsapp2: {
+      type: String,
+      default: "+918851746286",
+    },
+    activeHour1: {
+      type: String,
+      default: "Mon-Fr 9a.m.-6p.m.",
+    },
+    activeHour2: {
+      type: String,
+      default: "Mon-Fr 9a.m.-6p.m.",
+    },
     webname: {
       type: String,
       default: "SHOPMATE",

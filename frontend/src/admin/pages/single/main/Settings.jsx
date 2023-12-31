@@ -400,14 +400,41 @@ function Settings() {
                 <div className="lower_group">
                   <span className="d_flex">
                     <span className="flex_row">
-                      <small>Your whatSapp number here:</small>
+                      <small>Your phone number here:</small>
                       <input
                         className="sub_input"
                         type="text"
                         name="whatsapp"
                         value={updatedSettings.whatsapp || ""}
                         onChange={handleInputChange}
-                        placeholder="whatsapp"
+                        placeholder="work phone number"
+                      />
+                      <input
+                        className="sub_input mt10"
+                        type="text"
+                        name="activeHour1"
+                        value={updatedSettings.activeHour1 || ""}
+                        onChange={handleInputChange}
+                        placeholder="active working hours"
+                      />
+                    </span>
+                    <span className="flex_row">
+                      <small>Your phone number here:</small>
+                      <input
+                        className="sub_input"
+                        type="text"
+                        name="whatsapp2"
+                        value={updatedSettings.whatsapp2 || ""}
+                        onChange={handleInputChange}
+                        placeholder="work phone number"
+                      />
+                      <input
+                        className="sub_input mt10"
+                        type="text"
+                        name="activeHour2"
+                        value={updatedSettings.activeHour2 || ""}
+                        onChange={handleInputChange}
+                        placeholder="active working hours"
                       />
                     </span>
                   </span>
