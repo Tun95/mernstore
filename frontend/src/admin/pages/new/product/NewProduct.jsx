@@ -124,11 +124,14 @@ function NewProduct() {
   // TOGGLE SPECIFICATIONS BOX
   //==================
   const [specificationsData, setSpecificationsData] = useState([
-    { name: "", image: "" }, // Initialize with one empty specification
+    { description: "", image: "" }, // Initialize with one empty specification
   ]);
 
   const addMoreSpecification = () => {
-    setSpecificationsData([...specificationsData, { name: "", image: "" }]);
+    setSpecificationsData([
+      ...specificationsData,
+      { description: "", image: "" },
+    ]);
   };
 
   // Delete specification function
@@ -210,7 +213,7 @@ function NewProduct() {
       const cleanedSpecificationsData = specificationsData.filter(
         (specification) => {
           return (
-            specification.name.trim() !== "" ||
+            specification.description.trim() !== "" ||
             specification.image.trim() !== ""
           );
         }
@@ -694,19 +697,19 @@ function NewProduct() {
                                     <input
                                       type="text"
                                       id="specification"
-                                      value={specification.name}
+                                      value={specification.description}
                                       onChange={(e) => {
                                         const updatedSpecificationsData = [
                                           ...specificationsData,
                                         ];
                                         updatedSpecificationsData[
                                           specificationIndex
-                                        ].name = e.target.value;
+                                        ].description = e.target.value;
                                         setSpecificationsData(
                                           updatedSpecificationsData
                                         );
                                       }}
-                                      placeholder="specification name"
+                                      placeholder="specification description"
                                     />
                                   </span>
                                   <span className="link_img">

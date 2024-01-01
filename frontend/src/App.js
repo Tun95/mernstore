@@ -30,7 +30,6 @@ import Footer from "./common/footer/Footer";
 import ProductEdit from "./admin/pages/edit/product/ProductEdit";
 import UserEdit from "./admin/pages/edit/user/UserEdit";
 import UserInfo from "./admin/pages/single/user/UserInfo";
-import NewUser from "./admin/pages/new/user/NewUser";
 import NewProduct from "./admin/pages/new/product/NewProduct";
 import OurStoreScreen from "./screens/aboutscreen/ourstorescreen/OurStoreScreen";
 import PrivacyScreen from "./screens/aboutscreen/privacyscreen/PrivacyScreen";
@@ -334,14 +333,7 @@ function App() {
                 </AdminRoute>
               }
             ></Route>
-            <Route
-              path="/admin/user/new"
-              element={
-                <AdminRoute>
-                  <NewUser />
-                </AdminRoute>
-              }
-            ></Route>
+
             <Route
               path="/admin/user/:id/edit"
               element={
