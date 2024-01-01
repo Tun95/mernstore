@@ -709,6 +709,7 @@ function NewProduct() {
                                           updatedSpecificationsData
                                         );
                                       }}
+                                      
                                       placeholder="specification description"
                                     />
                                   </span>
