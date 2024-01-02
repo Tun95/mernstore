@@ -650,6 +650,10 @@ productRouter.get(
           }
         : {};
 
+    const countInStockFilter = {
+      countInStock: { $gt: 0 },
+    };
+
     const sortOrder =
       query.order === "featured"
         ? { featured: -1 }
@@ -658,13 +662,15 @@ productRouter.get(
         : query.order === "highest"
         ? { price: -1 }
         : query.order === "toprated"
-        ? { "seller.rating": -1 }
+        ? { rating: -1 }
         : query.order === "numsales"
         ? { numSales: -1 }
         : query.order === "discount"
         ? { discount: -1 }
         : query.order === "newest"
         ? { createdAt: -1 }
+        : query.order === "countinstock"
+        ? { countInStock: -1, countInStock: { $gt: 0 } }
         : { _id: -1 };
 
     const filters = {
@@ -680,6 +686,7 @@ productRouter.get(
       ...numSalesFilter,
       ...discountFilter,
       ...featureFilter,
+      ...countInStockFilter,
     };
 
     const products = await Product.find(filters)
