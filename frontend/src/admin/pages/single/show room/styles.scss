@@ -1,17 +1,40 @@
 .announce_box {
+  .product_info_color {
+    padding: 20px;
+    .link_img {
+      margin-top: 10px;
+    }
+    .form_input {
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      color: var(--color-white);
+    }
+    button[type="submit"] {
+      background-color: var(--color-blue);
+    }
+    button[type="button"] {
+      background-color: var(--color-youtube);
+    }
+  }
   .bottom_btn {
     display: flex;
     justify-content: flex-end;
     width: 100%;
+
     button {
       position: relative;
-      right: 20px;
-      bottom: 20px;
+
       padding: 10px;
       border-radius: 8px;
       color: var(--color-white);
       cursor: pointer;
-      background-color: var(--color-light-green);
+      background-color: var(--color-light-green) !important;
       .icon {
         font-size: 17px;
         margin-right: 3px;
