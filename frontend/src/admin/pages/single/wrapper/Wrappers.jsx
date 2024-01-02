@@ -5,6 +5,7 @@ import { request } from "../../../../base url/BaseUrl";
 import "./styles.scss";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { getError } from "../../../../components/utilities/util/Utils";
 
 const WrapperComponent = ({ openBox, toggleBox }) => {
   // State to hold the list of wrappers and the form data
@@ -26,7 +27,7 @@ const WrapperComponent = ({ openBox, toggleBox }) => {
       const response = await axios.get(`${request}/api/wrappers`);
       setWrappers(response.data);
     } catch (error) {
-      toast.error("Failed to fetch wrappers");
+      toast.error(getError(error));
     }
   };
 
@@ -46,7 +47,7 @@ const WrapperComponent = ({ openBox, toggleBox }) => {
       setWrappers((prevWrappers) => [...prevWrappers, response.data]);
       toast.success("Wrapper added successfully");
     } catch (error) {
-      toast.error("Failed to add wrapper");
+      toast.error(getError(error));
     }
   };
 
@@ -86,7 +87,7 @@ const WrapperComponent = ({ openBox, toggleBox }) => {
       );
       toast.success("Wrapper deleted successfully");
     } catch (error) {
-      toast.error("Failed to delete wrapper");
+      toast.error(getError(error));
     }
   };
 
@@ -99,7 +100,7 @@ const WrapperComponent = ({ openBox, toggleBox }) => {
       );
       return response.data; // Return the updated data from the server
     } catch (error) {
-      throw error; // Rethrow the error to handle it in the calling function
+      toast.error(getError(error));
     }
   };
 
