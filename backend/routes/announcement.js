@@ -4,118 +4,188 @@ import Announcement from "../models/announcement.js";
 
 const announcementRouter = express.Router();
 
-//=========================
-// Create a new announcement
-//=========================
+//==================
+// Create a new slider
+//==================
 announcementRouter.post(
-  "/create",
+  "/sliders",
   expressAsyncHandler(async (req, res) => {
-    const announcementData = req.body;
-    const newAnnouncement = new Announcement(announcementData);
+    const {
+      image,
+      title,
+      description,
+      hColor,
+      pColor,
+      width,
+      top,
+      left,
+      right,
+      bottom,
+    } = req.body;
+
+    const newSlide = {
+      image,
+      title,
+      description,
+      hColor,
+      pColor,
+      width,
+      top,
+      left,
+      right,
+      bottom,
+    };
 
     try {
-      const savedAnnouncement = await newAnnouncement.save();
-      res.status(201).json(savedAnnouncement);
+      let announcement = await Announcement.findOne();
+
+      if (!announcement) {
+        // Create a new Announcement document if not found
+        announcement = new Announcement({ sliders: [newSlide] });
+      } else {
+        // Add the new slide to the existing sliders
+        announcement.sliders.push(newSlide);
+      }
+
+      const updatedAnnouncement = await announcement.save();
+
+      res.status(201).json(updatedAnnouncement);
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Internal Server Error", error: error.message });
+      res.status(500).json({ message: "Internal Server Error" });
     }
   })
 );
 
-//=========================
-// Get all announcements
-//=========================
+//==================
+// Fetch all sliders
+//==================
 announcementRouter.get(
-  "/",
+  "/sliders",
   expressAsyncHandler(async (req, res) => {
-    try {
-      const allAnnouncements = await Announcement.find({});
-      res.status(200).json(allAnnouncements);
-    } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Internal Server Error", error: error.message });
+    const announcement = await Announcement.findOne();
+    if (announcement) {
+      res.json(announcement.sliders);
+    } else {
+      res.status(404).json({ message: "Announcement not found" });
     }
   })
 );
 
-//=========================
-// Get announcement by ID
-//=========================
-announcementRouter.get(
-  "/:id",
+//==================
+// Update slider by ID
+//==================
+announcementRouter.put(
+  "/sliders/:id",
   expressAsyncHandler(async (req, res) => {
-    const announcementId = req.params.id;
+    const { id } = req.params;
+    const {
+      image,
+      title,
+      description,
+      hColor,
+      pColor,
+      width,
+      top,
+      left,
+      right,
+      bottom,
+    } = req.body;
+
+    const announcement = await Announcement.findOne();
+    if (announcement) {
+      const slideIndex = announcement.sliders.findIndex(
+        (slide) => slide._id.toString() === id
+      );
+      if (slideIndex !== -1) {
+        announcement.sliders[slideIndex] = {
+          _id: id,
+          image,
+          title,
+          description,
+          hColor,
+          pColor,
+          width,
+          top,
+          left,
+          right,
+          bottom,
+        };
+        const updatedAnnouncement = await announcement.save();
+        res.json(updatedAnnouncement.sliders[slideIndex]);
+      } else {
+        res.status(404).json({ message: "Slider not found" });
+      }
+    } else {
+      res.status(404).json({ message: "Announcement not found" });
+    }
+  })
+);
+
+//==================
+// Delete slider by ID
+//==================
+announcementRouter.delete(
+  "/sliders/:id",
+  expressAsyncHandler(async (req, res) => {
+    const { id } = req.params;
+
+    const announcement = await Announcement.findOne();
+    if (announcement) {
+      announcement.sliders = announcement.sliders.filter(
+        (slide) => slide._id.toString() !== id
+      );
+      const updatedAnnouncement = await announcement.save();
+      res.json({
+        message: "Slider deleted",
+        sliders: updatedAnnouncement.sliders,
+      });
+    } else {
+      res.status(404).json({ message: "Announcement not found" });
+    }
+  })
+);
+
+//==================
+// Update only the fifthCard of the announcement
+//==================
+announcementRouter.put(
+  "/update-fifth-card/:id",
+  expressAsyncHandler(async (req, res) => {
+    const { fifthCard } = req.body;
+    const { id } = req.params;
 
     try {
-      const announcement = await Announcement.findById(announcementId);
+      const announcement = await Announcement.findById(id);
 
       if (announcement) {
-        res.status(200).json(announcement);
+        announcement.fifthCard = fifthCard;
+
+        const updatedAnnouncement = await announcement.save();
+        res.json(updatedAnnouncement);
       } else {
         res.status(404).json({ message: "Announcement not found" });
       }
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Internal Server Error", error: error.message });
+      res.status(500).json({ message: "Internal Server Error" });
     }
   })
 );
 
-//=========================
-// Update announcement by ID
-//=========================
-announcementRouter.put(
-  "/:id/update",
+//==================
+// Fetch all data
+//==================
+announcementRouter.get(
+  "/all",
   expressAsyncHandler(async (req, res) => {
-    const announcementId = req.params.id;
-    const updatedData = req.body;
-
     try {
-      const updatedAnnouncement = await Announcement.findByIdAndUpdate(
-        announcementId,
-        updatedData,
-        { new: true, runValidators: true }
-      );
-
-      if (updatedAnnouncement) {
-        res.status(200).json(updatedAnnouncement);
+      const announcement = await Announcement.findOne();
+      if (announcement) {
+        res.json(announcement);
       } else {
         res.status(404).json({ message: "Announcement not found" });
       }
     } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Internal Server Error", error: error.message });
-    }
-  })
-);
-
-//=========================
-// Delete announcement by ID
-//=========================
-announcementRouter.delete(
-  "/:id/delete",
-  expressAsyncHandler(async (req, res) => {
-    const announcementId = req.params.id;
-
-    try {
-      const deletedAnnouncement = await Announcement.findByIdAndDelete(
-        announcementId
-      );
-
-      if (deletedAnnouncement) {
-        res.status(200).json({ message: "Announcement deleted successfully" });
-      } else {
-        res.status(404).json({ message: "Announcement not found" });
-      }
-    } catch (error) {
-      res
-        .status(500)
-        .json({ message: "Internal Server Error", error: error.message });
+      res.status(500).json({ message: "Internal Server Error" });
     }
   })
 );

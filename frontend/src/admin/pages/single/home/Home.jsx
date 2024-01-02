@@ -1,19 +1,29 @@
-import React from "react";
-import ShowRoom from "../show room/ShowRoom";
+import React, { useState } from "react";
 import "./styles.scss";
 import WrapperForm from "../wrapper/Wrappers";
+import Announcement from "../show room/Announcement";
 
 function Home() {
+  //============
+  //TOGGLE BOX
+  //============
+  const [openBox, setOpenBox] = useState(null);
+
+  const toggleBox = (index) => {
+    if (openBox === index) {
+      setOpenBox(null);
+    } else {
+      setOpenBox(index);
+    }
+  };
   return (
     <div className="home_settings">
-      <div className="f_flex">
-        <span className="show_room_home">
-          <ShowRoom />
-        </span>
-        <span className="wrapper">
-          <WrapperForm />
-        </span>
-      </div>
+      <span className="show_room_home">
+        <Announcement toggleBox={toggleBox} openBox={openBox} />
+      </span>
+      <span className="wrapper">
+        <WrapperForm toggleBox={toggleBox} openBox={openBox} />
+      </span>
     </div>
   );
 }

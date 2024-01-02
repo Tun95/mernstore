@@ -3,8 +3,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { request } from "../../../../base url/BaseUrl";
 import "./styles.scss";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
-const WrapperComponent = () => {
+const WrapperComponent = ({ openBox, toggleBox }) => {
   // State to hold the list of wrappers and the form data
   const [wrappers, setWrappers] = useState([]);
   const [formData, setFormData] = useState({
@@ -152,85 +154,119 @@ const WrapperComponent = () => {
   };
 
   return (
-    <div className="home_wrappers">
-      <div className="light_shadow">
-        <h2>Wrappers</h2>
-        <form onSubmit={handleSubmit} className="form_input">
-          {/* Icon Input */}
-          <input
-            type="text"
-            name="icon"
-            value={formData.icon}
-            onChange={handleInputChange}
-            placeholder="Icon"
-          />
-
-          {/* Header Input */}
-          <input
-            type="text"
-            name="header"
-            value={formData.header}
-            onChange={handleInputChange}
-            placeholder="Header"
-          />
-
-          {/* Description Input */}
-          <input
-            type="text"
-            name="description"
-            value={formData.description}
-            onChange={handleInputChange}
-            placeholder="Description"
-          />
-
-          {/* Conditional Rendering of the Buttons */}
-          <button type="submit">
-            {formData._id ? "Update Wrapper" : "Add Wrapper"}
-          </button>
-          {formData._id && (
-            <button type="button" onClick={handleCancelEdit}>
-              Cancel Edit
-            </button>
-          )}
-        </form>
-
-        <ul className="wrapper_list">
-          {wrappers?.map((wrapperData) => (
-            <li key={wrapperData._id}>
-              {wrapperData.wrappers.map((wrapper) => (
-                <div key={wrapper._id}>
-                  <div>
-                    <strong>icon: </strong>
-                    <span>{wrapper.icon}</span>
+    <>
+      <div className="productForm mt">
+        <div className="product_info product___">
+          <div className="light_shadow product___main">
+            <div
+              className={
+                openBox === 1 ? "header  c_flex" : "header border c_flex"
+              }
+              onClick={() => toggleBox(1)}
+            >
+              <div className="left">
+                <div className="d_flex">
+                  <div className="number l_flex">
+                    <span>02</span>
                   </div>
-                  <div>
-                    <strong>header: </strong>
-                    <span>{wrapper.header}</span>
-                  </div>
-                  <div>
-                    <strong>description: </strong>
-                    <span>{wrapper.description}</span>
+                  <div className="text">
+                    <h4>Wrappers</h4>
+                    <small>Add, update and edit wrappers</small>
                   </div>
                 </div>
-              ))}
-              <button
-                type="submit"
-                onClick={() => editWrapper(wrapperData._id)}
-              >
-                Edit
-              </button>
-              &#160; &#160;
-              <button
-                type="button"
-                onClick={() => deleteWrapper(wrapperData._id)}
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
+              </div>
+              <div className="right">
+                {openBox === 1 ? (
+                  <KeyboardArrowUpIcon className="icon" />
+                ) : (
+                  <KeyboardArrowDownIcon className="icon" />
+                )}
+              </div>
+            </div>
+            {openBox === 1 && (
+              <div className="home_wrappers">
+                <div className="light_shadow">
+                  <form onSubmit={handleSubmit} className="form_input">
+                    {/* Icon Input */}
+                    <input
+                      type="text"
+                      name="icon"
+                      value={formData.icon}
+                      onChange={handleInputChange}
+                      placeholder="Icon"
+                    />
+
+                    {/* Header Input */}
+                    <input
+                      type="text"
+                      name="header"
+                      value={formData.header}
+                      onChange={handleInputChange}
+                      placeholder="Header"
+                    />
+
+                    {/* Description Input */}
+                    <input
+                      type="text"
+                      name="description"
+                      value={formData.description}
+                      onChange={handleInputChange}
+                      placeholder="Description"
+                    />
+
+                    {/* Conditional Rendering of the Buttons */}
+                    <button type="submit">
+                      {formData._id ? "Update Wrapper" : "Add Wrapper"}
+                    </button>
+                    {formData._id && (
+                      <button type="button" onClick={handleCancelEdit}>
+                        Cancel Edit
+                      </button>
+                    )}
+                  </form>
+
+                  <ul className="wrapper_list">
+                    {wrappers?.map((wrapperData) => (
+                      <li key={wrapperData._id}>
+                        {wrapperData.wrappers.map((wrapper) => (
+                          <div key={wrapper._id}>
+                            <div>
+                              <strong>icon: </strong>
+                              <span>{wrapper.icon}</span>
+                            </div>
+                            <div>
+                              <strong>header: </strong>
+                              <span>{wrapper.header}</span>
+                            </div>
+                            <div>
+                              <strong>description: </strong>
+                              <span>{wrapper.description}</span>
+                            </div>
+                          </div>
+                        ))}
+                        <button
+                          type="submit"
+                          onClick={() => editWrapper(wrapperData._id)}
+                        >
+                          Edit
+                        </button>
+                        &#160; &#160;
+                        <button
+                          type="button"
+                          onClick={() => deleteWrapper(wrapperData._id)}
+                        >
+                          Delete
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
