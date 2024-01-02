@@ -7,6 +7,7 @@ import { request } from "../../../../base url/BaseUrl";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
+import { getError } from "../../../../components/utilities/util/Utils";
 
 export function Category({ openBox, toggleBox }) {
   // State to hold the list of categories and the form data
@@ -36,7 +37,7 @@ export function Category({ openBox, toggleBox }) {
       setCategories(response.data);
     } catch (error) {
       console.error("Error fetching categories:", error);
-      // Add error handling or toast messages here
+      toast.error(getError(error));
     }
   };
 
@@ -79,7 +80,7 @@ export function Category({ openBox, toggleBox }) {
       toast.success("Category added successfully");
     } catch (error) {
       console.error("Failed to add category:", error);
-      toast.error("Failed to add category");
+      toast.error(getError(error));
     }
   };
 
@@ -119,7 +120,7 @@ export function Category({ openBox, toggleBox }) {
         toast.success("Category deleted successfully");
       } catch (error) {
         console.error("Failed to delete category:", error);
-        toast.error("Failed to delete category");
+        toast.error(getError(error));
       }
     }
   };
@@ -146,7 +147,7 @@ export function Category({ openBox, toggleBox }) {
       toast.success("Category updated successfully");
     } catch (error) {
       console.error("Failed to update category:", error);
-      toast.error("Failed to update category");
+      toast.error(getError(error));
     }
   };
 
@@ -159,43 +160,43 @@ export function Category({ openBox, toggleBox }) {
     }
   };
 
- const handleSubmit = async (e) => {
-   e.preventDefault();
-   updateOrAddCategory();
-   // Clear form data after submitting
-   setFormData({
-     icon: "",
-     background: "",
-     img: "",
-     name: "",
-     description: "",
-     banner: {
-       video: "",
-       heading1: "",
-       heading2: "",
-       heading3: "",
-     },
-     _id: "", // Clear the _id field to indicate it's a new category
-   });
- };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    updateOrAddCategory();
+    // Clear form data after submitting
+    setFormData({
+      icon: "",
+      background: "",
+      img: "",
+      name: "",
+      description: "",
+      banner: {
+        video: "",
+        heading1: "",
+        heading2: "",
+        heading3: "",
+      },
+      _id: "", // Clear the _id field to indicate it's a new category
+    });
+  };
 
- // Function to handle editing cancellation
- const handleCancelEdit = () => {
-   setFormData({
-     icon: "",
-     background: "",
-     img: "",
-     name: "",
-     description: "",
-     banner: {
-       video: "",
-       heading1: "",
-       heading2: "",
-       heading3: "",
-     },
-     _id: "", // Clear the _id field to indicate it's a new category
-   });
- };
+  // Function to handle editing cancellation
+  const handleCancelEdit = () => {
+    setFormData({
+      icon: "",
+      background: "",
+      img: "",
+      name: "",
+      description: "",
+      banner: {
+        video: "",
+        heading1: "",
+        heading2: "",
+        heading3: "",
+      },
+      _id: "", // Clear the _id field to indicate it's a new category
+    });
+  };
 
   return (
     <>
@@ -428,7 +429,7 @@ export function SubCategory({ openBox, toggleBox }) {
         ),
       });
     } catch (error) {
-      toast.error("Error fetching data:", error);
+      toast.error(getError(error));
     }
   };
 
@@ -478,7 +479,7 @@ export function SubCategory({ openBox, toggleBox }) {
       fetchData();
     } catch (error) {
       console.error("Failed to add subcategory:", error);
-      toast.error("Failed to add subcategory");
+      toast.error(getError(error));
     }
   };
 
@@ -503,7 +504,7 @@ export function SubCategory({ openBox, toggleBox }) {
         toast.success("Subcategory deleted successfully");
         fetchData();
       } catch (error) {
-        toast.error("Failed to delete subcategory:", error);
+        toast.error(getError(error));
       }
     }
   };
@@ -564,7 +565,7 @@ export function SubCategory({ openBox, toggleBox }) {
       fetchData();
     } catch (error) {
       console.error("Failed to update subcategory:", error);
-      toast.error("Failed to update subcategory");
+      toast.error(getError(error));
     }
   };
 
@@ -786,7 +787,7 @@ export function SubItem({ openBox, toggleBox }) {
         ),
       });
     } catch (error) {
-      toast.error("Error fetching data:", error);
+      toast.error(getError(error));
     }
   };
 
@@ -845,7 +846,7 @@ export function SubItem({ openBox, toggleBox }) {
       fetchData();
     } catch (error) {
       console.error("Failed to add subitem:", error);
-      toast.error("Failed to add subitem");
+      toast.error(getError(error));
     }
   };
 
@@ -875,7 +876,7 @@ export function SubItem({ openBox, toggleBox }) {
         toast.success("Subitem deleted successfully");
         fetchData();
       } catch (error) {
-        toast.error("Failed to delete subitem:", error);
+        toast.error(getError(error));
       }
     }
   };
@@ -938,7 +939,7 @@ export function SubItem({ openBox, toggleBox }) {
       fetchData();
     } catch (error) {
       console.error("Failed to update subitem:", error);
-      toast.error("Failed to update subitem");
+      toast.error(getError(error));
     }
   };
 
@@ -1144,7 +1145,7 @@ export function Color({ openBox, toggleBox }) {
       const response = await axios.get(`${request}/api/color`);
       setColors(response.data);
     } catch (error) {
-      toast.error("Failed to fetch colors");
+      toast.error(getError(error));
     }
   };
 
@@ -1175,7 +1176,7 @@ export function Color({ openBox, toggleBox }) {
       setColors((prevColors) => [...prevColors, response.data]);
       toast.success("Color added successfully");
     } catch (error) {
-      toast.error("Failed to add color");
+      toast.error(getError(error));
     }
   };
 
@@ -1222,7 +1223,7 @@ export function Color({ openBox, toggleBox }) {
         );
         toast.success("Color deleted successfully");
       } catch (error) {
-        toast.error("Failed to delete color");
+        toast.error(getError(error));
       }
     }
   };
@@ -1236,7 +1237,7 @@ export function Color({ openBox, toggleBox }) {
       );
       return response.data;
     } catch (error) {
-      throw error;
+      toast.error(getError(error));
     }
   };
 
@@ -1426,6 +1427,7 @@ export function Price({ openBox, toggleBox }) {
       setCurrentPriceId(response.data[0]._id);
     } catch (error) {
       console.error("Failed to fetch price data:", error);
+      toast.error(getError(error));
     }
   };
 
@@ -1446,7 +1448,7 @@ export function Price({ openBox, toggleBox }) {
       toast.success("Price updated successfully");
     } catch (error) {
       console.error("Failed to update price:", error);
-      toast.error("Failed to update price");
+      toast.error(getError(error));
     } finally {
       setLoading(false);
     }
