@@ -417,7 +417,7 @@ function Announcement({ openBox, toggleBox }) {
                                 name="videoUrl"
                                 value={fifthCardFormData.videoUrl}
                                 onChange={handleFifthCardInputChange}
-                                placeholder="slider video Url link"
+                                placeholder="video Url link"
                               />
                             </span>
                             <span className="link_img">
@@ -426,7 +426,7 @@ function Announcement({ openBox, toggleBox }) {
                                 name="title"
                                 value={fifthCardFormData.title}
                                 onChange={handleFifthCardInputChange}
-                                placeholder="slider title"
+                                placeholder="video title"
                               />
                             </span>
                             <span className="link_img">
@@ -435,7 +435,7 @@ function Announcement({ openBox, toggleBox }) {
                                 name="description"
                                 value={fifthCardFormData.description}
                                 onChange={handleFifthCardInputChange}
-                                placeholder="slider description"
+                                placeholder="video description"
                               />
                             </span>
                             <span className="link_img">
