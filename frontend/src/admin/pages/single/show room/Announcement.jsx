@@ -411,7 +411,7 @@ function Announcement({ openBox, toggleBox }) {
                           className="form_input"
                         >
                           <div className="form-group">
-                            <label htmlFor="color">Sliders</label>
+                            <label htmlFor="color">Video Ad</label>
                             <span className="color_name">
                               <input
                                 type="text"
