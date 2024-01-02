@@ -7,6 +7,7 @@ import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import "./styles.scss";
+import { getError } from "../../../../components/utilities/util/Utils";
 
 function Announcement({ openBox, toggleBox }) {
   const [announcementId, setAnnouncementId] = useState(null); // Initialize with null or the actual ID
@@ -53,7 +54,7 @@ function Announcement({ openBox, toggleBox }) {
         bColor: fifthCard.bColor || "",
       });
     } catch (error) {
-      toast.error("Failed to fetch all data");
+      toast.error(getError(error));
     }
   };
 
@@ -89,7 +90,7 @@ function Announcement({ openBox, toggleBox }) {
       fetchAllData();
       toast.success("Slider added successfully");
     } catch (error) {
-      toast.error("Failed to add slider");
+      toast.error(getError(error));
     }
   };
 
@@ -138,7 +139,7 @@ function Announcement({ openBox, toggleBox }) {
         );
         toast.success("Slider deleted successfully");
       } catch (error) {
-        toast.error("Failed to delete slider");
+        toast.error(getError(error));
       }
     }
   };
@@ -159,7 +160,7 @@ function Announcement({ openBox, toggleBox }) {
         toast.success("Slider updated successfully");
       } catch (error) {
         console.error("Error updating slider:", error);
-        toast.error("Failed to update slider");
+        toast.error(getError(error));
       }
     } else {
       addSlider();
@@ -218,7 +219,7 @@ function Announcement({ openBox, toggleBox }) {
     } catch (error) {
       setLoading(false); // Set loading back to false in case of an error
       console.error("Error updating fifth card:", error);
-      toast.error("Failed to update fifth card");
+      toast.error(getError(error));
     }
   };
 

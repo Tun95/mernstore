@@ -32,7 +32,7 @@ export function Promotion() {
       const response = await axios.get(`${request}/api/promotions`);
       setPromotions(response.data);
     } catch (error) {
-      toast.error("Failed to fetch promotions");
+      toast.error(getError(error));
     }
   };
 
