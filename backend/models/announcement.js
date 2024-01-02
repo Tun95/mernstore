@@ -5,6 +5,7 @@ const SlideSchema = new mongoose.Schema({
   image: String, // Image URL or path
   title: String, // Slide title
   description: String, // Slide description
+  category: String,
   hColor: String,
   pColor: String,
   width: String,
@@ -19,6 +20,7 @@ const VideoCardSchema = new mongoose.Schema({
   videoUrl: String, // Video URL or path
   title: String, // Video title
   description: String, // Video description
+  productSlug: String,
   hColor: String,
   pColor: String,
   bColor: String,
