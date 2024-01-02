@@ -3,6 +3,7 @@ import Product from "../models/productModels.js";
 import mongoose from "mongoose";
 import expressAsyncHandler from "express-async-handler";
 import { isAdmin, isAuth, isSellerOrAdmin } from "../utils.js";
+import User from "../models/userModels.js";
 
 const productRouter = express.Router();
 
@@ -268,37 +269,6 @@ productRouter.post(
   })
 );
 
-//UPDATING PRODUCT
-productRouter.put(
-  "/:id",
-  isAuth,
-  isSellerOrAdmin,
-  expressAsyncHandler(async (req, res) => {
-    const productId = req.params.id;
-    const product = await Product.findById(productId);
-    if (product) {
-      product.name = req.body.name;
-      product.slug = req.body.slug;
-      product.keygen = req.body.keygen;
-      product.category = req.body.category;
-      product.size = req.body.size;
-      product.color = req.body.color;
-      product.brand = req.body.brand;
-      product.image = req.body.image;
-      product.images = req.body.images;
-      product.desc = req.body.desc;
-      product.price = req.body.price;
-      product.discount = req.body.discount;
-      product.flashdeal = Boolean(req.body.flashdeal);
-      product.countInStock = req.body.countInStock;
-      await product.save();
-      res.send({ message: "Product Updated" });
-    } else {
-      res.status(404).send({ message: "Product Not Found" });
-    }
-  })
-);
-
 //================
 // PRODUCT DELETE
 //================
@@ -551,60 +521,6 @@ productRouter.delete(
   })
 );
 
-// //===============
-// //DELETE REVIEW
-// //===============
-// productRouter.delete(
-//   "/:id/reviews/:reviewId",
-//   isAuth,
-//   expressAsyncHandler(async (req, res) => {
-//     const productId = req.params.id;
-//     const reviewId = req.params.reviewId;
-
-//     const product = await Product.findById(productId);
-//     if (product) {
-//       const review = product.reviews.find((r) => r._id.toString() === reviewId);
-//       if (review) {
-//         // Check if the review belongs to the authenticated user
-//         if (review.email === req.user.email) {
-//           // Remove the review from the product's reviews array
-//           product.reviews = product.reviews.filter(
-//             (r) => r._id.toString() !== reviewId
-//           );
-
-//           product.numReviews = product.reviews.length;
-
-//           // Recalculate the average rating
-//           if (product.numReviews > 0) {
-//             product.rating =
-//               product.reviews.reduce((a, c) => c.rating + a, 0) /
-//               product.numReviews;
-//           } else {
-//             product.rating = 0;
-//           }
-
-//           // Save the updated product
-//           const updatedProduct = await product.save();
-
-//           res.status(200).send({
-//             message: "Review deleted",
-//             numReviews: updatedProduct.numReviews,
-//             rating: updatedProduct.rating,
-//           });
-//         } else {
-//           res.status(401).send({
-//             message: "Unauthorized: Review does not belong to the user",
-//           });
-//         }
-//       } else {
-//         res.status(404).send({ message: "Review not found" });
-//       }
-//     } else {
-//       res.status(404).send({ message: "Product not found" });
-//     }
-//   })
-// );
-
 //ADMIN PRODUCT LIST
 const ADMIN_PAGE_SIZE = 15;
 productRouter.get(
@@ -644,26 +560,34 @@ productRouter.get(
 //==============
 //PRODUCT FILTER
 //==============
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 12;
 productRouter.get(
   "/store",
   expressAsyncHandler(async (req, res) => {
     const { query } = req;
-    const seller = query.seller || "";
     const pageSize = query.pageSize || PAGE_SIZE;
     const page = query.page || 1;
     const category = query.category || "";
     const color = query.color || "";
-    const size = query.size || "";
     const price = query.price || "";
     const numSales = query.numSales || "";
     const discount = query.discount || "";
     const rating = query.rating || "";
-    const order = query.order || "";
     const brand = query.brand || "";
+    const subcategory = query.subcategory || "";
+    const subitem = query.subitem || "";
+    const feature = query.feature || ""; // Add feature filter
     const searchQuery = query.query || "";
 
-    const sellerFilter = seller ? { seller } : {};
+    // Find the seller with the highest rating
+    const highestRatedSeller = await User.findOne({})
+      .sort({ "seller.rating": -1 })
+      .limit(1);
+
+    const sellerFilter = highestRatedSeller
+      ? { "seller.name": highestRatedSeller.seller.name }
+      : {};
+
     const queryFilter =
       searchQuery && searchQuery !== "all"
         ? {
@@ -673,21 +597,23 @@ productRouter.get(
             },
           }
         : {};
-    const categoryFilter =
-      category && category !== "all"
-        ? { category: { $in: category.split(",") } }
-        : {};
-
-    const sizeFilter =
-      size && size !== "all" ? { size: { $in: size.split(",") } } : {};
+    const categoryFilter = category ? { "category.name": category } : {};
+    const subcategoryFilter = subcategory
+      ? { "category.subCategories.name": subcategory }
+      : {};
+    const subitemFilter = subitem
+      ? { "category.subCategories.subItems.name": subitem }
+      : {};
     const colorFilter =
-      color && color !== "all" ? { color: { $in: color.split(",") } } : {};
+      color && color !== "all"
+        ? { "color.colorName": { $in: color.split(",") } }
+        : {};
     const brandFilter =
       brand && brand !== "all" ? { brand: { $in: brand.split(",") } } : {};
     const ratingFilter =
       rating && rating !== "all"
         ? {
-            rating: {
+            "seller.rating": {
               $gte: Number(rating),
             },
           }
@@ -717,35 +643,43 @@ productRouter.get(
             },
           }
         : {};
+    const featureFilter =
+      feature && feature !== "all"
+        ? {
+            "features.subFeatures": { $in: feature.split(",") }, // Updated for multiple features
+          }
+        : {};
 
     const sortOrder =
-      order === "featured"
+      query.order === "featured"
         ? { featured: -1 }
-        : order === "lowest"
+        : query.order === "lowest"
         ? { price: 1 }
-        : order === "highest"
+        : query.order === "highest"
         ? { price: -1 }
-        : order === "toprated"
-        ? { rating: -1 }
-        : order === "numsales"
+        : query.order === "toprated"
+        ? { "seller.rating": -1 }
+        : query.order === "numsales"
         ? { numSales: -1 }
-        : order === "discount"
+        : query.order === "discount"
         ? { discount: -1 }
-        : order === "newest"
+        : query.order === "newest"
         ? { createdAt: -1 }
         : { _id: -1 };
 
     const filters = {
       ...queryFilter,
       ...categoryFilter,
+      ...subcategoryFilter,
+      ...subitemFilter,
       ...sellerFilter,
       ...colorFilter,
-      ...sizeFilter,
       ...brandFilter,
       ...priceFilter,
       ...ratingFilter,
       ...numSalesFilter,
       ...discountFilter,
+      ...featureFilter,
     };
 
     const products = await Product.find(filters)
@@ -762,7 +696,6 @@ productRouter.get(
       page,
       pages: Math.ceil(countProducts / pageSize),
     });
-    console.log(discountFilter); // Check the discount filter object
   })
 );
 
@@ -890,13 +823,35 @@ productRouter.get(
 );
 
 //************
-// CATEGORIES
+// FETCH CATEGORIES
 //************
 productRouter.get(
   "/categories",
   expressAsyncHandler(async (req, res) => {
     const categories = await Product.distinct("category");
     res.send(categories);
+  })
+);
+
+//************
+// FETCH FEATURES
+//************
+productRouter.get(
+  "/features",
+  expressAsyncHandler(async (req, res) => {
+    const features = await Product.distinct("features");
+    res.send(features);
+  })
+);
+
+//************
+// FETCH BRANDS
+//************
+productRouter.get(
+  "/brands",
+  expressAsyncHandler(async (req, res) => {
+    const brands = await Product.distinct("brand");
+    res.send(brands);
   })
 );
 
