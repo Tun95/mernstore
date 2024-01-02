@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useRef } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import { request } from "../../../../base url/BaseUrl";
@@ -8,8 +8,12 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import "./styles.scss";
 import { getError } from "../../../../components/utilities/util/Utils";
+import { Context } from "../../../../context/Context";
 
 function Announcement({ openBox, toggleBox }) {
+  const { state } = useContext(Context);
+  const { userInfo, categories } = state;
+
   const [announcementId, setAnnouncementId] = useState(null); // Initialize with null or the actual ID
   const [loading, setLoading] = useState(false);
   const [sliders, setSliders] = useState([]);
@@ -30,6 +34,7 @@ function Announcement({ openBox, toggleBox }) {
     videoUrl: "",
     title: "",
     description: "",
+    productSlug: "",
     hColor: "",
     pColor: "",
     bColor: "",
@@ -50,6 +55,7 @@ function Announcement({ openBox, toggleBox }) {
         videoUrl: fifthCard.videoUrl || "",
         title: fifthCard.title || "",
         description: fifthCard.description || "",
+        productSlug: fifthCard.productSlug || "",
         hColor: fifthCard.hColor || "",
         pColor: fifthCard.pColor || "",
         bColor: fifthCard.bColor || "",
@@ -193,7 +199,7 @@ function Announcement({ openBox, toggleBox }) {
       image: "",
       title: "",
       description: "",
-      category:"",
+      category: "",
       hColor: "",
       pColor: "",
       width: "",
@@ -219,7 +225,7 @@ function Announcement({ openBox, toggleBox }) {
       );
 
       setLoading(false); // Set loading back to false after a successful request
-      toast.success("Fifth card updated successfully");
+      toast.success("Video card updated successfully");
     } catch (error) {
       setLoading(false); // Set loading back to false in case of an error
       console.error("Error updating fifth card:", error);
@@ -289,6 +295,25 @@ function Announcement({ openBox, toggleBox }) {
                               onChange={handleInputChange}
                               placeholder="Slider title"
                             />
+                          </span>
+                          <span className="link_img">
+                            <select
+                              name="category"
+                              id="category"
+                              value={formData.category}
+                              onChange={handleInputChange}
+                            >
+                              <option value="" disabled>
+                                Select Category
+                              </option>
+                              {categories.map((categoryGroup) =>
+                                categoryGroup.categories.map((cat) => (
+                                  <option key={cat._id} value={cat.name}>
+                                    {cat.name}
+                                  </option>
+                                ))
+                              )}
+                            </select>
                           </span>
                           <span className="link_img">
                             <input
@@ -441,6 +466,15 @@ function Announcement({ openBox, toggleBox }) {
                                 value={fifthCardFormData.description}
                                 onChange={handleFifthCardInputChange}
                                 placeholder="video description"
+                              />
+                            </span>
+                            <span className="link_img">
+                              <input
+                                type="text"
+                                name="productSlug"
+                                value={fifthCardFormData.productSlug}
+                                onChange={handleFifthCardInputChange}
+                                placeholder="product slug e.g iphone-12-latest"
                               />
                             </span>
                             <span className="link_img">
