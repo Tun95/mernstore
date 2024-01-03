@@ -210,7 +210,10 @@ function AnnouncementCard() {
               </div>
               <div className="middle">
                 <div className="video_content">
-                  <Link to={`/product=${fifthCard?.slug}`} className="video">
+                  <Link
+                    to={`/product=${fifthCard?.productSlug}`}
+                    className="video"
+                  >
                     <video
                       ref={videoRef}
                       src={fifthCard?.videoUrl}
