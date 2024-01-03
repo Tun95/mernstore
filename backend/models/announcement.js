@@ -1,19 +1,23 @@
 import mongoose from "mongoose";
 
 // Define a schema for a single slide within the slider
-const SlideSchema = new mongoose.Schema({
-  image: String, // Image URL or path
-  title: String, // Slide title
-  description: String, // Slide description
-  category: String,
-  hColor: String,
-  pColor: String,
-  width: String,
-  top: String,
-  left: String,
-  right: String,
-  bottom: String,
-});
+const SlideSchema = new mongoose.Schema(
+  {
+    image: String, // Image URL or path
+    title: String, // Slide title
+    description: String, // Slide description
+    category: String,
+    hColor: String,
+    pColor: String,
+    width: String,
+    top: String,
+    left: String,
+    right: String,
+    bottom: String,
+    textAlign: String,
+  },
+  { timestamps: true }
+);
 
 // Define the schema for the fifth card with a video, title, and description
 const VideoCardSchema = new mongoose.Schema({

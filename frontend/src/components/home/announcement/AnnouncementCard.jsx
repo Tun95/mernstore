@@ -1,11 +1,56 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useReducer, useRef } from "react";
 import { Link } from "react-router-dom";
 import data from "./data";
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from "react-responsive-carousel";
+import { request } from "../../../base url/BaseUrl";
+import axios from "axios";
+import { Swiper, SwiperSlide } from "swiper/react";
+import LoadingBox from "../../utilities/message loading/LoadingBox";
+import MessageBox from "../../utilities/message loading/MessageBox";
 
+function reducer(state, action) {
+  switch (action.type) {
+    case "FETCH_REQUEST":
+      return { ...state, loading: true };
+    case "FETCH_SUCCESS":
+      return { ...state, loading: false, announcement: action.payload };
+    case "FETCH_FAIL":
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+}
 function AnnouncementCard() {
-  const { sliders, videoCard } = data;
+  const [{ loading, error, announcement }, dispatch] = useReducer(reducer, {
+    announcement: [],
+    loading: true,
+    error: "",
+  });
+
+  const { sliders, fifthCard } = announcement;
+
+  //==============
+  //FETCH BLOG POST
+  //==============
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        dispatch({ type: "FETCH_REQUEST" });
+        const { data } = await axios.get(`${request}/api/announcement/all`);
+        dispatch({
+          type: "FETCH_SUCCESS",
+          payload: data,
+        });
+      } catch (err) {
+        dispatch({ type: "FETCH_FAIL" });
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  console.log("ANNOUN:", announcement);
 
   const videoRef = useRef(null);
   useEffect(() => {
@@ -19,312 +64,319 @@ function AnnouncementCard() {
   }, []);
 
   return (
-    <div className="announ_cards">
-      <div className="content">
-        <div className="cards">
-          <div className="left">
-            <div className="top slides1">
-              <Carousel
-                transitionTime={800}
-                autoPlay={true}
-                infiniteLoop={true}
-                showStatus={false}
-                showThumbs={false}
-                showIndicators={false}
-                interval={5000}
-                showArrows={false}
-                swipeable={true}
-              >
-                {sliders[0].slides.map((slide, index) => (
-                  <Link
-                    to={`/store?order=${slide.category}`}
-                    className="box"
-                    key={index}
+    <>
+      {loading ? (
+        <LoadingBox></LoadingBox>
+      ) : error ? (
+        <MessageBox variant="danger">{error}</MessageBox>
+      ) : (
+        <div className="announ_cards">
+          <div className="content">
+            <div className="cards">
+              <div className="left">
+                <div className="top slides1">
+                  <Carousel
+                    transitionTime={800}
+                    autoPlay={true}
+                    infiniteLoop={true}
+                    showStatus={false}
+                    showThumbs={false}
+                    showIndicators={false}
+                    interval={5000}
+                    showArrows={false}
+                    swipeable={true}
                   >
-                    <div className="img">
-                      <img src={slide.image} alt={slide.title} />
-                    </div>
-                    <div
-                      className={`content`}
-                      style={
-                        index === 0
-                          ? {
-                              width: "40%",
-                              right: "20px",
-                              top: "40px",
-                              textAlign: "left",
-                            }
-                          : {
-                              width: "40%",
-                              left: "20px",
-                              top: "40px",
-                              textAlign: "left",
-                            }
-                      }
-                    >
-                      <h2
-                        style={
-                          index === 0
-                            ? { color: "var(--color-black)" }
-                            : { color: "var(--color-black)" }
-                        }
+                    {announcement?.sliders?.slice(6, 8).map((slide, index) => (
+                      <Link
+                        to={`/store?category=${slide.category}`}
+                        className="box"
                       >
-                        {slide.title}
-                      </h2>
-                      <p
-                        className="description"
-                        style={
-                          index === 0
-                            ? { color: "var(--color-gray)" }
-                            : { color: "var(--color-gray)" }
-                        }
-                      >
-                        {slide.description}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </Carousel>
-            </div>
-            <div className="bottom_Slide slides2">
-              <Carousel
-                transitionTime={800}
-                autoPlay={true}
-                infiniteLoop={true}
-                showStatus={false}
-                showThumbs={false}
-                showIndicators={false}
-                interval={5000}
-                showArrows={false}
-                swipeable={true}
-              >
-                {sliders[1].slides.map((slide, index) => (
-                  <Link
-                    to={`/store?order=${slide.category}`}
-                    className="box"
-                    key={index}
+                        <div className="img">
+                          <img src={slide.image} alt={slide.title} />
+                        </div>
+                        <div
+                          className={`content`}
+                          style={
+                            index === 0
+                              ? {
+                                  width: slide.width,
+                                  right: slide.right,
+                                  top: slide.top,
+                                  textAlign: slide.textAlign,
+                                }
+                              : {
+                                  width: slide.width,
+                                  left: slide.left,
+                                  top: slide.top,
+                                  textAlign: slide.textAlign,
+                                }
+                          }
+                        >
+                          <h2
+                            style={
+                              index === 0
+                                ? { color: slide.hColor }
+                                : { color: slide.hColor }
+                            }
+                          >
+                            {slide.title}
+                          </h2>
+                          <p
+                            className="description"
+                            style={
+                              index === 0
+                                ? { color: slide.pColor }
+                                : { color: slide.pColor }
+                            }
+                          >
+                            {slide.description}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </Carousel>
+                </div>
+                <div className="bottom_Slide slides2">
+                  <Carousel
+                    transitionTime={800}
+                    autoPlay={true}
+                    infiniteLoop={true}
+                    showStatus={false}
+                    showThumbs={false}
+                    showIndicators={false}
+                    interval={5000}
+                    showArrows={false}
+                    swipeable={true}
                   >
-                    <div className="img">
-                      <img src={slide.image} alt={slide.title} />
-                    </div>
-                    <div
-                      className={`content`}
-                      style={
-                        index === 0
-                          ? {
-                              width: "40%",
-                              left: "20px",
-                              top: "20px",
-                              textAlign: "left",
-                            }
-                          : {
-                              width: "100%",
-                              left: "",
-                              top: "20px",
-                              textAlign: "center",
-                            }
-                      }
-                    >
-                      <h2
-                        style={
-                          index === 0
-                            ? { color: "var(--color-black)" }
-                            : { color: "var(--color-black)" }
-                        }
+                    {announcement?.sliders?.slice(4, 6).map((slide, index) => (
+                      <Link
+                        to={`/store?category=${slide.category}`}
+                        className="box"
+                        key={index}
                       >
-                        {slide.title}
-                      </h2>
-                      <p
-                        className="description"
-                        style={
-                          index === 0
-                            ? { color: "var(--color-gray)" }
-                            : { color: "var(--color-gray)" }
-                        }
-                      >
-                        {slide.description}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </Carousel>
-            </div>
-          </div>
-          <div className="middle">
-            <div className="video_content">
-              <Link to={`/product=${videoCard.slug}`} className="video">
-                <video
-                  ref={videoRef}
-                  src={videoCard.videoUrl}
-                  loop
-                  muted
-                  autoPlay
-                />
+                        <div className="img">
+                          <img src={slide.image} alt={slide.title} />
+                        </div>
+                        <div
+                          className={`content`}
+                          style={
+                            index === 0
+                              ? {
+                                  width: slide.width,
+                                  left: slide.left,
+                                  top: slide.top,
+                                  textAlign: slide.textAlign,
+                                }
+                              : {
+                                  width: slide.width,
+                                  left: slide.left,
+                                  top: slide.top,
+                                  textAlign: slide.textAlign,
+                                }
+                          }
+                        >
+                          <h2
+                            style={
+                              index === 0
+                                ? { color: slide.hColor }
+                                : { color: slide.hColor }
+                            }
+                          >
+                            {slide.title}
+                          </h2>
+                          <p
+                            className="description"
+                            style={
+                              index === 0
+                                ? { color: slide.pColor }
+                                : { color: slide.pColor }
+                            }
+                          >
+                            {slide.description}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </Carousel>
+                </div>
+              </div>
+              <div className="middle">
+                <div className="video_content">
+                  <Link to={`/product=${fifthCard?.slug}`} className="video">
+                    <video
+                      ref={videoRef}
+                      src={fifthCard?.videoUrl}
+                      loop
+                      muted
+                      autoPlay
+                    />
 
-                <div
-                  className="content"
-                  style={{
-                    right: "",
-                    width: "100%",
-                    height: "100%",
-                    display: "flex",
-                    alignItems: "center",
-                    flexDirection: "column",
-                    top: "355px",
-                    bottom: "0px",
-                    textAlign: "center",
-                  }}
-                >
-                  <h1 style={{ width: "80%", color: "var(--color-white)" }}>
-                    {videoCard.title}
-                  </h1>
-                  <p className="description">
-                    <span
+                    <div
+                      className="content"
                       style={{
-                        color: "var(--color-black)",
-                        backgroundColor: "var(--color-tab)",
-                        width: "auto",
+                        right: "",
+                        width: "100%",
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        flexDirection: "column",
+                        top: "355px",
+                        bottom: "0px",
+                        textAlign: "center",
                       }}
                     >
-                      {videoCard.description}
-                    </span>
-                  </p>
+                      <h1 style={{ width: "80%", color: fifthCard?.hColor }}>
+                        {fifthCard?.title}
+                      </h1>
+                      <p className="description">
+                        <span
+                          style={{
+                            color: fifthCard?.pColor,
+                            backgroundColor: fifthCard?.bColor,
+                            width: "auto",
+                          }}
+                        >
+                          {fifthCard?.description}
+                        </span>
+                      </p>
+                    </div>
+                  </Link>
                 </div>
-              </Link>
-            </div>
-          </div>
-          <div className="right">
-            <div className="top slides">
-              <Carousel
-                transitionTime={800}
-                autoPlay={true}
-                infiniteLoop={true}
-                showStatus={false}
-                showThumbs={false}
-                showIndicators={false}
-                interval={5000}
-                showArrows={false}
-                swipeable={true}
-              >
-                {sliders[2].slides.map((slide, index) => (
-                  <Link
-                    to={`/store?order=${slide.category}`}
-                    className="box"
-                    key={index}
+              </div>
+              <div className="right">
+                <div className="top slides">
+                  <Carousel
+                    transitionTime={800}
+                    autoPlay={true}
+                    infiniteLoop={true}
+                    showStatus={false}
+                    showThumbs={false}
+                    showIndicators={false}
+                    interval={5000}
+                    showArrows={false}
+                    swipeable={true}
                   >
-                    <div className="img">
-                      <img src={slide.image} alt={slide.title} />
-                    </div>
-                    <div
-                      className={`content`}
-                      style={
-                        index === 0
-                          ? {
-                              width: "40%",
-                              right: "20px",
-                              top: "40px",
-                              textAlign: "left",
-                            }
-                          : {
-                              width: "40%",
-                              left: "20px",
-                              top: "40px",
-                              textAlign: "left",
-                            }
-                      }
-                    >
-                      <h2
-                        style={
-                          index === 0
-                            ? { color: "var(--color-black)" }
-                            : { color: "var(--color-black)" }
-                        }
+                    {announcement?.sliders?.slice(2, 4).map((slide, index) => (
+                      <Link
+                        to={`/store?category=${slide.category}`}
+                        className="box"
+                        key={index}
                       >
-                        {slide.title}
-                      </h2>
-                      <p
-                        className="description"
-                        style={
-                          index === 0
-                            ? { color: "var(--color-white)" }
-                            : { color: "var(--color-gray)" }
-                        }
-                      >
-                        {slide.description}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </Carousel>
-            </div>
-            <div className="bottom_Slide slides">
-              <Carousel
-                transitionTime={800}
-                autoPlay={true}
-                infiniteLoop={true}
-                showStatus={false}
-                showThumbs={false}
-                showIndicators={false}
-                interval={5000}
-                showArrows={false}
-                swipeable={true}
-              >
-                {sliders[3].slides.map((slide, index) => (
-                  <Link
-                    to={`/store?order=${slide.category}`}
-                    className="box"
-                    key={index}
+                        <div className="img">
+                          <img src={slide.image} alt={slide.title} />
+                        </div>
+                        <div
+                          className={`content`}
+                          style={
+                            index === 0
+                              ? {
+                                  width: slide.width,
+                                  right: slide.right,
+                                  top: slide.top,
+                                  textAlign: slide.textAlign,
+                                }
+                              : {
+                                  width: slide.width,
+                                  left: slide.left,
+                                  top: slide.top,
+                                  textAlign: slide.textAlign,
+                                }
+                          }
+                        >
+                          <h2
+                            style={
+                              index === 0
+                                ? { color: slide.hColor }
+                                : { color: slide.hColor }
+                            }
+                          >
+                            {slide.title}
+                          </h2>
+                          <p
+                            className="description"
+                            style={
+                              index === 0
+                                ? { color: slide.pColor }
+                                : { color: slide.pColor }
+                            }
+                          >
+                            {slide.description}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </Carousel>
+                </div>
+                <div className="bottom_Slide slides">
+                  <Carousel
+                    transitionTime={800}
+                    autoPlay={true}
+                    infiniteLoop={true}
+                    showStatus={false}
+                    showThumbs={false}
+                    showIndicators={false}
+                    interval={5000}
+                    showArrows={false}
+                    swipeable={true}
                   >
-                    <div className="img">
-                      <img src={slide.image} alt={slide.title} />
-                    </div>
-                    <div
-                      className={`content`}
-                      style={
-                        index === 0
-                          ? {
-                              width: "40%",
-                              left: "20px",
-                              top: "20px",
-                              textAlign: "left",
-                            }
-                          : {
-                              width: "100%",
-                              left: "20px",
-                              top: "50%",
-                              textAlign: "left",
-                              paddingRight: "10px",
-                            }
-                      }
-                    >
-                      <h2
-                        style={
-                          index === 0
-                            ? { color: "var(--color-black)" }
-                            : { color: "var(--color-white)" }
-                        }
+                    {announcement?.sliders?.slice(0, 2).map((slide, index) => (
+                      <Link
+                        to={`/store?category=${slide.category}`}
+                        className="box"
+                        key={index}
                       >
-                        {slide.title}
-                      </h2>
-                      <p
-                        className="description"
-                        style={
-                          index === 0
-                            ? { color: "var(--color-gray)" }
-                            : { color: "var(--color-border)" }
-                        }
-                      >
-                        {slide.description}
-                      </p>
-                    </div>
-                  </Link>
-                ))}
-              </Carousel>
+                        <div className="img">
+                          <img src={slide.image} alt={slide.title} />
+                        </div>
+                        <div
+                          className={`content`}
+                          style={
+                            index === 0
+                              ? {
+                                  width: slide.width,
+                                  left: slide.left,
+                                  top: slide.top,
+                                  textAlign: slide.textAlign,
+                                }
+                              : {
+                                  width: slide.width,
+                                  left: slide.left,
+                                  top: slide.top,
+                                  textAlign: slide.textAlign,
+                                  paddingRight: "10px",
+                                }
+                          }
+                        >
+                          <h2
+                            style={
+                              index === 0
+                                ? { color: slide.hColor }
+                                : { color: slide.hColor }
+                            }
+                          >
+                            {slide.title}
+                          </h2>
+                          <p
+                            className="description"
+                            style={
+                              index === 0
+                                ? { color: slide.pColor }
+                                : { color: slide.pColor }
+                            }
+                          >
+                            {slide.description}
+                          </p>
+                        </div>
+                      </Link>
+                    ))}
+                  </Carousel>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </>
   );
 }
 

@@ -29,6 +29,7 @@ function Announcement({ openBox, toggleBox }) {
     left: "",
     right: "",
     bottom: "",
+    textAlign:"",
   });
   const [fifthCardFormData, setFifthCardFormData] = useState({
     videoUrl: "",
@@ -128,6 +129,7 @@ function Announcement({ openBox, toggleBox }) {
         left: selectedSlider.left,
         right: selectedSlider.right,
         bottom: selectedSlider.bottom,
+        textAlign: selectedSlider.textAlign,
       }));
     } else {
       toast.error("No data found for the slider being edited.");
@@ -190,6 +192,7 @@ function Announcement({ openBox, toggleBox }) {
       left: "",
       right: "",
       bottom: "",
+      textAlign:"",
       _id: "",
     });
   };
@@ -207,6 +210,7 @@ function Announcement({ openBox, toggleBox }) {
       left: "",
       right: "",
       bottom: "",
+      textAlign:"",
       _id: "",
     });
   };
@@ -385,6 +389,15 @@ function Announcement({ openBox, toggleBox }) {
                               value={formData.bottom}
                               onChange={handleInputChange}
                               placeholder="Bottom e.g 20px"
+                            />
+                          </span>
+                          <span className="link_img">
+                            <input
+                              type="text"
+                              name="textAlign"
+                              value={formData.textAlign}
+                              onChange={handleInputChange}
+                              placeholder="text align e.g center"
                             />
                           </span>
                         </div>

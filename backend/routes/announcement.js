@@ -10,33 +10,7 @@ const announcementRouter = express.Router();
 announcementRouter.post(
   "/sliders",
   expressAsyncHandler(async (req, res) => {
-    const {
-      image,
-      title,
-      description,
-      category,
-      hColor,
-      pColor,
-      width,
-      top,
-      left,
-      right,
-      bottom,
-    } = req.body;
-
-    const newSlide = {
-      image,
-      title,
-      description,
-      category,
-      hColor,
-      pColor,
-      width,
-      top,
-      left,
-      right,
-      bottom,
-    };
+    const { _id, ...newSlide } = req.body; // Exclude _id from newSlide
 
     try {
       let announcement = await Announcement.findOne();
@@ -53,6 +27,7 @@ announcementRouter.post(
 
       res.status(201).json(updatedAnnouncement);
     } catch (error) {
+      console.error("Fail to create new:", error);
       res.status(500).json({ message: "Internal Server Error" });
     }
   })
@@ -80,19 +55,7 @@ announcementRouter.put(
   "/sliders/:id",
   expressAsyncHandler(async (req, res) => {
     const { id } = req.params;
-    const {
-      image,
-      title,
-      description,
-      category,
-      hColor,
-      pColor,
-      width,
-      top,
-      left,
-      right,
-      bottom,
-    } = req.body;
+    const updatedSlide = { ...req.body };
 
     const announcement = await Announcement.findOne();
     if (announcement) {
@@ -100,20 +63,7 @@ announcementRouter.put(
         (slide) => slide._id.toString() === id
       );
       if (slideIndex !== -1) {
-        announcement.sliders[slideIndex] = {
-          _id: id,
-          image,
-          title,
-          description,
-          category,
-          hColor,
-          pColor,
-          width,
-          top,
-          left,
-          right,
-          bottom,
-        };
+        announcement.sliders[slideIndex] = { _id: id, ...updatedSlide };
         const updatedAnnouncement = await announcement.save();
         res.json(updatedAnnouncement.sliders[slideIndex]);
       } else {
@@ -187,6 +137,28 @@ announcementRouter.get(
         res.json(announcement);
       } else {
         res.status(404).json({ message: "Announcement not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  })
+);
+
+//=======================
+// Fetch latest sliders
+//=======================
+announcementRouter.get(
+  "/latest-sliders",
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const latestSliders = await Announcement.find({})
+        .sort({ "sliders.createdAt": -1 }) // Sort sliders by timestamp in descending order
+        .exec();
+
+      if (latestSliders && latestSliders.sliders.length > 0) {
+        res.json({ sliders: latestSliders.sliders });
+      } else {
+        res.status(404).json({ message: "Sliders not found" });
       }
     } catch (error) {
       res.status(500).json({ message: "Internal Server Error" });

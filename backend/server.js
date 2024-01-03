@@ -62,13 +62,13 @@ app.use(
 );
 
 const corsOptions = {
-  origin: "https://mernstore-app.vercel.app",
+  origin: "*",
   methods: "GET,HEAD,OPTIONS,POST,PUT,PATCH,DELETE",
   credentials: true,
 };
 
 app.use((req, res, next) => {
-  // res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Origin", "*");
   res.header(
     "Access-Control-Allow-Methods",
     "GET,HEAD,OPTIONS,POST,PUT,PATCH,DELETE"
@@ -124,7 +124,6 @@ app.use("/api/blog", blogRouter);
 app.use("/api/plans", planRouter);
 app.use("/api/announcement", announcementRouter);
 app.use("/api/calls", callRouter);
-
 
 const _dirname = path.resolve();
 app.use(express.static(path.join(_dirname, "/frontend/build")));
