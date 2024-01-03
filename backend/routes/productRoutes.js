@@ -713,7 +713,7 @@ productRouter.get(
 //=========================
 // HOME PRODUCT FILTER
 //=========================
-const PAGE_PRODUCT_SIZE = 20;
+const PAGE_PRODUCT_SIZE = 10;
 productRouter.get(
   "/shop",
   expressAsyncHandler(async (req, res) => {
