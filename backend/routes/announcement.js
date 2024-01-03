@@ -33,17 +33,24 @@ announcementRouter.post(
   })
 );
 
-//==================
-// Fetch all sliders
-//==================
+//=======================
+// Fetch latest sliders
+//=======================
 announcementRouter.get(
   "/sliders",
   expressAsyncHandler(async (req, res) => {
-    const announcement = await Announcement.findOne();
-    if (announcement) {
-      res.json(announcement.sliders);
-    } else {
-      res.status(404).json({ message: "Announcement not found" });
+    try {
+      const latestSliders = await Announcement.findOne()
+        .sort({ "sliders.createdAt": -1 }) // Sort sliders by timestamp in descending order
+        .exec();
+
+      if (latestSliders && latestSliders.sliders.length > 0) {
+        res.json({ sliders: latestSliders.sliders });
+      } else {
+        res.status(404).json({ message: "Sliders not found" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
     }
   })
 );
@@ -126,14 +133,18 @@ announcementRouter.put(
 );
 
 //==================
-// Fetch all data
+// Fetch all data sorted by latest sliders
 //==================
 announcementRouter.get(
   "/all",
   expressAsyncHandler(async (req, res) => {
     try {
-      const announcement = await Announcement.findOne();
+      const announcement = await Announcement.findOne().exec();
+
       if (announcement) {
+        // Sort sliders by timestamp in descending order
+        announcement.sliders.sort((a, b) => b.createdAt - a.createdAt);
+
         res.json(announcement);
       } else {
         res.status(404).json({ message: "Announcement not found" });
@@ -144,26 +155,5 @@ announcementRouter.get(
   })
 );
 
-//=======================
-// Fetch latest sliders
-//=======================
-announcementRouter.get(
-  "/latest-sliders",
-  expressAsyncHandler(async (req, res) => {
-    try {
-      const latestSliders = await Announcement.find({})
-        .sort({ "sliders.createdAt": -1 }) // Sort sliders by timestamp in descending order
-        .exec();
-
-      if (latestSliders && latestSliders.sliders.length > 0) {
-        res.json({ sliders: latestSliders.sliders });
-      } else {
-        res.status(404).json({ message: "Sliders not found" });
-      }
-    } catch (error) {
-      res.status(500).json({ message: "Internal Server Error" });
-    }
-  })
-);
 
 export default announcementRouter;

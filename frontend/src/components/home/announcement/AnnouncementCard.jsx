@@ -101,13 +101,17 @@ function AnnouncementCard() {
                               ? {
                                   width: slide.width,
                                   right: slide.right,
+                                  left: slide.left,
                                   top: slide.top,
+                                  bottom: slide.bottom,
                                   textAlign: slide.textAlign,
                                 }
                               : {
                                   width: slide.width,
+                                  right: slide.right,
                                   left: slide.left,
                                   top: slide.top,
+                                  bottom: slide.bottom,
                                   textAlign: slide.textAlign,
                                 }
                           }
@@ -163,14 +167,18 @@ function AnnouncementCard() {
                             index === 0
                               ? {
                                   width: slide.width,
+                                  right: slide.right,
                                   left: slide.left,
                                   top: slide.top,
+                                  bottom: slide.bottom,
                                   textAlign: slide.textAlign,
                                 }
                               : {
                                   width: slide.width,
+                                  right: slide.right,
                                   left: slide.left,
                                   top: slide.top,
+                                  bottom: slide.bottom,
                                   textAlign: slide.textAlign,
                                 }
                           }
@@ -272,13 +280,17 @@ function AnnouncementCard() {
                               ? {
                                   width: slide.width,
                                   right: slide.right,
+                                  left: slide.left,
                                   top: slide.top,
+                                  bottom: slide.bottom,
                                   textAlign: slide.textAlign,
                                 }
                               : {
                                   width: slide.width,
+                                  right: slide.right,
                                   left: slide.left,
                                   top: slide.top,
+                                  bottom: slide.bottom,
                                   textAlign: slide.textAlign,
                                 }
                           }
@@ -334,14 +346,18 @@ function AnnouncementCard() {
                             index === 0
                               ? {
                                   width: slide.width,
+                                  right: slide.right,
                                   left: slide.left,
                                   top: slide.top,
+                                  bottom: slide.bottom,
                                   textAlign: slide.textAlign,
                                 }
                               : {
                                   width: slide.width,
+                                  right: slide.right,
                                   left: slide.left,
                                   top: slide.top,
+                                  bottom: slide.bottom,
                                   textAlign: slide.textAlign,
                                   paddingRight: "10px",
                                 }

@@ -20,15 +20,18 @@ const SlideSchema = new mongoose.Schema(
 );
 
 // Define the schema for the fifth card with a video, title, and description
-const VideoCardSchema = new mongoose.Schema({
-  videoUrl: String, // Video URL or path
-  title: String, // Video title
-  description: String, // Video description
-  productSlug: String,
-  hColor: String,
-  pColor: String,
-  bColor: String,
-});
+const VideoCardSchema = new mongoose.Schema(
+  {
+    videoUrl: String, // Video URL or path
+    title: String, // Video title
+    description: String, // Video description
+    productSlug: String,
+    hColor: String,
+    pColor: String,
+    bColor: String,
+  },
+  { timestamps: true }
+);
 
 // Define a schema for the entire CARDS, including multiple slides and the fifth video card
 const AnnouncementSchema = new mongoose.Schema({
