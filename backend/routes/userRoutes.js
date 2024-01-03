@@ -140,15 +140,15 @@ userRouter.get(
   })
 );
 
-//=================
-// CREATE REVIEWS
-//=================
+//=========================
+// CREATE REVIEWS FOR SELLER
+//==========================
 userRouter.post(
-  "/:userId/reviews",
+  "/:id/reviews",
   isAuth,
   expressAsyncHandler(async (req, res) => {
-    const { firstName, lastName, email, image, comment, rating } = req.body;
-    const userId = req.params.userId;
+    const { comment, rating } = req.body;
+    const userId = req.params.id;
 
     const user = await User.findById(userId);
 
@@ -166,13 +166,12 @@ userRouter.post(
       }
 
       const newReview = {
-        firstName,
-        lastName,
-        email,
-        image,
+        firstName: req.user.firstName,
+        lastName: req.user.lastName,
+        email: req.user.email,
+        image: req.user.image,
         comment,
         rating,
-        user: userId,
       };
 
       user.seller.reviews.push(newReview);
@@ -192,7 +191,7 @@ userRouter.post(
 );
 
 //=================
-// FETCH REVIEWS
+// FETCH REVIEWS FOR SELLER
 //=================
 userRouter.get(
   "/:userId/reviews",
@@ -211,7 +210,7 @@ userRouter.get(
 );
 
 //=================
-// UPDATE REVIEWS
+// UPDATE REVIEWS FOR SELLER
 //=================
 userRouter.put(
   "/:userId/reviews/:id",
@@ -243,7 +242,7 @@ userRouter.put(
 );
 
 //=================
-// DELETE REVIEWS
+// DELETE REVIEWS FOR SELLER
 //=================
 userRouter.delete(
   "/:userId/reviews/:id",
@@ -1011,14 +1010,20 @@ userRouter.put(
   })
 );
 
-//ADMIN USER LIST FETCHING
+//=====================
+// ADMIN USER LIST FETCHING
+//=====================
 userRouter.get(
   "/",
   isAuth,
   // isAdmin,
   expressAsyncHandler(async (req, res) => {
-    const users = await User.find({}).sort("-createdAt").populate("apply");
-    res.send(users);
+    try {
+      const users = await User.find({}).sort("-createdAt").populate("apply");
+      res.send(users);
+    } catch (error) {
+      res.status(500).send({ message: "Internal Server Error" });
+    }
   })
 );
 

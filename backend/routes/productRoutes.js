@@ -571,6 +571,7 @@ productRouter.get(
     const color = query.color || "";
     const price = query.price || "";
     const numSales = query.numSales || "";
+    const countInStock = query.countInStock || "";
     const discount = query.discount || "";
     const rating = query.rating || "";
     const brand = query.brand || "";
@@ -581,11 +582,11 @@ productRouter.get(
 
     // Find the seller with the highest rating
     const highestRatedSeller = await User.findOne({})
-      .sort({ "seller.rating": -1 })
+      .sort({ "seller.seller.rating": -1 })
       .limit(1);
 
     const sellerFilter = highestRatedSeller
-      ? { "seller.name": highestRatedSeller.seller.name }
+      ? { "seller.seller.name": highestRatedSeller.seller.name }
       : {};
 
     const queryFilter =
@@ -599,10 +600,10 @@ productRouter.get(
         : {};
     const categoryFilter = category ? { "category.name": category } : {};
     const subcategoryFilter = subcategory
-      ? { "category.subCategories.name": subcategory }
+      ? { "category.subcategory.name": subcategory }
       : {};
     const subitemFilter = subitem
-      ? { "category.subCategories.subItems.name": subitem }
+      ? { "category.subcategory.subitem.name": subitem }
       : {};
     const colorFilter =
       color && color !== "all"
@@ -613,7 +614,7 @@ productRouter.get(
     const ratingFilter =
       rating && rating !== "all"
         ? {
-            "seller.rating": {
+            rating: {
               $gte: Number(rating),
             },
           }
@@ -650,9 +651,14 @@ productRouter.get(
           }
         : {};
 
-    const countInStockFilter = {
-      countInStock: { $gt: 0 },
-    };
+    const countInStockFilter =
+      countInStock && countInStock !== "all"
+        ? {
+            countInStock: {
+              $gt: 0,
+            },
+          }
+        : {};
 
     const sortOrder =
       query.order === "featured"
@@ -669,8 +675,6 @@ productRouter.get(
         ? { discount: -1 }
         : query.order === "newest"
         ? { createdAt: -1 }
-        : query.order === "countinstock"
-        ? { countInStock: -1, countInStock: { $gt: 0 } }
         : { _id: -1 };
 
     const filters = {
@@ -707,89 +711,34 @@ productRouter.get(
 );
 
 //=========================
-//SHOPFINITY PRODUCT FILTER
+// HOME PRODUCT FILTER
 //=========================
-const PAGE_PRODUCT_SIZE = 8;
+const PAGE_PRODUCT_SIZE = 20;
 productRouter.get(
   "/shop",
   expressAsyncHandler(async (req, res) => {
     const { query } = req;
     const pageSize = query.pageSize || PAGE_PRODUCT_SIZE;
     const page = query.page || 1;
-    const category = query.category || "";
-    const color = query.color || "";
-    const size = query.size || "";
-    const price = query.price || "";
-    const numSales = query.numSales || "";
-    const discount = query.discount || "";
-    const rating = query.rating || "";
+    const countInStock = query.countInStock || "";
+
     const order = query.order || "";
-    const brand = query.brand || "";
-    const searchQuery = query.query || "";
 
-    const queryFilter =
-      searchQuery && searchQuery !== "all"
+    const countInStockFilter =
+      countInStock && countInStock !== "all"
         ? {
-            name: {
-              $regex: searchQuery,
-              $options: "i",
+            countInStock: {
+              $gt: 0,
             },
           }
         : {};
-    const categoryFilter =
-      category && category !== "all"
-        ? { category: { $in: category.split(",") } }
-        : {};
-
-    const sizeFilter =
-      size && size !== "all" ? { size: { $in: size.split(",") } } : {};
-    const colorFilter =
-      color && color !== "all" ? { color: { $in: color.split(",") } } : {};
-    const brandFilter =
-      brand && brand !== "all" ? { brand: { $in: brand.split(",") } } : {};
-    const ratingFilter =
-      rating && rating !== "all"
-        ? {
-            rating: {
-              $gte: Number(rating),
-            },
-          }
-        : {};
-    const numSalesFilter =
-      numSales && numSales !== "all"
-        ? {
-            numSales: {
-              $gte: Number(numSales),
-            },
-          }
-        : {};
-    const discountFilter =
-      discount && discount !== "all"
-        ? {
-            discount: {
-              $gte: 50,
-            },
-          }
-        : {};
-    const priceFilter =
-      price && price !== "all"
-        ? {
-            price: {
-              $gte: Number(price.split("-")[0]),
-              $lte: Number(price.split("-")[1]),
-            },
-          }
-        : {};
-
     const sortOrder =
-      order === "featured"
+      query.order === "featured"
         ? { featured: -1 }
-        : order === "lowest"
-        ? { price: 1 }
-        : order === "highest"
-        ? { price: -1 }
         : order === "toprated"
         ? { rating: -1 }
+        : order === "bestseller"
+        ? { "seller.seller.rating": -1 }
         : order === "numsales"
         ? { numSales: -1 }
         : order === "discount"
@@ -799,20 +748,10 @@ productRouter.get(
         : { _id: -1 };
 
     const filters = {
-      ...queryFilter,
-      ...categoryFilter,
-
-      ...colorFilter,
-      ...sizeFilter,
-      ...brandFilter,
-      ...priceFilter,
-      ...ratingFilter,
-      ...numSalesFilter,
-      ...discountFilter,
+      ...countInStockFilter,
     };
-
     const products = await Product.find(filters)
-      .populate("seller wish")
+      .populate("seller")
       .sort(sortOrder)
       .skip(pageSize * (page - 1))
       .limit(pageSize);
@@ -825,7 +764,6 @@ productRouter.get(
       page,
       pages: Math.ceil(countProducts / pageSize),
     });
-    console.log(discountFilter); // Check the discount filter object
   })
 );
 

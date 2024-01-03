@@ -13,6 +13,7 @@ import { request } from "../../../../base url/BaseUrl";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import LoadingBox from "../../../../components/utilities/message loading/LoadingBox";
 import MessageBox from "../../../../components/utilities/message loading/MessageBox";
+import "./styles.scss";
 
 const reducer = (state, action) => {
   switch (action.type) {
