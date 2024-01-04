@@ -35,7 +35,7 @@ function Bestseller() {
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
   const query = sp.get("query") || "all";
-  const countInStock = sp.get("countInStock") || "all";
+  const discount = sp.get("discount") || "all";
   const page = parseInt(sp.get("page") || 1);
 
   // New state for tracking the current filter type
@@ -58,7 +58,7 @@ function Bestseller() {
         if (filterType === "bestseller") {
           orderFilter = "bestseller";
         } else if (filterType === "onsale") {
-          orderFilter = "countInStock&countInStock=0";
+          orderFilter = "discount";
         } else if (filterType === "mostpopular") {
           orderFilter = "toprated";
         }
@@ -73,7 +73,7 @@ function Bestseller() {
     };
 
     fetchData();
-  }, [page, query, filterType, countInStock]);
+  }, [page, query, filterType, discount]);
 
   const toggleBox = (type) => {
     setFilterType(type);
