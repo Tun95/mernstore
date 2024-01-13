@@ -3,7 +3,6 @@ import Product from "../models/productModels.js";
 import mongoose from "mongoose";
 import expressAsyncHandler from "express-async-handler";
 import { isAdmin, isAuth, isSellerOrAdmin } from "../utils.js";
-import User from "../models/userModels.js";
 
 const productRouter = express.Router();
 
@@ -66,22 +65,22 @@ productRouter.get("/new-arrival", async (req, res) => {
   }
 });
 
-//=============
-//FLASHDEAL FETCH
-//=============
-productRouter.get("/flashdeal", async (req, res) => {
-  try {
-    const seller = req.query.seller || ""; // Get the seller query parameter
-    const sellerFilter = seller ? { seller } : {}; // Create the seller filter object
-    const products = await Product.find({ flashdeal: true, ...sellerFilter })
-      .populate("seller")
-      .sort("-createdAt")
-      .limit(10);
-    res.send(products);
-  } catch (error) {
-    res.status(500).json({ message: "Failed to retrieve flashdeal products" });
-  }
-});
+//=================================
+// FETCH PRODUCT WITH COUNT IN STOCK GREATER THAN 0
+//=====================================
+productRouter.get(
+  "/countinstock",
+  expressAsyncHandler(async (req, res) => {
+    try {
+      const products = await Product.find({ countInStock: { $gt: 0 } })
+        .sort("-createdAt")
+        .limit(10);
+      res.json(products);
+    } catch (error) {
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  })
+);
 
 //================
 // CREATE PRODUCT
@@ -580,15 +579,6 @@ productRouter.get(
     const feature = query.feature || ""; // Add feature filter
     const searchQuery = query.query || "";
 
-    // Find the seller with the highest rating
-    const highestRatedSeller = await User.findOne({})
-      .sort({ "seller.seller.rating": -1 })
-      .limit(1);
-
-    const sellerFilter = highestRatedSeller
-      ? { "seller.seller.name": highestRatedSeller.seller.name }
-      : {};
-
     const queryFilter =
       searchQuery && searchQuery !== "all"
         ? {
@@ -669,6 +659,8 @@ productRouter.get(
         ? { price: -1 }
         : query.order === "toprated"
         ? { rating: -1 }
+        : query.order === "bestseller"
+        ? { "seller.seller.rating": -1 }
         : query.order === "numsales"
         ? { numSales: -1 }
         : query.order === "discount"
@@ -682,7 +674,6 @@ productRouter.get(
       ...categoryFilter,
       ...subcategoryFilter,
       ...subitemFilter,
-      ...sellerFilter,
       ...colorFilter,
       ...brandFilter,
       ...priceFilter,
@@ -806,7 +797,7 @@ productRouter.get(
 productRouter.get("/slug/:slug", async (req, res) => {
   const decodedSlug = decodeURIComponent(req.params.slug); // Decode the slug
   const product = await Product.findOne({ slug: decodedSlug }).populate(
-    "seller wish"
+    "seller"
   );
 
   if (!product) {

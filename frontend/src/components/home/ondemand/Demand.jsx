@@ -5,6 +5,11 @@ import Slider from "react-slick";
 import "./styles.scss";
 import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
+import { getError } from "../../utilities/util/Utils";
+import { request } from "../../../base url/BaseUrl";
+import axios from "axios";
+import MessageBox from "../../utilities/message loading/MessageBox";
+import LoadingBox from "../../utilities/message loading/LoadingBox";
 
 const NextArrow = (props) => {
   const { onClick } = props;
@@ -33,7 +38,7 @@ const reducer = (state, action) => {
     case "FETCH_REQUEST":
       return { ...state, loading: true };
     case "FETCH_SUCCESS":
-      return { ...state, loading: false, promotions: action.payload };
+      return { ...state, loading: false, products: action.payload };
     case "FETCH_FAIL":
       return { ...state, loading: false, errors: action.payload };
 
@@ -43,13 +48,29 @@ const reducer = (state, action) => {
 };
 
 function Demand() {
-  const { products } = data;
-
-  const [{ loading, error, promotions }, dispatch] = useReducer(reducer, {
+  const [{ loading, error, products }, dispatch] = useReducer(reducer, {
     loading: true,
     error: "",
-    banners: [],
+    products: [],
   });
+
+  //==============
+  //FETCH PRODUCTS
+  //==============
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        dispatch({ type: "FETCH_REQUEST" });
+        const { data } = await axios.get(
+          `${request}/api/products/countinstock`
+        );
+        dispatch({ type: "FETCH_SUCCESS", payload: data });
+      } catch (err) {
+        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
+      }
+    };
+    fetchData();
+  }, []);
 
   //===========
   //REACT SLICK
@@ -103,13 +124,19 @@ function Demand() {
               <h2>Now in demand</h2>
             </div>
           </div>
-          <div className="product_list">
-            <Slider {...SliderSettings} className="slick-slider">
-              {products.map((product, index) => (
-                <DemandCard key={index} product={product} index={index} />
-              ))}
-            </Slider>
-          </div>
+          {loading ? (
+            <LoadingBox></LoadingBox>
+          ) : error ? (
+            <MessageBox variant="danger">{error}</MessageBox>
+          ) : (
+            <div className="product_list">
+              <Slider {...SliderSettings} className="slick-slider">
+                {products?.map((product, index) => (
+                  <DemandCard key={index} product={product} index={index} />
+                ))}
+              </Slider>
+            </div>
+          )}
         </div>
       </div>
     </div>

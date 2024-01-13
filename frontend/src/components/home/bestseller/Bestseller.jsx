@@ -57,9 +57,9 @@ function Bestseller() {
         // Determine the order filter based on the selected sub-heading
         if (filterType === "bestseller") {
           orderFilter = "bestseller";
-        } else if (filterType === "onsale") {
+        } else if (filterType === "discount") {
           orderFilter = "discount";
-        } else if (filterType === "mostpopular") {
+        } else if (filterType === "toprated") {
           orderFilter = "toprated";
         }
 
@@ -96,14 +96,14 @@ function Bestseller() {
                   Bestsellers
                 </li>
                 <li
-                  onClick={() => toggleBox("onsale")}
-                  className={filterType === "onsale" ? "active" : ""}
+                  onClick={() => toggleBox("discount")}
+                  className={filterType === "discount" ? "active" : ""}
                 >
                   On Sale
                 </li>
                 <li
-                  onClick={() => toggleBox("mostpopular")}
-                  className={filterType === "mostpopular" ? "active" : ""}
+                  onClick={() => toggleBox("toprated")}
+                  className={filterType === "toprated" ? "active" : ""}
                 >
                   Most Popular
                 </li>

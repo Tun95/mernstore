@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo, useState } from "react";
+import React, { useContext, useMemo, useState } from "react";
 import Checkbox from "@mui/material/Checkbox";
 import FavoriteBorder from "@mui/icons-material/FavoriteBorder";
 import Favorite from "@mui/icons-material/Favorite";
@@ -106,7 +106,7 @@ function BestSellerCard({ product, index }) {
       </div>
       <div className="product-image">
         <Link
-          to="/product/:slug"
+          to={`/product/${product.slug}`}
           className="img"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
@@ -137,7 +137,7 @@ function BestSellerCard({ product, index }) {
       <div className="relative_position">
         <span className="span_bottom">
           {" "}
-          <Link to="/product/:slug" className="name">
+          <Link to={`/product/${product.slug}`} className="name">
             <Tooltip
               placement="bottom"
               title={<span className="tooltip">{product.name}</span>}
@@ -168,14 +168,16 @@ function BestSellerCard({ product, index }) {
               </span>
             )}
             <span className="a_flex promo_youtube">
-              <Tooltip
-                placement="bottomRight"
-                title={<span className="tooltip">Promotion</span>}
-                arrow={mergedArrow}
-              >
-                <LocalActivityOutlinedIcon className="icon" />
-              </Tooltip>
-              <YouTubeIcon className="icon" />
+              {product.promotion && (
+                <Tooltip
+                  placement="bottomRight"
+                  title={<span className="tooltip">Promotion</span>}
+                  arrow={mergedArrow}
+                >
+                  <LocalActivityOutlinedIcon className="icon" />
+                </Tooltip>
+              )}
+              {product?.video?.length > 0 && <YouTubeIcon className="icon" />}
             </span>
           </small>
           <div className="countInStock">

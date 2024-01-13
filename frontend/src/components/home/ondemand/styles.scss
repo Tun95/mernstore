@@ -1,4 +1,11 @@
 .on_demand {
+  .product_list {
+    .card_content {
+      .min_height {
+        min-height: 125px !important;
+      }
+    }
+  }
   .countInStock {
     margin-bottom: 30px;
   }
