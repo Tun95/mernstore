@@ -87,7 +87,10 @@ promotionRouter.get(
         isChecked: true,
       }).populate({
         path: "products",
-        options: { limit: 10 }, // Limit the number of populated products to 10
+        options: {
+          limit: 10, // Limit the number of populated products to 10
+          sort: { createdAt: -1 }, // Sort by createdAt in descending order (latest first)
+        },
       });
       res.send(checkedPromotions);
     } catch (error) {
@@ -96,7 +99,6 @@ promotionRouter.get(
     }
   })
 );
-
 
 //=======================
 // Fetch promotion by ID
