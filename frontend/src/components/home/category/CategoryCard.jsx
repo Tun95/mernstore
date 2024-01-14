@@ -16,7 +16,7 @@ function CategoryCard({ data }) {
       ) : (
         <div className="category_card">
           {categories?.map((categoryGroup, groupIndex) => (
-            <span key={groupIndex}>
+            <>
               {Array.isArray(categoryGroup.categories) ? (
                 categoryGroup.categories.map((category, index) => (
                   <Link to="/store" className="category_content " key={index}>
@@ -33,7 +33,7 @@ function CategoryCard({ data }) {
                   {/* Render your single category code here */}
                 </span>
               )}
-            </span>
+            </>
           ))}
         </div>
       )}

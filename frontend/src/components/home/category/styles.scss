@@ -6,7 +6,7 @@
     gap: 10px;
 
     .category_content {
-      background-color: var(--color-light-light-gray);
+      background-color: var(--color-light-light-gray) !important;
       border-radius: 20px;
       text-align: center;
       padding: 10px;
@@ -43,6 +43,7 @@
         }
       }
     }
+
     /*======= MEDIA QUERIES (MEDIUM DEVICES) =======*/
     @media screen and (max-width: 1024px) {
       grid-template-columns: repeat(3, 1fr);
