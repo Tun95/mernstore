@@ -9,6 +9,12 @@ const promotionSchema = new mongoose.Schema(
     description: { type: String, default: "Default Description" },
     expirationDate: Date,
     isChecked: { type: Boolean, default: false },
+    // products: [
+    //   {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Product",
+    //   },
+    // ],
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
@@ -51,6 +57,13 @@ promotionSchema.pre("save", async function (next) {
     }
   }
   next();
+});
+
+//Virtual method to populate created product
+promotionSchema.virtual("products", {
+  ref: "Product",
+  foreignField: "promotion",
+  localField: "_id",
 });
 
 const Promotion = mongoose.model("Promotion", promotionSchema);

@@ -796,28 +796,38 @@ productRouter.get(
 // ===========================
 productRouter.get("/slug/:slug", async (req, res) => {
   const decodedSlug = decodeURIComponent(req.params.slug); // Decode the slug
-  const product = await Product.findOne({ slug: decodedSlug }).populate(
-    "seller"
-  );
 
-  if (!product) {
-    return res.status(404).send({ message: "Product Not Found" });
-  }
+  try {
+    const product = await Product.findOne({ slug: decodedSlug })
+      .populate("seller")
+      .populate("reviews.user")
+      .populate({
+        path: "promotion",
+        model: "Promotion", // Specify the model to use for population
+      });
 
-  if (req.query.affiliateCode) {
-    // If the request contains an affiliateCode, provide the affiliate link
-    const affiliateCode = req.query.affiliateCode;
-    const affiliateLink = `${
-      process.env.SUB_DOMAIN
-    }/product/${encodeURIComponent(
-      product.slug
-    )}?affiliateCode=${affiliateCode}`;
+    if (!product) {
+      return res.status(404).send({ message: "Product Not Found" });
+    }
 
-    // Send the product details along with the affiliate link in the response
-    res.send({ product, affiliateLink });
-  } else {
-    // If no affiliateCode is provided, send only the product details
-    res.send(product);
+    if (req.query.affiliateCode) {
+      // If the request contains an affiliateCode, provide the affiliate link
+      const affiliateCode = req.query.affiliateCode;
+      const affiliateLink = `${
+        process.env.SUB_DOMAIN
+      }/product/${encodeURIComponent(
+        product.slug
+      )}?affiliateCode=${affiliateCode}`;
+
+      // Send the product details along with the affiliate link in the response
+      res.send({ product, affiliateLink });
+    } else {
+      // If no affiliateCode is provided, send only the product details
+      res.send(product);
+    }
+  } catch (error) {
+    console.error("Error fetching product details:", error);
+    res.status(500).send({ message: "Internal Server Error" });
   }
 });
 

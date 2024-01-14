@@ -4,6 +4,7 @@ import http from "http";
 import { Server } from "socket.io";
 import Promotion from "../models/promotionModel.js";
 import { isAuth, isAdmin } from "../utils.js";
+import Product from "../models/productModels.js";
 
 const promotionRouter = express.Router();
 
@@ -63,6 +64,7 @@ promotionRouter.get(
   expressAsyncHandler(async (req, res) => {
     try {
       const promotions = await Promotion.find({})
+        .populate("products")
         .sort({ createdAt: -1 }) // Sort by createdAt in descending order
         .exec();
 
@@ -81,7 +83,12 @@ promotionRouter.get(
   "/checked-promotions",
   expressAsyncHandler(async (req, res) => {
     try {
-      const checkedPromotions = await Promotion.find({ isChecked: true });
+      const checkedPromotions = await Promotion.find({
+        isChecked: true,
+      }).populate({
+        path: "products",
+        options: { limit: 10 }, // Limit the number of populated products to 10
+      });
       res.send(checkedPromotions);
     } catch (error) {
       console.error("Error fetching checked promotions:", error);
@@ -89,6 +96,7 @@ promotionRouter.get(
     }
   })
 );
+
 
 //=======================
 // Fetch promotion by ID
@@ -111,17 +119,70 @@ promotionRouter.get(
 );
 
 //=======================
-// Fetch promotion by slug
+// Fetch promotion by slug with product filtering
 //=======================
+const PAGE_SIZE = 12;
 promotionRouter.get(
   "/slug/:slug",
   expressAsyncHandler(async (req, res) => {
     try {
+      const { query } = req;
+      const pageSize = query.pageSize || PAGE_SIZE;
+      const page = query.page || 1;
+      const sortOrder = query.order || "createdAt";
+
       const promotion = await Promotion.findOne({
         slug: req.params.slug,
+      }).populate({
+        path: "products",
+        match: {
+          // Add filters based on your product schema fields
+          // Example filters; modify as per your product schema
+          category: query.category || { $exists: true },
+          subcategory: query.subcategory || { $exists: true },
+          subitem: query.subitem || { $exists: true },
+          // Add more filters as needed
+        },
+        options: {
+          sort: sortOrder,
+          skip: pageSize * (page - 1),
+          limit: pageSize,
+        },
       });
+
       if (promotion) {
-        res.send(promotion);
+        // Count the total number of products based on applied filters using aggregation
+        const totalProducts = await Promotion.aggregate([
+          { $match: { _id: promotion._id } },
+          {
+            $lookup: {
+              from: "products", // Assuming your product collection is named "products"
+              localField: "_id",
+              foreignField: "promotion",
+              as: "products",
+            },
+          },
+          {
+            $unwind: "$products",
+          },
+          {
+            $match: {
+              "products.category": query.category || { $exists: true },
+              "products.subcategory": query.subcategory || { $exists: true },
+              "products.subitem": query.subitem || { $exists: true },
+              // Add more filters as needed
+            },
+          },
+          { $group: { _id: null, count: { $sum: 1 } } },
+        ]);
+
+        // Send both promotion and product data
+        res.send({
+          promotion,
+          page,
+          pages: Math.ceil(totalProducts[0]?.count / pageSize) || 1,
+          countProducts: totalProducts[0]?.count || 0,
+        });
       } else {
         res.status(404).send({ message: "Promotion not found" });
       }

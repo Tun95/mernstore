@@ -69,7 +69,10 @@ const productSchema = new mongoose.Schema(
         subFeatures: [{ type: String }],
       },
     ],
-    promotion: { type: String },
+    promotion: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Promotion",
+    },
     countInStock: { type: Number, default: 0 },
     numSales: { type: Number, default: 0 },
     sold: [

@@ -50,8 +50,6 @@ const reducer = (state, action) => {
   }
 };
 function Discount() {
-  const { products } = data;
-
   const navigate = useNavigate();
   const [{ loading, error, promotions, countdown }, dispatch] = useReducer(
     reducer,
@@ -171,17 +169,17 @@ function Discount() {
     const handleResize = () => {
       const screenWidth = window.innerWidth;
       if (screenWidth >= 1250) {
-        setSlidesToShow(Math.min(4, products.length));
+        setSlidesToShow(Math.min(4, promotions[0]?.products?.length || 0));
       } else if (screenWidth >= 1120) {
-        setSlidesToShow(Math.min(3, products.length));
+        setSlidesToShow(Math.min(3, promotions[0]?.products?.length || 0));
       } else if (screenWidth >= 800) {
-        setSlidesToShow(Math.min(2, products.length));
+        setSlidesToShow(Math.min(2, promotions[0]?.products?.length || 0));
       } else if (screenWidth >= 660) {
-        setSlidesToShow(Math.min(3, products.length));
+        setSlidesToShow(Math.min(3, promotions[0]?.products?.length || 0));
       } else if (screenWidth >= 330) {
-        setSlidesToShow(Math.min(2, products.length));
+        setSlidesToShow(Math.min(2, promotions[0]?.products?.length || 0));
       } else {
-        setSlidesToShow(Math.min(1, products.length));
+        setSlidesToShow(Math.min(1, promotions[0]?.products?.length || 0));
       }
     };
 
@@ -189,7 +187,7 @@ function Discount() {
 
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
-  }, [products.length]);
+  }, [promotions]);
 
   const SliderSettings = {
     dots: false,
@@ -208,6 +206,9 @@ function Discount() {
       },
     ],
   };
+
+  console.log("PROMOTION:", promotions[0]?.products);
+
   return (
     <div className="discount_section product_main">
       <div className="container">
@@ -276,7 +277,7 @@ function Discount() {
 
               <div className="product_list contentWidth">
                 <Slider {...SliderSettings} className="slick-slider">
-                  {products.map((product, index) => (
+                  {promotions[0]?.products?.map((product, index) => (
                     <DiscountCard key={index} product={product} index={index} />
                   ))}
                 </Slider>

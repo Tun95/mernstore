@@ -3,6 +3,13 @@
   .box_shadow {
     border-radius: 20px;
   }
+  .product_list {
+    .card_content {
+      .min_height {
+        min-height: 125px !important;
+      }
+    }
+  }
   .content {
     gap: 30px;
     padding: 20px;

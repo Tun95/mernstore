@@ -153,7 +153,6 @@ userSchema.methods.generateAffiliateCode = async function () {
   return affiliateCode;
 };
 
-// Optionally, you can add methods to track and calculate affiliate commissions and earnings
 
 // Optionally, you can add methods to track and calculate affiliate commissions and earnings
 userSchema.methods.calculateAffiliateCommission = async function (amount) {
@@ -221,13 +220,6 @@ userSchema.methods.updateSellerRating = async function () {
 userSchema.virtual("products", {
   ref: "Product",
   foreignField: "seller",
-  localField: "_id",
-});
-
-//Virtual method to populate created wish
-userSchema.virtual("wish", {
-  ref: "Wish",
-  foreignField: "user",
   localField: "_id",
 });
 
