@@ -196,6 +196,7 @@
               /*======= MEDIA QUERIES (SMALL DEVICES) =======*/
               @media screen and (max-width: 450px) {
                 height: 100%;
+                min-height: 200px;
               }
             }
           }
