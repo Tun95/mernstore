@@ -5,6 +5,7 @@ import { Server } from "socket.io";
 import Promotion from "../models/promotionModel.js";
 import { isAuth, isAdmin } from "../utils.js";
 import Product from "../models/productModels.js";
+import mongoose from "mongoose";
 
 const promotionRouter = express.Router();
 
@@ -190,6 +191,52 @@ promotionRouter.get(
       }
     } catch (error) {
       console.error("Error fetching promotion by slug:", error);
+      res.status(500).json({ message: "Internal Server Error" });
+    }
+  })
+);
+
+//************
+// FETCH CATEGORIES AND SUBCATEGORIES FROM PROMOTIONS' PRODUCTS
+//************
+promotionRouter.get(
+  "/:id/categories",
+  expressAsyncHandler(async (req, res) => {
+    const promotionId = req.params.id;
+    try {
+      // Fetch all promotions with their associated products and distinct categories and subcategories
+      const result = await Promotion.aggregate([
+        { $match: { _id: new mongoose.Types.ObjectId(promotionId) } },
+        {
+          $lookup: {
+            from: "products", // Assuming your product collection is named "products"
+            localField: "_id",
+            foreignField: "promotion",
+            as: "products",
+          },
+        },
+        {
+          $unwind: "$products",
+        },
+        {
+          $group: {
+            _id: "$products.category",
+            subcategories: { $addToSet: "$products.subcategory" },
+          },
+        },
+      ]);
+
+      const categories = result.map((group) => ({
+        category: group._id,
+        subcategories: group.subcategories.filter(Boolean), // Filter out null or empty subcategories
+      }));
+
+      res.json({ categories });
+    } catch (error) {
+      console.error(
+        "Error fetching categories from promotions' products:",
+        error
+      );
       res.status(500).json({ message: "Internal Server Error" });
     }
   })
