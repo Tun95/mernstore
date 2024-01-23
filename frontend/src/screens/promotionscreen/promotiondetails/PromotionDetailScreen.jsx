@@ -57,9 +57,9 @@ function PromotionDetailScreen() {
   const navigate = useNavigate();
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
-  const category = sp.get("category") || "all";
-  const subcategory = sp.get("subcategory") || "all";
-  const subitem = sp.get("subitem") || "all";
+  const category = sp.get("category") || "";
+  const subcategory = sp.get("subcategory") || "";
+  const subitem = sp.get("subitem") || "";
   const page = parseInt(sp.get("page") || 1);
 
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -182,6 +182,8 @@ function PromotionDetailScreen() {
 
     intervalIdRef.current = setInterval(updateCountdown, 1000);
   };
+
+  console.log("PROMOTION PRODUCTS:", promotion);
 
   return (
     <div className="promotion_detail_screen store product_main">

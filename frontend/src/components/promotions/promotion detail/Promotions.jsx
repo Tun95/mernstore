@@ -57,7 +57,7 @@ function Promotions({
           </div>
           <div className="product_list">
             <div className="product_card">
-              {products?.map((product, index) => (
+              {promotion?.products?.map((product, index) => (
                 <PromotionProductCard
                   key={index}
                   product={product}
