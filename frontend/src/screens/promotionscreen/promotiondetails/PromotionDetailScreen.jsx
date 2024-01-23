@@ -11,6 +11,7 @@ import { toast } from "react-toastify";
 import { getError } from "../../../components/utilities/util/Utils";
 import LoadingBox from "../../../components/utilities/message loading/LoadingBox";
 import MessageBox from "../../../components/utilities/message loading/MessageBox";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const initialState = {
   promotion: null,
@@ -24,11 +25,23 @@ const reducer = (state, action) => {
     case "FETCH_REQUEST":
       return { ...state, loading: true };
     case "FETCH_SUCCESS":
-      return { ...state, promotion: action.payload, loading: false };
+      return {
+        ...state,
+        promotion: action.payload,
+        page: action.payload.page,
+        pages: action.payload.pages,
+        countProducts: action.payload.countProducts,
+        loading: false,
+      };
     case "FETCH_FAIL":
       return { ...state, error: action.payload, loading: false };
+
+    case "SET_CURRENT_PAGE":
+      return { ...state, pages: action.payload.pages };
+
     case "UPDATE_COUNTDOWN":
       return { ...state, countdown: action.payload };
+
     default:
       return state;
   }
@@ -38,8 +51,19 @@ function PromotionDetailScreen() {
   const params = useParams();
   const { slug } = params;
 
+  //============
+  //PRODUCT FILTER
+  //============
+  const navigate = useNavigate();
+  const { search } = useLocation();
+  const sp = new URLSearchParams(search);
+  const category = sp.get("category") || "all";
+  const subcategory = sp.get("subcategory") || "all";
+  const subitem = sp.get("subitem") || "all";
+  const page = parseInt(sp.get("page") || 1);
+
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { loading, error, promotion, countdown } = state;
+  const { loading, error, promotion, countdown, pages, countProducts } = state;
 
   const socket = useRef(null);
   const intervalIdRef = useRef(null);
@@ -53,7 +77,15 @@ function PromotionDetailScreen() {
       dispatch({ type: "FETCH_REQUEST" });
       try {
         const result = await axios.get(
-          `${request}/api/promotions/slug/${slug}`
+          `${request}/api/promotions/slug/${slug}`,
+          {
+            params: {
+              page,
+              category,
+              subcategory,
+              subitem,
+            },
+          }
         );
 
         if (result.data.promotion) {
@@ -100,7 +132,19 @@ function PromotionDetailScreen() {
       clearInterval(intervalIdRef.current);
       socket.current.disconnect();
     };
-  }, [slug]);
+  }, [category, page, slug, subcategory, subitem]);
+
+  const getFilterUrl = (filter) => {
+    const filterCategory = filter.category || category;
+    const filterSubcategory = filter.subcategory || subcategory;
+    const filterSubitem = filter.subitem || subitem;
+
+    const url = `/promotions/${slug}?category=${filterCategory}&subcategory=${filterSubcategory}&subitem=${filterSubitem}`;
+
+    navigate(url); // Update the URL in the browser
+
+    return url; // Return the constructed URL
+  };
 
   const startCountdown = (targetTime) => {
     clearInterval(intervalIdRef.current);
@@ -158,7 +202,15 @@ function PromotionDetailScreen() {
           <MessageBox variant="danger">{error}</MessageBox>
         ) : (
           <div className="content">
-            <Promotions promotion={promotion} countdown={countdown} />
+            <Promotions
+              promotion={promotion}
+              countdown={countdown}
+              page={page}
+              pages={pages}
+              countProducts={countProducts}
+              getFilterUrl={getFilterUrl}
+              dispatch={dispatch}
+            />
           </div>
         )}
       </div>

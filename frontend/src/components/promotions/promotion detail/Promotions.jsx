@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./styles.scss";
 import CategoryFilter from "./CategoryFilter";
 import PromotionDetail from "./PromotionDetail";
@@ -7,8 +7,17 @@ import data from "../../home/bestseller/data";
 import { Pagination } from "antd";
 import { Link } from "react-router-dom";
 
-function Promotions({ promotion, countdown }) {
-  const { products } = data;
+function Promotions({
+  promotion,
+  products,
+  countdown,
+  page,
+  pages,
+  countProducts,
+  getFilterUrl,
+  dispatch,
+}) {
+  // const { products } = data;
 
   //===========
   // PAGINATION
@@ -23,6 +32,16 @@ function Promotions({ promotion, countdown }) {
     return originalElement;
   };
 
+  //PAGE REF
+  const headerRef = useRef(null);
+  const handlePageChange = (page) => {
+    if (headerRef.current) {
+      headerRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+    dispatch({ type: "SET_CURRENT_PAGE", payload: page });
+  };
+
+  // console.log("PROMOTION PRODUCTS:", promotion);
   return (
     <div className="promotions_main  f_flex">
       <div className="filter_promotion">
@@ -38,7 +57,7 @@ function Promotions({ promotion, countdown }) {
           </div>
           <div className="product_list">
             <div className="product_card">
-              {products.map((product, index) => (
+              {products?.map((product, index) => (
                 <PromotionProductCard
                   key={index}
                   product={product}
@@ -47,7 +66,13 @@ function Promotions({ promotion, countdown }) {
               ))}
             </div>
             <div className="ant_pagination l_flex mt">
-              <Pagination total={500} itemRender={itemRender} />
+              <Pagination
+                total={pages}
+                current={page}
+                pageSize={12}
+                itemRender={itemRender}
+                onChange={handlePageChange}
+              />
             </div>
           </div>
         </div>

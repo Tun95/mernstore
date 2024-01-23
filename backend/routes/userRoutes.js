@@ -823,7 +823,7 @@ userRouter.get(
   "/:id",
   expressAsyncHandler(async (req, res) => {
     const user = await User.findById(req.params.id).populate(
-      "products wish order apply"
+      "products order apply"
     );
 
     if (user) {
@@ -871,9 +871,7 @@ userRouter.get(
 userRouter.get(
   "/info/:id",
   expressAsyncHandler(async (req, res) => {
-    const user = await User.findById(req.params.id).populate(
-      "products wish apply"
-    );
+    const user = await User.findById(req.params.id).populate("products apply");
 
     if (user) {
       res.send(user);
