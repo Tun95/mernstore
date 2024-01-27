@@ -19,7 +19,7 @@ function CategoryCard({ data }) {
             <>
               {Array.isArray(categoryGroup.categories) ? (
                 categoryGroup.categories.map((category, index) => (
-                  <Link to="/store" className="category_content " key={index}>
+                  <Link to={`/store?category=${category.name}`} className="category_content " key={index}>
                     <div className="cards">
                       <img src={category.img} alt="" className="img" />
                       <div className="text l_flex">

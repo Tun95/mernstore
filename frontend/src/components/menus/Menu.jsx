@@ -110,7 +110,7 @@ export function CategoryMenu() {
                           categoryGroup.categories.map((category, index) => (
                             <li className="category" key={index}>
                               <Link
-                                to="/store"
+                                to={`/store?category=${category.name}`}
                                 className="main_list"
                                 onClick={handleCloseNav}
                               >
@@ -147,7 +147,10 @@ export function CategoryMenu() {
                                         key={subIndex}
                                         className="sub_category_list"
                                       >
-                                        <Link to="">
+                                        <Link
+                                          to={`/store?category=${category.name}&subcategory=${subCategory.name}`}
+                                          onClick={handleCloseNav}
+                                        >
                                           <div className="sub_img">
                                             <div className="img">
                                               <img
@@ -164,7 +167,10 @@ export function CategoryMenu() {
                                           {subCategory.subItems.map(
                                             (subItem, subItemIndex) => (
                                               <li key={subItemIndex}>
-                                                <Link to="">
+                                                <Link
+                                                  to={`/store?category=${category.name}&subcategory=${subCategory.name}&subitem=${subItem.name}`}
+                                                  onClick={handleCloseNav}
+                                                >
                                                   {subItem.name}
                                                 </Link>
                                               </li>

@@ -37,9 +37,6 @@ const StyledDivider = styled(Divider)(({ theme, darkMode }) => ({
 }));
 
 function SideBar() {
-  const { state: cState } = useContext(Context);
-  const { categories } = cState;
-
   const {
     state: states,
     dispatch: ctxDispatch,
@@ -48,7 +45,7 @@ function SideBar() {
     toCurrencies,
     setToCurrencies,
   } = useContext(Context);
-  const { cart, userInfo, settings } = states;
+  const { cart, userInfo, categories, settings } = states;
 
   const { logo } =
     (settings &&
@@ -270,7 +267,7 @@ function SideBar() {
                         categoryGroup.categories.map((category, index) => (
                           <li className="category" key={index}>
                             <Link
-                              to="/store"
+                              to={`/store?category=${category.name}`}
                               className="main_list "
                               onClick={toggleDrawer(anchor, false)}
                             >

@@ -63,20 +63,10 @@ function PromotionDetailScreen() {
   const { loading, error, promotion, countdown, pages, countProducts } = state;
 
   //console.logs
-  if (state.page && state.pages && state.countProducts) {
-    console.log("Current Page:", state.page);
-    console.log("Total Pages:", state.pages);
-    console.log("Count of Products:", state.countProducts);
-  }
+  console.log("Current Page:", state.page);
+  console.log("Total Pages:", state.pages);
+  console.log("Count of Products:", state.countProducts);
 
-  // or
-
-  useEffect(() => {
-    console.log("Current Page:", page);
-    console.log("Total Pages:", pages);
-    console.log("Count of Products:", countProducts);
-  }, [page, pages, countProducts]);
-  
   const socket = useRef(null);
   const intervalIdRef = useRef(null);
 
@@ -130,8 +120,6 @@ function PromotionDetailScreen() {
     fetchData();
 
     socket.current.on("promotionUpdate", ({ promotion }) => {
-      console.log("Received promotion update:", promotion);
-
       if (promotion && promotion.slug && promotion.slug === slug) {
         const countdownTime = new Date(promotion.expirationDate).getTime();
         startCountdown(countdownTime);
@@ -145,6 +133,8 @@ function PromotionDetailScreen() {
       socket.current.disconnect();
     };
   }, [category, countProducts, page, pages, slug, subcategory, subitem]);
+
+  console.log("PROMOTION PRODUCTS:", promotion);
 
   const getFilterUrl = (filter) => {
     const filterCategory = filter.category || category;
