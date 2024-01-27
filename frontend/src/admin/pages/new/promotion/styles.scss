@@ -4,6 +4,9 @@
     flex-direction: column;
     .color_list {
       font-size: 14px;
+      .img_link {
+        overflow: hidden !important;
+      }
       .expiring {
         strong {
           text-wrap: nowrap;

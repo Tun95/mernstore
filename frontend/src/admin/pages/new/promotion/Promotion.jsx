@@ -351,7 +351,7 @@ export function Promotion() {
                                   <strong>Slug: </strong>
                                   <span>{promotion.slug}</span>
                                 </div>
-                                <div>
+                                <div className="img_link">
                                   <strong>Image: </strong>
                                   <span>{promotion.image}</span>
                                 </div>

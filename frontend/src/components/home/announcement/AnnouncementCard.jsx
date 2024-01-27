@@ -211,7 +211,7 @@ function AnnouncementCard() {
               <div className="middle">
                 <div className="video_content">
                   <Link
-                    to={`/product=${fifthCard?.productSlug}`}
+                    to={`/product/${fifthCard?.productSlug}`}
                     className="video"
                   >
                     <video

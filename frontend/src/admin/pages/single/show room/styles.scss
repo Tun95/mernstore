@@ -1,6 +1,15 @@
 .announce_box {
   .product_info_color {
     padding: 20px;
+    .box {
+      .color_list {
+        li {
+          .img_link {
+            overflow: hidden !important;
+          }
+        }
+      }
+    }
     .link_img {
       margin-top: 10px;
     }

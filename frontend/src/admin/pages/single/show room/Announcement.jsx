@@ -29,7 +29,7 @@ function Announcement({ openBox, toggleBox }) {
     left: "",
     right: "",
     bottom: "",
-    textAlign:"",
+    textAlign: "",
   });
   const [fifthCardFormData, setFifthCardFormData] = useState({
     videoUrl: "",
@@ -192,7 +192,7 @@ function Announcement({ openBox, toggleBox }) {
       left: "",
       right: "",
       bottom: "",
-      textAlign:"",
+      textAlign: "",
       _id: "",
     });
   };
@@ -210,7 +210,7 @@ function Announcement({ openBox, toggleBox }) {
       left: "",
       right: "",
       bottom: "",
-      textAlign:"",
+      textAlign: "",
       _id: "",
     });
   };
@@ -419,7 +419,7 @@ function Announcement({ openBox, toggleBox }) {
                         {sliders?.map((sliderData) => (
                           <li key={sliderData._id} className="mb">
                             <div>
-                              <div>
+                              <div className="img_link">
                                 <strong>Image: </strong>
                                 <span>{sliderData.image}</span>
                               </div>
