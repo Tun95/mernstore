@@ -36,9 +36,6 @@ const reducer = (state, action) => {
     case "FETCH_FAIL":
       return { ...state, error: action.payload, loading: false };
 
-    case "SET_CURRENT_PAGE":
-      return { ...state, pages: action.payload.pages };
-
     case "UPDATE_COUNTDOWN":
       return { ...state, countdown: action.payload };
 
@@ -65,6 +62,21 @@ function PromotionDetailScreen() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { loading, error, promotion, countdown, pages, countProducts } = state;
 
+  //console.logs
+  if (state.page && state.pages && state.countProducts) {
+    console.log("Current Page:", state.page);
+    console.log("Total Pages:", state.pages);
+    console.log("Count of Products:", state.countProducts);
+  }
+
+  // or
+
+  useEffect(() => {
+    console.log("Current Page:", page);
+    console.log("Total Pages:", pages);
+    console.log("Count of Products:", countProducts);
+  }, [page, pages, countProducts]);
+  
   const socket = useRef(null);
   const intervalIdRef = useRef(null);
 
@@ -105,11 +117,6 @@ function PromotionDetailScreen() {
         }
 
         window.scrollTo(0, 0);
-
-        // Move console.log inside the fetchData function
-        console.log("Current Page:", state.pages);
-        console.log("Total Pages:", state.pages);
-        console.log("Count of Products:", state.countProducts);
       } catch (error) {
         console.error(getError(error));
         dispatch({

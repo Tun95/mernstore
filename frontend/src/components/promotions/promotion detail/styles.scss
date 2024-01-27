@@ -4,6 +4,11 @@
     .filter_promotion {
       .side_filter {
         width: 260px;
+        .no_category {
+          font-size: 13px;
+          color: var(--color-gray);
+          padding: 10px 15px;
+        }
       }
     }
     .promotion_detail {
