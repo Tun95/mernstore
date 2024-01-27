@@ -269,3 +269,14 @@
     max-width: 100% !important;
   }
 }
+.no_post {
+  background-color: var(--color-light-light-gray);
+  height: 150px;
+  margin: 20px 0px;
+  margin-bottom: 5px;
+  h3 {
+    font-size: 16px;
+    color: var(--color-light-gray);
+    font-weight: 300;
+  }
+}

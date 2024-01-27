@@ -25,6 +25,7 @@
         a {
           text-decoration: underline;
           position: relative;
+          max-width: fit-content !important;
         }
         .cards {
           .img_date {
@@ -37,6 +38,7 @@
         height: 100%;
         a {
           font-size: 14px;
+          width: fit-content !important;
         }
         .date {
           position: relative;
@@ -89,6 +91,7 @@
         .name {
           a {
             font-size: 18px;
+            width: fit-content !important;
           }
         }
       }

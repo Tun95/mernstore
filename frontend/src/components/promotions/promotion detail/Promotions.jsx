@@ -3,13 +3,11 @@ import "./styles.scss";
 import CategoryFilter from "./CategoryFilter";
 import PromotionDetail from "./PromotionDetail";
 import PromotionProductCard from "./PromotionProductCard";
-import data from "../../home/bestseller/data";
 import { Pagination } from "antd";
 import { Link } from "react-router-dom";
 
 function Promotions({
   promotion,
-  products,
   countdown,
   page,
   pages,
@@ -17,8 +15,6 @@ function Promotions({
   getFilterUrl,
   dispatch,
 }) {
-  // const { products } = data;
-
   //===========
   // PAGINATION
   //===========
@@ -45,7 +41,7 @@ function Promotions({
   return (
     <div className="promotions_main  f_flex">
       <div className="filter_promotion">
-        <CategoryFilter />
+        <CategoryFilter promotion={promotion} getFilterUrl={getFilterUrl} />
       </div>
       <div className="promotion_detail_products">
         <span>
@@ -55,26 +51,32 @@ function Promotions({
           <div className="header">
             <h2>All Product</h2>
           </div>
-          <div className="product_list">
-            <div className="product_card">
-              {promotion?.products?.map((product, index) => (
-                <PromotionProductCard
-                  key={index}
-                  product={product}
-                  index={index}
+          {promotion?.products?.length === 0 ? (
+            <div className="no_post l_flex">
+              <h3>No product found</h3>
+            </div>
+          ) : (
+            <div className="product_list">
+              <div className="product_card">
+                {promotion?.products?.map((product, index) => (
+                  <PromotionProductCard
+                    key={index}
+                    product={product}
+                    index={index}
+                  />
+                ))}
+              </div>
+              <div className="ant_pagination l_flex mt">
+                <Pagination
+                  total={pages}
+                  current={page}
+                  pageSize={12}
+                  itemRender={itemRender}
+                  onChange={handlePageChange}
                 />
-              ))}
+              </div>
             </div>
-            <div className="ant_pagination l_flex mt">
-              <Pagination
-                total={pages}
-                current={page}
-                pageSize={12}
-                itemRender={itemRender}
-                onChange={handlePageChange}
-              />
-            </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

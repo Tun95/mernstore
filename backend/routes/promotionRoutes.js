@@ -139,11 +139,12 @@ promotionRouter.get(
       }).populate({
         path: "products",
         match: {
-          // Add filters based on your product schema fields
-          // Example filters; modify as per your product schema
-          category: query.category || { $exists: true },
-          subcategory: query.subcategory || { $exists: true },
-          subitem: query.subitem || { $exists: true },
+          // Adjust filters based on your product schema fields
+          category:
+            query.category !== "all" ? query.category : { $exists: true },
+          subcategory:
+            query.subcategory !== "all" ? query.subcategory : { $exists: true },
+          subitem: query.subitem !== "all" ? query.subitem : { $exists: true },
           // Add more filters as needed
         },
         options: {
@@ -170,9 +171,14 @@ promotionRouter.get(
           },
           {
             $match: {
-              "products.category": query.category || { $exists: true },
-              "products.subcategory": query.subcategory || { $exists: true },
-              "products.subitem": query.subitem || { $exists: true },
+              "products.category":
+                query.category !== "all" ? query.category : { $exists: true },
+              "products.subcategory":
+                query.subcategory !== "all"
+                  ? query.subcategory
+                  : { $exists: true },
+              "products.subitem":
+                query.subitem !== "all" ? query.subitem : { $exists: true },
               // Add more filters as needed
             },
           },

@@ -57,9 +57,9 @@ function PromotionDetailScreen() {
   const navigate = useNavigate();
   const { search } = useLocation();
   const sp = new URLSearchParams(search);
-  const category = sp.get("category") || "";
-  const subcategory = sp.get("subcategory") || "";
-  const subitem = sp.get("subitem") || "";
+  const category = sp.get("category") || "all";
+  const subcategory = sp.get("subcategory") || "all";
+  const subitem = sp.get("subitem") || "all";
   const page = parseInt(sp.get("page") || 1);
 
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -105,6 +105,11 @@ function PromotionDetailScreen() {
         }
 
         window.scrollTo(0, 0);
+
+        // Move console.log inside the fetchData function
+        console.log("Current Page:", state.pages);
+        console.log("Total Pages:", state.pages);
+        console.log("Count of Products:", state.countProducts);
       } catch (error) {
         console.error(getError(error));
         dispatch({
@@ -132,7 +137,7 @@ function PromotionDetailScreen() {
       clearInterval(intervalIdRef.current);
       socket.current.disconnect();
     };
-  }, [category, page, slug, subcategory, subitem]);
+  }, [category, countProducts, page, pages, slug, subcategory, subitem]);
 
   const getFilterUrl = (filter) => {
     const filterCategory = filter.category || category;
@@ -182,8 +187,6 @@ function PromotionDetailScreen() {
 
     intervalIdRef.current = setInterval(updateCountdown, 1000);
   };
-
-  console.log("PROMOTION PRODUCTS:", promotion);
 
   return (
     <div className="promotion_detail_screen store product_main">
