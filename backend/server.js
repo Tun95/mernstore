@@ -53,6 +53,8 @@ if (process.env.NODE_ENV !== "production") {
 
 app.use(passport.initialize());
 
+app.use(express.json({ limit: "10mb" }));
+
 app.use(
   cors({
     origin: "*",
