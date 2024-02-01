@@ -337,34 +337,34 @@ export function Promotion() {
 
                         <ul className="color_list home_wrappers">
                           {promotions?.map((promotion) => (
-                            <li key={promotion._id} className="mb">
+                            <li key={promotion?._id} className="mb">
                               <div>
                                 <div>
                                   <strong>Title: </strong>
-                                  <span>{promotion.title}</span>
+                                  <span>{promotion?.title}</span>
                                 </div>
                                 <div>
                                   <strong>Subtitle: </strong>
-                                  <span>{promotion.subTitle}</span>
+                                  <span>{promotion?.subTitle}</span>
                                 </div>
                                 <div>
                                   <strong>Slug: </strong>
-                                  <span>{promotion.slug}</span>
+                                  <span>{promotion?.slug}</span>
                                 </div>
                                 <div className="img_link">
                                   <strong>Image: </strong>
-                                  <span>{promotion.image}</span>
+                                  <span>{promotion?.image}</span>
                                 </div>
                                 <div>
                                   <strong>Description: </strong>
-                                  <span>{promotion.description}</span>
+                                  <span>{promotion?.description}</span>
                                 </div>
                                 <div className="a_flex expiring">
                                   <strong>Expiration Date: </strong>
                                   <span className="c_flex full_width">
                                     <span className="date_time">
                                       {new Date(
-                                        promotion.expirationDate
+                                        promotion?.expirationDate
                                       ).toLocaleString("en-US", {
                                         year: "numeric",
                                         month: "2-digit",
@@ -377,13 +377,13 @@ export function Promotion() {
                                     <span
                                       className={`l_flex ${
                                         new Date() <
-                                        new Date(promotion.expirationDate)
+                                        new Date(promotion?.expirationDate)
                                           ? "verified_account"
                                           : "unverified_account"
                                       }`}
                                     >
                                       {new Date() <
-                                      new Date(promotion.expirationDate)
+                                      new Date(promotion?.expirationDate)
                                         ? "Ongoing"
                                         : "Expired"}
                                     </span>
@@ -394,9 +394,9 @@ export function Promotion() {
                                   <label className="a_flex label">
                                     <input
                                       type="checkbox"
-                                      checked={promotion.isChecked || false}
+                                      checked={promotion?.isChecked || false}
                                       onChange={() =>
-                                        handleCheckChange(promotion._id)
+                                        handleCheckChange(promotion?._id)
                                       }
                                     />
                                     <strong> Is Checked</strong>
@@ -406,13 +406,13 @@ export function Promotion() {
                               <span className="d_flex">
                                 <button
                                   type="submit"
-                                  onClick={() => editPromotion(promotion._id)}
+                                  onClick={() => editPromotion(promotion?._id)}
                                 >
                                   Edit
                                 </button>
                                 <button
                                   type="button"
-                                  onClick={() => deletePromotion(promotion._id)}
+                                  onClick={() => deletePromotion(promotion?._id)}
                                 >
                                   Delete
                                 </button>
