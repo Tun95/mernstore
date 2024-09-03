@@ -18,7 +18,7 @@ import ArticleOutlinedIcon from "@mui/icons-material/ArticleOutlined";
 import { LocationModal } from "../../components/modals/Modals";
 
 function Head() {
-  const { darkMode, state, toggle, currencies, toCurrencies, setToCurrencies } =
+  const { state, currencies, toCurrencies, setToCurrencies } =
     useContext(Context);
   const { settings } = state;
 
@@ -43,14 +43,12 @@ function Head() {
         },
         "& + .MuiSwitch-track": {
           opacity: 1,
-          backgroundColor:
-            theme.palette.mode === darkMode ? "#8796A5 " : "#aab4be dark",
+          backgroundColor: theme.palette.mode === "#aab4be dark",
         },
       },
     },
     "& .MuiSwitch-thumb": {
-      backgroundColor:
-        theme.palette.mode === darkMode ? "#003892 " : "#001e3c ",
+      backgroundColor: theme.palette.mode === "#001e3c ",
       width: 22,
       height: 22,
       marginTop: 2.5,
@@ -72,7 +70,7 @@ function Head() {
     "& .MuiSwitch-track": {
       opacity: 1,
       backgroundColor:
-        theme.palette.mode === darkMode ? "#8796A5 " : "#aab4be ",
+        theme.palette.mode ===  "#aab4be ",
       borderRadius: 20 / 2,
     },
   }));
@@ -219,7 +217,7 @@ function Head() {
               </label>
               <div className="currency_state">
                 <select
-                  className={darkMode ? "currency_symbol" : "currency_symbol"}
+                  className={ "currency_symbol"}
                   value={toCurrencies}
                   onChange={(e) => {
                     const selectedCurrency = e.target.value;
@@ -238,12 +236,7 @@ function Head() {
                   ))}
                 </select>
               </div>
-              {/* <div className="toggle_switch">
-                <FormControlLabel
-                  onClick={toggle}
-                  control={<MaterialUISwitch checked={darkMode} />}
-                />
-              </div> */}
+              
             </div>
           </div>
         </div>

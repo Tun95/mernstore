@@ -2,7 +2,6 @@ import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { useContext, useEffect } from "react";
 import ReactGA from "react-ga4";
-import "./theme style/dark.scss";
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 import ru from "javascript-time-ago/locale/ru.json";
@@ -89,7 +88,7 @@ TimeAgo.addDefaultLocale(en);
 TimeAgo.addLocale(ru);
 
 function App() {
-  const { darkMode, state, dispatch } = useContext(Context);
+  const { state, dispatch } = useContext(Context);
   const { settings } = state;
   const {
     messengerAppId,
@@ -175,7 +174,7 @@ function App() {
   }, []);
 
   return (
-    <div className={darkMode ? "app dark" : "app"}>
+    <div className="app">
       <Router>
         {/* <LoadingOverlayComponent center> */}
         <ToastContainer position="bottom-center" />

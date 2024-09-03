@@ -62,11 +62,6 @@ function PromotionDetailScreen() {
   const [state, dispatch] = useReducer(reducer, initialState);
   const { loading, error, promotion, countdown, pages, countProducts } = state;
 
-  //console.logs
-  console.log("Current Page:", state.page);
-  console.log("Total Pages:", state.pages);
-  console.log("Count of Products:", state.countProducts);
-
   const socket = useRef(null);
   const intervalIdRef = useRef(null);
 
@@ -133,6 +128,8 @@ function PromotionDetailScreen() {
       socket.current.disconnect();
     };
   }, [category, countProducts, page, pages, slug, subcategory, subitem]);
+
+
 
   console.log("PROMOTION PRODUCTS:", promotion);
 

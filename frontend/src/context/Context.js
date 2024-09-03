@@ -36,14 +36,7 @@ const initialState = {
 
 function reducer(state, action) {
   switch (action.type) {
-    //LIGHT AND DARK MODE
-    case "LIGHT":
-      return { darkMode: false };
-    case "DARK":
-      return { darkMode: true };
-    case "TOGGLE":
-      return { darkMode: !state.darkMode };
-
+   
     //FETCH SETTINGS
     case "FETCH_REQUEST":
       return { ...state, loading: true };
@@ -299,17 +292,7 @@ export function ContextProvider(props) {
     fetchData();
   }, []);
 
-  const [darkMode, setDarkMode] = useState(
-    JSON.parse(localStorage.getItem("darkMode")) || false
-  );
-  const toggle = () => {
-    setDarkMode(!darkMode);
-  };
-
-  useEffect(() => {
-    localStorage.setItem("darkMode", darkMode);
-  }, [darkMode]);
-
+ 
   //=============
   //  CONVERSION
   //=============
@@ -429,6 +412,7 @@ export function ContextProvider(props) {
   //   setToCurrencies(storedCurrency);
   //   fetchCurrencies();
   // }, [currency]);
+
   useEffect(() => {
     const fetchCurrencies = async () => {
       if (currency) {
@@ -479,9 +463,7 @@ export function ContextProvider(props) {
     convertCurrency,
     convertToNumeric,
     formatPrice,
-    darkMode,
     currencies,
-    toggle,
   };
 
   return <Context.Provider value={value}>{props.children}</Context.Provider>;

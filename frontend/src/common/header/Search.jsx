@@ -20,12 +20,12 @@ const StyledMenu = styled((props) => (
     }}
     {...props}
   />
-))(({ theme, darkMode }) => ({
+))(({ theme }) => ({
   "& .MuiPaper-root": {
     borderRadius: 6,
     marginTop: theme.spacing(1),
-    color: darkMode ? "#ffffff" : "#2e2e2e",
-    backgroundColor: darkMode ? "rgb(0,0,0,0.8)" : "", // Add this line
+    color: "#2e2e2e",
+    backgroundColor: "", // Add this line
     boxShadow:
       "rgb(255, 255, 255) 0px 0px 0px 0px, rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgba(0, 0, 0, 0.1) 0px 10px 15px -3px, rgba(0, 0, 0, 0.05) 0px 4px 6px -2px",
     "& .MuiMenu-list": {
@@ -33,7 +33,7 @@ const StyledMenu = styled((props) => (
     },
     "& .MuiMenuItem-root": {
       margin: "5px 0px",
-      color: darkMode ? "#ffffff" : "#2e2e2e",
+      color: "#2e2e2e",
       padding: "5px 60px",
       fontWeight: "500",
       transition: "all 500ms ease",
@@ -44,23 +44,18 @@ const StyledMenu = styled((props) => (
         marginRight: theme.spacing(1.5),
       },
       "&:hover": {
-        backgroundColor: darkMode ? "#2e2e2e" : "", // Change to the desired hover color
+        backgroundColor: "", // Change to the desired hover color
       },
     },
   },
 }));
 
-const StyledDivider = styled(Divider)(({ theme, darkMode }) => ({
-  backgroundColor: darkMode ? "#ffffff" : "", // Change colors accordingly
+const StyledDivider = styled(Divider)(({ theme }) => ({
+  backgroundColor: "", // Change colors accordingly
 }));
 
 function Search() {
-  // window.addEventListener("scroll", function () {
-  //   const search = document.querySelector(".search");
-  //   search.classList.toggle("active", window.scrollY > 100);
-  // });
-
-  const { state, dispatch: ctxDispatch, darkMode } = useContext(Context);
+  const { state, dispatch: ctxDispatch } = useContext(Context);
   const { cart, userInfo, settings } = state;
 
   const { logo } =
@@ -124,7 +119,6 @@ function Search() {
             <div className="user_modal">
               <i className="fa fa-user icon-circle" onClick={handleClick}></i>
               <StyledMenu
-                darkMode={darkMode}
                 id="demo-customized-menu"
                 MenuListProps={{
                   "aria-labelledby": "demo-customized-button",
@@ -162,7 +156,7 @@ function Search() {
                       >
                         Wishlist
                       </MenuItem>,
-                      <StyledDivider darkMode={darkMode} />,
+                      <StyledDivider />,
                     ]
                   : null}
 
@@ -231,7 +225,7 @@ function Search() {
                       >
                         Settings
                       </MenuItem>,
-                      <StyledDivider darkMode={darkMode} />,
+                      <StyledDivider />,
                     ]
                   : null}
 
@@ -264,7 +258,7 @@ function Search() {
                       >
                         Orders
                       </MenuItem>,
-                      <StyledDivider darkMode={darkMode} />,
+                      <StyledDivider />,
                     ]
                   : null}
 

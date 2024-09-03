@@ -12,12 +12,10 @@ import orderRouter from "./routes/orderRoutes.js";
 import morgan from "morgan";
 import uploadRouter from "./routes/uploadRoutes.js";
 import sendEmailRouter from "./routes/emailMsgRoutes.js";
-import stripeRouter from "./routes/stripeRoutes.js";
 import settingsRoutes from "./routes/settingRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import brandRoutes from "./routes/brandRoutes.js";
 import sizeRoutes from "./routes/sizeRoutes.js";
-import wishRouter from "./routes/wishRoutes.js";
 import priceRoutes from "./routes/priceRoutes.js";
 import bannerRoutes from "./routes/bannerRoutes.js";
 import colorRoutes from "./routes/colorRoutes.js";
@@ -85,24 +83,11 @@ app.use((req, res, next) => {
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-const paypalClientId = process.env.PAYPAL_CLIENT_ID || "sb";
-app.get("/", (req, res) => {
-  res.render("index", { paypalClientId });
-});
-app.get("/api/keys/paypal", (req, res) => {
-  res.send(process.env.PAYPAL_CLIENT_ID || "sb");
-});
-
-app.get("/get-stripe-key", (req, res) => {
-  res.send({ key: process.env.STRIPE_PUBLISHABLE_KEY });
-});
-
 app.use("/api/message", sendEmailRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/seed", seedRouter);
 app.use("/api/products", productRouter);
 app.use("/api/users", userRouter);
-app.use("/api/wishes", wishRouter);
 app.use("/api/orders", orderRouter);
 
 app.use("/api/category", categoryRoutes);
@@ -116,7 +101,6 @@ app.use("/api/promotions", promotionRouter);
 
 app.use("/api/banner", bannerRoutes);
 app.use("/api/settings", settingsRoutes);
-app.use("/api/checkout", stripeRouter);
 app.use("/api/apply", applicationRoutes);
 app.use("/api/showroom", showRoutes);
 app.use("/api/wrappers", wrapperRouter);

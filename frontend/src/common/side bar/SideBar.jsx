@@ -32,15 +32,14 @@ import ViewCarouselIcon from "@mui/icons-material/ViewCarousel";
 import MediationIcon from "@mui/icons-material/Mediation";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 
-const StyledDivider = styled(Divider)(({ theme, darkMode }) => ({
-  backgroundColor: darkMode ? "#ffffff" : "", // Change colors accordingly
+const StyledDivider = styled(Divider)(({ theme }) => ({
+  backgroundColor: "", // Change colors accordingly
 }));
 
 function SideBar() {
   const {
     state: states,
     dispatch: ctxDispatch,
-    darkMode,
     currencies,
     toCurrencies,
     setToCurrencies,
@@ -120,7 +119,7 @@ function SideBar() {
             className="side_bar_drawer"
             PaperProps={{
               sx: {
-                backgroundColor: darkMode ? "rgb(0,0,0,0.8)" : "",
+                backgroundColor: "",
               },
             }}
           >
@@ -315,7 +314,7 @@ function SideBar() {
                   <span className="label">Currencies: </span>
                   <div className="currency_state">
                     <select
-                      className={darkMode ? "dark_mode" : ""}
+                      className={""}
                       value={toCurrencies}
                       onChange={(e) => {
                         const selectedCurrency = e.target.value;
@@ -336,7 +335,7 @@ function SideBar() {
                   <LocationModal />
                 </div>
               </div>
-              <StyledDivider darkMode={darkMode} />
+              <StyledDivider />
               <div className="store_info">
                 <ul>
                   <li>
@@ -367,7 +366,7 @@ function SideBar() {
                   </li>
                 </ul>
               </div>
-              <StyledDivider darkMode={darkMode} />
+              <StyledDivider />
               <div className="shop">
                 <label
                   htmlFor=""
@@ -431,7 +430,7 @@ function SideBar() {
               </div>{" "}
               {userInfo && userInfo.isAdmin ? (
                 <>
-                  <StyledDivider darkMode={darkMode} />
+                  <StyledDivider />
                   <div className="shop admin">
                     <label
                       htmlFor=""
@@ -526,7 +525,7 @@ function SideBar() {
               {userInfo && userInfo.isSeller ? (
                 <>
                   {" "}
-                  <StyledDivider darkMode={darkMode} />
+                  <StyledDivider />
                   <div className="shop seller">
                     <label
                       htmlFor=""
@@ -584,7 +583,7 @@ function SideBar() {
               ) : (
                 ""
               )}
-              <StyledDivider darkMode={darkMode} />
+              <StyledDivider />
               <div className="lower_social_contact">
                 <div className="content">
                   <div className="upper">
